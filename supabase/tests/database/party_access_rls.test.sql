@@ -2,7 +2,7 @@ begin;
 
 create extension if not exists pgtap with schema extensions;
 
-select plan(13);
+select plan(19);
 
 select has_table('public', 'parties', 'parties table exists');
 select has_table('public', 'party_members', 'party_members table exists');
@@ -91,12 +91,42 @@ select lives_ok(
   $$update public.character_slots set updated_at = now() where position = 1$$,
   'Player can update a Character Slot'
 );
+select lives_ok(
+  $$update public.parties set updated_at = now()$$,
+  'Player can update the Party'
+);
 
 set local "request.jwt.claim.sub" = '10000000-0000-4000-8000-000000000002';
 
+select results_eq(
+  'select count(*) from public.parties',
+  array[1::bigint],
+  'Dungeon Master can read the Party'
+);
+select results_eq(
+  'select count(*) from public.character_slots',
+  array[6::bigint],
+  'Dungeon Master can read all six Character Slots'
+);
 select lives_ok(
   $$update public.parties set updated_at = now()$$,
   'Dungeon Master can update the Party'
+);
+select lives_ok(
+  $$update public.character_slots set updated_at = now() where position = 2$$,
+  'Dungeon Master can update a Character Slot'
+);
+select throws_ok(
+  $$insert into public.character_slots (party_id, position) values ('00000000-0000-4000-8000-000000000001', 7)$$,
+  '42501',
+  null,
+  'Dungeon Master cannot create a Character Slot'
+);
+select throws_ok(
+  $$delete from public.character_slots where position = 2$$,
+  '42501',
+  null,
+  'Dungeon Master cannot delete a Character Slot'
 );
 
 set local "request.jwt.claim.sub" = '10000000-0000-4000-8000-000000000003';

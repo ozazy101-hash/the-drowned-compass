@@ -22,6 +22,41 @@ create table public.character_slots (
   unique (party_id, position)
 );
 
+create function public.provision_shared_party_member()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  member_role text;
+begin
+  member_role := case lower(new.email)
+    when 'players@drowned-compass.test' then 'player'
+    when 'dm@drowned-compass.test' then 'dungeon-master'
+    else null
+  end;
+
+  if member_role is not null then
+    insert into public.party_members (party_id, user_id, role)
+    values (
+      '00000000-0000-4000-8000-000000000001',
+      new.id,
+      member_role
+    )
+    on conflict (party_id, user_id) do update set role = excluded.role;
+  end if;
+
+  return new;
+end;
+$$;
+
+revoke all on function public.provision_shared_party_member() from public;
+
+create trigger provision_shared_party_member_after_auth_user_created
+after insert on auth.users
+for each row execute function public.provision_shared_party_member();
+
 alter table public.parties enable row level security;
 alter table public.party_members enable row level security;
 alter table public.character_slots enable row level security;
