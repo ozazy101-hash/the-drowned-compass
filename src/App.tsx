@@ -85,11 +85,11 @@ export function App({ partyData }: AppProps) {
           </p>
         </section>
 
-        <section className="party" aria-labelledby="party-roster-heading">
+        <section className="party" aria-labelledby="party-slots-heading">
           <div className="section-heading">
             <div>
               <p className="section-heading__eyebrow">The company</p>
-              <h2 id="party-roster-heading">Party roster</h2>
+              <h2 id="party-slots-heading">The Party</h2>
             </div>
             <p>{party ? `${party.slots.length} berths` : "Reading the ledger…"}</p>
           </div>
@@ -107,7 +107,7 @@ export function App({ partyData }: AppProps) {
         <span className="footer__mark" aria-hidden="true">
           ◈
         </span>
-        <span>One shared record</span>
+        <span>Six shared character records</span>
       </footer>
     </div>
   );

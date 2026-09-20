@@ -9,12 +9,9 @@
   --ink: #e8e2d2;
   --muted: #969d95;
   --deep: #071011;
-  --panel: #0d1818;
-  --panel-raised: #12201f;
   --line: rgba(190, 174, 125, 0.28);
   --gold: #bdaa70;
   --gold-bright: #ded09c;
-  --sea: #4e7775;
 }
 
 * {

@@ -4,9 +4,15 @@
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] Opening the application shows The Drowned Compass title, a restrained compass placeholder, and exactly six unclaimed Character Slots.
-- [ ] The shell is operable and legible at representative phone and laptop widths.
-- [ ] A browser-level test verifies the six-slot journey through the in-memory Party data adapter.
-- [ ] The production build succeeds with a GitHub Pages project-site base path.
+- [x] Opening the application shows The Drowned Compass title, a restrained compass placeholder, and exactly six unclaimed Character Slots.
+- [x] The shell is operable and legible at representative phone and laptop widths.
+- [x] A browser-level test verifies the six-slot journey through the in-memory Party data adapter.
+- [x] The production build succeeds with a GitHub Pages project-site base path.
+
+## Comments
+
+- Implemented on `codex/ticket-01-dashboard-shell` through the injected in-memory Party data adapter.
+- Verified with Playwright in laptop and phone Chrome profiles and with the production TypeScript/Vite build.
+- Two-axis review completed: spec passed; domain-language findings from the standards review were corrected before resolution.
