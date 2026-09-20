@@ -4,7 +4,7 @@
 
 **Blocked by:** 01 — View the Party Dashboard shell.
 
-**Status:** ready-for-agent
+**Status:** claimed
 
 - [ ] Player and Dungeon Master role choices each authenticate with their configured shared identity and open the Party Dashboard.
 - [ ] Invalid credentials produce a clear error without revealing which credential failed.

@@ -121,9 +121,242 @@ a {
   text-transform: uppercase;
 }
 
+.session-controls {
+  display: flex;
+  gap: 0.9rem;
+  align-items: center;
+}
+
+.session-controls span {
+  color: var(--muted);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.session-controls button {
+  padding: 0.48rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  color: var(--gold-bright);
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.session-controls button:hover,
+.session-controls button:focus-visible {
+  border-color: var(--gold);
+  outline: none;
+  background: rgba(189, 170, 112, 0.08);
+}
+
 main {
   width: min(100% - 3rem, 76rem);
   margin: 0 auto;
+}
+
+.session-loading {
+  width: 2rem;
+  height: 2rem;
+  margin: 35vh auto 0;
+  border: 1px solid var(--line);
+  border-top-color: var(--gold-bright);
+  border-radius: 50%;
+  animation: turn 900ms linear infinite;
+}
+
+.login {
+  display: grid;
+  min-height: calc(100vh - 5rem);
+  place-items: center;
+  padding-top: 3rem;
+  padding-bottom: 5rem;
+}
+
+.login__panel {
+  display: grid;
+  width: min(100%, 37rem);
+  justify-items: center;
+  text-align: center;
+}
+
+.login .compass {
+  width: 6.4rem;
+  height: 6.4rem;
+  margin-bottom: 1.6rem;
+}
+
+.login .compass__needle {
+  height: 4.2rem;
+}
+
+.login h1 {
+  margin: 0.35rem 0 0;
+  color: var(--ink);
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(3rem, 8vw, 4.6rem);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 0.9;
+}
+
+.login__intro {
+  max-width: 27rem;
+  margin: 1.2rem 0 1.8rem;
+  color: var(--muted);
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.18rem;
+  line-height: 1.45;
+}
+
+.login-form {
+  width: min(100%, 30rem);
+  padding: 1.2rem;
+  border: 1px solid var(--line);
+  background: rgba(13, 24, 24, 0.8);
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.22);
+  text-align: left;
+}
+
+.login-form fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.login-form legend,
+.password-field > span {
+  display: block;
+  margin-bottom: 0.55rem;
+  color: var(--gold);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.role-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.role-option {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: 0.6rem;
+  align-items: center;
+  min-height: 4.5rem;
+  padding: 0.75rem;
+  border: 1px solid rgba(190, 174, 125, 0.17);
+  border-radius: 0;
+  color: var(--ink);
+  background: rgba(7, 16, 17, 0.45);
+  cursor: pointer;
+  text-align: left;
+}
+
+.role-option:hover,
+.role-option:focus-visible {
+  border-color: rgba(222, 208, 156, 0.55);
+  outline: none;
+}
+
+.role-option.is-selected {
+  border-color: var(--gold);
+  background: rgba(189, 170, 112, 0.09);
+  box-shadow: inset 0 0 0 1px rgba(189, 170, 112, 0.12);
+}
+
+.role-option__icon {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--gold-bright);
+}
+
+.role-option strong,
+.role-option small {
+  display: block;
+}
+
+.role-option strong {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.08rem;
+  font-weight: 600;
+}
+
+.role-option small {
+  margin-top: 0.1rem;
+  color: var(--muted);
+  font-size: 0.66rem;
+  line-height: 1.35;
+}
+
+.password-field {
+  display: block;
+  margin-top: 1rem;
+}
+
+.password-field input {
+  width: 100%;
+  min-height: 2.8rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgba(190, 174, 125, 0.24);
+  border-radius: 0;
+  outline: none;
+  color: var(--ink);
+  background: rgba(5, 12, 13, 0.72);
+  font-size: 1rem;
+}
+
+.password-field input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(189, 170, 112, 0.12);
+}
+
+.login-form__error {
+  margin: 0.8rem 0 0;
+  padding: 0.65rem 0.75rem;
+  border-left: 2px solid #a65d57;
+  color: #dfb0aa;
+  background: rgba(128, 54, 48, 0.12);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.enter-button {
+  width: 100%;
+  min-height: 2.9rem;
+  margin-top: 1rem;
+  border: 1px solid var(--gold);
+  border-radius: 0;
+  color: #101716;
+  background: var(--gold-bright);
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.enter-button:hover:not(:disabled),
+.enter-button:focus-visible {
+  outline: 2px solid rgba(222, 208, 156, 0.28);
+  outline-offset: 2px;
+  background: #eee3b8;
+}
+
+.enter-button:disabled {
+  cursor: wait;
+  opacity: 0.7;
 }
 
 .hero {
@@ -439,8 +672,24 @@ footer {
     font-size: 0.82rem;
   }
 
+  .brand > span:last-child {
+    display: none;
+  }
+
   .site-header__label {
     display: none;
+  }
+
+  .login {
+    padding-top: 2.2rem;
+  }
+
+  .login-form {
+    padding: 1rem;
+  }
+
+  .role-options {
+    grid-template-columns: 1fr;
   }
 
   .hero {
@@ -520,5 +769,11 @@ footer {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes turn {
+  to {
+    transform: rotate(360deg);
   }
 }

@@ -1,11 +1,13 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
-import { inMemoryPartyData } from "./data/in-memory-party-data";
+import { createPartyData } from "./data/create-party-data";
 import "./styles.css";
+
+const partyData = createPartyData();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App partyData={inMemoryPartyData} />
+    <App partyData={partyData} />
   </StrictMode>,
 );

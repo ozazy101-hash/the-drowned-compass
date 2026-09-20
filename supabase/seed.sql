@@ -1,0 +1,2 @@
+-- The six Character Slots are created by the schema migration.
+-- Shared prototype users are provisioned through the hosted Supabase dashboard.
