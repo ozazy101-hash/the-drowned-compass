@@ -26,7 +26,7 @@ insert into auth.users (
     '10000000-0000-4000-8000-000000000001',
     'authenticated',
     'authenticated',
-    'rls-player@example.test',
+    'players@drowned-compass.test',
     '',
     now(),
     '{}',
@@ -39,7 +39,7 @@ insert into auth.users (
     '10000000-0000-4000-8000-000000000002',
     'authenticated',
     'authenticated',
-    'rls-dm@example.test',
+    'dm@drowned-compass.test',
     '',
     now(),
     '{}',
@@ -52,26 +52,13 @@ insert into auth.users (
     '10000000-0000-4000-8000-000000000003',
     'authenticated',
     'authenticated',
-    'rls-outsider@example.test',
+    'outsider@drowned-compass.test',
     '',
     now(),
     '{}',
     '{}',
     now(),
     now()
-  );
-
-insert into public.party_members (party_id, user_id, role)
-values
-  (
-    '00000000-0000-4000-8000-000000000001',
-    '10000000-0000-4000-8000-000000000001',
-    'player'
-  ),
-  (
-    '00000000-0000-4000-8000-000000000001',
-    '10000000-0000-4000-8000-000000000002',
-    'dungeon-master'
   );
 
 set local role authenticated;
