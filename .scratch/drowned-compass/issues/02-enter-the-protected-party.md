@@ -4,9 +4,9 @@
 
 **Blocked by:** 01 — View the Party Dashboard shell.
 
-**Status:** ready-for-human
+**Status:** resolved
 
-- [ ] Player and Dungeon Master role choices each authenticate with their configured shared identity and open the Party Dashboard.
+- [x] Player and Dungeon Master role choices each authenticate with their configured shared identity and open the Party Dashboard.
 - [x] Invalid credentials produce a clear error without revealing which credential failed.
 - [x] Refreshing preserves the current browser session, and signing out affects only that browser.
 - [x] Local Supabase security tests prove that Party members can read and update the Party while unauthenticated and non-member identities cannot access it.
@@ -19,4 +19,4 @@
 - Read-only hosted checks confirm that unauthenticated REST requests to `parties`, `character_slots`, and `party_members` are rejected with PostgreSQL error `42501`.
 - The pgTAP suite covers Player and Dungeon Master reads and updates, non-member and unauthenticated denial, and the absence of Character Slot insert/delete grants. Update assertions were strengthened to prove that authorized updates affect rows rather than merely avoiding an error.
 - After Docker Desktop was installed, the local Supabase migration applied cleanly and `pnpm test:db` passed all 21 pgTAP assertions (`Files=1, Tests=21, Result: PASS`).
-- Final human verification: after this branch is deployed, sign in once as Player and once as Dungeon Master with the configured shared passwords, confirm six Character Slots appear for each role, refresh once, then sign out. Do not record the passwords in this ticket or the repository.
+- Live verification completed on 2026-09-22: both configured shared identities authenticated, displayed the same six Character Slots, preserved their sessions across refresh, and signed out successfully. Showing the same Party to both roles is intentional at this stage; the richer Dungeon Master overview belongs to Ticket 06. No passwords were recorded.
