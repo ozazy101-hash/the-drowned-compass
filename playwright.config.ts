@@ -19,7 +19,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "pnpm dev --host 127.0.0.1 --port 4173",
+    command:
+      "VITE_USE_IN_MEMORY_DATA=true pnpm dev --host 127.0.0.1 --port 4173",
     url: "http://127.0.0.1:4173/the-drowned-compass/",
     reuseExistingServer: true,
   },
