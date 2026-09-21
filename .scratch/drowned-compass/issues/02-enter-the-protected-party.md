@@ -4,10 +4,19 @@
 
 **Blocked by:** 01 — View the Party Dashboard shell.
 
-**Status:** claimed
+**Status:** ready-for-human
 
 - [ ] Player and Dungeon Master role choices each authenticate with their configured shared identity and open the Party Dashboard.
-- [ ] Invalid credentials produce a clear error without revealing which credential failed.
-- [ ] Refreshing preserves the current browser session, and signing out affects only that browser.
+- [x] Invalid credentials produce a clear error without revealing which credential failed.
+- [x] Refreshing preserves the current browser session, and signing out affects only that browser.
 - [ ] Local Supabase security tests prove that Party members can read and update the Party while unauthenticated and non-member identities cannot access it.
 - [ ] Browser roles cannot create or delete Character Slots.
+
+## Comments
+
+- The production TypeScript/Vite build passes with the configured Supabase browser variables.
+- The isolated in-memory Playwright suite passes all eight laptop and phone checks, covering both role choices, the non-revealing invalid-credential message, refresh persistence, and browser-local sign-out.
+- Read-only hosted checks confirm that unauthenticated REST requests to `parties`, `character_slots`, and `party_members` are rejected with PostgreSQL error `42501`.
+- The pgTAP suite covers Player and Dungeon Master reads and updates, non-member and unauthenticated denial, and the absence of Character Slot insert/delete grants. Update assertions were strengthened to prove that authorized updates affect rows rather than merely avoiding an error.
+- `pnpm test:db` cannot complete on this workstation because no local Supabase/PostgreSQL service is running and no Docker-compatible runtime is installed. Run `pnpm supabase:start` followed by `pnpm test:db` on a machine with Docker to check the final two database criteria.
+- Final human verification: after this branch is deployed, sign in once as Player and once as Dungeon Master with the configured shared passwords, confirm six Character Slots appear for each role, refresh once, then sign out. Do not record the passwords in this ticket or the repository.

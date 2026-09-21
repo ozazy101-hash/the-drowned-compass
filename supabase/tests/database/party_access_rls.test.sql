@@ -2,7 +2,7 @@ begin;
 
 create extension if not exists pgtap with schema extensions;
 
-select plan(19);
+select plan(21);
 
 select has_table('public', 'parties', 'parties table exists');
 select has_table('public', 'party_members', 'party_members table exists');
@@ -74,12 +74,14 @@ select results_eq(
   array[6::bigint],
   'Player can read all six Character Slots'
 );
-select lives_ok(
-  $$update public.character_slots set updated_at = now() where position = 1$$,
+select results_eq(
+  $$update public.character_slots set updated_at = now() where position = 1 returning position$$,
+  array[1],
   'Player can update a Character Slot'
 );
-select lives_ok(
-  $$update public.parties set updated_at = now()$$,
+select results_eq(
+  $$update public.parties set updated_at = now() returning name$$,
+  array['The Drowned Compass'],
   'Player can update the Party'
 );
 
@@ -95,12 +97,14 @@ select results_eq(
   array[6::bigint],
   'Dungeon Master can read all six Character Slots'
 );
-select lives_ok(
-  $$update public.parties set updated_at = now()$$,
+select results_eq(
+  $$update public.parties set updated_at = now() returning name$$,
+  array['The Drowned Compass'],
   'Dungeon Master can update the Party'
 );
-select lives_ok(
-  $$update public.character_slots set updated_at = now() where position = 2$$,
+select results_eq(
+  $$update public.character_slots set updated_at = now() where position = 2 returning position$$,
+  array[2],
   'Dungeon Master can update a Character Slot'
 );
 select throws_ok(
@@ -122,6 +126,16 @@ select results_eq(
   'select count(*) from public.parties',
   array[0::bigint],
   'Non-member cannot read the Party'
+);
+select results_eq(
+  'select count(*) from public.character_slots',
+  array[0::bigint],
+  'Non-member cannot read Character Slots'
+);
+select results_eq(
+  $$update public.parties set updated_at = now() returning name$$,
+  array[]::text[],
+  'Non-member cannot update the Party'
 );
 select results_eq(
   $$update public.character_slots set updated_at = now() returning position$$,
