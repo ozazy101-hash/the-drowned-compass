@@ -1,6 +1,8 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type {
   AccessRole,
+  CharacterRecord,
+  CharacterSlot,
   Party,
   PartyData,
   PartySession,
@@ -12,8 +14,73 @@ const sharedIdentityByRole: Record<AccessRole, string> = {
   "dungeon-master": "dm@drowned-compass.test",
 };
 
+const characterSlotColumns = `
+  id,
+  position,
+  claimed_at,
+  player_name,
+  character_name,
+  primary_class,
+  subclass,
+  species,
+  background,
+  level,
+  strength,
+  dexterity,
+  constitution,
+  intelligence,
+  wisdom,
+  charisma
+`;
+
+type CharacterSlotRow = {
+  id: string;
+  position: number;
+  claimed_at: string | null;
+  player_name: string | null;
+  character_name: string | null;
+  primary_class: string | null;
+  subclass: string | null;
+  species: string | null;
+  background: string | null;
+  level: number | null;
+  strength: number | null;
+  dexterity: number | null;
+  constitution: number | null;
+  intelligence: number | null;
+  wisdom: number | null;
+  charisma: number | null;
+};
+
 function isAccessRole(value: unknown): value is AccessRole {
   return value === "player" || value === "dungeon-master";
+}
+
+function mapCharacterSlot(row: CharacterSlotRow): CharacterSlot {
+  return {
+    id: row.id,
+    position: row.position,
+    character:
+      row.claimed_at === null
+        ? null
+        : {
+            playerName: row.player_name!,
+            characterName: row.character_name!,
+            primaryClass: row.primary_class!,
+            subclass: row.subclass!,
+            species: row.species!,
+            background: row.background!,
+            level: row.level!,
+            abilityScores: {
+              strength: row.strength!,
+              dexterity: row.dexterity!,
+              constitution: row.constitution!,
+              intelligence: row.intelligence!,
+              wisdom: row.wisdom!,
+              charisma: row.charisma!,
+            },
+          },
+  };
 }
 
 async function readMembership(
@@ -35,6 +102,30 @@ export function createSupabasePartyData(
   publishableKey: string,
 ): PartyData {
   const client = createClient(url, publishableKey);
+
+  async function loadParty(): Promise<Party> {
+    const { data: party, error: partyError } = await client
+      .from("parties")
+      .select("id, name")
+      .single();
+
+    if (partyError || !party) {
+      throw partyError ?? new Error("The Party could not be loaded.");
+    }
+
+    const { data: slots, error: slotsError } = await client
+      .from("character_slots")
+      .select(characterSlotColumns)
+      .eq("party_id", party.id)
+      .order("position");
+
+    if (slotsError) throw slotsError;
+
+    return {
+      name: party.name,
+      slots: ((slots ?? []) as CharacterSlotRow[]).map(mapCharacterSlot),
+    };
+  }
 
   return {
     async getSession() {
@@ -65,31 +156,60 @@ export function createSupabasePartyData(
       if (error) throw error;
     },
 
-    async getParty(): Promise<Party> {
-      const { data: party, error: partyError } = await client
-        .from("parties")
-        .select("id, name")
-        .single();
+    getParty: loadParty,
 
-      if (partyError || !party) {
-        throw partyError ?? new Error("The Party could not be loaded.");
+    async claimCharacterSlot(slotId, character: CharacterRecord) {
+      const { data: authData, error: authError } = await client.auth.getUser();
+      if (authError || !authData.user) {
+        throw authError ?? new Error("Your Party session has ended.");
       }
 
-      const { data: slots, error: slotsError } = await client
+      const now = new Date().toISOString();
+      const { data, error } = await client
         .from("character_slots")
-        .select("id, position")
-        .eq("party_id", party.id)
-        .order("position");
+        .update({
+          claimed_at: now,
+          claimed_by: authData.user.id,
+          player_name: character.playerName,
+          character_name: character.characterName,
+          primary_class: character.primaryClass,
+          subclass: character.subclass,
+          species: character.species,
+          background: character.background,
+          level: character.level,
+          strength: character.abilityScores.strength,
+          dexterity: character.abilityScores.dexterity,
+          constitution: character.abilityScores.constitution,
+          intelligence: character.abilityScores.intelligence,
+          wisdom: character.abilityScores.wisdom,
+          charisma: character.abilityScores.charisma,
+          version: 1,
+          updated_at: now,
+        })
+        .eq("id", slotId)
+        .is("claimed_at", null)
+        .select(characterSlotColumns)
+        .maybeSingle();
 
-      if (slotsError) throw slotsError;
+      if (error) throw error;
+      if (!data) throw new Error("That Character Slot is no longer available.");
+      return mapCharacterSlot(data as CharacterSlotRow);
+    },
 
-      return {
-        name: party.name,
-        slots: (slots ?? []).map((slot) => ({
-          id: slot.id,
-          position: slot.position,
-          character: null,
-        })),
+    subscribeToParty(onPartyChanged) {
+      const channel = client
+        .channel("party-character-slot-claims")
+        .on(
+          "postgres_changes",
+          { event: "UPDATE", schema: "public", table: "character_slots" },
+          () => {
+            void loadParty().then(onPartyChanged);
+          },
+        )
+        .subscribe();
+
+      return () => {
+        void client.removeChannel(channel);
       };
     },
   };
