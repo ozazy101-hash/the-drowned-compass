@@ -20,3 +20,4 @@
 - Reset the local Supabase database and applied both migrations from scratch. `pnpm test:db` passed 40 pgTAP assertions across two files, including Player claims, Dungeon Master edits to a Player claim, outsider denial, unauthenticated denial, validation constraints, and Realtime publication.
 - `pnpm test:e2e` passed all 12 laptop and phone checks. Coverage includes incomplete and invalid Ability Scores, Character Page opening, responsive overflow checks, and a separate-browser-context claim update received without reload.
 - `pnpm build` passes with the configured GitHub Pages base path. Hosted Supabase was not mutated; the new migration still needs to be applied through the normal hosted deployment path before live smoke testing.
+- Manual acceptance completed on 2026-09-22: the full two-step claim journey, validation, Character Page transition, claimed Party card, and no-reload second-tab update all worked as expected.
