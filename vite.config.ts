@@ -6,7 +6,7 @@ type TestParty = {
   slots: Array<{
     id: string;
     position: number;
-    character: unknown | null;
+    character: Record<string, unknown> | null;
   }>;
 };
 
@@ -56,7 +56,7 @@ function sharedInMemoryParty(): Plugin {
           return;
         }
 
-        if (testRequest.method !== "POST") {
+        if (testRequest.method !== "POST" && testRequest.method !== "PATCH") {
           response.statusCode = 405;
           response.end();
           return;
@@ -65,19 +65,51 @@ function sharedInMemoryParty(): Plugin {
         let body = "";
         testRequest.on("data", (chunk) => { body += String(chunk); });
         testRequest.on("end", () => {
-          const claim = JSON.parse(body) as {
-            slotId: string;
-            character: unknown;
-          };
-          const slot = party.slots.find((candidate) => candidate.id === claim.slotId);
-          if (!slot || slot.character) {
-            response.statusCode = 409;
-            response.end();
+          const requestBody = JSON.parse(body) as Record<string, unknown>;
+          const slot = party.slots.find((candidate) => candidate.id === requestBody.slotId);
+          response.setHeader("content-type", "application/json");
+
+          if (testRequest.method === "POST") {
+            if (!slot || slot.character) {
+              response.statusCode = 409;
+              response.end(JSON.stringify(slot ?? {}));
+              return;
+            }
+            slot.character = requestBody.character as Record<string, unknown>;
+            response.end(JSON.stringify(slot));
             return;
           }
 
-          slot.character = claim.character;
-          response.setHeader("content-type", "application/json");
+          if (!slot?.character) {
+            response.statusCode = 404;
+            response.end(JSON.stringify(slot ?? {}));
+            return;
+          }
+
+          const field = String(requestBody.field);
+          const versions = slot.character.fieldVersions as Record<string, number>;
+          const currentVersion = versions[field] ?? 0;
+          if (currentVersion !== requestBody.expectedVersion) {
+            response.statusCode = 409;
+            response.end(JSON.stringify(slot));
+            return;
+          }
+
+          if (field.startsWith("save.")) {
+            const values = slot.character.savingThrowProficiencies as Record<string, unknown>;
+            values[field.slice(5)] = requestBody.value;
+          } else if (field.startsWith("skill.")) {
+            const values = slot.character.skillProficiencies as Record<string, unknown>;
+            values[field.slice(6)] = requestBody.value;
+          } else if ([
+            "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma",
+          ].includes(field)) {
+            const values = slot.character.abilityScores as Record<string, unknown>;
+            values[field] = requestBody.value;
+          } else {
+            slot.character[field] = requestBody.value;
+          }
+          versions[field] = currentVersion + 1;
           response.end(JSON.stringify(slot));
         });
       });

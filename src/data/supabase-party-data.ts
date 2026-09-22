@@ -3,6 +3,8 @@ import type {
   AccessRole,
   CharacterRecord,
   CharacterSlot,
+  OverviewFieldKey,
+  OverviewFieldValue,
   Party,
   PartyData,
   PartySession,
@@ -30,7 +32,14 @@ const characterSlotColumns = `
   constitution,
   intelligence,
   wisdom,
-  charisma
+  charisma,
+  saving_throw_proficiencies,
+  skill_proficiencies,
+  armor_class,
+  max_hit_points,
+  speed,
+  spellcasting_ability,
+  overview_field_versions
 `;
 
 type CharacterSlotRow = {
@@ -50,6 +59,13 @@ type CharacterSlotRow = {
   intelligence: number | null;
   wisdom: number | null;
   charisma: number | null;
+  saving_throw_proficiencies: CharacterRecord["savingThrowProficiencies"];
+  skill_proficiencies: CharacterRecord["skillProficiencies"];
+  armor_class: number;
+  max_hit_points: number;
+  speed: number;
+  spellcasting_ability: CharacterRecord["spellcastingAbility"];
+  overview_field_versions: CharacterRecord["fieldVersions"];
 };
 
 function isAccessRole(value: unknown): value is AccessRole {
@@ -79,6 +95,13 @@ function mapCharacterSlot(row: CharacterSlotRow): CharacterSlot {
               wisdom: row.wisdom!,
               charisma: row.charisma!,
             },
+            savingThrowProficiencies: row.saving_throw_proficiencies,
+            skillProficiencies: row.skill_proficiencies,
+            armorClass: row.armor_class,
+            maxHitPoints: row.max_hit_points,
+            speed: row.speed,
+            spellcastingAbility: row.spellcasting_ability,
+            fieldVersions: row.overview_field_versions,
           },
   };
 }
@@ -183,6 +206,13 @@ export function createSupabasePartyData(
           intelligence: character.abilityScores.intelligence,
           wisdom: character.abilityScores.wisdom,
           charisma: character.abilityScores.charisma,
+          saving_throw_proficiencies: character.savingThrowProficiencies,
+          skill_proficiencies: character.skillProficiencies,
+          armor_class: character.armorClass,
+          max_hit_points: character.maxHitPoints,
+          speed: character.speed,
+          spellcasting_ability: character.spellcastingAbility,
+          overview_field_versions: character.fieldVersions,
           version: 1,
           updated_at: now,
         })
@@ -194,6 +224,30 @@ export function createSupabasePartyData(
       if (error) throw error;
       if (!data) throw new Error("That Character Slot is no longer available.");
       return mapCharacterSlot(data as CharacterSlotRow);
+    },
+
+    async updateCharacterOverviewField(
+      slotId: string,
+      field: OverviewFieldKey,
+      value: OverviewFieldValue,
+      expectedVersion: number,
+    ) {
+      const { data, error } = await client.rpc("update_character_overview_field", {
+        target_slot_id: slotId,
+        target_field: field,
+        next_value: value,
+        expected_version: expectedVersion,
+      });
+      if (error) throw error;
+
+      const party = await loadParty();
+      const slot = party.slots.find((candidate) => candidate.id === slotId);
+      if (!slot?.character) throw new Error("That Character Record is unavailable.");
+
+      const result = Array.isArray(data) ? data[0] : data;
+      return result?.accepted === true
+        ? { ok: true as const, slot }
+        : { ok: false as const, reason: "conflict" as const, slot };
     },
 
     subscribeToParty(onPartyChanged) {

@@ -154,7 +154,9 @@ test("a player completes both setup steps and opens the Character Page", async (
   await expect(page.getByRole("heading", { level: 1, name: "Neris Vale" })).toBeVisible();
   await expect(page.getByText("Played by Mara", { exact: true })).toBeVisible();
   await expect(page.getByText("Level 3 Rogue · Thief", { exact: true })).toBeVisible();
-  await expect(page.getByRole("definition")).toHaveCount(6);
+  for (const [label, value] of Object.entries(abilityScores)) {
+    await expect(page.getByLabel(label, { exact: true })).toHaveValue(value);
+  }
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= window.innerWidth,

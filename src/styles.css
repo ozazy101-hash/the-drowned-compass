@@ -859,6 +859,171 @@ main {
   margin-top: 2.5rem;
 }
 
+.character-nav {
+  display: flex;
+  gap: 0.25rem;
+  margin-top: 1.25rem;
+  padding: 0.35rem;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  background: rgba(5, 12, 13, 0.58);
+}
+
+.character-nav button {
+  flex: 0 0 auto;
+  min-height: 2.5rem;
+  padding: 0.55rem 0.9rem;
+  border: 0;
+  color: #767c77;
+  background: transparent;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.character-nav button[aria-current="page"] {
+  color: #071111;
+  background: var(--gold-bright);
+}
+
+.character-nav button:disabled {
+  cursor: not-allowed;
+  opacity: 0.68;
+}
+
+.overview-section {
+  margin-top: 2.5rem;
+  padding-top: 0.25rem;
+}
+
+.overview-section + .overview-section {
+  padding-top: 2.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.overview-section .section-heading > p {
+  max-width: 19rem;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  text-align: right;
+}
+
+.overview-grid,
+.skills-grid,
+.ability-editor-grid {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.overview-grid--identity {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.overview-grid--compact {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.ability-editor-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.skills-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ability-editor {
+  padding: 0.9rem;
+  border: 1px solid var(--line);
+  background: rgba(13, 24, 24, 0.72);
+}
+
+.overview-field {
+  display: grid;
+  align-content: start;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.overview-field > label {
+  color: var(--gold);
+  font-size: 0.63rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.overview-field input,
+.overview-field select {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.62rem 0.7rem;
+  border: 1px solid rgba(190, 174, 125, 0.24);
+  border-radius: 0;
+  outline: 0;
+  color: var(--ink);
+  background: #081313;
+  font: inherit;
+}
+
+.overview-field input:focus-visible,
+.overview-field select:focus-visible,
+.proficiency-field input:focus-visible {
+  border-color: var(--gold-bright);
+  box-shadow: 0 0 0 2px rgba(189, 170, 112, 0.16);
+}
+
+.overview-field [aria-invalid="true"] {
+  border-color: #a65d57;
+}
+
+.save-feedback {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  min-height: 1rem;
+  color: #8c958f;
+  font-size: 0.65rem;
+  line-height: 1.35;
+}
+
+.save-feedback--saving { color: var(--gold); }
+.save-feedback--saved { color: #8ab8a5; }
+.save-feedback--unsaved { color: #dfb0aa; }
+
+.save-feedback button {
+  padding: 0;
+  border: 0;
+  color: #f0d59e;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.16rem;
+}
+
+.proficiency-field {
+  margin-top: 0.7rem;
+}
+
+.proficiency-field > label {
+  display: flex;
+  gap: 0.55rem;
+  align-items: flex-start;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.proficiency-field input {
+  width: 1rem;
+  height: 1rem;
+  margin: 0.05rem 0 0;
+  accent-color: var(--gold-bright);
+}
+
 .ability-score-grid {
   margin: 0;
 }
@@ -913,6 +1078,12 @@ footer {
   .ability-entry-grid,
   .ability-score-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .overview-grid--compact,
+  .ability-editor-grid,
+  .skills-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -995,6 +1166,21 @@ footer {
   .character-identity .character-slot__portrait {
     width: 5.8rem;
     height: 8rem;
+  }
+
+  .overview-grid--identity,
+  .overview-grid--compact,
+  .ability-editor-grid,
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .overview-section .section-heading {
+    align-items: flex-start;
+  }
+
+  .overview-section .section-heading > p {
+    display: none;
   }
 
 }
