@@ -1,3 +1,4 @@
+import { validateCharacterText, type CharacterTextEntry } from "../domain/character-text";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type {
   AccessRole,
@@ -147,9 +148,20 @@ export function createSupabasePartyData(
 
     if (slotsError) throw slotsError;
 
+    const { data: texts, error: textsError } = await client
+      .from('character_text_entries')
+      .select('slot_id, entry_id, kind, title, body, deleted, version');
+    if (textsError) throw textsError;
     return {
       name: party.name,
-      slots: ((slots ?? []) as CharacterSlotRow[]).map(mapCharacterSlot),
+      slots: ((slots ?? []) as CharacterSlotRow[]).map(row => {
+        const slot = mapCharacterSlot(row);
+        if (slot.character) slot.character.textEntries = (texts ?? [])
+          .filter(text => text.slot_id === slot.id)
+          .map(text => ({ id: text.entry_id, kind: text.kind, title: text.title, body: text.body,
+            deleted: text.deleted, version: Number(text.version) }) as CharacterTextEntry);
+        return slot;
+      }),
     };
   }
 
@@ -254,6 +266,21 @@ export function createSupabasePartyData(
         : { ok: false as const, reason: "conflict" as const, slot };
     },
 
+    async saveCharacterTextEntry(slotId, entry, expectedVersion) {
+      validateCharacterText(entry);
+      const { data, error } = await client.rpc('save_character_text_entry', {
+        target_slot_id: slotId, target_entry_id: entry.id, target_kind: entry.kind,
+        next_title: entry.title, next_body: entry.body, next_deleted: entry.deleted,
+        expected_version: expectedVersion,
+      });
+      if (error) throw error;
+      const party = await loadParty();
+      const slot = party.slots.find(candidate => candidate.id === slotId);
+      if (!slot?.character) throw new Error('That Character Record is unavailable.');
+      const result = Array.isArray(data) ? data[0] : data;
+      return result?.accepted === true ? { ok: true, slot } : { ok: false, reason: 'conflict', slot };
+    },
+
     subscribeToParty(onPartyChanged) {
       let active = true;
       const reload = () => {
@@ -269,6 +296,8 @@ export function createSupabasePartyData(
           { event: "UPDATE", schema: "public", table: "character_slots" },
           reload,
         )
+        .on('postgres_changes',
+          { event: '*', schema: 'public', table: 'character_text_entries' }, reload)
         .subscribe((status) => {
           // Realtime does not replay changes missed while disconnected.
           if (status === "SUBSCRIBED") reload();

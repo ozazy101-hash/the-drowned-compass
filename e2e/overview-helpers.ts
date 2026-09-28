@@ -69,7 +69,7 @@ export async function expectSaveFeedback(page: Page, control: Locator, text: str
 export async function prepareTwoBrowsers(browser: Browser, page: Page, testInfo: TestInfo) {
   const url = isolatedPartyUrl(testInfo);
   const otherContext = await browser.newContext({
-    baseURL: "http://127.0.0.1:4173/the-drowned-compass/",
+    baseURL: String(testInfo.project.use.baseURL),
   });
   const otherPage = await otherContext.newPage();
   await page.goto(url);

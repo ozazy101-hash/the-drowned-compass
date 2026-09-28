@@ -1,3 +1,4 @@
+import { setCharacterText, type CharacterTextDraft } from "./src/domain/character-text.ts";
 import { setOverviewValue } from "./src/domain/overview-fields.ts";
 import type { CharacterRecord, OverviewFieldKey, OverviewFieldValue } from "./src/domain/party.ts";
 import { defineConfig, type Plugin } from "vite";
@@ -85,6 +86,16 @@ function sharedInMemoryParty(): Plugin {
           if (!slot?.character) {
             response.statusCode = 404;
             response.end(JSON.stringify(slot ?? {}));
+            return;
+          }
+
+          if (requestBody.textEntry) {
+            try {
+              const character = slot.character as CharacterRecord;
+              const accepted = setCharacterText(character.textEntries ??= [], requestBody.textEntry as CharacterTextDraft, Number(requestBody.expectedVersion));
+              response.statusCode = accepted ? 200 : 409;
+            } catch { response.statusCode = 400; }
+            response.end(JSON.stringify(slot));
             return;
           }
 

@@ -1,3 +1,5 @@
+import { mergeCharacterText } from "./domain/character-text";
+import { FeaturesStory } from "./features/FeaturesStory";
 import { overviewValue, setOverviewValue } from "./domain/overview-fields";
 import { calculateDerivedValues, type DerivedValue, type DerivedValueKey } from "./domain/derived-values";
 import { type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from "react";
@@ -53,6 +55,7 @@ const skillLabels = {
 function mergeCharacterRecords(current: CharacterRecord, incoming: CharacterRecord) {
   const merged: CharacterRecord = {
     ...incoming,
+    textEntries: mergeCharacterText(current.textEntries, incoming.textEntries),
     abilityScores: { ...incoming.abilityScores },
     savingThrowProficiencies: { ...incoming.savingThrowProficiencies },
     skillProficiencies: { ...incoming.skillProficiencies },
@@ -727,6 +730,7 @@ function CharacterPage({
   onSlotChanged: (slot: CharacterSlot) => void;
 }) {
   const character = slot.character!;
+  const [section, setSection] = useState("Overview");
   const derived = calculateDerivedValues({ ...character, totalLevel: character.level }, character.derivedOverrides);
   const version = (field: OverviewFieldKey) => character.fieldVersions[field] ?? 0;
 
@@ -782,15 +786,19 @@ function CharacterPage({
           <button
             key={item}
             type="button"
-            aria-current={item === "Overview" ? "page" : undefined}
-            disabled={item !== "Overview"}
-            title={item === "Overview" ? undefined : "Coming in a later ticket"}
+            aria-current={item === section ? "page" : undefined}
+            disabled={!["Overview", "Features", "Story"].includes(item)}
+            onClick={() => setSection(item)}
+            title={["Overview", "Features", "Story"].includes(item) ? undefined : "Coming in a later ticket"}
           >
             {item}
           </button>
         ))}
       </nav>
 
+      <div hidden={section !== 'Features'}><FeaturesStory key={`${slot.id}-features`} slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} area="Features" /></div>
+      <div hidden={section !== 'Story'}><FeaturesStory key={`${slot.id}-story`} slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} area="Story" /></div>
+      <div hidden={section !== 'Overview'}>
       <section className="overview-section" aria-labelledby="identity-heading">
         <div className="section-heading">
           <div><p className="section-heading__eyebrow">Character overview</p><h2 id="identity-heading">Identity</h2></div>
@@ -885,6 +893,7 @@ function CharacterPage({
           ))}
         </div>
       </section>
+      </div>
     </main>
   );
 }

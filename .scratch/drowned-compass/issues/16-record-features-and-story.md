@@ -4,7 +4,7 @@
 
 **Blocked by:** 04 — Edit and synchronize the Character Overview.
 
-**Status:** ready-for-agent
+**Status:** claimed
 
 - [ ] The Features area supports player-authored class, species, background, and feat summaries.
 - [ ] The Story area supports appearance, personality, backstory, allies, and general notes.
