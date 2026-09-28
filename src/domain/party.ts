@@ -1,3 +1,5 @@
+import type { DerivedOverrides, DerivedValueKey } from "./derived-values.ts";
+
 export const abilityScoreKeys = [
   "strength",
   "dexterity",
@@ -35,9 +37,10 @@ export type OverviewFieldKey =
   | "armorClass"
   | "maxHitPoints"
   | "speed"
-  | "spellcastingAbility";
+  | "spellcastingAbility"
+  | `override.${DerivedValueKey}`;
 
-export type OverviewFieldValue = string | number | boolean | SkillProficiency | null;
+export type OverviewFieldValue = string | number | SkillProficiency | null;
 
 export type CharacterRecord = {
   playerName: string;
@@ -48,12 +51,13 @@ export type CharacterRecord = {
   background: string;
   level: number;
   abilityScores: AbilityScores;
-  savingThrowProficiencies: Record<AbilityScoreKey, boolean>;
+  savingThrowProficiencies: Record<AbilityScoreKey, SkillProficiency>;
   skillProficiencies: Record<SkillKey, SkillProficiency>;
   armorClass: number;
   maxHitPoints: number;
   speed: number;
   spellcastingAbility: AbilityScoreKey | null;
+  derivedOverrides: DerivedOverrides;
   fieldVersions: Partial<Record<OverviewFieldKey, number>>;
 };
 

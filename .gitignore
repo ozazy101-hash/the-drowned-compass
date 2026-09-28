@@ -7,3 +7,4 @@ test-results/
 .env.local
 .env.*.local
 .DS_Store
+supabase/tests/database/*.generated.test.sql

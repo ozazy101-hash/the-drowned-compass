@@ -1,3 +1,4 @@
+import { setOverviewValue } from "../domain/overview-fields";
 import {
   abilityScoreKeys,
   skillKeys,
@@ -43,6 +44,7 @@ function copyCharacter(character: CharacterRecord): CharacterRecord {
     abilityScores: { ...character.abilityScores },
     savingThrowProficiencies: { ...character.savingThrowProficiencies },
     skillProficiencies: { ...character.skillProficiencies },
+    derivedOverrides: { ...character.derivedOverrides },
     fieldVersions: { ...character.fieldVersions },
   };
 }
@@ -50,14 +52,17 @@ function copyCharacter(character: CharacterRecord): CharacterRecord {
 function normalizeCharacter(character: CharacterRecord): CharacterRecord {
   return copyCharacter({
     ...character,
-    savingThrowProficiencies: character.savingThrowProficiencies ??
-      Object.fromEntries(abilityScoreKeys.map((key) => [key, false])) as CharacterRecord["savingThrowProficiencies"],
+    savingThrowProficiencies: Object.fromEntries(abilityScoreKeys.map((key) => {
+      const value: unknown = character.savingThrowProficiencies?.[key];
+      return [key, value === true ? 'proficient' : value === false || value === undefined ? 'none' : value];
+    })) as CharacterRecord["savingThrowProficiencies"],
     skillProficiencies: character.skillProficiencies ??
       Object.fromEntries(skillKeys.map((key) => [key, "none"])) as CharacterRecord["skillProficiencies"],
     armorClass: character.armorClass ?? 10,
     maxHitPoints: character.maxHitPoints ?? 1,
     speed: character.speed ?? 30,
     spellcastingAbility: character.spellcastingAbility ?? null,
+    derivedOverrides: character.derivedOverrides ?? {},
     fieldVersions: character.fieldVersions ?? {},
   });
 }
@@ -85,24 +90,6 @@ function readParty(): Party {
 function storeParty(party: Party) {
   window.localStorage.setItem(partyStorageKey, JSON.stringify(party));
   window.dispatchEvent(new CustomEvent(partyChangedEvent));
-}
-
-function applyOverviewField(
-  character: CharacterRecord,
-  field: OverviewFieldKey,
-  value: OverviewFieldValue,
-) {
-  if (field.startsWith("save.")) {
-    const key = field.slice(5) as keyof CharacterRecord["savingThrowProficiencies"];
-    character.savingThrowProficiencies[key] = value as boolean;
-  } else if (field.startsWith("skill.")) {
-    const key = field.slice(6) as keyof CharacterRecord["skillProficiencies"];
-    character.skillProficiencies[key] = value as CharacterRecord["skillProficiencies"][typeof key];
-  } else if (abilityScoreKeys.includes(field as (typeof abilityScoreKeys)[number])) {
-    character.abilityScores[field as keyof CharacterRecord["abilityScores"]] = value as number;
-  } else {
-    (character as unknown as Record<string, OverviewFieldValue>)[field] = value;
-  }
 }
 
 function testPartyUrl(namespace: string): string {
@@ -194,7 +181,7 @@ export function createInMemoryPartyData(): PartyData {
       if (currentVersion !== expectedVersion) {
         return { ok: false, reason: "conflict", slot };
       }
-      applyOverviewField(slot.character, field, value);
+      setOverviewValue(slot.character, field, value);
       slot.character.fieldVersions[field] = currentVersion + 1;
       storeParty(party);
       return { ok: true, slot };

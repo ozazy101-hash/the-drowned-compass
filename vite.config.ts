@@ -1,3 +1,5 @@
+import { setOverviewValue } from "./src/domain/overview-fields.ts";
+import type { CharacterRecord, OverviewFieldKey, OverviewFieldValue } from "./src/domain/party.ts";
 import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 
@@ -95,19 +97,12 @@ function sharedInMemoryParty(): Plugin {
             return;
           }
 
-          if (field.startsWith("save.")) {
-            const values = slot.character.savingThrowProficiencies as Record<string, unknown>;
-            values[field.slice(5)] = requestBody.value;
-          } else if (field.startsWith("skill.")) {
-            const values = slot.character.skillProficiencies as Record<string, unknown>;
-            values[field.slice(6)] = requestBody.value;
-          } else if ([
-            "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma",
-          ].includes(field)) {
-            const values = slot.character.abilityScores as Record<string, unknown>;
-            values[field] = requestBody.value;
-          } else {
-            slot.character[field] = requestBody.value;
+          try {
+            setOverviewValue(slot.character as CharacterRecord, field as OverviewFieldKey, requestBody.value as OverviewFieldValue);
+          } catch {
+            response.statusCode = 400;
+            response.end(JSON.stringify(slot));
+            return;
           }
           versions[field] = currentVersion + 1;
           response.end(JSON.stringify(slot));

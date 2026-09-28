@@ -8,5 +8,10 @@
     "strict": true,
     "noEmit": true
   },
-  "include": ["vite.config.ts", "playwright.config.ts"]
+  "include": [
+    "vite.config.ts",
+    "playwright.config.ts",
+    "src/domain/**/*.ts",
+    "playwright.calculations.config.ts"
+  ]
 }

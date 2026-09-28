@@ -1,8 +1,11 @@
+import { overviewValue, setOverviewValue } from "./domain/overview-fields";
+import { calculateDerivedValues, type DerivedValue, type DerivedValueKey } from "./domain/derived-values";
 import { type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from "react";
 import {
   abilityScoreKeys,
   skillKeys,
   type AbilityScoreKey,
+  type SkillProficiency,
   type AccessRole,
   type CharacterRecord,
   type CharacterSlot,
@@ -47,44 +50,13 @@ const skillLabels = {
   survival: "Survival",
 } as const;
 
-function overviewValue(character: CharacterRecord, field: OverviewFieldKey): OverviewFieldValue {
-  if (field.startsWith("save.")) {
-    const key = field.slice(5) as AbilityScoreKey;
-    return character.savingThrowProficiencies[key];
-  }
-  if (field.startsWith("skill.")) {
-    const key = field.slice(6) as keyof CharacterRecord["skillProficiencies"];
-    return character.skillProficiencies[key];
-  }
-  if (abilityScoreKeys.includes(field as AbilityScoreKey)) {
-    return character.abilityScores[field as AbilityScoreKey];
-  }
-  return (character as unknown as Record<string, OverviewFieldValue>)[field];
-}
-
-function setOverviewValue(
-  character: CharacterRecord,
-  field: OverviewFieldKey,
-  value: OverviewFieldValue,
-) {
-  if (field.startsWith("save.")) {
-    character.savingThrowProficiencies[field.slice(5) as AbilityScoreKey] = value as boolean;
-  } else if (field.startsWith("skill.")) {
-    const key = field.slice(6) as keyof CharacterRecord["skillProficiencies"];
-    character.skillProficiencies[key] = value as CharacterRecord["skillProficiencies"][typeof key];
-  } else if (abilityScoreKeys.includes(field as AbilityScoreKey)) {
-    character.abilityScores[field as AbilityScoreKey] = value as number;
-  } else {
-    (character as unknown as Record<string, OverviewFieldValue>)[field] = value;
-  }
-}
-
 function mergeCharacterRecords(current: CharacterRecord, incoming: CharacterRecord) {
   const merged: CharacterRecord = {
     ...incoming,
     abilityScores: { ...incoming.abilityScores },
     savingThrowProficiencies: { ...incoming.savingThrowProficiencies },
     skillProficiencies: { ...incoming.skillProficiencies },
+    derivedOverrides: { ...incoming.derivedOverrides },
     fieldVersions: { ...incoming.fieldVersions },
   };
 
@@ -317,7 +289,7 @@ function CharacterSetup({
         level: Number(identity.level),
         abilityScores,
         savingThrowProficiencies: Object.fromEntries(
-          abilityScoreKeys.map((key) => [key, false]),
+          abilityScoreKeys.map((key) => [key, "none"]),
         ) as CharacterRecord["savingThrowProficiencies"],
         skillProficiencies: Object.fromEntries(
           skillKeys.map((key) => [key, "none"]),
@@ -326,6 +298,7 @@ function CharacterSetup({
         maxHitPoints: 1,
         speed: 30,
         spellcastingAbility: null,
+        derivedOverrides: {},
         fieldVersions: {},
       });
       onClaimed(claimedSlot);
@@ -465,7 +438,7 @@ function SaveFeedback({
     >
       {state === "saving" ? "Saving…" : state === "saved" ? "Saved" : message}
       {state === "unsaved" && onRetry && (
-        <button type="button" onClick={onRetry}>Retry</button>
+        <button type="button" data-save-retry="true" onClick={onRetry}>Retry</button>
       )}
     </span>
   );
@@ -647,64 +620,97 @@ function EditableSelect({
   );
 }
 
-function EditableCheckbox({
-  field,
-  label,
-  checked,
-  version,
-  onSave,
-}: {
-  field: OverviewFieldKey;
-  label: string;
-  checked: boolean;
-  version: number;
-  onSave: SaveField;
+const proficiencyOptions: Array<{ value: SkillProficiency; label: string }> = [
+  { value: 'none', label: 'Not proficient' },
+  { value: 'proficient', label: 'Proficient' },
+  { value: 'expertise', label: 'Expertise (double proficiency)' },
+];
+
+function DerivedValueEditor({ valueKey, label, result, override, signed, version, onSave }: {
+  valueKey: DerivedValueKey; label: string; result: DerivedValue; override: number | null;
+  signed: boolean; version: number; onSave: SaveField;
 }) {
-  const [draft, setDraft] = useState(checked);
-  const [state, setState] = useState<SaveState>("idle");
-  const [message, setMessage] = useState("");
+  const [draft, setDraft] = useState<number | null>(override);
+  const [text, setText] = useState(String(override ?? ''));
+  const [editing, setEditing] = useState(false);
   const [dirty, setDirty] = useState(false);
-  const feedbackId = `save-${field.replace(".", "-")}`;
-
+  const [state, setState] = useState<SaveState>('idle');
+  const [message, setMessage] = useState('');
+  const revision = useRef(0);
+  const request = useRef(0);
+  const draftVersion = useRef(version);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const field: OverviewFieldKey = `override.${valueKey}`;
+  const id = `derived-${valueKey.replaceAll('.', '-')}`;
   useEffect(() => {
-    if (!dirty) setDraft(checked);
-  }, [dirty, checked, version]);
+    if (!dirty) { draftVersion.current = version; setDraft(override); setText(String(override ?? '')); }
+  }, [override, version, dirty]);
+  useEffect(() => { if (editing) inputRef.current?.focus(); }, [editing]);
+  const visible = dirty ? draft === null ? result.calculated : Number.isFinite(draft) ? draft : result.value : result.value;
+  const overridden = dirty ? draft !== null : result.overridden;
+  const format = (value: number | null) => value === null ? 'Not set' : signed && value >= 0 ? `+${value}` : String(value);
 
-  async function save(nextValue: boolean = draft) {
-    setState("saving");
+  async function save(next: number | null) {
+    if (next !== null && (!Number.isInteger(next) || next < -999 || next > 999)) {
+      setState('unsaved'); setMessage('Enter a whole number from -999 to 999.'); return;
+    }
+    const expectedVersion = draftVersion.current;
+    const savedRevision = revision.current;
+    const savedRequest = ++request.current;
+    setState('saving');
     try {
-      const result = await onSave(field, nextValue, version);
-      if (result === "conflict") {
-        setState("unsaved");
-        setMessage("Changed elsewhere. Your choice is not saved.");
-      } else {
-        setDirty(false);
-        setState("saved");
-        setMessage("");
+      const outcome = await onSave(field, next, expectedVersion);
+      if (savedRequest !== request.current) return;
+      // Only our accepted write can advance a still-dirty draft's base version.
+      if (outcome === 'saved') draftVersion.current = expectedVersion + 1;
+      if (savedRevision !== revision.current) {
+        setState('unsaved'); setMessage('You have newer changes that are not saved.'); return;
       }
+      if (outcome === 'conflict') {
+        setState('unsaved'); setMessage('Changed elsewhere. Your override is not saved.'); return;
+      }
+      setDirty(false); setEditing(false); setState('saved'); setMessage('');
     } catch {
-      setState("unsaved");
-      setMessage("Not saved. Check your connection and retry.");
+      if (savedRequest !== request.current) return;
+      setState('unsaved'); setMessage('Not saved. Check your connection and retry.');
     }
   }
-
+  function saveText() { void save(text.trim() === '' ? NaN : Number(text)); }
+  function reset() {
+    draftVersion.current = version;
+    revision.current += 1; setDraft(null); setText(''); setDirty(true); setEditing(false);
+    void save(null);
+  }
   return (
-    <div className="proficiency-field">
-      <label>
-        <input
-          type="checkbox"
-          checked={draft}
-          disabled={state === "saving"}
-          aria-describedby={feedbackId}
-          onChange={(event) => {
-            setDirty(true);
-            setDraft(event.target.checked);
-            void save(event.target.checked);
-          }}
-        />
-        <span>{label}</span>
-      </label>
-      <SaveFeedback id={feedbackId} state={state} message={message} onRetry={() => void save()} />
+    <div className={`derived-field ${overridden ? 'derived-field--overridden' : ''}`} role="group" aria-label={label}>
+      <div className="derived-field__result"><span>{label}</span><output aria-label={`${label} value`}>{format(visible)}</output></div>
+      <span className="derived-field__source">{overridden ? `Override${dirty ? ' (unsaved)' : ''} · calculated: ${format(result.calculated)}` : 'Calculated'}</span>
+      {(editing || overridden) && (
+        <label className="derived-field__input">Override value
+          <input ref={inputRef} type="number" min={-999} max={999} step={1}
+            aria-label={`${label} override`} aria-describedby={`${id}-feedback`}
+            aria-invalid={state === 'unsaved'} value={text}
+            onChange={(event) => {
+              if (!dirty) draftVersion.current = version;
+              revision.current += 1; setText(event.target.value); setDirty(true); setState('idle');
+              const number = Number(event.target.value);
+              setDraft(event.target.value.trim() !== '' && Number.isInteger(number) ? number : NaN);
+            }}
+            onBlur={(event) => {
+              if (dirty && !(event.relatedTarget instanceof HTMLElement && (event.relatedTarget.dataset.resetOverride || event.relatedTarget.dataset.saveRetry))) saveText();
+            }}
+            onKeyDown={(event) => { if (event.key === 'Enter') { event.preventDefault(); event.currentTarget.blur(); } }} />
+        </label>
+      )}
+      <div className="derived-field__actions">
+        {!editing && !overridden && <button type="button" onClick={() => {
+          draftVersion.current = version;
+          revision.current += 1; setEditing(true); setDirty(true); setDraft(result.value ?? 0); setText(String(result.value ?? 0)); setState('idle');
+        }}>Override {label}</button>}
+        {(editing || overridden) && <button type="button" data-reset-override="true" disabled={state === 'saving'} onClick={reset}>Reset {label}</button>}
+      </div>
+      <SaveFeedback id={`${id}-feedback`} state={state} message={message}
+        onRetry={() => { draftVersion.current = version; if (draft === null) void save(null); else saveText(); }} />
     </div>
   );
 }
@@ -721,6 +727,7 @@ function CharacterPage({
   onSlotChanged: (slot: CharacterSlot) => void;
 }) {
   const character = slot.character!;
+  const derived = calculateDerivedValues({ ...character, totalLevel: character.level }, character.derivedOverrides);
   const version = (field: OverviewFieldKey) => character.fieldVersions[field] ?? 0;
 
   const saveField: SaveField = async (field, value, expectedVersion) => {
@@ -733,6 +740,12 @@ function CharacterPage({
     onSlotChanged(result.slot);
     return result.ok ? "saved" : "conflict";
   };
+
+  const derivedEditor = (valueKey: DerivedValueKey, label: string, signed = true) => (
+    <DerivedValueEditor valueKey={valueKey} label={label} result={derived[valueKey]}
+      override={character.derivedOverrides[valueKey] ?? null} signed={signed}
+      version={version(`override.${valueKey}`)} onSave={saveField} />
+  );
 
   const identityFields: Array<{
     field: OverviewFieldKey;
@@ -807,15 +820,30 @@ function CharacterPage({
                 max={30}
                 onSave={saveField}
               />
-              <EditableCheckbox
+              {derivedEditor(`ability.${key}`, `${abilityScoreLabels[key]} modifier`)}
+              <EditableSelect
                 field={`save.${key}`}
                 label={`${abilityScoreLabels[key]} saving throw proficiency`}
-                checked={character.savingThrowProficiencies[key]}
+                value={character.savingThrowProficiencies[key]}
+                options={proficiencyOptions}
                 version={version(`save.${key}`)}
                 onSave={saveField}
               />
+              {derivedEditor(`save.${key}`, `${abilityScoreLabels[key]} saving throw modifier`)}
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="overview-section" aria-labelledby="derived-heading">
+        <div className="section-heading"><div><p className="section-heading__eyebrow">Calculated from your record</p><h2 id="derived-heading">Derived Values</h2></div></div>
+        <p className="derived-help">Overrides flow into dependent calculations. Reset restores the calculation. Spell values need a spellcasting Ability or an explicit override.</p>
+        <div className="overview-grid overview-grid--compact">
+          {derivedEditor('proficiencyBonus', 'Proficiency bonus')}
+          {derivedEditor('initiative', 'Initiative')}
+          {derivedEditor('passivePerception', 'Passive Perception', false)}
+          {derivedEditor('spellAttack', 'Spell attack modifier')}
+          {derivedEditor('spellSaveDC', 'Spell save DC', false)}
         </div>
       </section>
 
@@ -843,19 +871,17 @@ function CharacterPage({
         <div className="section-heading"><div><p className="section-heading__eyebrow">Training</p><h2 id="skills-heading">Skill Proficiency</h2></div></div>
         <div className="skills-grid">
           {skillKeys.map((key) => (
-            <EditableSelect
-              key={key}
+            <div key={key} className="skill-editor">
+              <EditableSelect
               field={`skill.${key}`}
               label={skillLabels[key]}
               value={character.skillProficiencies[key]}
               version={version(`skill.${key}`)}
               onSave={saveField}
-              options={[
-                { value: "none", label: "Not proficient" },
-                { value: "proficient", label: "Proficient" },
-                { value: "expertise", label: "Expertise" },
-              ]}
+              options={proficiencyOptions}
             />
+            {derivedEditor(`skill.${key}`, `${skillLabels[key]} modifier`)}
+            </div>
           ))}
         </div>
       </section>
