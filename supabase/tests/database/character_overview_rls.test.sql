@@ -2,7 +2,20 @@ begin;
 
 create extension if not exists pgtap with schema extensions;
 
-select plan(28);
+select plan(34);
+
+select ok(has_function_privilege('authenticated', 'public.valid_saving_throw_proficiencies(jsonb)', 'EXECUTE'),
+  'authenticated writes can execute saving throw validation');
+select ok(has_function_privilege('authenticated', 'public.valid_skill_proficiencies(jsonb)', 'EXECUTE'),
+  'authenticated writes can execute skill validation');
+select ok(has_function_privilege('authenticated', 'public.valid_overview_field_versions(jsonb)', 'EXECUTE'),
+  'authenticated writes can execute per-field version validation');
+select ok(not has_function_privilege('anon', 'public.valid_saving_throw_proficiencies(jsonb)', 'EXECUTE'),
+  'anonymous users are not granted saving throw validation');
+select ok(not has_function_privilege('anon', 'public.valid_skill_proficiencies(jsonb)', 'EXECUTE'),
+  'anonymous users are not granted skill validation');
+select ok(not has_function_privilege('anon', 'public.valid_overview_field_versions(jsonb)', 'EXECUTE'),
+  'anonymous users are not granted per-field version validation');
 
 select has_column('public', 'character_slots', 'saving_throw_proficiencies', 'saving throw proficiency data exists');
 select has_column('public', 'character_slots', 'skill_proficiencies', 'skill proficiency data exists');
