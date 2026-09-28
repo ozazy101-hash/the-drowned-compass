@@ -495,6 +495,8 @@ function EditableInput({
   const [message, setMessage] = useState("");
   const [dirty, setDirty] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const draftRevision = useRef(0);
+  const saveRequest = useRef(0);
   const feedbackId = `save-${field.replace(".", "-")}`;
   const inputId = `field-${field.replace(".", "-")}`;
 
@@ -519,9 +521,17 @@ function EditableInput({
     }
     if (!dirty && String(value) === String(parsed)) return;
 
+    const revision = draftRevision.current;
+    const request = ++saveRequest.current;
     setState("saving");
     try {
       const result = await onSave(field, parsed, version);
+      if (request !== saveRequest.current) return;
+      if (revision !== draftRevision.current) {
+        setState("unsaved");
+        setMessage("You have newer changes that are not saved.");
+        return;
+      }
       if (result === "conflict") {
         setState("unsaved");
         setMessage("Changed elsewhere. Your value is not saved.");
@@ -531,6 +541,7 @@ function EditableInput({
       setState("saved");
       setMessage("");
     } catch {
+      if (request !== saveRequest.current) return;
       setState("unsaved");
       setMessage("Not saved. Check your connection and retry.");
     }
@@ -557,6 +568,7 @@ function EditableInput({
         aria-describedby={feedbackId}
         aria-invalid={state === "unsaved"}
         onChange={(event) => {
+          draftRevision.current += 1;
           setDraft(event.target.value);
           setDirty(true);
           setState("idle");
@@ -587,14 +599,13 @@ function EditableSelect({
   const [draft, setDraft] = useState(value);
   const [state, setState] = useState<SaveState>("idle");
   const [message, setMessage] = useState("");
+  const [dirty, setDirty] = useState(false);
   const feedbackId = `save-${field.replace(".", "-")}`;
   const selectId = `field-${field.replace(".", "-")}`;
 
   useEffect(() => {
-    if (state !== "unsaved") setDraft(value);
-    // The version is the synchronization boundary. Same-version polling snapshots
-    // must not replace a choice while its conditional save is still in flight.
-  }, [version]);
+    if (!dirty) setDraft(value);
+  }, [dirty, value, version]);
 
   async function save(nextValue: string = draft) {
     setState("saving");
@@ -604,6 +615,7 @@ function EditableSelect({
         setState("unsaved");
         setMessage("Changed elsewhere. Your choice is not saved.");
       } else {
+        setDirty(false);
         setState("saved");
         setMessage("");
       }
@@ -619,9 +631,11 @@ function EditableSelect({
       <select
         id={selectId}
         value={draft}
+        disabled={state === "saving"}
         aria-describedby={feedbackId}
         aria-invalid={state === "unsaved"}
         onChange={(event) => {
+          setDirty(true);
           setDraft(event.target.value);
           void save(event.target.value);
         }}
@@ -649,12 +663,12 @@ function EditableCheckbox({
   const [draft, setDraft] = useState(checked);
   const [state, setState] = useState<SaveState>("idle");
   const [message, setMessage] = useState("");
+  const [dirty, setDirty] = useState(false);
   const feedbackId = `save-${field.replace(".", "-")}`;
 
   useEffect(() => {
-    if (state !== "unsaved") setDraft(checked);
-    // See EditableSelect: only an accepted remote version may replace the draft.
-  }, [version]);
+    if (!dirty) setDraft(checked);
+  }, [dirty, checked, version]);
 
   async function save(nextValue: boolean = draft) {
     setState("saving");
@@ -664,6 +678,7 @@ function EditableCheckbox({
         setState("unsaved");
         setMessage("Changed elsewhere. Your choice is not saved.");
       } else {
+        setDirty(false);
         setState("saved");
         setMessage("");
       }
@@ -679,8 +694,10 @@ function EditableCheckbox({
         <input
           type="checkbox"
           checked={draft}
+          disabled={state === "saving"}
           aria-describedby={feedbackId}
           onChange={(event) => {
+            setDirty(true);
             setDraft(event.target.checked);
             void save(event.target.checked);
           }}
@@ -987,7 +1004,14 @@ export function App({ partyData }: AppProps) {
   function handleSlotChanged(changedSlot: CharacterSlot) {
     setParty((current) => current && ({
       ...current,
-      slots: current.slots.map((slot) => slot.id === changedSlot.id ? changedSlot : slot),
+      slots: current.slots.map((slot) => {
+        if (slot.id !== changedSlot.id) return slot;
+        if (!slot.character || !changedSlot.character) return changedSlot;
+        return {
+          ...changedSlot,
+          character: mergeCharacterRecords(slot.character, changedSlot.character),
+        };
+      }),
     }));
   }
 

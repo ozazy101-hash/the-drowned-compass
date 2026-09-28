@@ -251,18 +251,27 @@ export function createSupabasePartyData(
     },
 
     subscribeToParty(onPartyChanged) {
+      let active = true;
+      const reload = () => {
+        void loadParty()
+          .then((party) => { if (active) onPartyChanged(party); })
+          // A later event or successful reconnect retries a transient read failure.
+          .catch(() => {});
+      };
       const channel = client
         .channel("party-character-slot-claims")
         .on(
           "postgres_changes",
           { event: "UPDATE", schema: "public", table: "character_slots" },
-          () => {
-            void loadParty().then(onPartyChanged);
-          },
+          reload,
         )
-        .subscribe();
+        .subscribe((status) => {
+          // Realtime does not replay changes missed while disconnected.
+          if (status === "SUBSCRIBED") reload();
+        });
 
       return () => {
+        active = false;
         void client.removeChannel(channel);
       };
     },
