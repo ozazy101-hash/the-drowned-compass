@@ -438,7 +438,7 @@ function SaveFeedback({
     >
       {state === "saving" ? "Saving…" : state === "saved" ? "Saved" : message}
       {state === "unsaved" && onRetry && (
-        <button type="button" onClick={onRetry}>Retry</button>
+        <button type="button" data-save-retry="true" onClick={onRetry}>Retry</button>
       )}
     </span>
   );
@@ -638,11 +638,12 @@ function DerivedValueEditor({ valueKey, label, result, override, signed, version
   const [message, setMessage] = useState('');
   const revision = useRef(0);
   const request = useRef(0);
+  const draftVersion = useRef(version);
   const inputRef = useRef<HTMLInputElement>(null);
   const field: OverviewFieldKey = `override.${valueKey}`;
   const id = `derived-${valueKey.replaceAll('.', '-')}`;
   useEffect(() => {
-    if (!dirty) { setDraft(override); setText(String(override ?? '')); }
+    if (!dirty) { draftVersion.current = version; setDraft(override); setText(String(override ?? '')); }
   }, [override, version, dirty]);
   useEffect(() => { if (editing) inputRef.current?.focus(); }, [editing]);
   const visible = dirty ? draft === null ? result.calculated : Number.isFinite(draft) ? draft : result.value : result.value;
@@ -653,12 +654,15 @@ function DerivedValueEditor({ valueKey, label, result, override, signed, version
     if (next !== null && (!Number.isInteger(next) || next < -999 || next > 999)) {
       setState('unsaved'); setMessage('Enter a whole number from -999 to 999.'); return;
     }
+    const expectedVersion = draftVersion.current;
     const savedRevision = revision.current;
     const savedRequest = ++request.current;
     setState('saving');
     try {
-      const outcome = await onSave(field, next, version);
+      const outcome = await onSave(field, next, expectedVersion);
       if (savedRequest !== request.current) return;
+      // Only our accepted write can advance a still-dirty draft's base version.
+      if (outcome === 'saved') draftVersion.current = expectedVersion + 1;
       if (savedRevision !== revision.current) {
         setState('unsaved'); setMessage('You have newer changes that are not saved.'); return;
       }
@@ -673,6 +677,7 @@ function DerivedValueEditor({ valueKey, label, result, override, signed, version
   }
   function saveText() { void save(text.trim() === '' ? NaN : Number(text)); }
   function reset() {
+    draftVersion.current = version;
     revision.current += 1; setDraft(null); setText(''); setDirty(true); setEditing(false);
     void save(null);
   }
@@ -686,24 +691,26 @@ function DerivedValueEditor({ valueKey, label, result, override, signed, version
             aria-label={`${label} override`} aria-describedby={`${id}-feedback`}
             aria-invalid={state === 'unsaved'} value={text}
             onChange={(event) => {
+              if (!dirty) draftVersion.current = version;
               revision.current += 1; setText(event.target.value); setDirty(true); setState('idle');
               const number = Number(event.target.value);
               setDraft(event.target.value.trim() !== '' && Number.isInteger(number) ? number : NaN);
             }}
             onBlur={(event) => {
-              if (dirty && !(event.relatedTarget instanceof HTMLElement && event.relatedTarget.dataset.resetOverride)) saveText();
+              if (dirty && !(event.relatedTarget instanceof HTMLElement && (event.relatedTarget.dataset.resetOverride || event.relatedTarget.dataset.saveRetry))) saveText();
             }}
             onKeyDown={(event) => { if (event.key === 'Enter') { event.preventDefault(); event.currentTarget.blur(); } }} />
         </label>
       )}
       <div className="derived-field__actions">
         {!editing && !overridden && <button type="button" onClick={() => {
+          draftVersion.current = version;
           revision.current += 1; setEditing(true); setDirty(true); setDraft(result.value ?? 0); setText(String(result.value ?? 0)); setState('idle');
         }}>Override {label}</button>}
         {(editing || overridden) && <button type="button" data-reset-override="true" disabled={state === 'saving'} onClick={reset}>Reset {label}</button>}
       </div>
       <SaveFeedback id={`${id}-feedback`} state={state} message={message}
-        onRetry={() => draft === null ? void save(null) : saveText()} />
+        onRetry={() => { draftVersion.current = version; if (draft === null) void save(null); else saveText(); }} />
     </div>
   );
 }

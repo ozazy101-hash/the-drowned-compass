@@ -121,17 +121,13 @@ begin
       raise exception 'Numeric overview value is out of range' using errcode = '23514';
     end if;
   elsif target_field like 'override.%' then
-    if substring(target_field from 10) <> all (array['ability.strength', 'ability.dexterity', 'ability.constitution', 'ability.intelligence', 'ability.wisdom', 'ability.charisma', 'save.strength', 'save.dexterity', 'save.constitution', 'save.intelligence', 'save.wisdom', 'save.charisma', 'skill.acrobatics', 'skill.animalHandling', 'skill.arcana', 'skill.athletics', 'skill.deception', 'skill.history', 'skill.insight', 'skill.intimidation', 'skill.investigation', 'skill.medicine', 'skill.nature', 'skill.perception', 'skill.performance', 'skill.persuasion', 'skill.religion', 'skill.sleightOfHand', 'skill.stealth', 'skill.survival', 'proficiencyBonus', 'passivePerception', 'initiative', 'spellAttack', 'spellSaveDC']) then
-      raise exception 'Unknown Derived Value' using errcode = '23514';
-    end if;
-    if next_value <> 'null'::jsonb then
-      if jsonb_typeof(next_value) <> 'number' then
-        raise exception 'Override must be a number or null' using errcode = '23514';
-      end if;
-      number_value := (next_value #>> '{}')::numeric;
-      if trunc(number_value) <> number_value or number_value not between -999 and 999 then
-        raise exception 'Override must be a whole number from -999 to 999' using errcode = '23514';
-      end if;
+    -- Validate the key and value together using the CHECK validator's allowlist.
+    -- A reset supplies zero only for validation; the write still removes the key.
+    if not public.valid_derived_overrides(jsonb_build_object(
+      substring(target_field from 10),
+      case when next_value = 'null'::jsonb then '0'::jsonb else next_value end
+    )) then
+      raise exception 'Invalid Derived Value override' using errcode = '23514';
     end if;
   elsif target_field like 'save.%' then
     if substring(target_field from 6) not in ('strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma')

@@ -186,3 +186,23 @@ test('invalid override drafts stay unsaved without replacing the calculated numb
   await expect(group(page,'Initiative').locator('.save-feedback')).toHaveText('Saved');
   await expect(value(page,'Initiative')).toHaveText('+3');
 });
+
+test('a remote same-field update before local submission keeps the draft stale until explicit Retry', async ({ browser,page },testInfo) => {
+  const { otherPage, otherContext } = await prepareTwoBrowsers(browser,page,testInfo);
+  await overrideValue(page,'Initiative','0');
+  const control = page.getByLabel('Initiative override');
+  await control.fill('9');
+  await overrideValue(otherPage,'Initiative','2');
+  // Seeing the later independent edit proves that the full remote snapshot,
+  // including Initiative's new field version, arrived before local submission.
+  await saveInput(otherPage,'Speed (feet)','40');
+  await expect(page.getByLabel('Speed (feet)')).toHaveValue('40');
+  await control.press('Enter');
+  await expect(group(page,'Initiative').getByRole('alert')).toContainText('Changed elsewhere');
+  await expect(control).toHaveValue('9');
+  await expect(value(otherPage,'Initiative')).toHaveText('+2');
+  await group(page,'Initiative').getByRole('button', { name:'Retry' }).click();
+  await expectSaveFeedback(page,control,'Saved');
+  await expect(value(otherPage,'Initiative')).toHaveText('+9');
+  await otherContext.close();
+});

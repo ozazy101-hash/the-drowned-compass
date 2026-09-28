@@ -4,7 +4,7 @@
 
 Effective Ability modifiers and proficiency bonus feed saves, skills, initiative, and spell statistics. Effective Perception feeds Passive Perception. Final overrides do not flow upstream: initiative does not change Dexterity, and spell attack does not change spell save DC. An unset spellcasting Ability produces null spell calculations; each spell statistic can still have its own explicit override and resets to null.
 
-The UI previews a draft override and marks it unsaved. Dependent fields use accepted inputs/overrides. Reset previews the calculated result immediately while preserving Saving/failure feedback until the backend acknowledges it. Each override and proficiency entry has its own conditional field version, retaining the existing draft and snapshot guards.
+The UI previews a draft override and marks it unsaved. Dependent fields use accepted inputs/overrides. Reset previews the calculated result immediately while preserving Saving/failure feedback until the backend acknowledges it. Each override and proficiency entry has its own conditional field version, retaining the existing draft and snapshot guards. An override draft remembers its starting version; a competing same-field update received before submission makes that save conflict. Explicit Retry deliberately adopts the latest version.
 
 ## Rules evidence
 
@@ -20,6 +20,8 @@ Saving-throw expertise is a ticket-requested table extension, not an automatic S
 ## Local verification
 
 Run `pnpm test:calculations`, `pnpm test:e2e --workers=1`, `pnpm test:db`, and `pnpm build`. The database runner expands the actual migration into a rollback-only fixture because Supabase mounts test SQL without sibling migrations. It proves that legacy choices, claim metadata, and conditional versions survive the forward migration; generated test SQL is removed after the run.
+
+Final review verification passed 50 browser tests (25 laptop, 25 phone) using `pnpm test:e2e --workers=1 --timeout=90000` on the busy development Mac. This extends the whole-test budget; assertion timeouts remain unchanged. The production build and all 111 database assertions also passed after the review fixes.
 
 ## Release boundary
 
