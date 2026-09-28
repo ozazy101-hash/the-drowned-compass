@@ -11,7 +11,7 @@ test("the Character Overview is keyboard operable, responsive, and persists focu
     await expect(navigation.getByRole("button", { name: section })).toBeVisible();
   }
   await expect(navigation.getByRole("button", { name: "Overview" })).toHaveAttribute("aria-current", "page");
-  await expect(navigation.getByRole("button", { name: "Combat" })).toBeDisabled();
+  await expect(navigation.getByRole("button", { name: "Combat" })).toBeEnabled();
 
   const characterName = page.getByLabel("Character name", { exact: true });
   await characterName.fill("Neris Stormwake");

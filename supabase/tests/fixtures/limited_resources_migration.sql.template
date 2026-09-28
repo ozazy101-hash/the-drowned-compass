@@ -1,16 +1,21 @@
 begin;
+set local search_path=public,extensions;
 create extension if not exists pgtap with schema extensions;
 select no_plan();
-create temporary table before_resources as select * from public.character_slots;
--- __LIMITED_RESOURCES_MIGRATION__
 insert into auth.users(instance_id,id,aud,role,email,encrypted_password,email_confirmed_at,raw_app_meta_data,raw_user_meta_data,created_at,updated_at)
 values ('00000000-0000-0000-0000-000000000000','31000000-0000-4000-8000-000000000001','authenticated','authenticated','players@drowned-compass.test','',now(),'{}','{}',now(),now()),
 ('00000000-0000-0000-0000-000000000000','31000000-0000-4000-8000-000000000002','authenticated','authenticated','dm@drowned-compass.test','',now(),'{}','{}',now(),now()),
 ('00000000-0000-0000-0000-000000000000','31000000-0000-4000-8000-000000000003','authenticated','authenticated','resource-outsider@test.invalid','',now(),'{}','{}',now(),now());
+set local role authenticated;
+set local "request.jwt.claim.sub" = '31000000-0000-4000-8000-000000000001';
+update public.character_slots set claimed_at=now(),claimed_by='31000000-0000-4000-8000-000000000001',player_name='Mara',character_name='Neris',primary_class='Fighter',subclass='Champion',species='Human',background='Sailor',level=1,strength=10,dexterity=10,constitution=10,intelligence=10,wisdom=10,charisma=10, version=5, overview_field_versions='{"armorClass":7,"override.initiative":4}'::jsonb,
+derived_overrides='{"initiative":0}'::jsonb where position=1;
+reset role;
+create temporary table before_resources as select * from public.character_slots;
+-- __LIMITED_RESOURCES_MIGRATION__
 select results_eq($$select * from public.character_slots order by id$$,$$select * from before_resources order by id$$,'migration preserves all six slots, claims, data and versions');
 set local role authenticated;
 set local "request.jwt.claim.sub" = '31000000-0000-4000-8000-000000000001';
-update public.character_slots set claimed_at=now(),claimed_by='31000000-0000-4000-8000-000000000001',player_name='Mara',character_name='Neris',primary_class='Fighter',subclass='Champion',species='Human',background='Sailor',level=1,strength=10,dexterity=10,constitution=10,intelligence=10,wisdom=10,charisma=10 where position=1;
 select ok(has_function_privilege('authenticated','public.write_limited_resource(uuid,uuid,text,integer,integer,text,double precision,boolean,boolean,integer)','EXECUTE'),'authenticated has explicit RPC grant');
 select ok(not has_function_privilege('anon','public.write_limited_resource(uuid,uuid,text,integer,integer,text,double precision,boolean,boolean,integer)','EXECUTE'),'anonymous has no RPC grant');
 select ok(not has_table_privilege('authenticated','public.limited_resources','UPDATE'),'direct updates cannot bypass conditional versions');

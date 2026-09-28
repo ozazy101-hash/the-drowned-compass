@@ -790,7 +790,7 @@ function CharacterPage({
             aria-current={item === section ? "page" : undefined}
             disabled={item !== "Overview" && item !== "Combat"}
             onClick={() => setSection(item)}
-            title={item === "Overview" || item === "Combat" ? undefined : "Coming in a later ticket"}
+            title={item === "Overview" || item === "Combat" ? undefined : "Not available yet"}
           >
             {item}
           </button>

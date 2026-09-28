@@ -101,9 +101,9 @@ test("the Dungeon Master can enter and sign out", async ({
   await expect(page.getByLabel("Shared password")).toBeVisible();
 });
 
-test("signing out leaves another browser signed in", async ({ browser, page }) => {
+test("signing out leaves another browser signed in", async ({ browser, page }, testInfo) => {
   const otherContext = await browser.newContext({
-    baseURL: "http://127.0.0.1:4173/the-drowned-compass/",
+    baseURL: String(testInfo.project.use.baseURL ?? "http://127.0.0.1:4173/the-drowned-compass/"),
   });
   const otherPage = await otherContext.newPage();
 
@@ -178,7 +178,7 @@ test("another signed-in browser receives a claimed identity without reloading", 
 }, testInfo) => {
   const url = isolatedPartyUrl(testInfo);
   const otherContext = await browser.newContext({
-    baseURL: "http://127.0.0.1:4173/the-drowned-compass/",
+    baseURL: String(testInfo.project.use.baseURL ?? "http://127.0.0.1:4173/the-drowned-compass/"),
   });
   const otherPage = await otherContext.newPage();
 

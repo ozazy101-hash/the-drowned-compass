@@ -130,7 +130,7 @@ export function CombatResources({ slotId, resources = [], partyData, onChanged }
   const newResource: LimitedResource = resources.find(resource => resource.id === newId) ?? { id: newId, name: '', current: 1, maximum: 1, recovery: 'Manual', position: (ordered.at(-1)?.position ?? 0) + 1024, important: false, version: 0, deleted: false };
   return <section className="overview-section" aria-labelledby="resources-heading">
     <div className="section-heading"><div><p className="section-heading__eyebrow">Combat · Session Trackers</p><h2 id="resources-heading">Limited resources</h2></div></div>
-    <p>Track uses and recovery timing. Mark one important resource for the Party Dashboard. Recovery timing records when a resource recovers; rest actions follow in a later ticket.</p>
+    <p>Track uses and recovery timing. Mark one important resource for the Party Dashboard. Restore uses manually or correct Current when a resource recovers.</p>
     {ordered.length === 0 && <p>No limited resources yet.</p>}
     {resources.filter(resource => resource.id !== newId).sort((a, b) => a.position - b.position || a.id.localeCompare(b.id)).map(resource => { const index = ordered.findIndex(candidate => candidate.id === resource.id); return <ResourceEditor key={resource.id} resource={resource} save={save} movePosition={{
       up: index <= 0 ? undefined : ((ordered[index - 2]?.position ?? ordered[index - 1].position - 2048) + ordered[index - 1].position) / 2,

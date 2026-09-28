@@ -34,6 +34,8 @@ test('limited resources add, correct, order, use, designate and remove persist',
   await expect(wind.getByRole('button', { name: 'Make important' })).toHaveAttribute('aria-pressed', 'false');
   await luck.getByRole('button', { name: 'Move up' }).click(); await saved(luck);
   await expect(page.getByRole('form').nth(0)).toHaveAttribute('aria-label', 'Resource Luck');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: info.outputPath('combat-resources.png'), fullPage: true });
   await page.getByRole('button', { name: 'Back to the Party' }).click();
   await expect(page.getByText('Luck: 3 / 3', { exact: true })).toBeVisible();
   await page.reload(); await page.getByRole('article', { name: 'Neris Vale, played by Mara' }).getByRole('button').click(); await combat(page);
