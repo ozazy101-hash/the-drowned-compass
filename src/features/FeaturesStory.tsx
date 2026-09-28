@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
+import { useRef, useState, type KeyboardEvent } from 'react';
 import {
   featureKinds, storyKinds, textKindLabels,
   type CharacterTextDraft, type CharacterTextEntry, type FeatureKind,
@@ -10,8 +10,10 @@ type SaveText = (entry: CharacterTextDraft, version: number) => Promise<boolean>
 function TextEditor({ entry, label, feature, onSave, onCancelNew }: {
   entry: CharacterTextEntry; label: string; feature?: boolean; onSave: SaveText; onCancelNew?: () => void;
 }) {
-  const [draft, setDraft] = useState(entry);
-  const [dirty, setDirty] = useState(false);
+  const [draft, setDraft] = useState<CharacterTextDraft | null>(null);
+  const draftRef = useRef<CharacterTextDraft | null>(null);
+  const dirty = draft !== null;
+  const visible = draft ?? entry;
   const [state, setState] = useState<'idle' | 'saving' | 'saved' | 'unsaved'>('idle');
   const [message, setMessage] = useState('');
   const revision = useRef(0);
@@ -19,21 +21,26 @@ function TextEditor({ entry, label, feature, onSave, onCancelNew }: {
   const baseVersion = useRef(entry.version);
   const pendingRemoval = useRef(false);
   const id = entry.id.replaceAll('.', '-');
-  useEffect(() => {
-    if (!dirty) { setDraft(entry); baseVersion.current = entry.version; }
-  }, [entry, dirty]);
-
   function change(field: 'title' | 'body', value: string) {
-    if (!dirty) baseVersion.current = entry.version;
+    if (!draftRef.current) baseVersion.current = entry.version;
     revision.current += 1;
     pendingRemoval.current = false;
-    setDraft(current => ({ ...current, [field]: value, deleted: false }));
-    setDirty(true); if (state !== 'saving') setState('unsaved'); setMessage('Unsaved changes.');
+    draftRef.current = { ...(draftRef.current ?? entry), [field]: value, deleted: false };
+    setDraft(draftRef.current);
+    setState(current => current === 'saving' ? 'saving' : 'unsaved'); setMessage('Unsaved changes.');
   }
   async function save(remove = false, retry = false) {
+    if (!draftRef.current && !remove) {
+      if (feature && !entry.title.trim()) { setState('unsaved'); setMessage('Enter a feature name before saving.'); }
+      return;
+    }
+    if (!draftRef.current) {
+      baseVersion.current = entry.version;
+      draftRef.current = { ...entry };
+      setDraft(draftRef.current);
+    }
     pendingRemoval.current = remove;
-    if (remove) setDirty(true);
-    const next = { ...draft, deleted: remove, title: feature ? draft.title.trim() : '' };
+    const next = { ...draftRef.current, deleted: remove, title: feature ? draftRef.current.title.trim() : '' };
     if (feature && !next.title) { setState('unsaved'); setMessage('Enter a feature name before saving.'); return; }
     if (retry) baseVersion.current = entry.version;
     const expected = baseVersion.current;
@@ -50,7 +57,7 @@ function TextEditor({ entry, label, feature, onSave, onCancelNew }: {
       if (!accepted) {
         setState('unsaved'); setMessage('Changed elsewhere. Your text is not saved.'); return;
       }
-      setDirty(false); setState('saved'); setMessage('');
+      draftRef.current = null; setDraft(null); setState('saved'); setMessage('');
     } catch {
       if (request.current !== savedRequest) return;
       setState('unsaved'); setMessage('Not saved. Check your connection and retry.');
@@ -66,18 +73,18 @@ function TextEditor({ entry, label, feature, onSave, onCancelNew }: {
     <article className="text-entry" aria-label={label}>
       <h3>{label}</h3>
       {feature && <label htmlFor={`${id}-title`}>Feature name
-        <input id={`${id}-title`} value={draft.title} maxLength={160}
+        <input id={`${id}-title`} value={visible.title} maxLength={160}
           aria-describedby={`${id}-feedback`} onChange={event => change('title', event.target.value)} onKeyDown={keySave} />
       </label>}
       <label htmlFor={`${id}-body`}>{feature ? 'Summary' : label}
-        <textarea id={`${id}-body`} rows={feature ? 6 : 10} maxLength={20000} value={draft.body}
+        <textarea id={`${id}-body`} rows={feature ? 6 : 10} maxLength={20000} value={visible.body}
           aria-describedby={`${id}-feedback`} onChange={event => change('body', event.target.value)} onKeyDown={keySave} />
       </label>
       <div className="text-entry__actions">
         <button className="secondary-button" type="button" disabled={state === 'saving'} onClick={() => void save()}>Save {feature ? 'feature' : label}</button>
         {feature && <button className="text-button" type="button" disabled={state === 'saving'} onClick={() => { if (entry.version === 0) onCancelNew?.(); else void save(true); }}>Remove feature</button>}
         {state === 'unsaved' && <button className="text-button" type="button" onClick={() => {
-          request.current += 1; revision.current += 1; setDraft(entry); setDirty(false); setState('idle'); setMessage('');
+          request.current += 1; revision.current += 1; draftRef.current = null; setDraft(null); setState('idle'); setMessage('');
         }}>Discard changes</button>}
       </div>
       <p id={`${id}-feedback`} className={`save-feedback save-feedback--${state}`}

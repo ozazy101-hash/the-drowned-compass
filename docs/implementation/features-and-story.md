@@ -4,7 +4,7 @@ Features contains repeatable player-authored Class, Species, Background and Feat
 
 `src/features/FeaturesStory.tsx` supplies the two composable Character Page sections. Editors support multiline text, explicit per-entry Save, Ctrl/Command+Enter, unsaved/Saving/Saved/failure feedback, Retry and Discard changes. Switching Character Record sections preserves mounted drafts. Text is plain text with a 20,000-character limit; Feature names allow 160 characters. Empty Story text is a valid save. Features can be added repeatedly and removed independently.
 
-`src/domain/character-text.ts` defines and validates independently addressable entries, applies the in-memory conditional-write contract and merges records by version. Story identifiers are fixed (`story.backstory`, etc.); Features have generated identifiers. Deletions retain versioned tombstones. The draft remembers its starting version; remote changes cannot silently rebase it. Retry explicitly adopts the latest accepted version. Revision/request guards retain newer typing through delayed responses; snapshot merging preserves accepted newer records and tombstones.
+`src/domain/character-text.ts` defines and validates independently addressable entries, applies the in-memory conditional-write contract and merges records by version. Story identifiers are fixed (`story.backstory`, etc.); Features have generated identifiers. Deletions retain versioned tombstones. The draft remembers its starting version; remote changes cannot silently rebase it. Retry explicitly adopts the latest accepted version. Revision/request guards retain newer typing through delayed responses; snapshot merging preserves accepted newer records and tombstones. Clean editors render accepted entries directly; edited entries own a separate draft captured synchronously. A prior effect that copied accepted values into the draft could run after new input and erase it during a neighboring save. Removing that effect prevents the reproduced race; the boundary regression pins input at that render and checks save/reload persistence.
 
 ## Storage and release
 
@@ -24,4 +24,23 @@ Hosted migration and reviewed frontend deployment remain pending user approval. 
 
 ## Verification
 
-`pnpm test:db` passed all 144 assertions across six files, including 33 new migration/RLS/grant/conditional-write assertions, in rollback-only transactions. `pnpm build` and `git diff --check` pass. Browser acceptance results follow after the final runs. Browser tests use both laptop and phone projects with one worker and a temporary uncommitted config on port 4216. SQL rehearses the actual forward migration inside a transaction and rolls it back, avoiding any persistent changes to the shared local stack.
+`pnpm test:db` passed all 144 assertions across six files, including 33 new migration/RLS/grant/conditional-write assertions, in rollback-only transactions. `pnpm build` and `git diff --check` pass. The final selected browser run passed all 40 tests in 4.4 minutes across laptop and phone: 12 Feature/Story acceptance checks, eight text-adapter checks, four existing Supabase adapter checks and 16 Overview regressions. A separate draft-race regression passed three repetitions on each viewport (six checks total), after reproducing the same data loss in all three baseline runs. The two-session and failure/Retry workflows also passed a focused rerun after correcting exact-label test lookups for populated textareas. Both long Story layouts were visually inspected; long text wraps without page overflow. Browser tests used one worker, the shared browser verification lock and a temporary uncommitted config on reserved port 4216; that config was removed after verification. Hosted UI/database integration is pending the approved release; browser adapter contracts mock Supabase HTTP/WebSocket delivery, while SQL rehearses the real database migration and authorization rules. SQL rehearses the actual forward migration inside a transaction and rolls it back, avoiding any persistent changes to the shared local stack.
+
+Canonical browser selections (the verification-only config changed the port, not the projects or tests):
+
+```sh
+pnpm exec playwright test e2e/features-story.spec.ts e2e/character-text-adapters.spec.ts e2e/supabase-party-data.spec.ts e2e/character-overview.spec.ts --workers=1 --timeout=90000
+pnpm exec playwright test e2e/story-draft-regression.spec.ts --workers=1 --timeout=90000 --repeat-each=3
+```
+
+Review PR: [#7](https://github.com/ozazy101-hash/the-drowned-compass/pull/7), branch `codex/ticket-16-features-story`, based on accepted main `da52f5af1f5520adedb34b8f79813907111fee7a`.
+
+## Standards
+
+Independent static review found no remaining documented-standard violations or baseline smell findings. Clean editors render accepted entries directly; unsaved editors render their separate draft. The synchronous draft reference and version/revision guards preserve the current edit through sibling snapshots and delayed acknowledgements. Blank new Features retain name validation. Earlier feedback on stale Discard feedback and duplicated navigation state was addressed.
+
+## Spec
+
+Independent static review found no remaining correctness or acceptance blocker. All four Feature sources and five Story fields are implemented without private-note scope or rules automation. The final fix removes the obsolete effect that reproduced data loss. The boundary regression verifies draft survival, save and reload, and the long Story journey checks outgoing values as well as persistence. Earlier removal Retry feedback was addressed and covered by regression. Hosted end-to-end verification awaits approved migration/deployment.
+
+Remaining findings: Standards 0 (no worst issue); Spec 0 (no worst issue).

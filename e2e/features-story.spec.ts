@@ -7,7 +7,8 @@ async function area(page: Page, name: 'Features' | 'Story') {
 }
 async function saveStory(page: Page, label: string, text: string) {
   const editor = page.getByRole('article', { name: label, exact: true });
-  await editor.getByLabel(label, { exact: true }).fill(text);
+  await editor.getByRole('textbox', { name: label, exact: true }).fill(text);
+  await expect(editor.getByRole('textbox', { name: label, exact: true })).toHaveValue(text);
   await editor.getByRole('button', { name: `Save ${label}`, exact: true }).click();
   await expect(editor.getByRole('status')).toHaveText('Saved');
 }
@@ -39,7 +40,17 @@ test('all Story fields preserve long party-visible text', async ({ page }, info)
   const longText = ('Salt-stained coat, a compass from an old ally.\n' + 'abyss'.repeat(80) + '\n').repeat(12);
   await area(page, 'Story');
   await expect(page.getByText('Visible to the whole Party.', { exact: false }).last()).toBeVisible();
-  for (const label of ['Appearance', 'Personality', 'Backstory', 'Allies', 'General notes']) await saveStory(page, label, longText);
+  const submitted = new Map<string, string>();
+  page.on('request', request => {
+    if (request.method() === 'PATCH') {
+      const body = request.postDataJSON();
+      if (body.textEntry) submitted.set(body.textEntry.id, body.textEntry.body);
+    }
+  });
+  for (const [label, key] of [['Appearance', 'appearance'], ['Personality', 'personality'], ['Backstory', 'backstory'], ['Allies', 'allies'], ['General notes', 'notes']]) {
+    await saveStory(page, label, longText);
+    expect(submitted.get(`story.${key}`)).toBe(longText);
+  }
   await expect(page.getByRole('textbox', { name: /private|Dungeon Master/i })).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.screenshot({ path: info.outputPath('story-layout.png'), fullPage: true });
@@ -61,12 +72,12 @@ test('independent Feature and Story edits survive and stale same-field drafts co
     await area(page, 'Story');
     await expect(page.getByRole('textbox', { name: 'Backstory', exact: true })).toHaveValue('Raised aboard the Gull.');
     const backstory = page.getByRole('article', { name: 'Backstory', exact: true });
-    await backstory.getByLabel('Backstory').fill('My unfinished draft');
+    await backstory.getByRole('textbox', { name: 'Backstory', exact: true }).fill('My unfinished draft');
     await saveStory(otherPage, 'Backstory', 'Remote accepted story');
     // Wait for a separate realtime field to prove the snapshot has reached this session.
     await saveStory(otherPage, 'Appearance', 'Scarred cheek');
     await expect(page.getByRole('textbox', { name: 'Appearance', exact: true })).toHaveValue('Scarred cheek');
-    await expect(backstory.getByLabel('Backstory')).toHaveValue('My unfinished draft');
+    await expect(backstory.getByRole('textbox', { name: 'Backstory', exact: true })).toHaveValue('My unfinished draft');
     await backstory.getByRole('button', { name: 'Save Backstory' }).click();
     await expect(backstory.getByRole('alert')).toContainText('Changed elsewhere');
     await expect(otherPage.getByRole('textbox', { name: 'Backstory', exact: true })).toHaveValue('Remote accepted story');
@@ -91,11 +102,11 @@ test('independent Feature and Story edits survive and stale same-field drafts co
 test('failed Story saves retain text and section drafts while Retry persists it', async ({ page }, info) => {
   await prepareTextPage(page, info, '&failTextSaves=once'); await area(page, 'Story');
   const editor = page.getByRole('article', { name: 'General notes' });
-  await editor.getByLabel('General notes').fill('Remember the debt.\nAsk the crew.');
+  await editor.getByRole('textbox', { name: 'General notes', exact: true }).fill('Remember the debt.\nAsk the crew.');
   await editor.getByRole('button', { name: 'Save General notes' }).click();
   await expect(editor.getByRole('alert')).toContainText('Not saved');
   await area(page, 'Features'); await area(page, 'Story');
-  await expect(editor.getByLabel('General notes')).toHaveValue('Remember the debt.\nAsk the crew.');
+  await expect(editor.getByRole('textbox', { name: 'General notes', exact: true })).toHaveValue('Remember the debt.\nAsk the crew.');
   await editor.getByRole('button', { name: 'Retry' }).click(); await expect(editor.getByRole('status')).toHaveText('Saved');
   await page.reload(); await openClaimedCharacter(page); await area(page, 'Story');
   await expect(page.getByRole('textbox', { name: 'General notes', exact: true })).toHaveValue('Remember the debt.\nAsk the crew.');
@@ -119,17 +130,17 @@ test('older save acknowledgements preserve newer typing and delayed snapshots pr
       await route.fulfill({ response });
     });
     const editor = page.getByRole('article', { name: 'Personality', exact: true });
-    await editor.getByLabel('Personality').fill('First draft');
+    await editor.getByRole('textbox', { name: 'Personality', exact: true }).fill('First draft');
     await editor.getByRole('button', { name: 'Save Personality' }).click();
     await expect(editor.getByRole('status')).toHaveText('Saving…');
     await expect(otherPage.getByRole('textbox', { name: 'Personality', exact: true })).toHaveValue('First draft');
-    await editor.getByLabel('Personality').fill('Newer typing');
+    await editor.getByRole('textbox', { name: 'Personality', exact: true }).fill('Newer typing');
     await saveStory(otherPage, 'Personality', 'Newer remote record');
     release();
     await expect(editor.getByRole('alert')).toContainText('newer changes');
-    await expect(editor.getByLabel('Personality')).toHaveValue('Newer typing');
+    await expect(editor.getByRole('textbox', { name: 'Personality', exact: true })).toHaveValue('Newer typing');
     await editor.getByRole('button', { name: 'Discard changes' }).click();
-    await expect(editor.getByLabel('Personality')).toHaveValue('Newer remote record');
+    await expect(editor.getByRole('textbox', { name: 'Personality', exact: true })).toHaveValue('Newer remote record');
   } finally { await otherContext.close(); }
 });
 
