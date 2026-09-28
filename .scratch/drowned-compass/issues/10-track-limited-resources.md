@@ -28,3 +28,7 @@
 - `pnpm test:db` twice failed with a host connection termination; the existing 111 assertions were not rerun successfully via that runner. Initial in-container rehearsal attempts exposed shared-transaction contention and a missing session search path; both were resolved before the final wrapped 25/25 run.
 - Independent code-review Standards and Spec re-reviews report no remaining findings after fixing action Retry intent, serializing all localStorage Party mutations, and typing save feedback.
 - Hosted migration, release, and live acceptance remain pending fresh Ticket 10 approval; ticket remains claimed. Peer integration is documented in `docs/implementation/limited-resources.md`.
+
+## Review PR
+
+[PR #8 — Track limited resources in Combat](https://github.com/ozazy101-hash/the-drowned-compass/pull/8) is open against `main` from `codex/ticket-10-limited-resources` and attached to this task. Hosted migration/release remain pending approval. No peer changes were imported, and the shared verification lanes were released after the final commands exited.
