@@ -1,4 +1,5 @@
 import { overviewValue, setOverviewValue } from "./domain/overview-fields";
+import { ClaimedCharacterCard } from "./components/claimed-character-card";
 import { calculateDerivedValues, type DerivedValue, type DerivedValueKey } from "./domain/derived-values";
 import { type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from "react";
 import {
@@ -127,29 +128,6 @@ function UnclaimedSlot({
           <span>A place waits at the table.</span>
         </span>
         <span className="character-slot__marker" aria-hidden="true">+</span>
-      </button>
-    </article>
-  );
-}
-
-function ClaimedSlot({ slot, onSelect }: { slot: CharacterSlot; onSelect: () => void }) {
-  const character = slot.character!;
-
-  return (
-    <article
-      className="character-slot character-slot--claimed"
-      aria-label={`${character.characterName}, played by ${character.playerName}`}
-    >
-      <button className="character-slot__action" type="button" onClick={onSelect}>
-        <Portrait position={slot.position} />
-        <span className="character-slot__body">
-          <span className="character-slot__eyebrow">Played by {character.playerName}</span>
-          <strong>{character.characterName}</strong>
-          <span>
-            Level {character.level} {character.primaryClass} · {character.subclass}
-          </span>
-        </span>
-        <span className="character-slot__marker" aria-hidden="true">›</span>
       </button>
     </article>
   );
@@ -470,11 +448,15 @@ function EditableInput({
   const inputRef = useRef<HTMLInputElement>(null);
   const draftRevision = useRef(0);
   const saveRequest = useRef(0);
+  const draftVersion = useRef(version);
   const feedbackId = `save-${field.replace(".", "-")}`;
   const inputId = `field-${field.replace(".", "-")}`;
 
   useEffect(() => {
-    if (!dirty) setDraft(String(value));
+    if (!dirty) {
+      draftVersion.current = version;
+      setDraft(String(value));
+    }
   }, [dirty, value, version]);
 
   async function save() {
@@ -495,11 +477,14 @@ function EditableInput({
     if (!dirty && String(value) === String(parsed)) return;
 
     const revision = draftRevision.current;
+    const expectedVersion = draftVersion.current;
     const request = ++saveRequest.current;
     setState("saving");
     try {
-      const result = await onSave(field, parsed, version);
+      const result = await onSave(field, parsed, expectedVersion);
       if (request !== saveRequest.current) return;
+      // A remote snapshot must not silently rebase an unsaved draft.
+      if (result === "saved") draftVersion.current = expectedVersion + 1;
       if (revision !== draftRevision.current) {
         setState("unsaved");
         setMessage("You have newer changes that are not saved.");
@@ -541,15 +526,19 @@ function EditableInput({
         aria-describedby={feedbackId}
         aria-invalid={state === "unsaved"}
         onChange={(event) => {
+          if (!dirty) draftVersion.current = version;
           draftRevision.current += 1;
           setDraft(event.target.value);
           setDirty(true);
           setState("idle");
         }}
-        onBlur={() => { if (dirty) void save(); }}
+        onBlur={(event) => {
+          if (dirty && !(event.relatedTarget instanceof HTMLElement && event.relatedTarget.dataset.saveRetry)) void save();
+        }}
         onKeyDown={handleKeyDown}
       />
-      <SaveFeedback id={feedbackId} state={state} message={message} onRetry={() => void save()} />
+      <SaveFeedback id={feedbackId} state={state} message={message}
+        onRetry={() => { draftVersion.current = version; void save(); }} />
     </div>
   );
 }
@@ -1067,10 +1056,8 @@ export function App({ partyData }: AppProps) {
     );
   } else {
     authenticatedContent = (
-      <main>
-        <section className="hero" aria-labelledby="party-heading">
-          <div className="hero__ornament" aria-hidden="true"><span /><b>✦</b><span /></div>
-          <CompassMark />
+      <main className="party-dashboard">
+        <section className="hero dashboard-heading" aria-labelledby="party-heading">
           <p className="hero__kicker">Chart the living. Remember the lost.</p>
           <h1 id="party-heading">{party?.name ?? "The Drowned Compass"}</h1>
           <p className="hero__intro">
@@ -1085,13 +1072,13 @@ export function App({ partyData }: AppProps) {
               <p className="section-heading__eyebrow">The company</p>
               <h2 id="party-slots-heading">The Party</h2>
             </div>
-            <p>{party ? `${party.slots.length} berths` : "Reading the ledger…"}</p>
+            <p>{party ? `${party.slots.filter((slot) => slot.character).length} of ${party.slots.length} claimed` : "Reading the ledger…"}</p>
           </div>
 
           <div className="party-grid" aria-live="polite">
             {party?.slots.map((slot) =>
               slot.character ? (
-                <ClaimedSlot
+                <ClaimedCharacterCard
                   key={slot.id}
                   slot={slot}
                   onSelect={() => setSelectedSlotId(slot.id)}

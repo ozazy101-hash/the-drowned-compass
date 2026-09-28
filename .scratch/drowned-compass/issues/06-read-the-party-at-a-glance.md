@@ -4,7 +4,7 @@
 
 **Blocked by:** 05 — Calculate and override Derived Values.
 
-**Status:** ready-for-agent
+**Status:** claimed
 
 - [ ] Each claimed card shows character and player identity, primary class, subclass, total level, health, Armor Class, and compact Ability modifiers.
 - [ ] Each card shows Passive Perception and spell save DC when applicable.
