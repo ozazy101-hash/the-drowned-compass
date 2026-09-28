@@ -12,7 +12,7 @@ The primary attack is one separately versioned pointer per Character Slot. Selec
 - `primaryAttackSummary(character.combatEntries)` in `src/domain/combat-entries.ts` returns a concise string or null. Ticket 06 can place it in its existing dashboard card layout. Today's small dashboard addition displays the same string beneath identity.
 - `CharacterRecord.combatEntries` is optional for old fixtures/local storage, normalized to an empty collection by the in-memory adapter. The production adapter loads `character_combat_entries` and `character_primary_attacks`. `PartyData.updateCombatEntry` submits one conditional command. Existing Overview behavior remains untouched.
 - `mergeCombatEntries` must remain called by the shared Character Record snapshot merger during integration.
-- The shared Vite test transport uses the same command seam as local storage. Browser tests reserve port 4209 in an untracked config; committed default ports remain unchanged. The existing two-browser helper now uses the effective Playwright project server URL so isolated task configs work.
+- The shared Vite test transport uses the same command seam as local storage. Browser verification reserved port 4209 in a temporary config (removed after verification); committed default ports remain unchanged. The existing two-browser helper now uses the effective Playwright project server URL so isolated task configs work.
 - The database runner expands the new migration into a rollback-only fixture, alongside its existing Derived Values fixture. No persistent local migration is necessary.
 
 ## Migration and release
@@ -23,16 +23,16 @@ Release requires approval for this ticket, applying the migration to hosted Supa
 
 ## Verification
 
-The production build, 131 calculation tests and whitespace checks pass. Independent Standards and Spec reviews report zero remaining findings. Browser verification is pending completion of the shared verification queue; see the ticket and PR for exact outcomes.
+The production build, 131 calculation tests and whitespace checks pass. Independent Standards and Spec reviews report zero remaining findings. The final full browser suite passed 68/68 cases in 3.5 minutes, exit 0, across laptop and phone Chromium. It ran through the shared browser lock on port 4209 with one worker and a 180000ms whole-test budget; assertion timeouts were unchanged. Temporary port/runtime configuration and diagnostic specs were removed. The reproduced Combat draft-hydration race passed its three repeated replays after correction. The existing Derived Values stale-draft test also now waits for the peer to receive its accepted starting override; controlled delayed-snapshot checks passed on both viewports before the final full suite. See the ticket for the earlier interrupted/failed runs and their corrections.
 
 All 146 local database assertions passed: 111 baseline/Derived Values and 35 Combat assertions. The new RPC has zero `plpgsql_check` findings. The direct container checks ran through the shared database lock after localhost connections timed out; every fixture and lint transaction rolled back. The Combat fixture expands the actual forward migration and verifies preserved slots/data, permissions, conditional writes, ordering, primary selection/removal, tombstones and member/outsider access.
 
 ## Standards review
 
-No remaining findings. The independent review confirmed fixes to test-context URLs, typed feedback states and accessible field labels/styles.
+No remaining findings. Independent original and delta reviews confirmed fixes to test-context URLs, typed feedback states, accessible field labels/styles and clean-versus-dirty draft handling.
 
 ## Spec review
 
-No remaining findings. The independent review confirmed the creation acknowledgement remains visibly Saved after the editor becomes a persisted record.
+No remaining findings. Independent original and delta reviews confirmed creation remains visibly Saved, clean snapshot hydration cannot overwrite typing, stale starting versions and explicit Retry remain intact, and the corrected regression-test setup preserves its conflict assertions.
 
 Review totals: Standards 0; Spec 0. Neither axis has an outstanding issue.

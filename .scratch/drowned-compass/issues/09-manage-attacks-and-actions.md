@@ -6,11 +6,11 @@
 
 **Status:** claimed
 
-- [ ] The Combat area supports adding, editing, ordering, and removing attacks and actions.
-- [ ] An attack can record name, attack bonus or relevant Ability, range, damage, damage type, and player-entered notes.
-- [ ] One attack can be designated as primary and appears as a concise summary on the Party Dashboard.
-- [ ] Attack and action changes save independently and synchronize without replacing unrelated Combat data.
-- [ ] The attack-management journey is operable on phones, laptops, and keyboards.
+- [x] The Combat area supports adding, editing, ordering, and removing attacks and actions.
+- [x] An attack can record name, attack bonus or relevant Ability, range, damage, damage type, and player-entered notes.
+- [x] One attack can be designated as primary and appears as a concise summary on the Party Dashboard.
+- [x] Attack and action changes save independently and synchronize without replacing unrelated Combat data.
+- [x] The attack-management journey is operable on phones, laptops, and keyboards.
 
 ## Comments
 
@@ -33,3 +33,13 @@ Ticket 09 stays claimed while review/release is pending. No merge, hosted migrat
 The serialized remainder run completed 56 cases successfully and failed one laptop two-session case. A targeted three-run replay reproduced the failure once: its request trace showed old notes in the submitted payload after new notes were typed. The editor's passive clean hydration effect depended on fresh snapshot object identities and could overwrite typing before Save. Clean editors now display the accepted record directly, and first edits copy it into a local draft with the starting version. Ability selection and manual bonus clearing occur in one patch. Existing request/revision, conflict/Retry, creation Saved and remote-removal protections remain intact.
 
 The corrected production build passes. Standards and Spec delta reviews report zero remaining findings. Targeted replay and final browser results are pending.
+
+### 2026-09-29 — Verified review handoff
+
+All five implementation criteria are verified locally. The final complete browser command passed **68 tests in 3.5 minutes**, exit 0, on laptop and phone Chromium with keyboard journeys. Playwright arguments were `test --config=playwright.ticket09.config.ts --workers=1 --timeout=180000`; execution used the shared browser-lock wrapper and a pinned arm64 pnpm/Vite runtime on port 4209. Assertion timeouts were unchanged. The temporary config and diagnostic specs were removed afterward.
+
+The Combat hydration-race replay passed 3/3 after the fix. A subsequent full suite passed 67 cases and exposed a setup race in the existing Derived Values stale-draft test: the peer could edit before receiving the first accepted override. A controlled delayed snapshot reproduced a correctly rejected version-0 write. The test now waits for the peer's accepted +0 before creating the stale draft; both delayed-snapshot viewport probes passed, followed by the final 68/68 suite above. No Derived Values production behavior changed.
+
+Final verification totals: production build/type-check passed; `git diff --check` passed; 131 calculation tests passed; 146 rollback-only database assertions passed (111 baseline/Derived Values +35 Combat); new RPC database lint returned zero findings. Every database fixture/lint transaction rolled back. Standards and Spec reviews have zero remaining findings, including the draft-race correction and test setup check.
+
+[PR #6](https://github.com/ozazy101-hash/the-drowned-compass/pull/6) carries the review branch `codex/ticket-09-attacks-actions` and is attached to this task. Ticket 09 remains **claimed** until accepted release. Coordinating peer integration for Tickets 06/10 and hosted persistence/synchronization acceptance remain pending. Release requires approval, hosted migration `20260928220900_manage_attacks_and_actions.sql`, the reviewed frontend deployment and hosted checks. No merge, production Character Record edit, persistent local migration or hosted deployment occurred.
