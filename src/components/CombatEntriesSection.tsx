@@ -1,0 +1,134 @@
+import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { abilityScoreKeys, type CharacterSlot, type PartyData } from '../domain/party';
+import { emptyCombatEntries, visibleCombatEntries, validateCombatDetails, type CombatEntry, type CombatEntryDetails, type CombatEntryCommand } from '../domain/combat-entries';
+
+type Save = (command: CombatEntryCommand) => Promise<boolean>;
+function Feedback({ state, retry }: { state: string; retry: () => void }) {
+  return <div className="save-feedback" role={state.includes('not saved') || state.includes('Not saved') ? 'alert' : 'status'} aria-live="polite">
+    {state}{state.includes('not saved') || state.includes('Not saved') ? <button type="button" onClick={retry}>Retry</button> : null}
+  </div>;
+}
+function EntryEditor({ entry, onSave, onCreated, onCancel, upRank, downRank }: { entry: CombatEntry; onSave: Save; onCreated?: () => void; onCancel?: () => void; upRank?: number; downRank?: number }) {
+  const [draft, setDraft] = useState(entry.details);
+  const [dirty, setDirty] = useState(false);
+  const [feedback, setFeedback] = useState('');
+  const revision = useRef(0);
+  const request = useRef(0);
+  const draftVersion = useRef(entry.version);
+  const pending = useRef<CombatEntryCommand | null>(null);
+  const isNew = entry.version === 0;
+  useEffect(() => { if (!dirty) { setDraft(entry.details); draftVersion.current = entry.version; } }, [entry.details, entry.version, dirty]);
+  function change<K extends keyof CombatEntryDetails>(key: K, value: CombatEntryDetails[K]) {
+    if (!dirty) draftVersion.current = entry.version;
+    revision.current += 1;
+    setDirty(true);
+    setDraft(current => ({ ...current, [key]: value }));
+    setFeedback('Changes not saved.');
+  }
+  async function send(command: CombatEntryCommand) {
+    const currentRequest = ++request.current;
+    const currentRevision = revision.current;
+    pending.current = command;
+    setFeedback('Saving…');
+    try {
+      const ok = await onSave(command);
+      if (currentRequest !== request.current) return;
+      if (currentRevision !== revision.current) { setFeedback('Newer changes not saved.'); return; }
+      if (!ok) { setFeedback('Changed elsewhere. Your changes are not saved.'); return; }
+      setFeedback('Saved');
+      setDirty(false);
+      if (command.type === 'save') onCreated?.();
+    } catch { if (currentRequest === request.current) setFeedback('Not saved. Check your connection and retry.'); }
+  }
+  function save(event?: FormEvent) {
+    event?.preventDefault();
+    try { validateCombatDetails(draft); } catch (error) { setFeedback(`${(error as Error).message} Changes not saved.`); return; }
+    void send({ type: 'save', id: entry.id, details: draft, rank: entry.rank, expectedVersion: draftVersion.current });
+  }
+  function retry() {
+    draftVersion.current = entry.version;
+    // Newer typing must be submitted, never the payload of an older request.
+    if (dirty || pending.current?.type === 'save' || !pending.current) save();
+    else void send({ ...pending.current, expectedVersion: entry.version });
+  }
+  if (entry.deleted && !dirty) return null;
+  const title = isNew ? `New ${draft.kind}` : entry.details.name;
+  return <article className="combat-entry" aria-label={title}>
+    <form onSubmit={save}>
+      <div className="section-heading"><h3>{title}</h3><span>{draft.kind === 'attack' ? 'Attack' : 'Action'}</span></div>
+      {entry.deleted && <p role="alert">Removed elsewhere. This draft cannot be saved. Copy your notes or discard the draft.</p>}
+      <div className="overview-grid combat-entry__fields">
+        <label className="setup-field"><span>Name</span><input maxLength={120} value={draft.name} onChange={e => change('name',e.target.value)} /></label>
+        {draft.kind === 'attack' && <>
+          <label className="setup-field"><span>Relevant Ability</span><select value={draft.ability ?? ''} onChange={e => {
+            change('ability', (e.target.value || null) as CombatEntryDetails['ability']);
+            if (e.target.value) change('attackBonus', '');
+          }}><option value="">Manual attack bonus</option>{abilityScoreKeys.map(key => <option key={key} value={key}>{key[0].toUpperCase() + key.slice(1)}</option>)}</select></label>
+          {!draft.ability && <label className="setup-field"><span>Attack bonus</span><input type="number" min={-999} max={999} step={1} value={draft.attackBonus} onChange={e => change('attackBonus',e.target.value)} /></label>}
+          <label className="setup-field"><span>Range</span><input maxLength={120} value={draft.range} onChange={e => change('range',e.target.value)} /></label>
+          <label className="setup-field"><span>Damage</span><input maxLength={120} value={draft.damage} onChange={e => change('damage',e.target.value)} /></label>
+          <label className="setup-field"><span>Damage type</span><input maxLength={120} value={draft.damageType} onChange={e => change('damageType',e.target.value)} /></label>
+        </>}
+      </div>
+      <label className="setup-field"><span>Notes</span><textarea maxLength={4000} rows={3} value={draft.notes} onChange={e => change('notes',e.target.value)} /></label>
+      <div className="combat-entry__actions">
+        <button className="secondary-button" type="submit" disabled={feedback === 'Saving…' || entry.deleted || (!dirty && !isNew)}>Save {draft.kind}</button>
+        {dirty && !isNew && <button className="text-button" type="button" onClick={() => { revision.current += 1; setDirty(false); setFeedback(''); }}>Discard draft</button>}
+        {!isNew && <>
+          <button className="text-button" type="button" disabled={dirty || feedback === 'Saving…' || upRank === undefined || entry.deleted} onClick={() => void send({ type:'move', id:entry.id, rank:upRank!, expectedVersion:entry.version })}>Move up</button>
+          <button className="text-button" type="button" disabled={dirty || feedback === 'Saving…' || downRank === undefined || entry.deleted} onClick={() => void send({ type:'move', id:entry.id, rank:downRank!, expectedVersion:entry.version })}>Move down</button>
+          <button className="text-button" type="button" disabled={dirty || feedback === 'Saving…' || entry.deleted} onClick={() => void send({ type:'remove', id:entry.id, expectedVersion:entry.version })}>Remove {draft.kind}</button>
+        </>}
+      </div>
+      {onCancel && <button className="text-button" type="button" disabled={feedback === 'Saving…'} onClick={onCancel}>Cancel new {draft.kind}</button>}
+      <Feedback state={feedback} retry={retry} />
+    </form>
+  </article>;
+}
+export function CombatEntriesSection({ slot, partyData, onSlotChanged }: { slot: CharacterSlot; partyData: PartyData; onSlotChanged: (slot: CharacterSlot) => void }) {
+  const state = slot.character?.combatEntries ?? emptyCombatEntries();
+  const visible = visibleCombatEntries(state);
+  const [creating, setCreating] = useState<CombatEntry | null>(null);
+  const [primaryFeedback, setPrimaryFeedback] = useState('');
+  const primaryCommand = useRef<CombatEntryCommand | null>(null);
+  const primaryRequest = useRef(0);
+  const save: Save = async command => {
+    const result = await partyData.updateCombatEntry(slot.id, command);
+    onSlotChanged(result.slot);
+    return result.ok;
+  };
+  async function primary(id: string | null, expectedVersion = state.primaryVersion) {
+    const currentRequest = ++primaryRequest.current;
+    primaryCommand.current = { type:'primary', id, expectedVersion };
+    setPrimaryFeedback('Saving…');
+    try {
+      const ok = await save(primaryCommand.current);
+      if (primaryRequest.current === currentRequest) setPrimaryFeedback(ok ? 'Saved' : 'Changed elsewhere. Primary selection not saved.');
+    } catch { if (primaryRequest.current === currentRequest) setPrimaryFeedback('Not saved. Check your connection and retry.'); }
+  }
+  function add(kind: 'attack' | 'action') {
+    setCreating({ id:crypto.randomUUID(), version:0, deleted:false, rank:(visible.at(-1)?.rank ?? 0)+1024,
+      details:{ kind, name:'', attackBonus:'', ability:null, range:'', damage:'', damageType:'', notes:'' } });
+  }
+  return <section className="overview-section" aria-labelledby="attacks-heading">
+    <div className="section-heading"><div><p className="section-heading__eyebrow">Combat</p><h2 id="attacks-heading">Attacks &amp; Actions</h2></div><p>Player-entered values. Save each attack or action when ready.</p></div>
+    <p className="combat-entry__guidance">A relevant Ability is a reminder; enter attack and damage values from your Character Record. No weapon or class rules are applied.</p>
+    <label className="setup-field combat-primary"><span>Primary attack</span><select disabled={primaryFeedback === 'Saving…'} value={state.primaryId ?? ''} onChange={e => void primary(e.target.value || null)}>
+      <option value="">None</option>{visible.filter(e => e.details.kind === 'attack').map(e => <option key={e.id} value={e.id}>{e.details.name}</option>)}
+    </select></label>
+    <Feedback state={primaryFeedback} retry={() => { if (primaryCommand.current?.type === 'primary') void primary(primaryCommand.current.id); }} />
+    {visible.length === 0 && !creating && <p>No attacks or actions recorded yet.</p>}
+    <div className="combat-entry-list">
+      {state.entries.filter(e => e.id !== creating?.id).sort((a,b) => a.rank-b.rank || a.id.localeCompare(b.id)).map(entry => {
+        const index = visible.findIndex(e => e.id === entry.id);
+        const previous = visible[index-1];
+        const next = visible[index+1];
+        return <EntryEditor key={entry.id} entry={entry} onSave={save}
+          upRank={previous ? (previous.rank + (visible[index-2]?.rank ?? previous.rank-2048))/2 : undefined}
+          downRank={next ? (next.rank + (visible[index+2]?.rank ?? next.rank+2048))/2 : undefined} />;
+      })}
+      {creating && <div><EntryEditor key={creating.id} entry={state.entries.find(e => e.id === creating.id) ?? creating} onSave={save} onCreated={() => setCreating(current => current?.id === creating.id ? null : current)} onCancel={() => setCreating(null)} /></div>}
+    </div>
+    <div className="combat-entry__actions"><button className="secondary-button" type="button" disabled={!!creating} onClick={() => add('attack')}>Add attack</button><button className="secondary-button" type="button" disabled={!!creating} onClick={() => add('action')}>Add action</button></div>
+  </section>;
+}

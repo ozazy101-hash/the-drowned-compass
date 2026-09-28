@@ -10,10 +10,17 @@ writeFileSync(generated, readFileSync(template, 'utf8').replace(
   '-- __DERIVED_VALUES_MIGRATION__',
   () => readFileSync(migration, 'utf8'),
 ));
+const combatTemplate = new URL('../supabase/tests/fixtures/combat_entries_migration.sql.template', import.meta.url);
+const combatMigration = new URL('../supabase/migrations/20260928220900_manage_attacks_and_actions.sql', import.meta.url);
+const combatGenerated = new URL('../supabase/tests/database/combat_entries_migration.generated.test.sql', import.meta.url);
+writeFileSync(combatGenerated, readFileSync(combatTemplate, 'utf8').replace(
+  '-- __COMBAT_ENTRIES_MIGRATION__', () => readFileSync(combatMigration, 'utf8'),
+));
 try {
   const result = spawnSync('supabase', ['test', 'db', ...process.argv.slice(2)], { stdio: 'inherit' });
   if (result.error) throw result.error;
   process.exitCode = result.status ?? 1;
 } finally {
   rmSync(generated, { force: true });
+  rmSync(combatGenerated, { force: true });
 }

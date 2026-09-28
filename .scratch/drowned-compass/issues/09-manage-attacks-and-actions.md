@@ -4,7 +4,7 @@
 
 **Blocked by:** 04 — Edit and synchronize the Character Overview.
 
-**Status:** ready-for-agent
+**Status:** claimed
 
 - [ ] The Combat area supports adding, editing, ordering, and removing attacks and actions.
 - [ ] An attack can record name, attack bonus or relevant Ability, range, damage, damage type, and player-entered notes.

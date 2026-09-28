@@ -1,0 +1,57 @@
+-- Entire forward migration and all writes below are rolled back.
+begin;
+create extension if not exists pgtap with schema extensions;
+select plan(35);
+create temporary table slots_before as select * from public.character_slots;
+-- __COMBAT_ENTRIES_MIGRATION__
+select results_eq($$select * from public.character_slots order by id$$, $$select * from slots_before order by id$$, 'migration preserves all six slots, claims, data and versions');
+select is((select count(*) from public.character_primary_attacks), 6::bigint, 'primary selectors provisioned for six slots only');
+select ok(has_function_privilege('authenticated','public.valid_combat_entry_details(jsonb)','EXECUTE'), 'explicit authenticated validator grant');
+select ok(not has_function_privilege('anon','public.valid_combat_entry_details(jsonb)','EXECUTE'), 'anonymous validator denied');
+select ok(has_function_privilege('authenticated','public.update_character_combat_entry(uuid,jsonb)','EXECUTE'), 'members can execute RPC');
+select ok(not has_function_privilege('anon','public.update_character_combat_entry(uuid,jsonb)','EXECUTE'), 'anonymous RPC denied');
+select is((select count(*) from pg_publication_tables where pubname='supabase_realtime' and tablename in ('character_combat_entries','character_primary_attacks')),2::bigint,'records and primary selection published');
+insert into auth.users(instance_id,id,aud,role,email,encrypted_password,email_confirmed_at,raw_app_meta_data,raw_user_meta_data,created_at,updated_at) values
+('00000000-0000-0000-0000-000000000000','39000000-0000-4000-8000-000000000001','authenticated','authenticated','players@drowned-compass.test','',now(),'{}','{}',now(),now()),
+('00000000-0000-0000-0000-000000000000','39000000-0000-4000-8000-000000000002','authenticated','authenticated','dm@drowned-compass.test','',now(),'{}','{}',now(),now()),
+('00000000-0000-0000-0000-000000000000','39000000-0000-4000-8000-000000000003','authenticated','authenticated','combat-outsider@drowned-compass.test','',now(),'{}','{}',now(),now());
+update public.character_slots set claimed_at=now(),claimed_by='39000000-0000-4000-8000-000000000001',player_name='Mara',character_name='Neris Vale',primary_class='Rogue',subclass='Thief',species='Human',background='Sailor',level=3,strength=9,dexterity=17,constitution=13,intelligence=14,wisdom=12,charisma=11 where position=1;
+create temporary table slot_target as select id from public.character_slots where position=1;
+grant select on slot_target to authenticated, anon;
+set local role authenticated;
+set local "request.jwt.claim.sub"='39000000-0000-4000-8000-000000000001';
+select is(public.update_character_combat_entry((select id from slot_target), '{"type":"save","id":"39000000-0000-4000-8000-000000000010","expectedVersion":0,"rank":1024,"details":{"kind":"attack","name":"Cutlass","attackBonus":"0","ability":null,"range":"5 feet","damage":"1d6","damageType":"Slashing","notes":"Player notes"}}'),true,'Player creates independent attack');
+select is(public.update_character_combat_entry((select id from slot_target), '{"type":"save","id":"39000000-0000-4000-8000-000000000011","expectedVersion":0,"rank":2048,"details":{"kind":"action","name":"Help","attackBonus":"","ability":null,"range":"","damage":"","damageType":"","notes":"Distract"}}'),true,'Player creates independent action');
+select results_eq($$select details->>'attackBonus', details->>'notes',version from public.character_combat_entries where id='39000000-0000-4000-8000-000000000010'$$,$$values ('0','Player notes',1::bigint)$$,'zero bonus and notes persist');
+select throws_ok($$insert into public.character_combat_entries(id,slot_id,details,rank) values(gen_random_uuid(),(select id from slot_target),'{}',1)$$,'42501',null,'direct insert denied; RPC required');
+select throws_ok($$update public.character_combat_entries set version=99$$,'42501',null,'direct replacement denied');
+select throws_ok($$delete from public.character_combat_entries$$,'42501',null,'direct delete denied');
+set local "request.jwt.claim.sub"='39000000-0000-4000-8000-000000000002';
+select is(public.update_character_combat_entry((select id from slot_target),'{"type":"save","id":"39000000-0000-4000-8000-000000000010","expectedVersion":1,"rank":1024,"details":{"kind":"attack","name":"Harpoon","attackBonus":"","ability":"strength","range":"20/60 feet","damage":"1d6+3","damageType":"Piercing","notes":"DM edit"}}'),true,'Dungeon Master edits without owning claim');
+select is(public.update_character_combat_entry((select id from slot_target),'{"type":"move","id":"39000000-0000-4000-8000-000000000011","expectedVersion":1,"rank":0}'),true,'independent action version remains usable');
+select results_eq($$select details->>'name' from public.character_combat_entries order by rank$$,array['Help','Harpoon'],'ordering and independent edits survive');
+select is(public.update_character_combat_entry((select id from slot_target),'{"type":"move","id":"39000000-0000-4000-8000-000000000010","expectedVersion":1,"rank":999}'),false,'stale same-record write rejected');
+select is(public.update_character_combat_entry((select id from slot_target),'{"type":"move","id":"39000000-0000-4000-8000-000000000010","expectedVersion":2,"rank":999}'),true,'explicit retry adopts current version');
+select is(public.update_character_combat_entry((select id from slot_target),'{"type":"primary","id":"39000000-0000-4000-8000-000000000010","expectedVersion":0}'),true,'primary attack selected');
+select is(public.update_character_combat_entry((select id from slot_target),'{"type":"primary","id":null,"expectedVersion":0}'),false,'stale primary selection rejected independently');
+select throws_ok($$select public.update_character_combat_entry((select id from slot_target),'{"type":"primary","id":"39000000-0000-4000-8000-000000000011","expectedVersion":1}')$$,'23514',null,'actions cannot become primary attacks');
+select throws_ok($$select public.update_character_combat_entry((select id from slot_target),'{"type":"save","id":"39000000-0000-4000-8000-000000000010","expectedVersion":3,"rank":1,"details":{"kind":"attack","name":"","attackBonus":"0","ability":null,"range":"","damage":"","damageType":"","notes":""}}')$$,'23514',null,'invalid details denied by validator');
+select is(public.update_character_combat_entry((select id from slot_target),'{"type":"remove","id":"39000000-0000-4000-8000-000000000010","expectedVersion":3}'),true,'primary attack removal succeeds');
+select results_eq($$select primary_id,version from public.character_primary_attacks where slot_id=(select id from slot_target)$$,$$values(null::uuid,2::bigint)$$,'removal clears only primary selection with new version');
+select results_eq($$select deleted,version from public.character_combat_entries where id='39000000-0000-4000-8000-000000000010'$$,$$values(true,4::bigint)$$,'versioned tombstone prevents snapshot resurrection');
+select is(public.update_character_combat_entry((select id from slot_target),'{"type":"move","id":"39000000-0000-4000-8000-000000000010","expectedVersion":4,"rank":5}'),false,'deleted record cannot be revived by stale editor');
+select is((select details->>'notes' from public.character_combat_entries where id='39000000-0000-4000-8000-000000000011'),'Distract','unrelated action content unchanged');
+select is(public.update_character_combat_entry((select id from slot_target),'{"type":"remove","id":"39000000-0000-4000-8000-000000000011","expectedVersion":2}'),true,'action removal succeeds');
+set local "request.jwt.claim.sub"='39000000-0000-4000-8000-000000000003';
+select is((select count(*) from public.character_combat_entries),0::bigint,'non-member cannot read attacks/actions');
+select is((select count(*) from public.character_primary_attacks),0::bigint,'non-member cannot read primary selection');
+select throws_ok($$select public.update_character_combat_entry((select id from slot_target),'{"type":"primary","id":null,"expectedVersion":2}')$$,'42501',null,'non-member cannot write through definer RPC');
+set local role anon;
+reset "request.jwt.claim.sub";
+select throws_ok($$select * from public.character_combat_entries$$,'42501',null,'anonymous read denied');
+select throws_ok($$select public.update_character_combat_entry((select id from slot_target),'{}')$$,'42501',null,'anonymous RPC execution denied');
+reset role;
+select is((select count(*) from public.character_slots),6::bigint,'six slots retained after all operations');
+select is((select character_name from public.character_slots where position=1),'Neris Vale','Combat writes preserve Character Record identity');
+select * from finish();
+rollback;
