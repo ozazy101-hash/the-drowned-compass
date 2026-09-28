@@ -159,8 +159,8 @@ test('a delayed Party snapshot cannot revive a removed primary attack', async ({
   let delivered = false;
   await page.route('**/__drowned_compass_test_party?**', async route => {
     if (route.request().method() !== 'GET' || captured) { await route.continue(); return; }
-    captured=true;
     const response=await route.fetch();
+    captured=true;
     await held;
     await route.fulfill({ response });
     delivered=true;
@@ -175,4 +175,49 @@ test('a delayed Party snapshot cannot revive a removed primary attack', async ({
     await expect(page.getByRole('article', { name:'Cutlass', exact:true })).toHaveCount(0);
     await expect(page.getByLabel('Primary attack')).toHaveValue('');
   } finally { release(); }
+});
+
+test('primary selection, ordering and removal failures expose Retry and keep unrelated records', async ({ page }, testInfo) => {
+  await prepareCombat(page,isolatedPartyUrl(testInfo)); await add(page,'attack','Cutlass'); await add(page,'action','Help');
+  let failNext = false;
+  await page.route('**/__drowned_compass_test_party?**', async route => {
+    if (route.request().method() === 'PATCH' && failNext) { failNext=false; await route.abort(); }
+    else await route.continue();
+  });
+  failNext=true;
+  await page.getByLabel('Primary attack').selectOption({ label:'Cutlass' });
+  const section=page.getByRole('region', { name:'Attacks & Actions' });
+  await expect(section.getByRole('alert')).toContainText('Not saved');
+  await section.getByRole('button', { name:'Retry', exact:true }).click();
+  await expect(page.getByLabel('Primary attack')).not.toHaveValue('');
+  const editor=page.getByRole('article', { name:'Cutlass', exact:true });
+  failNext=true;
+  await editor.getByRole('button', { name:'Move down', exact:true }).click();
+  await expect(editor.getByRole('alert')).toContainText('Not saved');
+  await editor.getByRole('button', { name:'Retry', exact:true }).click();
+  await expect(page.locator('.combat-entry').getByRole('heading', { level:3 })).toHaveText(['Help','Cutlass']);
+  failNext=true;
+  await editor.getByRole('button', { name:'Remove attack', exact:true }).click();
+  await expect(editor.getByRole('alert')).toContainText('Not saved');
+  await editor.getByRole('button', { name:'Retry', exact:true }).click();
+  await expect(editor).toHaveCount(0);
+  await expect(page.getByLabel('Primary attack')).toHaveValue('');
+  await expect(page.getByRole('article', { name:'Help', exact:true }).getByLabel('Notes')).toHaveValue('Player-authored reminder');
+});
+
+test('a remote removal preserves unsaved notes until the editor discards them', async ({ page }, testInfo) => {
+  await prepareCombat(page,isolatedPartyUrl(testInfo)); await add(page,'attack','Cutlass');
+  const editor=page.getByRole('article', { name:'Cutlass', exact:true });
+  await editor.getByLabel('Notes').fill('Keep these unsaved notes');
+  const namespace=new URL(page.url()).searchParams.get('partyTestId')!;
+  const endpoint=`/__drowned_compass_test_party?namespace=${encodeURIComponent(namespace)}`;
+  const party=await (await page.request.get(endpoint)).json();
+  const id=party.slots[0].character.combatEntries.entries[0].id;
+  const removal=await page.request.patch(endpoint,{ data:{ slotId:'character-slot-1',combatCommand:{ type:'remove',id,expectedVersion:1 } } });
+  expect(removal.ok()).toBe(true);
+  await expect(editor.getByRole('alert')).toContainText('Removed elsewhere');
+  await expect(editor.getByLabel('Notes')).toHaveValue('Keep these unsaved notes');
+  await expect(editor.getByRole('button', { name:'Save attack', exact:true })).toBeDisabled();
+  await editor.getByRole('button', { name:'Discard draft', exact:true }).click();
+  await expect(editor).toHaveCount(0);
 });

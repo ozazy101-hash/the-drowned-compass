@@ -2,6 +2,8 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 select plan(35);
+-- Take the shared table lock first to avoid an upgrade deadlock with other rollback rehearsals.
+lock table public.character_slots in access exclusive mode;
 create temporary table slots_before as select * from public.character_slots;
 -- __COMBAT_ENTRIES_MIGRATION__
 select results_eq($$select * from public.character_slots order by id$$, $$select * from slots_before order by id$$, 'migration preserves all six slots, claims, data and versions');
