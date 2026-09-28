@@ -1,3 +1,4 @@
+import { createPartyBrowserContext } from "./browser-fixtures";
 import { expect, type Browser, type Locator, type Page, type TestInfo } from "@playwright/test";
 
 export async function enterAs(page: Page, role: "Player" | "Dungeon Master") {
@@ -68,9 +69,7 @@ export async function expectSaveFeedback(page: Page, control: Locator, text: str
 
 export async function prepareTwoBrowsers(browser: Browser, page: Page, testInfo: TestInfo) {
   const url = isolatedPartyUrl(testInfo);
-  const otherContext = await browser.newContext({
-    baseURL: testInfo.project.use.baseURL,
-  });
+  const otherContext = await createPartyBrowserContext(browser, testInfo);
   const otherPage = await otherContext.newPage();
   await page.goto(url);
   await otherPage.goto(url);

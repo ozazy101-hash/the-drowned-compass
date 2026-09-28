@@ -1,4 +1,5 @@
-import { expect, test, type Page } from "@playwright/test";
+import { test, createPartyBrowserContext } from "./browser-fixtures";
+import { expect, type Page } from "@playwright/test";
 import { claimCharacter, enterAs, expectSaveFeedback, isolatedPartyUrl, openClaimedCharacter, prepareTwoBrowsers, saveInput } from "./overview-helpers";
 
 function card(page: Page) { return page.getByRole("article", { name: /Neris .+, played by Mara/ }); }
@@ -76,7 +77,7 @@ test("live cards follow dependent overrides, meaningful zero values and reset wi
 test("cards retain accepted values through save failure, independent edits and a stale same-field draft until Retry", async ({ browser, page }, testInfo) => {
   const url = isolatedPartyUrl(testInfo, "&failOverviewSaves=once");
   await page.goto(url); await enterAs(page, "Player"); await claimCharacter(page);
-  const otherContext = await browser.newContext({ baseURL: testInfo.project.use.baseURL });
+  const otherContext = await createPartyBrowserContext(browser, testInfo);
   const otherPage = await otherContext.newPage();
   await otherPage.goto(isolatedPartyUrl(testInfo)); await enterAs(otherPage, "Dungeon Master");
   await expect(card(otherPage)).toBeVisible();
