@@ -23,4 +23,6 @@ Release requires approval for this ticket, applying the migration to hosted Supa
 
 ## Verification
 
-See the ticket's implementation/verification notes and PR for final commands and outcomes. The migration fixture uses an actual forward migration within a transaction and rolls back its schema, users and test Character Record changes.
+The production build, 131 calculation tests and whitespace checks pass. Independent Standards and Spec reviews report zero remaining findings. Browser verification is pending completion of the shared verification queue; see the ticket and PR for exact outcomes.
+
+All 146 local database assertions passed: 111 baseline/Derived Values and 35 Combat assertions. The new RPC has zero `plpgsql_check` findings. The direct container checks ran through the shared database lock after localhost connections timed out; every fixture and lint transaction rolled back. The Combat fixture expands the actual forward migration and verifies preserved slots/data, permissions, conditional writes, ordering, primary selection/removal, tombstones and member/outsider access.
