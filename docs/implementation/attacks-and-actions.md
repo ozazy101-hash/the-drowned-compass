@@ -12,7 +12,7 @@ The primary attack is one separately versioned pointer per Character Slot. Selec
 - `primaryAttackSummary(character.combatEntries)` in `src/domain/combat-entries.ts` returns a concise string or null. Ticket 06 can place it in its existing dashboard card layout. Today's small dashboard addition displays the same string beneath identity.
 - `CharacterRecord.combatEntries` is optional for old fixtures/local storage, normalized to an empty collection by the in-memory adapter. The production adapter loads `character_combat_entries` and `character_primary_attacks`. `PartyData.updateCombatEntry` submits one conditional command. Existing Overview behavior remains untouched.
 - `mergeCombatEntries` must remain called by the shared Character Record snapshot merger during integration.
-- The shared Vite test transport uses the same command seam as local storage. Browser tests reserve port 4209 in an untracked config; committed default ports remain unchanged. The existing two-browser helper now derives its server URL from the active page so isolated task configs work.
+- The shared Vite test transport uses the same command seam as local storage. Browser tests reserve port 4209 in an untracked config; committed default ports remain unchanged. The existing two-browser helper now uses the effective Playwright project server URL so isolated task configs work.
 - The database runner expands the new migration into a rollback-only fixture, alongside its existing Derived Values fixture. No persistent local migration is necessary.
 
 ## Migration and release

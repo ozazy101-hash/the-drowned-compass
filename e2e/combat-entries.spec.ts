@@ -1,7 +1,22 @@
 import { expect, test, type Page } from '@playwright/test';
+import { abilityScoreKeys, skillKeys } from '../src/domain/party';
 import { enterAs, claimCharacter, isolatedPartyUrl, openClaimedCharacter } from './overview-helpers';
 
 async function combat(page: Page) { await page.getByRole('button', { name:'Combat', exact:true }).click(); }
+
+async function prepareCombat(page: Page, url: string) {
+  await page.goto(url);
+  const namespace = new URL(page.url()).searchParams.get('partyTestId');
+  const seed = await page.request.post(`/__drowned_compass_test_party?namespace=${encodeURIComponent(namespace!)}`, { data:{ slotId:'character-slot-1', character:{
+    playerName:'Mara',characterName:'Neris Vale',primaryClass:'Rogue',subclass:'Thief',species:'Human',background:'Sailor',level:3,
+    abilityScores:Object.fromEntries(abilityScoreKeys.map(key => [key,10])),
+    savingThrowProficiencies:Object.fromEntries(abilityScoreKeys.map(key => [key,'none'])),
+    skillProficiencies:Object.fromEntries(skillKeys.map(key => [key,'none'])),
+    armorClass:10,maxHitPoints:1,speed:30,spellcastingAbility:null,derivedOverrides:{},fieldVersions:{},
+  } } });
+  expect(seed.ok()).toBe(true);
+  await enterAs(page,'Player'); await openClaimedCharacter(page); await combat(page);
+}
 async function add(page: Page, kind: 'attack' | 'action', name: string) {
   await page.getByRole('button', { name:`Add ${kind}`, exact:true }).click();
   const editor = page.getByRole('article', { name:`New ${kind}`, exact:true });
@@ -14,7 +29,7 @@ async function add(page: Page, kind: 'attack' | 'action', name: string) {
   }
   await editor.getByLabel('Notes', { exact:true }).fill('Player-authored reminder');
   await editor.getByRole('button', { name:`Save ${kind}`, exact:true }).click();
-  await expect(page.getByRole('article', { name, exact:true }).getByRole('status')).toHaveText('');
+  await expect(page.getByRole('article', { name, exact:true }).getByRole('status')).toHaveText('Saved');
 }
 async function edit(page: Page, name: string, notes: string) {
   const editor = page.getByRole('article', { name, exact:true });
@@ -62,7 +77,7 @@ test('attacks and actions can be entered, edited, ordered, selected and removed 
 });
 
 test('failed creation retains the draft and Retry saves it once', async ({ page }, testInfo) => {
-  await page.goto(isolatedPartyUrl(testInfo,'&failCombatSaves=once')); await enterAs(page,'Player'); await claimCharacter(page); await combat(page);
+  await prepareCombat(page,isolatedPartyUrl(testInfo,'&failCombatSaves=once'));
   await page.getByRole('button', { name:'Add attack', exact:true }).click();
   const editor = page.getByRole('article', { name:'New attack', exact:true });
   await editor.getByLabel('Name', { exact:true }).fill('Cutlass');
@@ -77,7 +92,7 @@ test('failed creation retains the draft and Retry saves it once', async ({ page 
 
 test('two sessions preserve independent records and reject a stale same-record draft before explicit Retry', async ({ browser, page }, testInfo) => {
   const url = isolatedPartyUrl(testInfo);
-  await page.goto(url); await enterAs(page,'Player'); await claimCharacter(page); await combat(page);
+  await prepareCombat(page,url);
   await add(page,'attack','Cutlass'); await add(page,'action','Help');
   const other = await browser.newContext({ baseURL:testInfo.project.use.baseURL, viewport:testInfo.project.use.viewport });
   const peer = await other.newPage();
@@ -107,7 +122,7 @@ test('two sessions preserve independent records and reject a stale same-record d
 });
 
 test('new typing survives an older save acknowledgement and Retry sends the newer draft', async ({ page }, testInfo) => {
-  await page.goto(isolatedPartyUrl(testInfo)); await enterAs(page,'Player'); await claimCharacter(page); await combat(page); await add(page,'attack','Cutlass');
+  await prepareCombat(page,isolatedPartyUrl(testInfo)); await add(page,'attack','Cutlass');
   let release!: () => void;
   const held = new Promise<void>(resolve => { release=resolve; });
   let intercepted = false;
@@ -135,7 +150,7 @@ test('new typing survives an older save acknowledgement and Retry sends the newe
 });
 
 test('a delayed Party snapshot cannot revive a removed primary attack', async ({ page }, testInfo) => {
-  await page.goto(isolatedPartyUrl(testInfo)); await enterAs(page,'Player'); await claimCharacter(page); await combat(page); await add(page,'attack','Cutlass');
+  await prepareCombat(page,isolatedPartyUrl(testInfo)); await add(page,'attack','Cutlass');
   await page.getByLabel('Primary attack').selectOption({ label:'Cutlass' });
   await expect(page.getByLabel('Primary attack')).not.toHaveValue('');
   let release!: () => void;
