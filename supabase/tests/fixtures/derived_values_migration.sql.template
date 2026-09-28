@@ -1,0 +1,88 @@
+-- Rehearse the actual forward migration with a legacy claimed Character Record.
+-- All schema/data changes roll back; existing local data is never reset.
+begin;
+create extension if not exists pgtap with schema extensions;
+select plan(7);
+insert into auth.users (
+  instance_id, id, aud, role, email, encrypted_password, email_confirmed_at,
+  raw_app_meta_data, raw_user_meta_data, created_at, updated_at
+) values
+  (
+    '00000000-0000-0000-0000-000000000000',
+    '30000000-0000-4000-8000-000000000001',
+    'authenticated', 'authenticated', 'players@drowned-compass.test', '', now(),
+    '{}', '{}', now(), now()
+  ),
+  (
+    '00000000-0000-0000-0000-000000000000',
+    '30000000-0000-4000-8000-000000000002',
+    'authenticated', 'authenticated', 'dm@drowned-compass.test', '', now(),
+    '{}', '{}', now(), now()
+  ),
+  (
+    '00000000-0000-0000-0000-000000000000',
+    '30000000-0000-4000-8000-000000000003',
+    'authenticated', 'authenticated', 'overview-outsider@drowned-compass.test', '', now(),
+    '{}', '{}', now(), now()
+  );
+
+set local role authenticated;
+set local "request.jwt.claim.sub" = '30000000-0000-4000-8000-000000000001';
+
+select results_eq(
+  $$
+    update public.character_slots
+    set claimed_at = now(),
+      claimed_by = '30000000-0000-4000-8000-000000000001',
+      player_name = 'Mara', character_name = 'Neris Vale',
+      primary_class = 'Rogue', subclass = 'Thief', species = 'Human',
+      background = 'Sailor', level = 3,
+      strength = 9, dexterity = 17, constitution = 13,
+      intelligence = 14, wisdom = 12, charisma = 11,
+      version = 1, updated_at = now()
+    where position = 1
+    returning character_name
+  $$,
+  array['Neris Vale'],
+  'Player can prepare a complete claimed Character Record'
+);
+
+reset role;
+alter table public.character_slots drop constraint character_slots_saving_throw_proficiencies_valid;
+alter table public.character_slots drop column derived_overrides;
+drop function public.valid_derived_overrides(jsonb);
+create or replace function public.valid_saving_throw_proficiencies(value jsonb)
+returns boolean
+language sql
+immutable
+set search_path = ''
+as $$
+  select jsonb_typeof(value) = 'object'
+    and value ?& array['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma']
+    and not exists (
+      select 1 from jsonb_each(value) as entry(key, item)
+      where key <> all (array['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'])
+        or jsonb_typeof(item) <> 'boolean'
+    );
+$$;
+
+update public.character_slots set saving_throw_proficiencies =
+  '{"strength":false,"dexterity":false,"constitution":false,"intelligence":false,"wisdom":true,"charisma":false}'::jsonb;
+alter table public.character_slots add constraint character_slots_saving_throw_proficiencies_valid
+  check (public.valid_saving_throw_proficiencies(saving_throw_proficiencies));
+update public.character_slots set overview_field_versions='{"save.wisdom":7,"wisdom":3}'::jsonb where position=1;
+create temporary table before_migration as select claimed_at, claimed_by, version, updated_at from public.character_slots where position=1;
+
+-- __DERIVED_VALUES_MIGRATION__
+
+select results_eq($$select saving_throw_proficiencies->>'wisdom', saving_throw_proficiencies->>'strength' from public.character_slots where position=1$$,
+  $$values ('proficient','none')$$, 'forward migration preserves both true and false legacy choices');
+select results_eq($$select overview_field_versions, wisdom, character_name from public.character_slots where position=1$$,
+  $$values ('{"save.wisdom":7,"wisdom":3}'::jsonb,12,'Neris Vale'::text)$$, 'forward migration preserves conditional versions and input data');
+select results_eq($$select claimed_at,claimed_by,version,updated_at from public.character_slots where position=1$$,
+  $$select * from before_migration$$, 'forward migration preserves claim and update metadata');
+select results_eq($$select derived_overrides from public.character_slots where position=1$$, array['{}'::jsonb], 'legacy Character Record starts without overrides');
+select ok(has_function_privilege('authenticated','public.valid_derived_overrides(jsonb)','EXECUTE'), 'forward migration explicitly grants authenticated validator execution');
+select ok(not has_function_privilege('anon','public.valid_derived_overrides(jsonb)','EXECUTE'), 'forward migration denies anonymous validator execution');
+select * from finish();
+rollback;

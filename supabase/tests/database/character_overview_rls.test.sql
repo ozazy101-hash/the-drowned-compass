@@ -150,7 +150,7 @@ select results_eq(
 select results_eq(
   $$select accepted from public.update_character_overview_field(
     (select id from public.character_slots where position = 1),
-    'save.wisdom', 'true'::jsonb, 0
+    'save.wisdom', '"proficient"'::jsonb, 0
   )$$,
   array[true],
   'saving throw proficiency saves independently'
@@ -166,7 +166,7 @@ select results_eq(
 select results_eq(
   $$select saving_throw_proficiencies->>'wisdom', skill_proficiencies->>'perception'
     from public.character_slots where position = 1$$,
-  $$values ('true', 'expertise')$$,
+  $$values ('proficient', 'expertise')$$,
   'proficiency changes are persisted without replacing one another'
 );
 

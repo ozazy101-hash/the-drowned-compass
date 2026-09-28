@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test:e2e": "playwright test",
     "supabase:start": "supabase start",
-    "test:db": "supabase test db"
+    "test:db": "node scripts/run-database-tests.mjs",
+    "test:calculations": "playwright test --config=playwright.calculations.config.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",

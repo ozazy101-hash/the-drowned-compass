@@ -39,7 +39,8 @@ const characterSlotColumns = `
   max_hit_points,
   speed,
   spellcasting_ability,
-  overview_field_versions
+  overview_field_versions,
+  derived_overrides
 `;
 
 type CharacterSlotRow = {
@@ -65,6 +66,7 @@ type CharacterSlotRow = {
   max_hit_points: number;
   speed: number;
   spellcasting_ability: CharacterRecord["spellcastingAbility"];
+  derived_overrides: CharacterRecord["derivedOverrides"];
   overview_field_versions: CharacterRecord["fieldVersions"];
 };
 
@@ -101,6 +103,7 @@ function mapCharacterSlot(row: CharacterSlotRow): CharacterSlot {
             maxHitPoints: row.max_hit_points,
             speed: row.speed,
             spellcastingAbility: row.spellcasting_ability,
+            derivedOverrides: row.derived_overrides,
             fieldVersions: row.overview_field_versions,
           },
   };
@@ -212,6 +215,7 @@ export function createSupabasePartyData(
           max_hit_points: character.maxHitPoints,
           speed: character.speed,
           spellcasting_ability: character.spellcastingAbility,
+          derived_overrides: character.derivedOverrides,
           overview_field_versions: character.fieldVersions,
           version: 1,
           updated_at: now,

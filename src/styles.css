@@ -1240,3 +1240,17 @@ footer {
     transform: rotate(360deg);
   }
 }
+
+.derived-help { color: var(--muted); line-height: 1.6; }
+.derived-field { padding: .8rem; border: 1px solid rgba(159, 186, 182, .2); border-radius: .4rem; min-width: 0; }
+.derived-field--overridden { border-color: #c5a35f; background: rgba(197, 163, 95, .07); }
+.derived-field__result { display: flex; align-items: center; justify-content: space-between; gap: .6rem; }
+.derived-field__result output { font-size: 1.3rem; font-weight: 700; white-space: nowrap; }
+.derived-field__source { display: block; color: #aebcb7; font-size: .8rem; margin: .35rem 0; }
+.derived-field__actions button { background: transparent; border: 0; color: #d5b775; padding: .4rem 0; text-align: left; cursor: pointer; }
+.derived-field__actions button:disabled { opacity: .5; cursor: wait; }
+.derived-field__input { display: grid; gap: .4rem; font-size: .8rem; }
+.derived-field__input input { width: 100%; min-width: 0; background: #0c191c; color: #eee6d4; border: 1px solid #5b706c; border-radius: .3rem; padding: .6rem; }
+.ability-editor .derived-field { margin: .75rem 0; }
+.skill-editor { min-width: 0; }
+.skill-editor .derived-field { margin-top: .4rem; }

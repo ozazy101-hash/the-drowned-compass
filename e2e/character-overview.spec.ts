@@ -1,86 +1,5 @@
-import { expect, test, type Browser, type Locator, type Page, type TestInfo } from "@playwright/test";
-
-async function enterAs(page: Page, role: "Player" | "Dungeon Master") {
-  await page.getByRole("button", { name: role }).click();
-  await page.getByLabel("Shared password").fill(role === "Player" ? "player-password" : "dm-password");
-  await page.getByRole("button", { name: "Enter the Party" }).click();
-}
-
-function isolatedPartyUrl(testInfo: TestInfo, extra = "") {
-  const namespace = [
-    testInfo.project.name,
-    testInfo.workerIndex,
-    testInfo.retry,
-    testInfo.testId,
-  ].join("-");
-  return `./?partyTestId=${encodeURIComponent(namespace)}${extra}`;
-}
-
-async function claimCharacter(page: Page) {
-  await page.getByRole("article", { name: "Unclaimed character slot" }).first().getByRole("button").click();
-  const identity = {
-    "Player name": "Mara",
-    "Character name": "Neris Vale",
-    "Primary class": "Rogue",
-    Subclass: "Thief",
-    Species: "Human",
-    Background: "Sailor",
-    Level: "3",
-  };
-  for (const [label, value] of Object.entries(identity)) {
-    await page.getByLabel(label, { exact: true }).fill(value);
-  }
-  await page.getByRole("button", { name: "Continue to Ability Scores" }).click();
-  const abilities = {
-    Strength: "9",
-    Dexterity: "17",
-    Constitution: "13",
-    Intelligence: "14",
-    Wisdom: "12",
-    Charisma: "11",
-  };
-  for (const [label, value] of Object.entries(abilities)) {
-    await page.getByLabel(label, { exact: true }).fill(value);
-  }
-  await page.getByRole("button", { name: "Claim Character Slot" }).click();
-  await expect(page.getByRole("heading", { level: 1, name: "Neris Vale" })).toBeVisible();
-}
-
-async function openClaimedCharacter(page: Page) {
-  await page
-    .getByRole("article", { name: /Neris .+, played by Mara/ })
-    .getByRole("button")
-    .click();
-}
-
-async function saveInput(page: Page, label: string, value: string) {
-  const input = page.getByLabel(label, { exact: true });
-  await input.fill(value);
-  await input.press("Enter");
-  await expectSaveFeedback(page, input, "Saved");
-}
-
-async function expectSaveFeedback(page: Page, control: Locator, text: string) {
-  const feedbackId = await control.getAttribute("aria-describedby");
-  expect(feedbackId).not.toBeNull();
-  await expect(page.locator(`#${feedbackId}`)).toHaveText(text);
-}
-
-async function prepareTwoBrowsers(browser: Browser, page: Page, testInfo: TestInfo) {
-  const url = isolatedPartyUrl(testInfo);
-  const otherContext = await browser.newContext({
-    baseURL: "http://127.0.0.1:4173/the-drowned-compass/",
-  });
-  const otherPage = await otherContext.newPage();
-  await page.goto(url);
-  await otherPage.goto(url);
-  await enterAs(page, "Player");
-  await enterAs(otherPage, "Dungeon Master");
-  await claimCharacter(page);
-  await expect(otherPage.getByRole("article", { name: "Neris Vale, played by Mara" })).toBeVisible();
-  await openClaimedCharacter(otherPage);
-  return { otherContext, otherPage };
-}
+import { expect, test } from "@playwright/test";
+import { enterAs, isolatedPartyUrl, claimCharacter, openClaimedCharacter, saveInput, expectSaveFeedback, prepareTwoBrowsers } from "./overview-helpers";
 
 test("the Character Overview is keyboard operable, responsive, and persists focused fields", async ({ page }, testInfo) => {
   await page.goto(isolatedPartyUrl(testInfo, "&slowOverviewSaves=once"));
@@ -115,7 +34,7 @@ test("the Character Overview is keyboard operable, responsive, and persists focu
   await saveInput(page, "Speed (feet)", "35");
 
   const wisdomSave = page.getByLabel("Wisdom saving throw proficiency");
-  await wisdomSave.check();
+  await wisdomSave.selectOption("proficient");
   await expectSaveFeedback(page, wisdomSave, "Saved");
 
   await page.getByLabel("Perception", { exact: true }).selectOption("proficient");
@@ -134,7 +53,7 @@ test("the Character Overview is keyboard operable, responsive, and persists focu
   await expect(page.getByLabel("Armor Class")).toHaveValue("16");
   await expect(page.getByLabel("Maximum Hit Points")).toHaveValue("24");
   await expect(page.getByLabel("Speed (feet)")).toHaveValue("35");
-  await expect(page.getByLabel("Wisdom saving throw proficiency")).toBeChecked();
+  await expect(page.getByLabel("Wisdom saving throw proficiency")).toHaveValue("proficient");
   await expect(page.getByLabel("Perception", { exact: true })).toHaveValue("proficient");
   await expect(page.getByLabel("Spellcasting Ability")).toHaveValue("wisdom");
 });
@@ -237,11 +156,11 @@ for (const controlType of ["skill", "saving throw"] as const) {
     const control = page.getByLabel(label, { exact: true });
     const otherControl = otherPage.getByLabel(label, { exact: true });
     if (controlType === "skill") await control.selectOption("expertise");
-    else await control.check();
+    else await control.selectOption("proficient");
     await ready;
     await expectSaveFeedback(page, control, "Saving…");
     if (controlType === "skill") await otherControl.selectOption("proficient");
-    else await otherControl.check();
+    else await otherControl.selectOption("expertise");
     await expectSaveFeedback(otherPage, otherControl, "Saved");
     await saveInput(otherPage, "Speed (feet)", "40");
     await expect(page.getByLabel("Speed (feet)")).toHaveValue("40");
@@ -250,11 +169,11 @@ for (const controlType of ["skill", "saving throw"] as const) {
     const alert = page.getByRole("alert").filter({ hasText: "Changed elsewhere" });
     await expect(alert).toBeVisible();
     if (controlType === "skill") await expect(control).toHaveValue("expertise");
-    else await expect(control).toBeChecked();
+    else await expect(control).toHaveValue("proficient");
     await alert.getByRole("button", { name: "Retry" }).click();
     await expectSaveFeedback(page, control, "Saved");
     if (controlType === "skill") await expect(otherControl).toHaveValue("expertise");
-    else await expect(otherControl).toBeChecked();
+    else await expect(otherControl).toHaveValue("proficient");
     await otherContext.close();
   });
 }
