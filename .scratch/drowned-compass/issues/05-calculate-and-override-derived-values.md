@@ -4,7 +4,7 @@
 
 **Blocked by:** 04 — Edit and synchronize the Character Overview.
 
-**Status:** claimed
+**Status:** resolved
 
 - [x] Ability modifiers and proficiency bonus derive from Ability Scores and total level.
 - [x] Saves and skills support none, proficient, and expertise states and display the correct modifiers.
@@ -26,3 +26,11 @@
 - Review handoff: [PR #3 — Ticket 05: calculate and override Derived Values](https://github.com/ozazy101-hash/the-drowned-compass/pull/3) is open against `main`. Local implementation is committed and pushed on `codex/ticket-05-derived-values`; approval is still required for merge and hosted release.
 - Final two-axis review on 2026-09-28 found one Spec issue: a dirty override adopted a remote version before its own save was submitted, bypassing stale-draft detection. Reproduced with a failing two-session browser regression, then fixed by retaining the draft's original version and advancing it only for its own accepted write or explicit Retry/reset. Retry/reset also suppress a duplicate blur submission. The Spec reviewer confirmed the fix and found no remaining actionable issue.
 - Standards review found no documented-standard violations and one optional duplicated database allowlist. Consolidated RPC override validation through the existing CHECK validator; the Standards reviewer confirmed no remaining finding. Local database tests still pass 111 assertions, including migration rehearsal, effective grants, zero overrides, and null resets; the production build passes. Final expanded browser verification passes 50/50 (25 laptop, 25 phone) with `pnpm test:e2e --workers=1 --timeout=90000`. The default 30-second whole-test budget timed out on the busy Mac; the successful run extended that budget without changing assertion timeouts. Hosted release remains pending user approval.
+- Release approved by the user on 2026-09-28. Hosted dry-run identified only the reviewed Ticket 05 migration; applied it to Supabase project `qjiqnzujsuqoqaausrgy` without seeds, custom roles, or vault changes. A follow-up dry-run reports the remote database up to date. Merged PR #3 at reviewed head `f981ceef0e154310c22a4c2cc0081f237f0f28e2`, producing release commit `8e7dab814371b9b4c066eb1b50645c64e5d62f5f`. [GitHub Pages deployment](https://github.com/ozazy101-hash/the-drowned-compass/actions/runs/36482067218) completed successfully.
+- Hosted acceptance passed in signed-in Chrome (Player) and Codex browser (Dungeon Master), using only the labelled `Ticket 04 Test Character`. Wisdom 14 produced modifier +2, proficient Wisdom saving throw +4, Perception expertise +6, Passive Perception 16, spell attack +4, and spell save DC 12. A zero Perception override persisted in the other browser, fed Passive Perception 10, and reset to the calculated +6/16 results.
+- Live concurrency acceptance held an unfinished Dungeon Master Initiative +7 draft while the Player saved +2 and an independent Speed 40 edit. The independent edit arrived without replacing the draft. Submitting the stale draft displayed "Changed elsewhere. Your override is not saved." and preserved the Player's accepted +2. Explicit Retry saved +7 and both browsers converged without losing Speed 40.
+- Restored every temporary test value and verified persistence after refreshing the Player and Dungeon Master sessions: identity and claim retained, level 1, all Ability Scores 10, all saves/skills not proficient, AC 10, maximum Hit Points 1, Speed 30, no spellcasting Ability, and no overrides. Spell statistics returned to Not set. Other Character Slots were not edited. Hosted release acceptance is complete.
+
+## Answer
+
+All 35 Derived Values are calculated, independently overrideable, and resettable in the deployed Party Companion. Local verification, Standards/Spec review, the hosted migration, GitHub Pages deployment, and signed-in live acceptance are complete. Implementation and release evidence are recorded in [Derived Values implementation notes](../../../docs/implementation/derived-values.md).
