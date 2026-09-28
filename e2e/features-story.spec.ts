@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
-import { claimCharacter, enterAs, isolatedPartyUrl, openClaimedCharacter, prepareTwoBrowsers } from './overview-helpers';
+import { openClaimedCharacter } from './overview-helpers';
+import { prepareTextBrowsers, prepareTextPage } from './character-text-helpers';
 
 async function area(page: Page, name: 'Features' | 'Story') {
   await page.getByRole('navigation', { name: 'Character Record sections' }).getByRole('button', { name, exact: true }).click();
@@ -11,8 +12,8 @@ async function saveStory(page: Page, label: string, text: string) {
   await expect(editor.getByRole('status')).toHaveText('Saved');
 }
 
-test('all Feature sources and Story fields persist long party-visible text with keyboard and responsive access', async ({ page }, info) => {
-  await page.goto(isolatedPartyUrl(info)); await enterAs(page, 'Player'); await claimCharacter(page);
+test('all Feature sources persist long text with keyboard and responsive access', async ({ page }, info) => {
+  await prepareTextPage(page, info);
   const longText = ('Salt-stained coat, a compass from an old ally.\n' + 'abyss'.repeat(80) + '\n').repeat(12);
   await area(page, 'Features');
   for (const kind of ['Class', 'Species', 'Background', 'Feat']) {
@@ -24,16 +25,6 @@ test('all Feature sources and Story fields persist long party-visible text with 
     await editor.getByLabel('Summary').press('Control+Enter');
     await expect(editor.getByRole('status')).toHaveText('Saved');
   }
-  await area(page, 'Story');
-  await expect(page.getByText('Visible to the whole Party.', { exact: false }).last()).toBeVisible();
-  for (const label of ['Appearance', 'Personality', 'Backstory', 'Allies', 'General notes']) await saveStory(page, label, longText);
-  await expect(page.getByRole('textbox', { name: /private|Dungeon Master/i })).toHaveCount(0);
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-  await page.screenshot({ path: info.outputPath('story-layout.png'), fullPage: true });
-  await page.reload(); await openClaimedCharacter(page); await area(page, 'Story');
-  for (const label of ['Appearance', 'Personality', 'Backstory', 'Allies', 'General notes']) await expect(page.getByLabel(label, { exact: true })).toHaveValue(longText);
-  // Empty Story is a valid correction, rather than an unsaveable field.
-  await saveStory(page, 'Allies', '');
   await area(page, 'Features');
   for (const kind of ['Class', 'Species', 'Background', 'Feat']) await expect(page.getByRole('article', { name: `${kind} feature` }).getByLabel('Summary')).toHaveValue(longText);
   await page.getByRole('article', { name: 'Feat feature' }).getByRole('button', { name: 'Remove feature' }).click();
@@ -43,8 +34,21 @@ test('all Feature sources and Story fields persist long party-visible text with 
   await expect(page.getByRole('article', { name: 'Class feature' })).toBeVisible();
 });
 
+test('all Story fields preserve long party-visible text', async ({ page }, info) => {
+  await prepareTextPage(page, info);
+  const longText = ('Salt-stained coat, a compass from an old ally.\n' + 'abyss'.repeat(80) + '\n').repeat(12);
+  await area(page, 'Story');
+  await expect(page.getByText('Visible to the whole Party.', { exact: false }).last()).toBeVisible();
+  for (const label of ['Appearance', 'Personality', 'Backstory', 'Allies', 'General notes']) await saveStory(page, label, longText);
+  await expect(page.getByRole('textbox', { name: /private|Dungeon Master/i })).toHaveCount(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: info.outputPath('story-layout.png'), fullPage: true });
+  await page.reload(); await openClaimedCharacter(page); await area(page, 'Story');
+  for (const label of ['Appearance', 'Personality', 'Backstory', 'Allies', 'General notes']) await expect(page.getByRole('textbox', { name: label, exact: true })).toHaveValue(longText);
+});
+
 test('independent Feature and Story edits survive and stale same-field drafts conflict until explicit Retry', async ({ browser, page }, info) => {
-  const { otherContext, otherPage } = await prepareTwoBrowsers(browser, page, info);
+  const { otherContext, otherPage } = await prepareTextBrowsers(browser, page, info);
   try {
     await area(page, 'Features');
     await page.getByRole('button', { name: 'Add feature', exact: true }).click();
@@ -55,20 +59,20 @@ test('independent Feature and Story edits survive and stale same-field drafts co
     await Promise.all([feature.getByRole('button', { name: 'Save feature' }).click(), saveStory(otherPage, 'Backstory', 'Raised aboard the Gull.')]);
     await expect(feature.getByRole('status')).toHaveText('Saved');
     await area(page, 'Story');
-    await expect(page.getByLabel('Backstory', { exact: true })).toHaveValue('Raised aboard the Gull.');
+    await expect(page.getByRole('textbox', { name: 'Backstory', exact: true })).toHaveValue('Raised aboard the Gull.');
     const backstory = page.getByRole('article', { name: 'Backstory', exact: true });
     await backstory.getByLabel('Backstory').fill('My unfinished draft');
     await saveStory(otherPage, 'Backstory', 'Remote accepted story');
     // Wait for a separate realtime field to prove the snapshot has reached this session.
     await saveStory(otherPage, 'Appearance', 'Scarred cheek');
-    await expect(page.getByLabel('Appearance', { exact: true })).toHaveValue('Scarred cheek');
+    await expect(page.getByRole('textbox', { name: 'Appearance', exact: true })).toHaveValue('Scarred cheek');
     await expect(backstory.getByLabel('Backstory')).toHaveValue('My unfinished draft');
     await backstory.getByRole('button', { name: 'Save Backstory' }).click();
     await expect(backstory.getByRole('alert')).toContainText('Changed elsewhere');
-    await expect(otherPage.getByLabel('Backstory', { exact: true })).toHaveValue('Remote accepted story');
+    await expect(otherPage.getByRole('textbox', { name: 'Backstory', exact: true })).toHaveValue('Remote accepted story');
     await backstory.getByRole('button', { name: 'Retry', exact: true }).click();
     await expect(backstory.getByRole('status')).toHaveText('Saved');
-    await expect(otherPage.getByLabel('Backstory', { exact: true })).toHaveValue('My unfinished draft');
+    await expect(otherPage.getByRole('textbox', { name: 'Backstory', exact: true })).toHaveValue('My unfinished draft');
     await area(otherPage, 'Features');
     await expect(otherPage.getByLabel('Feature name')).toHaveValue('Second Wind');
     await area(page, 'Features');
@@ -80,11 +84,12 @@ test('independent Feature and Story edits survive and stale same-field drafts co
     await expect(feature.getByRole('alert')).toContainText('Changed elsewhere');
     await feature.getByRole('button', { name: 'Discard changes' }).click();
     await expect(feature.getByLabel('Summary')).toHaveValue('Remote feature');
+    await expect(feature.getByRole('status')).toBeEmpty();
   } finally { await otherContext.close(); }
 });
 
 test('failed Story saves retain text and section drafts while Retry persists it', async ({ page }, info) => {
-  await page.goto(isolatedPartyUrl(info, '&failTextSaves=once')); await enterAs(page, 'Player'); await claimCharacter(page); await area(page, 'Story');
+  await prepareTextPage(page, info, '&failTextSaves=once'); await area(page, 'Story');
   const editor = page.getByRole('article', { name: 'General notes' });
   await editor.getByLabel('General notes').fill('Remember the debt.\nAsk the crew.');
   await editor.getByRole('button', { name: 'Save General notes' }).click();
@@ -93,11 +98,14 @@ test('failed Story saves retain text and section drafts while Retry persists it'
   await expect(editor.getByLabel('General notes')).toHaveValue('Remember the debt.\nAsk the crew.');
   await editor.getByRole('button', { name: 'Retry' }).click(); await expect(editor.getByRole('status')).toHaveText('Saved');
   await page.reload(); await openClaimedCharacter(page); await area(page, 'Story');
-  await expect(page.getByLabel('General notes', { exact: true })).toHaveValue('Remember the debt.\nAsk the crew.');
+  await expect(page.getByRole('textbox', { name: 'General notes', exact: true })).toHaveValue('Remember the debt.\nAsk the crew.');
+  await saveStory(page, 'General notes', '');
+  await page.reload(); await openClaimedCharacter(page); await area(page, 'Story');
+  await expect(page.getByRole('textbox', { name: 'General notes', exact: true })).toHaveValue('');
 });
 
 test('older save acknowledgements preserve newer typing and delayed snapshots preserve newer records', async ({ browser, page }, info) => {
-  const { otherContext, otherPage } = await prepareTwoBrowsers(browser, page, info);
+  const { otherContext, otherPage } = await prepareTextBrowsers(browser, page, info);
   try {
     await area(page, 'Story'); await area(otherPage, 'Story');
     let release: () => void = () => {};
@@ -114,7 +122,7 @@ test('older save acknowledgements preserve newer typing and delayed snapshots pr
     await editor.getByLabel('Personality').fill('First draft');
     await editor.getByRole('button', { name: 'Save Personality' }).click();
     await expect(editor.getByRole('status')).toHaveText('Saving…');
-    await expect(otherPage.getByLabel('Personality', { exact: true })).toHaveValue('First draft');
+    await expect(otherPage.getByRole('textbox', { name: 'Personality', exact: true })).toHaveValue('First draft');
     await editor.getByLabel('Personality').fill('Newer typing');
     await saveStory(otherPage, 'Personality', 'Newer remote record');
     release();
@@ -123,4 +131,31 @@ test('older save acknowledgements preserve newer typing and delayed snapshots pr
     await editor.getByRole('button', { name: 'Discard changes' }).click();
     await expect(editor.getByLabel('Personality')).toHaveValue('Newer remote record');
   } finally { await otherContext.close(); }
+});
+
+test('typing during a delayed Feature removal makes Retry restore the newer draft', async ({ page }, info) => {
+  await prepareTextPage(page, info); await area(page, 'Features');
+  await page.getByRole('button', { name: 'Add feature', exact: true }).click();
+  const feature = page.getByRole('article', { name: 'Class feature' });
+  await feature.getByLabel('Feature name').fill('Second Wind');
+  await feature.getByLabel('Summary').fill('Original reminder');
+  await feature.getByRole('button', { name: 'Save feature', exact: true }).click();
+  await expect(feature.getByRole('status')).toHaveText('Saved');
+  let release: () => void = () => {};
+  const gate = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/__drowned_compass_test_party?*', async route => {
+    if (route.request().method() !== 'PATCH' || !route.request().postDataJSON().textEntry?.deleted) return route.continue();
+    const response = await route.fetch();
+    await gate;
+    await route.fulfill({ response });
+  });
+  await feature.getByRole('button', { name: 'Remove feature' }).click();
+  await feature.getByLabel('Summary').fill('Newer reminder to keep');
+  release();
+  await expect(feature.getByRole('alert')).toContainText('newer changes');
+  await expect(feature.getByLabel('Summary')).toHaveValue('Newer reminder to keep');
+  await feature.getByRole('button', { name: 'Retry', exact: true }).click();
+  await expect(feature.getByRole('status')).toHaveText('Saved');
+  await page.reload(); await openClaimedCharacter(page); await area(page, 'Features');
+  await expect(page.getByLabel('Summary')).toHaveValue('Newer reminder to keep');
 });

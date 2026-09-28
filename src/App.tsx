@@ -782,18 +782,20 @@ function CharacterPage({
       </section>
 
       <nav className="character-nav" aria-label="Character Record sections">
-        {['Overview', 'Combat', 'Magic', 'Inventory', 'Features', 'Story'].map((item) => (
+        {['Overview', 'Combat', 'Magic', 'Inventory', 'Features', 'Story'].map((item) => {
+          const enabled = ['Overview', 'Features', 'Story'].includes(item);
+          return (
           <button
             key={item}
             type="button"
             aria-current={item === section ? "page" : undefined}
-            disabled={!["Overview", "Features", "Story"].includes(item)}
+            disabled={!enabled}
             onClick={() => setSection(item)}
-            title={["Overview", "Features", "Story"].includes(item) ? undefined : "Coming in a later ticket"}
+            title={enabled ? undefined : "Coming in a later ticket"}
           >
             {item}
           </button>
-        ))}
+        ); })}
       </nav>
 
       <div hidden={section !== 'Features'}><FeaturesStory key={`${slot.id}-features`} slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} area="Features" /></div>

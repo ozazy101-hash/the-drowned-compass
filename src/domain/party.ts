@@ -1,4 +1,4 @@
-import type { CharacterTextDraft, CharacterTextEntry } from "./character-text";
+import type { CharacterTextDraft, CharacterTextEntry } from "./character-text.ts";
 import type { DerivedOverrides, DerivedValueKey } from "./derived-values.ts";
 
 export const abilityScoreKeys = [

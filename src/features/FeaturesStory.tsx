@@ -26,11 +26,13 @@ function TextEditor({ entry, label, feature, onSave, onCancelNew }: {
   function change(field: 'title' | 'body', value: string) {
     if (!dirty) baseVersion.current = entry.version;
     revision.current += 1;
+    pendingRemoval.current = false;
     setDraft(current => ({ ...current, [field]: value, deleted: false }));
     setDirty(true); if (state !== 'saving') setState('unsaved'); setMessage('Unsaved changes.');
   }
   async function save(remove = false, retry = false) {
     pendingRemoval.current = remove;
+    if (remove) setDirty(true);
     const next = { ...draft, deleted: remove, title: feature ? draft.title.trim() : '' };
     if (feature && !next.title) { setState('unsaved'); setMessage('Enter a feature name before saving.'); return; }
     if (retry) baseVersion.current = entry.version;
@@ -75,7 +77,7 @@ function TextEditor({ entry, label, feature, onSave, onCancelNew }: {
         <button className="secondary-button" type="button" disabled={state === 'saving'} onClick={() => void save()}>Save {feature ? 'feature' : label}</button>
         {feature && <button className="text-button" type="button" disabled={state === 'saving'} onClick={() => { if (entry.version === 0) onCancelNew?.(); else void save(true); }}>Remove feature</button>}
         {state === 'unsaved' && <button className="text-button" type="button" onClick={() => {
-          request.current += 1; revision.current += 1; setDraft(entry); setDirty(false); setState('idle');
+          request.current += 1; revision.current += 1; setDraft(entry); setDirty(false); setState('idle'); setMessage('');
         }}>Discard changes</button>}
       </div>
       <p id={`${id}-feedback`} className={`save-feedback save-feedback--${state}`}

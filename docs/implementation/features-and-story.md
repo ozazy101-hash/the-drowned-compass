@@ -24,4 +24,4 @@ Hosted migration and reviewed frontend deployment remain pending user approval. 
 
 ## Verification
 
-Verification results are appended after the local acceptance runs. Browser tests use both laptop and phone projects with one worker and a temporary uncommitted config on port 4216. SQL rehearses the actual forward migration inside a transaction and rolls it back, avoiding any persistent changes to the shared local stack.
+`pnpm test:db` passed all 144 assertions across six files, including 33 new migration/RLS/grant/conditional-write assertions, in rollback-only transactions. `pnpm build` and `git diff --check` pass. Browser acceptance results follow after the final runs. Browser tests use both laptop and phone projects with one worker and a temporary uncommitted config on port 4216. SQL rehearses the actual forward migration inside a transaction and rolls it back, avoiding any persistent changes to the shared local stack.
