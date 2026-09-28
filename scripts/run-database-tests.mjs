@@ -10,10 +10,17 @@ writeFileSync(generated, readFileSync(template, 'utf8').replace(
   '-- __DERIVED_VALUES_MIGRATION__',
   () => readFileSync(migration, 'utf8'),
 ));
+const resourceTemplate = new URL('../supabase/tests/fixtures/limited_resources_migration.sql.template', import.meta.url);
+const resourceMigration = new URL('../supabase/migrations/20260928221000_track_limited_resources.sql', import.meta.url);
+const resourceGenerated = new URL('../supabase/tests/database/limited_resources_migration.generated.test.sql', import.meta.url);
+writeFileSync(resourceGenerated, readFileSync(resourceTemplate, 'utf8').replace(
+  '-- __LIMITED_RESOURCES_MIGRATION__', () => readFileSync(resourceMigration, 'utf8'),
+));
 try {
   const result = spawnSync('supabase', ['test', 'db', ...process.argv.slice(2)], { stdio: 'inherit' });
   if (result.error) throw result.error;
   process.exitCode = result.status ?? 1;
 } finally {
   rmSync(generated, { force: true });
+  rmSync(resourceGenerated, { force: true });
 }

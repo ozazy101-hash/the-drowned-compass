@@ -1,3 +1,4 @@
+import { readResources, mapResource, writeSupabaseResource } from "./supabase-limited-resources";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type {
   AccessRole,
@@ -147,9 +148,14 @@ export function createSupabasePartyData(
 
     if (slotsError) throw slotsError;
 
+    const resources = await readResources(client);
     return {
       name: party.name,
-      slots: ((slots ?? []) as CharacterSlotRow[]).map(mapCharacterSlot),
+      slots: ((slots ?? []) as CharacterSlotRow[]).map(row => {
+        const slot = mapCharacterSlot(row);
+        if (slot.character) slot.character.limitedResources = resources.filter(resource => resource.slot_id === slot.id).map(mapResource);
+        return slot;
+      }),
     };
   }
 
@@ -254,6 +260,8 @@ export function createSupabasePartyData(
         : { ok: false as const, reason: "conflict" as const, slot };
     },
 
+    writeLimitedResource: (slotId, resource, expectedVersion) => writeSupabaseResource(client, slotId, resource, expectedVersion),
+
     subscribeToParty(onPartyChanged) {
       let active = true;
       const reload = () => {
@@ -267,6 +275,11 @@ export function createSupabasePartyData(
         .on(
           "postgres_changes",
           { event: "UPDATE", schema: "public", table: "character_slots" },
+          reload,
+        )
+        .on(
+          "postgres_changes",
+          { event: "*", schema: "public", table: "limited_resources" },
           reload,
         )
         .subscribe((status) => {

@@ -1,3 +1,5 @@
+import { CombatResources, ImportantResourceSummary } from "./components/CombatResources";
+import { mergeResources } from "./domain/limited-resources";
 import { overviewValue, setOverviewValue } from "./domain/overview-fields";
 import { calculateDerivedValues, type DerivedValue, type DerivedValueKey } from "./domain/derived-values";
 import { type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from "react";
@@ -53,6 +55,7 @@ const skillLabels = {
 function mergeCharacterRecords(current: CharacterRecord, incoming: CharacterRecord) {
   const merged: CharacterRecord = {
     ...incoming,
+    limitedResources: mergeResources(current.limitedResources, incoming.limitedResources),
     abilityScores: { ...incoming.abilityScores },
     savingThrowProficiencies: { ...incoming.savingThrowProficiencies },
     skillProficiencies: { ...incoming.skillProficiencies },
@@ -148,6 +151,7 @@ function ClaimedSlot({ slot, onSelect }: { slot: CharacterSlot; onSelect: () => 
           <span>
             Level {character.level} {character.primaryClass} · {character.subclass}
           </span>
+          <ImportantResourceSummary resources={character.limitedResources} />
         </span>
         <span className="character-slot__marker" aria-hidden="true">›</span>
       </button>
@@ -726,6 +730,7 @@ function CharacterPage({
   onBack: () => void;
   onSlotChanged: (slot: CharacterSlot) => void;
 }) {
+  const [section, setSection] = useState("Overview");
   const character = slot.character!;
   const derived = calculateDerivedValues({ ...character, totalLevel: character.level }, character.derivedOverrides);
   const version = (field: OverviewFieldKey) => character.fieldVersions[field] ?? 0;
@@ -782,15 +787,21 @@ function CharacterPage({
           <button
             key={item}
             type="button"
-            aria-current={item === "Overview" ? "page" : undefined}
-            disabled={item !== "Overview"}
-            title={item === "Overview" ? undefined : "Coming in a later ticket"}
+            aria-current={item === section ? "page" : undefined}
+            disabled={item !== "Overview" && item !== "Combat"}
+            onClick={() => setSection(item)}
+            title={item === "Overview" || item === "Combat" ? undefined : "Coming in a later ticket"}
           >
             {item}
           </button>
         ))}
       </nav>
 
+      <div hidden={section !== "Combat"}>
+        <CombatResources slotId={slot.id} resources={character.limitedResources} partyData={partyData}
+          onChanged={resources => onSlotChanged({ ...slot, character: { ...character, limitedResources: resources } })} />
+      </div>
+      <div hidden={section !== "Overview"}>
       <section className="overview-section" aria-labelledby="identity-heading">
         <div className="section-heading">
           <div><p className="section-heading__eyebrow">Character overview</p><h2 id="identity-heading">Identity</h2></div>
@@ -885,6 +896,7 @@ function CharacterPage({
           ))}
         </div>
       </section>
+      </div>
     </main>
   );
 }

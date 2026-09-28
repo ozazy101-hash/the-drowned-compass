@@ -1,3 +1,4 @@
+import type { LimitedResource, ResourceWrite, ResourceWriteResult } from "./limited-resources.ts";
 import type { DerivedOverrides, DerivedValueKey } from "./derived-values.ts";
 
 export const abilityScoreKeys = [
@@ -58,6 +59,7 @@ export type CharacterRecord = {
   speed: number;
   spellcastingAbility: AbilityScoreKey | null;
   derivedOverrides: DerivedOverrides;
+  limitedResources?: LimitedResource[];
   fieldVersions: Partial<Record<OverviewFieldKey, number>>;
 };
 
@@ -101,5 +103,6 @@ export interface PartyData {
     value: OverviewFieldValue,
     expectedVersion: number,
   ): Promise<OverviewUpdateResult>;
+  writeLimitedResource(slotId: string, resource: ResourceWrite, expectedVersion: number): Promise<ResourceWriteResult>;
   subscribeToParty(onPartyChanged: (party: Party) => void): () => void;
 }

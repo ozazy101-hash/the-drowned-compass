@@ -1,0 +1,47 @@
+begin;
+create extension if not exists pgtap with schema extensions;
+select no_plan();
+create temporary table before_resources as select * from public.character_slots;
+-- __LIMITED_RESOURCES_MIGRATION__
+insert into auth.users(instance_id,id,aud,role,email,encrypted_password,email_confirmed_at,raw_app_meta_data,raw_user_meta_data,created_at,updated_at)
+values ('00000000-0000-0000-0000-000000000000','31000000-0000-4000-8000-000000000001','authenticated','authenticated','players@drowned-compass.test','',now(),'{}','{}',now(),now()),
+('00000000-0000-0000-0000-000000000000','31000000-0000-4000-8000-000000000002','authenticated','authenticated','dm@drowned-compass.test','',now(),'{}','{}',now(),now()),
+('00000000-0000-0000-0000-000000000000','31000000-0000-4000-8000-000000000003','authenticated','authenticated','resource-outsider@test.invalid','',now(),'{}','{}',now(),now());
+select results_eq($$select * from public.character_slots order by id$$,$$select * from before_resources order by id$$,'migration preserves all six slots, claims, data and versions');
+set local role authenticated;
+set local "request.jwt.claim.sub" = '31000000-0000-4000-8000-000000000001';
+update public.character_slots set claimed_at=now(),claimed_by='31000000-0000-4000-8000-000000000001',player_name='Mara',character_name='Neris',primary_class='Fighter',subclass='Champion',species='Human',background='Sailor',level=1,strength=10,dexterity=10,constitution=10,intelligence=10,wisdom=10,charisma=10 where position=1;
+select ok(has_function_privilege('authenticated','public.write_limited_resource(uuid,uuid,text,integer,integer,text,double precision,boolean,boolean,integer)','EXECUTE'),'authenticated has explicit RPC grant');
+select ok(not has_function_privilege('anon','public.write_limited_resource(uuid,uuid,text,integer,integer,text,double precision,boolean,boolean,integer)','EXECUTE'),'anonymous has no RPC grant');
+select ok(not has_table_privilege('authenticated','public.limited_resources','UPDATE'),'direct updates cannot bypass conditional versions');
+select ok(public.write_limited_resource((select id from public.character_slots where position=1),'41000000-0000-4000-8000-000000000001','Second Wind',3,3,'Short Rest',1024,true,false,0),'Player adds Short Rest resource');
+select ok(public.write_limited_resource((select id from public.character_slots where position=1),'41000000-0000-4000-8000-000000000002','Luck',1,3,'Dawn',2048,false,false,0),'Player adds independent Dawn resource');
+set local "request.jwt.claim.sub" = '31000000-0000-4000-8000-000000000002';
+select ok(public.write_limited_resource((select id from public.character_slots where position=1),'41000000-0000-4000-8000-000000000001','Second Wind',2,3,'Short Rest',1024,true,false,1),'DM spends one use');
+select ok(not public.write_limited_resource((select id from public.character_slots where position=1),'41000000-0000-4000-8000-000000000001','Second Wind',2,3,'Short Rest',1024,true,false,1),'concurrent stale spend conflicts');
+select ok(public.write_limited_resource((select id from public.character_slots where position=1),'41000000-0000-4000-8000-000000000002','Luck',2,3,'Long Rest',512,true,false,1),'independent resource restores, changes recovery, order and importance');
+select results_eq($$select name,current,important,version from public.limited_resources order by position$$,$$values ('Luck'::text,2,true,2),('Second Wind',2,false,3)$$,'important handoff bumps previous version without overwriting uses');
+select throws_ok($$select public.write_limited_resource((select id from public.character_slots where position=1),'41000000-0000-4000-8000-000000000001','Bad',4,3,'Manual',1024,false,false,3)$$,'23514',null,'current above maximum rejected');
+select throws_ok($$select public.write_limited_resource((select id from public.character_slots where position=1),'41000000-0000-4000-8000-000000000001','Bad',-1,3,'Manual',1024,false,false,3)$$,'23514',null,'negative current rejected');
+select throws_ok($$select public.write_limited_resource((select id from public.character_slots where position=1),'41000000-0000-4000-8000-000000000001','Bad',0,3,'Never',1024,false,false,3)$$,'23514',null,'unknown recovery rejected');
+select throws_ok($$select public.write_limited_resource((select id from public.character_slots where position=1),'41000000-0000-4000-8000-000000000001',' ',0,3,'Manual',1024,false,false,3)$$,'23514',null,'blank name rejected');
+select ok(public.write_limited_resource((select id from public.character_slots where position=1),'41000000-0000-4000-8000-000000000001','Second Wind',0,0,'Manual',1024,false,false,3),'zero current and maximum support correction');
+select ok(public.write_limited_resource((select id from public.character_slots where position=1),'41000000-0000-4000-8000-000000000002','Luck',2,3,'Long Rest',512,true,true,2),'remove important resource');
+select results_eq($$select deleted,important,version from public.limited_resources where name='Luck'$$,$$values (true,false,3)$$,'deletion preserves a versioned tombstone and clears importance');
+select ok(not public.write_limited_resource((select id from public.character_slots where position=1),'41000000-0000-4000-8000-000000000002','Luck',3,3,'Dawn',2048,true,false,3),'deleted record cannot be resurrected even with current version');
+select ok(not public.write_limited_resource((select id from public.character_slots where position=2),'41000000-0000-4000-8000-000000000003','Unclaimed',1,1,'Manual',0,false,false,0),'unclaimed slot cannot acquire resources');
+reset role;
+create temporary table resource_slot as select id from public.character_slots where position=1;
+grant select on resource_slot to authenticated;
+set local role authenticated;
+set local "request.jwt.claim.sub" = '31000000-0000-4000-8000-000000000003';
+select is((select count(*) from public.limited_resources),0::bigint,'non-member cannot read resources');
+select ok(not public.write_limited_resource((select id from resource_slot),'41000000-0000-4000-8000-000000000001','Stolen',1,3,'Manual',0,true,false,4),'non-member cannot mutate known resource through RPC');
+select throws_ok($$insert into public.limited_resources(id,slot_id,name,current,maximum,recovery,position) values('41000000-0000-4000-8000-000000000009',(select id from resource_slot),'Bad',1,1,'Manual',0)$$,'42501',null,'non-member cannot insert directly');
+set local role anon;
+select throws_ok($$select * from public.limited_resources$$,'42501',null,'anonymous cannot read resources');
+select throws_ok($$select public.write_limited_resource('00000000-0000-0000-0000-000000000001','41000000-0000-4000-8000-000000000001','Bad',1,1,'Manual',0,false,false,0)$$,'42501',null,'anonymous cannot call RPC');
+reset role;
+select is((select count(*) from public.character_slots),6::bigint,'all six Character Slots remain');
+select * from finish();
+rollback;

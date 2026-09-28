@@ -1,3 +1,4 @@
+import { writeResource } from "../domain/limited-resources";
 import { setOverviewValue } from "../domain/overview-fields";
 import {
   abilityScoreKeys,
@@ -41,6 +42,7 @@ function readStoredSession(): PartySession | null {
 function copyCharacter(character: CharacterRecord): CharacterRecord {
   return {
     ...character,
+    limitedResources: (character.limitedResources ?? []).map(resource => ({ ...resource })),
     abilityScores: { ...character.abilityScores },
     savingThrowProficiencies: { ...character.savingThrowProficiencies },
     skillProficiencies: { ...character.skillProficiencies },
@@ -185,6 +187,30 @@ export function createInMemoryPartyData(): PartyData {
       slot.character.fieldVersions[field] = currentVersion + 1;
       storeParty(party);
       return { ok: true, slot };
+    },
+
+    async writeLimitedResource(slotId, resource, expectedVersion) {
+      if (params.get("failResourceSaves") === "once" && !window.sessionStorage.getItem("failed-resource-save")) {
+        window.sessionStorage.setItem("failed-resource-save", "true");
+        throw new Error("The save could not reach the Party.");
+      }
+      if (testNamespace) {
+        const response = await fetch(testPartyUrl(testNamespace), {
+          method: "PATCH", headers: { "content-type": "application/json" },
+          body: JSON.stringify({ slotId, resource, expectedVersion }),
+        });
+        if (!response.ok) throw new Error("The resource could not be saved.");
+        return await response.json();
+      }
+      // Web Locks serialize localStorage read/modify/write across tabs, matching server CAS semantics.
+      return navigator.locks.request("drowned-compass-resource-write", () => {
+        const party = readParty();
+        const slot = party.slots.find(candidate => candidate.id === slotId);
+        if (!slot?.character) throw new Error("That Character Record is unavailable.");
+        const result = writeResource(slot.character.limitedResources ?? [], resource, expectedVersion);
+        if (result.ok) { slot.character.limitedResources = result.resources; storeParty(party); }
+        return result;
+      });
     },
 
     subscribeToParty(onPartyChanged) {

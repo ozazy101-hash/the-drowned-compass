@@ -72,7 +72,8 @@ test('the Supabase adapter maps and conditionally persists proficiency and indep
         row.overview_field_versions[field]=currentVersion+1;
       }
       json=[{ accepted,current_version:row.overview_field_versions[field] }];
-    } else if (url.pathname.endsWith('/parties')) json={ id:'test-party',name:'The Drowned Compass' };
+    } else if (url.pathname.endsWith('/limited_resources')) json=[];
+    else if (url.pathname.endsWith('/parties')) json={ id:'test-party',name:'The Drowned Compass' };
     else {
       expect(url.searchParams.get('select')).toContain('derived_overrides');
       json=[row];

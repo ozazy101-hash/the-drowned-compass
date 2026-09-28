@@ -1,3 +1,4 @@
+import { writeResource, type ResourceWrite, type LimitedResource } from "./src/domain/limited-resources.ts";
 import { setOverviewValue } from "./src/domain/overview-fields.ts";
 import type { CharacterRecord, OverviewFieldKey, OverviewFieldValue } from "./src/domain/party.ts";
 import { defineConfig, type Plugin } from "vite";
@@ -88,6 +89,14 @@ function sharedInMemoryParty(): Plugin {
             return;
           }
 
+          if (requestBody.resource) {
+            try {
+              const result = writeResource((slot.character.limitedResources ?? []) as LimitedResource[], requestBody.resource as ResourceWrite, Number(requestBody.expectedVersion));
+              if (result.ok) slot.character.limitedResources = result.resources;
+              response.end(JSON.stringify(result));
+            } catch { response.statusCode = 400; response.end(JSON.stringify({ error: "Invalid resource" })); }
+            return;
+          }
           const field = String(requestBody.field);
           const versions = slot.character.fieldVersions as Record<string, number>;
           const currentVersion = versions[field] ?? 0;
