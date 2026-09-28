@@ -91,6 +91,11 @@ test('independent records synchronize, same-resource drafts conflict and Retry a
     ]);
     await expect(row(page, 'Last Breath').getByLabel('Current')).toHaveValue('2');
     await expect(row(otherPage, 'Last Breath').getByLabel('Current')).toHaveValue('2');
+    await expect.poll(async () => await row(page, 'Last Breath').getByRole('button', { name: 'Retry' }).count() + await row(otherPage, 'Last Breath').getByRole('button', { name: 'Retry' }).count()).toBe(1);
+    const failedPage = await row(page, 'Last Breath').getByRole('button', { name: 'Retry' }).count() ? page : otherPage;
+    await row(failedPage, 'Last Breath').getByRole('button', { name: 'Retry' }).click();
+    await expect(row(page, 'Last Breath').getByLabel('Current')).toHaveValue('1');
+    await expect(row(otherPage, 'Last Breath').getByLabel('Current')).toHaveValue('1');
   } finally { await otherContext.close(); }
 });
 

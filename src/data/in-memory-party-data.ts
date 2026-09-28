@@ -139,12 +139,14 @@ export function createInMemoryPartyData(): PartyData {
         if (!response.ok) throw new Error("That Character Slot is no longer available.");
         return normalizeSlot(await response.json() as CharacterSlot);
       }
+      return navigator.locks.request("drowned-compass-party-write", () => {
       const party = readParty();
       const slot = party.slots.find((candidate) => candidate.id === slotId);
       if (!slot || slot.character) throw new Error("That Character Slot is no longer available.");
       slot.character = copyCharacter(character);
       storeParty(party);
       return slot;
+      });
     },
 
     async updateCharacterOverviewField(slotId, field, value, expectedVersion) {
@@ -176,6 +178,7 @@ export function createInMemoryPartyData(): PartyData {
         return { ok: true, slot };
       }
 
+      return navigator.locks.request("drowned-compass-party-write", () => {
       const party = readParty();
       const slot = party.slots.find((candidate) => candidate.id === slotId);
       if (!slot?.character) throw new Error("That Character Record is unavailable.");
@@ -187,6 +190,7 @@ export function createInMemoryPartyData(): PartyData {
       slot.character.fieldVersions[field] = currentVersion + 1;
       storeParty(party);
       return { ok: true, slot };
+      });
     },
 
     async writeLimitedResource(slotId, resource, expectedVersion) {
@@ -203,7 +207,7 @@ export function createInMemoryPartyData(): PartyData {
         return await response.json();
       }
       // Web Locks serialize localStorage read/modify/write across tabs, matching server CAS semantics.
-      return navigator.locks.request("drowned-compass-resource-write", () => {
+      return navigator.locks.request("drowned-compass-party-write", () => {
         const party = readParty();
         const slot = party.slots.find(candidate => candidate.id === slotId);
         if (!slot?.character) throw new Error("That Character Record is unavailable.");

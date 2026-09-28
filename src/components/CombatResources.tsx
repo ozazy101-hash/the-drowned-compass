@@ -10,6 +10,14 @@ export function ImportantResourceSummary({ resources }: { resources?: LimitedRes
 type Draft = { name: string; current: string; maximum: string; recovery: LimitedResource['recovery'] };
 const toDraft = (resource: ResourceWrite): Draft => ({ name: resource.name, current: String(resource.current), maximum: String(resource.maximum), recovery: resource.recovery });
 
+type ActionIntent = { delta: number } | { patch: Partial<ResourceWrite> };
+type SaveFeedback = { status: 'idle' | 'dirty' | 'saving' | 'saved' | 'failed' | 'conflict' | 'invalid'; message: string };
+function applyAction(resource: ResourceWrite, intent: ActionIntent): ResourceWrite {
+  const write = 'delta' in intent ? { ...resource, current: resource.current + intent.delta } : { ...resource, ...intent.patch };
+  validateResource(write);
+  return write;
+}
+
 type EditorProps = {
   resource: LimitedResource;
   isNew?: boolean;
@@ -20,12 +28,14 @@ type EditorProps = {
 function ResourceEditor({ resource, isNew, save, onAdded, movePosition }: EditorProps) {
   const [draft, setDraft] = useState(toDraft(resource));
   const [dirty, setDirty] = useState(false);
-  const [state, setState] = useState('');
+  const [feedback, setFeedback] = useState<SaveFeedback>({ status: 'idle', message: '' });
+  const [isSaving, setIsSaving] = useState(false);
+  const showFeedback = (status: SaveFeedback['status'], message: string) => setFeedback({ status, message });
   const revision = useRef(0);
   const startingVersion = useRef(resource.version);
   const latestResource = useRef(resource);
   latestResource.current = resource;
-  const pending = useRef<ResourceWrite | null>(null);
+  const pending = useRef<{ write: ResourceWrite; intent?: ActionIntent } | null>(null);
   const saving = useRef(false);
   useEffect(() => { if (!dirty && !saving.current) { setDraft(toDraft(resource)); startingVersion.current = resource.version; } }, [resource, dirty]);
 
@@ -34,7 +44,7 @@ function ResourceEditor({ resource, isNew, save, onAdded, movePosition }: Editor
     revision.current += 1;
     setDirty(true);
     setDraft(current => ({ ...current, [key]: value }));
-    setState('Unsaved changes');
+    showFeedback('dirty', 'Unsaved changes');
     pending.current = null;
   }
   function draftWrite(): ResourceWrite {
@@ -43,32 +53,36 @@ function ResourceEditor({ resource, isNew, save, onAdded, movePosition }: Editor
     validateResource(write);
     return write;
   }
-  async function persist(write: ResourceWrite, version: number) {
+  async function persist(write: ResourceWrite, version: number, intent?: ActionIntent) {
     if (saving.current) return;
     const submittedRevision = revision.current;
-    pending.current = write;
+    pending.current = { write, intent };
     saving.current = true;
-    setState('Saving…');
+    setIsSaving(true);
+    showFeedback('saving', 'Saving…');
     try {
       const result = await save(write, version);
       if (revision.current !== submittedRevision) return;
-      if (!result.ok) { setState('Another session changed this resource. Your changes are unsaved.'); return; }
+      if (!result.ok) { showFeedback('conflict', 'Another session changed this resource. Your changes are unsaved.'); return; }
       setDirty(false);
       pending.current = null;
       startingVersion.current = result.resources.find(candidate => candidate.id === resource.id)?.version ?? version + 1;
-      setState('Saved');
+      showFeedback('saved', 'Saved');
       if (isNew) onAdded?.();
-    } catch { if (revision.current === submittedRevision) setState('Save failed. Your changes are unsaved.'); }
-    finally { saving.current = false; }
+    } catch { if (revision.current === submittedRevision) showFeedback('failed', 'Save failed. Your changes are unsaved.'); }
+    finally { saving.current = false; setIsSaving(false); }
   }
   function submit(event?: FormEvent) {
     event?.preventDefault();
     try { void persist(draftWrite(), startingVersion.current); }
-    catch (error) { setState((error as Error).message); }
+    catch (error) { showFeedback('invalid', (error as Error).message); }
   }
-  function action(patch: Partial<ResourceWrite>) { void persist({ ...resource, ...patch }, resource.version); }
-  const failed = state.includes('unsaved.');
-  const invalid = state.startsWith('Enter');
+  function action(patch: Partial<ResourceWrite>) {
+    const intent: ActionIntent = patch.current === undefined ? { patch } : { delta: patch.current - resource.current };
+    void persist(applyAction(resource, intent), resource.version, intent);
+  }
+  const failed = feedback.status === 'failed' || feedback.status === 'conflict';
+  const invalid = feedback.status === 'invalid';
   if (resource.deleted && !dirty) return null;
   return <form className="resource-editor" aria-label={isNew ? 'New limited resource' : `Resource ${resource.name}`} noValidate onSubmit={submit}>
     {resource.deleted && <p role="alert">This resource was removed in another session. Copy any unsaved details before discarding them.</p>}
@@ -79,22 +93,26 @@ function ResourceEditor({ resource, isNew, save, onAdded, movePosition }: Editor
       <label>Recovery<select value={draft.recovery} onChange={e => change('recovery', e.target.value)}>{recoveryTimings.map(timing => <option key={timing}>{timing}</option>)}</select></label>
     </div>
     <div className="resource-actions">
-      <button type="submit" disabled={state === 'Saving…' || resource.deleted}>{isNew ? 'Add resource' : 'Save resource'}</button>
+      <button type="submit" disabled={isSaving || resource.deleted}>{isNew ? 'Add resource' : 'Save resource'}</button>
       {!isNew && <>
-        <button type="button" disabled={resource.deleted || dirty || state === 'Saving…' || resource.current === 0} onClick={() => action({ current: resource.current - 1 })}>Spend 1</button>
-        <button type="button" disabled={resource.deleted || dirty || state === 'Saving…' || resource.current === resource.maximum} onClick={() => action({ current: resource.current + 1 })}>Restore 1</button>
-        <button type="button" aria-pressed={resource.important} disabled={resource.deleted || dirty || state === 'Saving…'} onClick={() => action({ important: !resource.important })}>{resource.important ? 'Important resource' : 'Make important'}</button>
-        <button type="button" disabled={resource.deleted || dirty || state === 'Saving…' || movePosition?.up === undefined} onClick={() => action({ position: movePosition!.up! })}>Move up</button>
-        <button type="button" disabled={resource.deleted || dirty || state === 'Saving…' || movePosition?.down === undefined} onClick={() => action({ position: movePosition!.down! })}>Move down</button>
-        <button type="button" disabled={resource.deleted || dirty || state === 'Saving…'} onClick={() => action({ deleted: true })}>Remove resource</button>
+        <button type="button" disabled={resource.deleted || dirty || isSaving || resource.current === 0} onClick={() => action({ current: resource.current - 1 })}>Spend 1</button>
+        <button type="button" disabled={resource.deleted || dirty || isSaving || resource.current === resource.maximum} onClick={() => action({ current: resource.current + 1 })}>Restore 1</button>
+        <button type="button" aria-pressed={resource.important} disabled={resource.deleted || dirty || isSaving} onClick={() => action({ important: !resource.important })}>{resource.important ? 'Important resource' : 'Make important'}</button>
+        <button type="button" disabled={resource.deleted || dirty || isSaving || movePosition?.up === undefined} onClick={() => action({ position: movePosition!.up! })}>Move up</button>
+        <button type="button" disabled={resource.deleted || dirty || isSaving || movePosition?.down === undefined} onClick={() => action({ position: movePosition!.down! })}>Move down</button>
+        <button type="button" disabled={resource.deleted || dirty || isSaving} onClick={() => action({ deleted: true })}>Remove resource</button>
       </>}
     </div>
-    {dirty && !isNew && <button type="button" disabled={state === 'Saving…'} onClick={() => {
-      setDirty(false); setDraft(toDraft(resource)); startingVersion.current = resource.version; pending.current = null; setState('');
+    {(dirty || failed) && !isNew && <button type="button" disabled={isSaving} onClick={() => {
+      setDirty(false); setDraft(toDraft(resource)); startingVersion.current = resource.version; pending.current = null; showFeedback('idle', '');
     }}>Discard changes</button>}
-    <p className="save-feedback" role={failed || invalid ? 'alert' : 'status'}>{state}</p>
+    <p className="save-feedback" role={failed || invalid ? 'alert' : 'status'}>{feedback.message}</p>
     {failed && !resource.deleted && <button type="button" onClick={() => {
-      try { void persist(pending.current ?? draftWrite(), latestResource.current.version); } catch (error) { setState((error as Error).message); }
+      try {
+        const intent = pending.current?.intent;
+        const write = intent ? applyAction(latestResource.current, intent) : pending.current?.write ?? draftWrite();
+        void persist(write, latestResource.current.version, intent);
+      } catch { showFeedback('conflict', 'The latest count cannot apply this action. Your action is unsaved; discard it or retry after the count changes.'); }
     }}>Retry</button>}
   </form>;
 }
