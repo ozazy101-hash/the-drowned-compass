@@ -27,3 +27,9 @@ Standards and Spec reviews ran independently through the code-review skill. Thei
 Database checks completed through `/tmp/drowned-compass-with-db-lock.py` against the existing local container using direct `docker exec` psql: 111 baseline/Derived Values assertions and 35 Combat migration assertions passed (146 total). All fixtures rolled back. An additional transaction expanded the actual Combat migration and ran `plpgsql_check_function_tb` for `update_character_combat_entry(uuid,jsonb)`: zero findings, then rollback. Preflight confirmed no peer DDL locks before each rehearsal. The direct runner was used because two `pnpm test:db` attempts timed out connecting through localhost. Earlier rehearsals rolled back after a peer DDL deadlock, temporary TAP parser failure and pgTAP query-format failure; corrected verification completed successfully. No persistent migration was applied.
 
 Ticket 09 stays claimed while review/release is pending. No merge, hosted migration, production Character Record edit or Pages deployment has occurred. Hosted acceptance requires fresh release approval.
+
+### 2026-09-29 — Final browser regression fix
+
+The serialized remainder run completed 56 cases successfully and failed one laptop two-session case. A targeted three-run replay reproduced the failure once: its request trace showed old notes in the submitted payload after new notes were typed. The editor's passive clean hydration effect depended on fresh snapshot object identities and could overwrite typing before Save. Clean editors now display the accepted record directly, and first edits copy it into a local draft with the starting version. Ability selection and manual bonus clearing occur in one patch. Existing request/revision, conflict/Retry, creation Saved and remote-removal protections remain intact.
+
+The corrected production build passes. Standards and Spec delta reviews report zero remaining findings. Targeted replay and final browser results are pending.

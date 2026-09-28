@@ -1,6 +1,6 @@
 # Attacks and actions (Ticket 09)
 
-Combat now includes a focused `CombatEntriesSection`. Every attack/action is a separately addressed, versioned record. Editing an entire record is deliberate: two devices changing that same record receive a visible conflict rather than silently combining incompatible drafts. Different records and Overview fields remain independent. Drafts keep their starting record version; only explicit Retry or Discard adopts an incoming version. Typing during an older request remains unsaved and is preserved. Remote removal retains an open dirty draft for copying or discard.
+Combat now includes a focused `CombatEntriesSection`. Every attack/action is a separately addressed, versioned record. Editing an entire record is deliberate: two devices changing that same record receive a visible conflict rather than silently combining incompatible drafts. Different records and Overview fields remain independent. Drafts keep their starting record version; only explicit Retry or Discard adopts an incoming version. Typing during an older request remains unsaved and is preserved. Remote removal retains an open dirty draft for copying or discard. Clean editors render accepted details directly; the first change copies those details into a local draft. This avoids a passive snapshot-hydration race that could replace newly typed notes before submission. Selecting an Ability and clearing its manual bonus is one draft update.
 
 Names, range, damage, damage type and notes are player-entered. An attack records either a manual whole-number attack bonus (including zero) or a relevant Ability reminder. Selecting an Ability does not infer weapon proficiency, damage, or class rules. Actions have a name and player-authored notes. Move up/down buttons provide keyboard and touch ordering using fractional ranks; equal ranks have stable ID ordering.
 
@@ -26,3 +26,13 @@ Release requires approval for this ticket, applying the migration to hosted Supa
 The production build, 131 calculation tests and whitespace checks pass. Independent Standards and Spec reviews report zero remaining findings. Browser verification is pending completion of the shared verification queue; see the ticket and PR for exact outcomes.
 
 All 146 local database assertions passed: 111 baseline/Derived Values and 35 Combat assertions. The new RPC has zero `plpgsql_check` findings. The direct container checks ran through the shared database lock after localhost connections timed out; every fixture and lint transaction rolled back. The Combat fixture expands the actual forward migration and verifies preserved slots/data, permissions, conditional writes, ordering, primary selection/removal, tombstones and member/outsider access.
+
+## Standards review
+
+No remaining findings. The independent review confirmed fixes to test-context URLs, typed feedback states and accessible field labels/styles.
+
+## Spec review
+
+No remaining findings. The independent review confirmed the creation acknowledgement remains visibly Saved after the editor becomes a persisted record.
+
+Review totals: Standards 0; Spec 0. Neither axis has an outstanding issue.

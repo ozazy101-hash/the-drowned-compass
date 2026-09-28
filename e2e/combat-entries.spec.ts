@@ -34,6 +34,7 @@ async function add(page: Page, kind: 'attack' | 'action', name: string) {
 async function edit(page: Page, name: string, notes: string) {
   const editor = page.getByRole('article', { name, exact:true });
   await editor.getByLabel('Notes', { exact:true }).fill(notes);
+  await expect(editor.getByLabel('Notes', { exact:true })).toHaveValue(notes);
   await editor.getByRole('button', { name:/^Save (attack|action)$/ }).click();
   await expect(editor.getByRole('status')).toHaveText('Saved');
 }

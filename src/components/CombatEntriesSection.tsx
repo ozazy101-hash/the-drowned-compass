@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
+import { useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { abilityScoreKeys, type CharacterSlot, type PartyData } from '../domain/party';
 import { emptyCombatEntries, visibleCombatEntries, validateCombatDetails, type CombatEntry, type CombatEntryDetails, type CombatEntryCommand } from '../domain/combat-entries';
 
@@ -14,20 +14,21 @@ function EntryField({ label, id, children, className = '' }: { label: string; id
   return <div className={`setup-field ${className}`}><label htmlFor={id}><span>{label}</span></label>{children}</div>;
 }
 function EntryEditor({ entry, onSave, onCreated, onCancel, initiallySaved = false, upRank, downRank }: { entry: CombatEntry; onSave: Save; onCreated?: () => void; onCancel?: () => void; initiallySaved?: boolean; upRank?: number; downRank?: number }) {
-  const [draft, setDraft] = useState(entry.details);
+  const [localDraft, setDraft] = useState(entry.details);
   const [dirty, setDirty] = useState(false);
+  // Clean editors follow accepted records directly; snapshot effects must never hydrate over typing.
+  const draft = dirty ? localDraft : entry.details;
   const [feedback, setFeedback] = useState<FeedbackState>(initiallySaved ? { status:'saved', message:'Saved' } : idleFeedback);
   const revision = useRef(0);
   const request = useRef(0);
   const draftVersion = useRef(entry.version);
   const pending = useRef<CombatEntryCommand | null>(null);
   const isNew = entry.version === 0;
-  useEffect(() => { if (!dirty) { setDraft(entry.details); draftVersion.current = entry.version; } }, [entry.details, entry.version, dirty]);
-  function change<K extends keyof CombatEntryDetails>(key: K, value: CombatEntryDetails[K]) {
+  function change(patch: Partial<CombatEntryDetails>) {
     if (!dirty) draftVersion.current = entry.version;
     revision.current += 1;
     setDirty(true);
-    setDraft(current => ({ ...current, [key]: value }));
+    setDraft(current => ({ ...(dirty ? current : entry.details), ...patch }));
     setFeedback({ status:'unsaved', message:'Changes not saved.' });
   }
   async function send(command: CombatEntryCommand) {
@@ -63,19 +64,18 @@ function EntryEditor({ entry, onSave, onCreated, onCancel, initiallySaved = fals
       <div className="section-heading"><h3>{title}</h3><span>{draft.kind === 'attack' ? 'Attack' : 'Action'}</span></div>
       {entry.deleted && <p role="alert">Removed elsewhere. This draft cannot be saved. Copy your notes or discard the draft.</p>}
       <div className="overview-grid combat-entry__fields">
-        <EntryField label="Name" id={`${entry.id}-name`}><input id={`${entry.id}-name`} maxLength={120} value={draft.name} onChange={e => change('name',e.target.value)} /></EntryField>
+        <EntryField label="Name" id={`${entry.id}-name`}><input id={`${entry.id}-name`} maxLength={120} value={draft.name} onChange={e => change({ name:e.target.value })} /></EntryField>
         {draft.kind === 'attack' && <>
           <EntryField label="Relevant Ability" id={`${entry.id}-relevant-ability`}><select id={`${entry.id}-relevant-ability`} value={draft.ability ?? ''} onChange={e => {
-            change('ability', (e.target.value || null) as CombatEntryDetails['ability']);
-            if (e.target.value) change('attackBonus', '');
+            change({ ability:(e.target.value || null) as CombatEntryDetails['ability'], ...(e.target.value ? { attackBonus:'' } : {}) });
           }}><option value="">Manual attack bonus</option>{abilityScoreKeys.map(key => <option key={key} value={key}>{key[0].toUpperCase() + key.slice(1)}</option>)}</select></EntryField>
-          {!draft.ability && <EntryField label="Attack bonus" id={`${entry.id}-attack-bonus`}><input id={`${entry.id}-attack-bonus`} type="number" min={-999} max={999} step={1} value={draft.attackBonus} onChange={e => change('attackBonus',e.target.value)} /></EntryField>}
-          <EntryField label="Range" id={`${entry.id}-range`}><input id={`${entry.id}-range`} maxLength={120} value={draft.range} onChange={e => change('range',e.target.value)} /></EntryField>
-          <EntryField label="Damage" id={`${entry.id}-damage`}><input id={`${entry.id}-damage`} maxLength={120} value={draft.damage} onChange={e => change('damage',e.target.value)} /></EntryField>
-          <EntryField label="Damage type" id={`${entry.id}-damage-type`}><input id={`${entry.id}-damage-type`} maxLength={120} value={draft.damageType} onChange={e => change('damageType',e.target.value)} /></EntryField>
+          {!draft.ability && <EntryField label="Attack bonus" id={`${entry.id}-attack-bonus`}><input id={`${entry.id}-attack-bonus`} type="number" min={-999} max={999} step={1} value={draft.attackBonus} onChange={e => change({ attackBonus:e.target.value })} /></EntryField>}
+          <EntryField label="Range" id={`${entry.id}-range`}><input id={`${entry.id}-range`} maxLength={120} value={draft.range} onChange={e => change({ range:e.target.value })} /></EntryField>
+          <EntryField label="Damage" id={`${entry.id}-damage`}><input id={`${entry.id}-damage`} maxLength={120} value={draft.damage} onChange={e => change({ damage:e.target.value })} /></EntryField>
+          <EntryField label="Damage type" id={`${entry.id}-damage-type`}><input id={`${entry.id}-damage-type`} maxLength={120} value={draft.damageType} onChange={e => change({ damageType:e.target.value })} /></EntryField>
         </>}
       </div>
-      <EntryField label="Notes" id={`${entry.id}-notes`}><textarea id={`${entry.id}-notes`} maxLength={4000} rows={3} value={draft.notes} onChange={e => change('notes',e.target.value)} /></EntryField>
+      <EntryField label="Notes" id={`${entry.id}-notes`}><textarea id={`${entry.id}-notes`} maxLength={4000} rows={3} value={draft.notes} onChange={e => change({ notes:e.target.value })} /></EntryField>
       <div className="combat-entry__actions">
         <button className="secondary-button" type="submit" disabled={feedback.status === 'saving' || entry.deleted || (!dirty && !isNew)}>Save {draft.kind}</button>
         {dirty && !isNew && <button className="text-button" type="button" onClick={() => { revision.current += 1; setDirty(false); setFeedback(idleFeedback); }}>Discard draft</button>}
