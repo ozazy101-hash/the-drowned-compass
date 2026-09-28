@@ -19,3 +19,19 @@ The new HP concurrency acceptance found that released numeric/text editors used 
 `e2e/party-summary.spec.ts` covers summaries, applicable/unset spell save DC, effective and zero overrides, reset, reload persistence, live two-session updates, independent writes, failed saves and Retry, stale same-field drafts, six-card responsive layout, long names, and keyboard navigation to every Character Page. Existing browser helpers now follow the configured base URL and viewport for additional sessions, allowing isolated test servers. A shared browser fixture serves an empty Google Fonts stylesheet in every test session so app acceptance exercises the existing local font fallbacks without waiting for third-party font delivery; production font styling is unchanged.
 
 Use the normal Playwright config for ordinary runs. For concurrent implementation, a temporary task-local config reserves port 4206, disables server reuse, preserves both viewport projects and runs one worker; do not commit that port override. Record actual results in the ticket. Hosted frontend release requires approval; there is no database migration for Ticket 06.
+
+## Local results — 2026-09-28
+
+Four laptop dashboard acceptance cases passed with a 90000ms whole-test budget; four phone cases passed with 180000ms (7.7m), with assertion timeouts unchanged. All four Supabase adapter contract cases passed with 180000ms (4.4m). All 131 calculation cases passed (28.3s). The production build and `git diff --check` passed. Laptop and phone screenshots were visually inspected. Exact commands and interrupted-run results are recorded in the ticket.
+
+The full 58-case regression attempt with the 90000ms budget was interrupted after five existing laptop cases passed and two existing two-session cases timed out; 51 did not run. A coordinated full regression run is still required before integrated release. No schema/adapter/transport changes were made, so no database migration rehearsal or local/hosted database mutation was needed. Hosted release remains pending explicit approval.
+
+## Standards review
+
+No actionable Standards findings against accepted main `da52f5af1f5520adedb34b8f79813907111fee7a`. The focused card component and stylesheet follow the documented Party data seam, pure Derived Value calculation, separate overrides, responsive priority, native keyboard interaction and conditional-write safeguards. No actionable baseline smells. The incremental browser fixture review also reported zero findings.
+
+## Spec review
+
+No actionable Spec findings. The six Ticket 06 acceptance requirements are implemented and locally verified. The broader spec's current/Temporary HP, Conditions, concentration and multiclass summaries remain deferred under the explicit task boundary; the card labels the maximum and unknown current HP honestly. The draft-version fix supports detection of stale writes. The incremental fixture review found no masked application behavior, while noting that local acceptance covers fallback typography rather than successful hosted webfont delivery.
+
+Review totals: Standards 0; Spec 0; no worst issue in either axis.
