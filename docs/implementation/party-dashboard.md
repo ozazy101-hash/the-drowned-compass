@@ -24,7 +24,7 @@ Use the normal Playwright config for ordinary runs. For concurrent implementatio
 
 Four laptop dashboard acceptance cases passed with a 90000ms whole-test budget; four phone cases passed with 180000ms (7.7m), with assertion timeouts unchanged. All four Supabase adapter contract cases passed with 180000ms (4.4m). All 131 calculation cases passed (28.3s). The production build and `git diff --check` passed. Laptop and phone screenshots were visually inspected. Exact commands and interrupted-run results are recorded in the ticket.
 
-The full 58-case regression attempt with the 90000ms budget was interrupted after five existing laptop cases passed and two existing two-session cases timed out; 51 did not run. A coordinated full regression run is still required before integrated release. No schema/adapter/transport changes were made, so no database migration rehearsal or local/hosted database mutation was needed. Hosted release remains pending explicit approval.
+An earlier full 58-case regression attempt with the 90000ms budget was interrupted after five existing laptop cases passed and two existing two-session cases timed out; 51 did not run. On 2026-10-02, a complete run passed 58/58 across laptop and phone using one worker and a 180000ms whole-test budget on isolated port 4206. The Derived Values two-session test now waits for the second browser to receive the first accepted Initiative override before editing that field; this removes a race in test setup without changing application behavior. No schema/adapter/transport changes were made, so no database migration rehearsal or local/hosted database mutation was needed. Hosted release remains pending deployment and live acceptance.
 
 ## Standards review
 

@@ -191,6 +191,7 @@ test('invalid override drafts stay unsaved without replacing the calculated numb
 test('a remote same-field update before local submission keeps the draft stale until explicit Retry', async ({ browser,page },testInfo) => {
   const { otherPage, otherContext } = await prepareTwoBrowsers(browser,page,testInfo);
   await overrideValue(page,'Initiative','0');
+  await expect(value(otherPage,'Initiative')).toHaveText('+0');
   const control = page.getByLabel('Initiative override');
   await control.fill('9');
   await overrideValue(otherPage,'Initiative','2');
