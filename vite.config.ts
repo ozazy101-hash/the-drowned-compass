@@ -1,3 +1,4 @@
+import { applyCombatEntryCommand, emptyCombatEntries, type CombatEntryCommand } from './src/domain/combat-entries.ts';
 import { setOverviewValue } from "./src/domain/overview-fields.ts";
 import type { CharacterRecord, OverviewFieldKey, OverviewFieldValue } from "./src/domain/party.ts";
 import { defineConfig, type Plugin } from "vite";
@@ -85,6 +86,16 @@ function sharedInMemoryParty(): Plugin {
           if (!slot?.character) {
             response.statusCode = 404;
             response.end(JSON.stringify(slot ?? {}));
+            return;
+          }
+
+          if (requestBody.combatCommand) {
+            try {
+              const character = slot.character as CharacterRecord;
+              const state = character.combatEntries ??= emptyCombatEntries();
+              if (!applyCombatEntryCommand(state, requestBody.combatCommand as CombatEntryCommand)) response.statusCode = 409;
+            } catch { response.statusCode = 400; }
+            response.end(JSON.stringify(slot));
             return;
           }
 

@@ -80,4 +80,3 @@ export async function prepareTwoBrowsers(browser: Browser, page: Page, testInfo:
   await openClaimedCharacter(otherPage);
   return { otherContext, otherPage };
 }
-

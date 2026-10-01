@@ -1,3 +1,5 @@
+import { CombatEntriesSection } from './components/CombatEntriesSection';
+import { mergeCombatEntries, primaryAttackSummary } from './domain/combat-entries';
 import { overviewValue, setOverviewValue } from "./domain/overview-fields";
 import { ClaimedCharacterCard } from "./components/claimed-character-card";
 import { calculateDerivedValues, type DerivedValue, type DerivedValueKey } from "./domain/derived-values";
@@ -54,6 +56,7 @@ const skillLabels = {
 function mergeCharacterRecords(current: CharacterRecord, incoming: CharacterRecord) {
   const merged: CharacterRecord = {
     ...incoming,
+    combatEntries: mergeCombatEntries(current.combatEntries, incoming.combatEntries),
     abilityScores: { ...incoming.abilityScores },
     savingThrowProficiencies: { ...incoming.savingThrowProficiencies },
     skillProficiencies: { ...incoming.skillProficiencies },
@@ -131,6 +134,11 @@ function UnclaimedSlot({
       </button>
     </article>
   );
+}
+
+function primaryAttackPlaySummary(slot: CharacterSlot) {
+  const summary = primaryAttackSummary(slot.character?.combatEntries);
+  return summary ? <span className="primary-attack-summary">Primary attack: {summary}</span> : null;
 }
 
 type IdentityDraft = Pick<
@@ -715,6 +723,7 @@ function CharacterPage({
   onBack: () => void;
   onSlotChanged: (slot: CharacterSlot) => void;
 }) {
+  const [section, setSection] = useState('Overview');
   const character = slot.character!;
   const derived = calculateDerivedValues({ ...character, totalLevel: character.level }, character.derivedOverrides);
   const version = (field: OverviewFieldKey) => character.fieldVersions[field] ?? 0;
@@ -771,15 +780,18 @@ function CharacterPage({
           <button
             key={item}
             type="button"
-            aria-current={item === "Overview" ? "page" : undefined}
-            disabled={item !== "Overview"}
-            title={item === "Overview" ? undefined : "Coming in a later ticket"}
+            aria-current={item === section ? "page" : undefined}
+            disabled={!['Overview', 'Combat'].includes(item)}
+            onClick={() => setSection(item)}
+            title={["Overview", "Combat"].includes(item) ? undefined : "Coming in a later ticket"}
           >
             {item}
           </button>
         ))}
       </nav>
 
+      <div hidden={section !== "Combat"}><CombatEntriesSection slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} /></div>
+      <div hidden={section !== "Overview"}>
       <section className="overview-section" aria-labelledby="identity-heading">
         <div className="section-heading">
           <div><p className="section-heading__eyebrow">Character overview</p><h2 id="identity-heading">Identity</h2></div>
@@ -874,6 +886,7 @@ function CharacterPage({
           ))}
         </div>
       </section>
+      </div>
     </main>
   );
 }
@@ -1082,6 +1095,7 @@ export function App({ partyData }: AppProps) {
                   key={slot.id}
                   slot={slot}
                   onSelect={() => setSelectedSlotId(slot.id)}
+                  playSummary={primaryAttackPlaySummary(slot)}
                 />
               ) : (
                 <UnclaimedSlot
