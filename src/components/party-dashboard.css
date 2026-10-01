@@ -1,0 +1,70 @@
+.party-dashboard .dashboard-heading {
+  justify-items: start;
+  padding: 2.8rem 0 2rem;
+  text-align: left;
+}
+
+.party-dashboard .dashboard-heading h1 {
+  max-width: none;
+  font-size: clamp(2.6rem, 5vw, 4.2rem);
+  line-height: 1;
+}
+
+.dashboard-heading .hero__intro { margin-top: 1rem; max-width: 46rem; }
+
+.party-card { min-width: 0; }
+.party-card__action {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 1.1rem;
+  border: 0;
+  color: var(--ink);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.party-card__action:hover, .party-card__action:focus-visible {
+  outline: 2px solid var(--gold-bright);
+  outline-offset: -3px;
+  background: rgba(189, 170, 112, .045);
+}
+
+.party-card__identity { display: flex; gap: .65rem; width: 100%; align-items: start; }
+.party-card__compass { color: var(--gold); font-size: 1.6rem; line-height: 1; }
+.party-card__names { min-width: 0; flex: 1; }
+.party-card__names > span, .party-card__names > strong { display: block; overflow-wrap: anywhere; }
+.party-card__names .character-slot__eyebrow { font-size: .6rem; letter-spacing: .09em; }
+.party-card__names > strong {
+  margin: .3rem 0;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.75rem;
+  line-height: 1.05;
+}
+.party-card__class { color: var(--muted); font-size: .8rem; line-height: 1.5; }
+.party-card__position { color: var(--gold); font-size: .7rem; }
+.party-card__summary { display: block; width: 100%; margin-top: 1rem; }
+.party-card__vitals { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; }
+.party-card__vitals > span { display: grid; gap: .3rem; padding: .7rem; border: 1px solid var(--line); }
+.party-card__vitals strong { font-size: 1.8rem; font-weight: 600; }
+.party-card__label { display: block; color: var(--gold-bright); font-size: .65rem; line-height: 1.4; }
+.party-card__unknown { color: var(--muted); font-size: .65rem; line-height: 1.4; }
+.party-card__abilities { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .25rem; margin-top: 1rem; }
+.party-card__ability { text-align: center; }
+.party-card__value { display: block; margin-top: .25rem; font-size: 1.1rem; font-variant-numeric: tabular-nums; }
+.party-card__override { margin-left: .1rem; color: var(--gold-bright); font-size: .7rem; vertical-align: super; }
+.party-card__senses { display: flex; flex-wrap: wrap; gap: .7rem 1.5rem; margin-top: 1rem; padding-top: .8rem; border-top: 1px solid var(--line); }
+.party-card__override-note { display: block; margin-top: .7rem; color: var(--gold-bright); font-size: .65rem; }
+.party-card__play-summary { display: grid; gap: .5rem; margin-top: 1rem; font-size: .8rem; }
+.party-card__open { display: flex; justify-content: space-between; width: 100%; padding-top: 1rem; margin-top: auto; color: var(--muted); font-size: .7rem; }
+
+@media (max-width: 560px) {
+  .party-dashboard .dashboard-heading { padding: 2rem 0 1.5rem; }
+  .party-dashboard .dashboard-heading h1 { font-size: 2.8rem; }
+  .party-card__action { padding: 1rem; }
+  .party-card__summary { margin-top: .8rem; }
+  .party-card__vitals > span { padding: .6rem .7rem; }
+  .party-card__abilities { margin-top: .8rem; }
+}

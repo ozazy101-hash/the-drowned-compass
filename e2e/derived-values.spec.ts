@@ -1,4 +1,5 @@
-import { expect, test, type Page } from '@playwright/test';
+import { test } from "./browser-fixtures";
+import { expect, type Page } from '@playwright/test';
 import { enterAs, isolatedPartyUrl, claimCharacter, openClaimedCharacter, saveInput, expectSaveFeedback, prepareTwoBrowsers } from './overview-helpers';
 
 function value(page: Page, label: string) { return page.getByLabel(`${label} value`, { exact:true }); }

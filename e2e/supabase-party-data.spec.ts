@@ -1,4 +1,5 @@
-import { expect, test, type WebSocketRoute } from "@playwright/test";
+import { test } from "./browser-fixtures";
+import { expect, type WebSocketRoute } from "@playwright/test";
 
 test("the Supabase adapter catches up when a realtime connection returns", async ({ page }) => {
   let partyName = "Before reconnect";
