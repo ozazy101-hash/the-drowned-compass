@@ -4,7 +4,7 @@
 
 **Blocked by:** 04 — Edit and synchronize the Character Overview.
 
-**Status:** claimed
+**Status:** resolved
 
 - [x] The Combat area supports adding, editing, ordering, and removing attacks and actions.
 - [x] An attack can record name, attack bonus or relevant Ability, range, damage, damage type, and player-entered notes.
@@ -43,3 +43,15 @@ The Combat hydration-race replay passed 3/3 after the fix. A subsequent full sui
 Final verification totals: production build/type-check passed; `git diff --check` passed; 131 calculation tests passed; 146 rollback-only database assertions passed (111 baseline/Derived Values +35 Combat); new RPC database lint returned zero findings. Every database fixture/lint transaction rolled back. Standards and Spec reviews have zero remaining findings, including the draft-race correction and test setup check.
 
 [PR #6](https://github.com/ozazy101-hash/the-drowned-compass/pull/6) carries the review branch `codex/ticket-09-attacks-actions` and is attached to this task. Ticket 09 remains **claimed** until accepted release. Coordinating peer integration for Tickets 06/10 and hosted persistence/synchronization acceptance remain pending. Release requires approval, hosted migration `20260928220900_manage_attacks_and_actions.sql`, the reviewed frontend deployment and hosted checks. No merge, production Character Record edit, persistent local migration or hosted deployment occurred.
+
+### 2026-10-02 — Hosted release acceptance
+
+The user approved the Ticket 09 release and explicitly approved merging [PR #6](https://github.com/ozazy101-hash/the-drowned-compass/pull/6) into `main` with a merge commit. The exact reviewed migration `20260928220900_manage_attacks_and_actions.sql` (SHA-256 `7f83087223fbe610c87a399fa03059234b4f904320f04e425809649509100217`) was applied to hosted Supabase project `qjiqnzujsuqoqaausrgy` in one SQL Editor transaction and recorded in `supabase_migrations.schema_migrations` with its full source. Preflight found six Character Slots and no Combat tables or migration record. Postflight found six primary rows, zero active Combat entries, authenticated SELECT/RPC grants, anonymous denial, RLS enabled and both tables in Realtime.
+
+PR #6 merged at `d9033ed382044549bb83f2302d5aef88848d5b72`. [GitHub Pages deployment](https://github.com/ozazy101-hash/the-drowned-compass/actions/runs/36940572192) completed successfully. Signed-in Dungeon Master and Player sessions used only the labelled Ticket 04 Test Character: an attack with a manual +0 bonus saved and appeared as the dashboard primary summary; the Player added an independent action, and both sessions saw the accepted records. The Player saved a same-attack edit while the Dungeon Master held a dirty draft. The Dungeon Master's stale save showed a conflict and kept its draft; explicit Retry saved it and the Player session converged. Move Up reordered the action. Both temporary records were removed, clearing the primary selection atomically. After refresh, Combat was empty and the dashboard had no primary summary. A hosted database check found zero active entries, two expected removal tombstones, zero selected primary attacks and the original single claimed Character Slot.
+
+Ticket 09 is resolved. Tickets 06 and 10 remain separate review branches with shared-file merge conflicts to resolve during their integration; neither was included in this release.
+
+## Answer
+
+Players can independently save and synchronize attacks and actions, choose a primary attack, and see its concise Party Dashboard summary in the deployed app. Local verification, Standards/Spec review, hosted migration, GitHub Pages deployment, and signed-in two-session acceptance are complete. This is a shared tabletop reference, not a fight simulator.
