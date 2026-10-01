@@ -1,3 +1,4 @@
+import type { CombatEntries, CombatEntryCommand } from './combat-entries.ts';
 import type { DerivedOverrides, DerivedValueKey } from "./derived-values.ts";
 
 export const abilityScoreKeys = [
@@ -58,6 +59,7 @@ export type CharacterRecord = {
   speed: number;
   spellcastingAbility: AbilityScoreKey | null;
   derivedOverrides: DerivedOverrides;
+  combatEntries?: CombatEntries;
   fieldVersions: Partial<Record<OverviewFieldKey, number>>;
 };
 
@@ -101,5 +103,6 @@ export interface PartyData {
     value: OverviewFieldValue,
     expectedVersion: number,
   ): Promise<OverviewUpdateResult>;
+  updateCombatEntry(slotId: string, command: CombatEntryCommand): Promise<OverviewUpdateResult>;
   subscribeToParty(onPartyChanged: (party: Party) => void): () => void;
 }
