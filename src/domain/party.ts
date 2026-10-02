@@ -1,3 +1,4 @@
+import type { CharacterTextDraft, CharacterTextEntry } from "./character-text.ts";
 import type { CombatEntries, CombatEntryCommand } from './combat-entries.ts';
 import type { DerivedOverrides, DerivedValueKey } from "./derived-values.ts";
 
@@ -59,6 +60,7 @@ export type CharacterRecord = {
   speed: number;
   spellcastingAbility: AbilityScoreKey | null;
   derivedOverrides: DerivedOverrides;
+  textEntries?: CharacterTextEntry[];
   combatEntries?: CombatEntries;
   fieldVersions: Partial<Record<OverviewFieldKey, number>>;
 };
@@ -102,6 +104,9 @@ export interface PartyData {
     field: OverviewFieldKey,
     value: OverviewFieldValue,
     expectedVersion: number,
+  ): Promise<OverviewUpdateResult>;
+  saveCharacterTextEntry(
+    slotId: string, entry: CharacterTextDraft, expectedVersion: number,
   ): Promise<OverviewUpdateResult>;
   updateCombatEntry(slotId: string, command: CombatEntryCommand): Promise<OverviewUpdateResult>;
   subscribeToParty(onPartyChanged: (party: Party) => void): () => void;

@@ -1,0 +1,89 @@
+begin;
+create extension if not exists pgtap with schema extensions;
+select no_plan();
+create temporary table before_text_migration as select to_jsonb(s) data from public.character_slots s order by position;
+-- __FEATURES_STORY_MIGRATION__
+select results_eq($$select to_jsonb(s) from public.character_slots s order by position$$,
+  $$select data from before_text_migration$$, 'migration preserves all six slots, claims, data and versions');
+insert into auth.users (
+  instance_id, id, aud, role, email, encrypted_password, email_confirmed_at,
+  raw_app_meta_data, raw_user_meta_data, created_at, updated_at
+) values
+  (
+    '00000000-0000-0000-0000-000000000000',
+    '30000000-0000-4000-8000-000000000001',
+    'authenticated', 'authenticated', 'players@drowned-compass.test', '', now(),
+    '{}', '{}', now(), now()
+  ),
+  (
+    '00000000-0000-0000-0000-000000000000',
+    '30000000-0000-4000-8000-000000000002',
+    'authenticated', 'authenticated', 'dm@drowned-compass.test', '', now(),
+    '{}', '{}', now(), now()
+  ),
+  (
+    '00000000-0000-0000-0000-000000000000',
+    '30000000-0000-4000-8000-000000000003',
+    'authenticated', 'authenticated', 'overview-outsider@drowned-compass.test', '', now(),
+    '{}', '{}', now(), now()
+  );
+
+set local role authenticated;
+set local "request.jwt.claim.sub" = '30000000-0000-4000-8000-000000000001';
+
+select results_eq(
+  $$
+    update public.character_slots
+    set claimed_at = now(),
+      claimed_by = '30000000-0000-4000-8000-000000000001',
+      player_name = 'Mara', character_name = 'Neris Vale',
+      primary_class = 'Rogue', subclass = 'Thief', species = 'Human',
+      background = 'Sailor', level = 3,
+      strength = 9, dexterity = 17, constitution = 13,
+      intelligence = 14, wisdom = 12, charisma = 11,
+      version = 1, updated_at = now()
+    where position = 1
+    returning character_name
+  $$,
+  array['Neris Vale'],
+  'Player can prepare a complete claimed Character Record'
+);
+
+select ok(has_function_privilege('authenticated','public.save_character_text_entry(uuid,text,text,text,text,boolean,bigint)','EXECUTE'), 'authenticated explicitly granted RPC');
+select ok(not has_function_privilege('anon','public.save_character_text_entry(uuid,text,text,text,text,boolean,bigint)','EXECUTE'), 'anonymous denied RPC');
+select ok(not has_table_privilege('authenticated','public.character_text_entries','INSERT'), 'direct inserts cannot bypass version guard');
+select ok(not has_table_privilege('authenticated','public.character_text_entries','UPDATE'), 'direct updates cannot bypass version guard');
+select ok(not has_table_privilege('authenticated','public.character_text_entries','DELETE'), 'direct deletion cannot remove tombstones');
+select results_eq($$select accepted from public.save_character_text_entry((select id from public.character_slots where position=1),'feature.11111111-1111-4111-8111-111111111111','class','Second Wind','My reminder',false,0)$$, array[true], 'Player adds class feature');
+select results_eq($$select accepted from public.save_character_text_entry((select id from public.character_slots where position=1),'feature.22222222-2222-4222-8222-222222222222','feat','Alert','My feat',false,0)$$, array[true], 'repeatable feature independently addressable');
+select results_eq($$select accepted from public.save_character_text_entry((select id from public.character_slots where position=1),'story.backstory','backstory','',repeat('ocean',4000),false,0)$$, array[true], '20,000 character Story saves independently');
+set local "request.jwt.claim.sub" = '30000000-0000-4000-8000-000000000002';
+select results_eq($$select accepted from public.save_character_text_entry((select id from public.character_slots where position=1),'story.appearance','appearance','','Scarred',false,0)$$, array[true], 'Dungeon Master independently writes Story');
+select results_eq($$select count(*)::int from public.character_text_entries$$, array[4], 'Features and Story preserve each other');
+select results_eq($$select accepted from public.save_character_text_entry((select id from public.character_slots where position=1),'story.backstory','backstory','','Stale',false,0)$$, array[false], 'stale Story rejected');
+select results_eq($$select length(body) from public.character_text_entries where entry_id='story.backstory'$$, array[20000], 'stale write preserves accepted long text');
+select results_eq($$select accepted from public.save_character_text_entry((select id from public.character_slots where position=1),'story.backstory','backstory','','',false,1)$$, array[true], 'explicit latest-version retry allows empty Story');
+select results_eq($$select accepted from public.save_character_text_entry((select id from public.character_slots where position=1),'feature.11111111-1111-4111-8111-111111111111','class','Second Wind','Changed elsewhere',false,0)$$, array[false], 'stale feature rejected');
+select results_eq($$select accepted from public.save_character_text_entry((select id from public.character_slots where position=1),'feature.11111111-1111-4111-8111-111111111111','class','Second Wind','My reminder',true,1)$$, array[true], 'feature removal is conditional tombstone');
+select results_eq($$select deleted,version from public.character_text_entries where entry_id='feature.11111111-1111-4111-8111-111111111111'$$, $$values (true,2::bigint)$$, 'removal retains version');
+select throws_ok($$select * from public.save_character_text_entry((select id from public.character_slots where position=1),'story.private','private','','Secret',false,0)$$, '23514',null,'no private or DM-only kind');
+select throws_ok($$select * from public.save_character_text_entry((select id from public.character_slots where position=1),'story.notes','notes','',repeat('x',20001),false,0)$$, '23514',null,'oversized text rejected');
+select throws_ok($$select * from public.save_character_text_entry((select id from public.character_slots where position=1),'story.notes','notes','Name','',false,0)$$, '23514',null,'Story identity validated');
+select throws_ok($$select * from public.save_character_text_entry((select id from public.character_slots where position=1),'story.appearance','allies','','',false,1)$$, '23514',null,'kind cannot change');
+select throws_ok($$select * from public.save_character_text_entry((select id from public.character_slots where position=1),'story.notes','notes','','',true,0)$$, '23514',null,'Story fields cleared rather than deleted');
+select throws_ok($$select * from public.save_character_text_entry((select id from public.character_slots where position=1),'feature.33333333-3333-4333-8333-333333333333','species','','',false,0)$$, '23514',null,'feature requires name');
+select throws_ok($$select * from public.save_character_text_entry((select id from public.character_slots where position=1),'story.notes','notes','','',false,-1)$$, '23514',null,'negative versions rejected');
+select results_eq($$select accepted from public.save_character_text_entry((select id from public.character_slots where position=2),'story.notes','notes','','',false,0)$$, array[false], 'unclaimed slot cannot gain text');
+select results_eq($$select count(*)::int from public.character_slots$$, array[6], 'six slots preserved');
+select results_eq($$select character_name,overview_field_versions from public.character_slots where position=1$$, $$values ('Neris Vale'::text,'{}'::jsonb)$$, 'text writes leave overview and versions intact');
+select ok(exists(select 1 from pg_publication_tables where pubname='supabase_realtime' and tablename='character_text_entries'), 'text records publish realtime events');
+select set_config('test.text_slot', (select id::text from public.character_slots where position=1), true);
+set local "request.jwt.claim.sub" = '30000000-0000-4000-8000-000000000003';
+select results_eq($$select entry_id from public.character_text_entries$$, array[]::text[], 'non-member cannot read Features or Story');
+select results_eq($$select accepted from public.save_character_text_entry(current_setting('test.text_slot')::uuid,'story.notes','notes','','Intruder',false,0)$$, array[false], 'non-member RPC cannot edit any slot');
+set local role anon;
+reset "request.jwt.claim.sub";
+select throws_ok($$select * from public.character_text_entries$$, '42501',null,'anonymous cannot read Features or Story');
+select throws_ok($$select * from public.save_character_text_entry(current_setting('test.text_slot')::uuid,'story.notes','notes','','Intruder',false,0)$$, '42501',null,'anonymous cannot invoke RPC');
+select * from finish();
+rollback;
