@@ -18,7 +18,7 @@ The production table is membership-protected and read-only to browser roles outs
 
 The database runner expands the actual new migration into a rollback-only fixture. Tests assert existing slot/claim/data/version preservation, member access, explicit RPC grants, anonymous/non-member denial, bounds, independent records, conflicts, importance handoff, ordering, recovery timing and tombstones. No persistent local or hosted migration is needed for rehearsals.
 
-Migration `20260928221000_track_limited_resources.sql` is additive. Deploy it before the new frontend reads `limited_resources`. Hosted migration, frontend release and live acceptance remain pending explicit approval for Ticket 10. The implementation does not modify hosted Character Records.
+Migration `20260928221000_track_limited_resources.sql` is additive. Deploy it before the new frontend reads `limited_resources`. Ticket 16's later-numbered migration is already hosted, so the future Ticket 10 database push needs `--include-all`. A linked `supabase db push --dry-run --include-all --skip-vault` selected exactly the Ticket 10 migration, with no seeds or roles. Hosted migration, frontend release and live acceptance remain pending separate approval for Ticket 10. The implementation does not modify hosted Character Records.
 
 ### Verified results
 
