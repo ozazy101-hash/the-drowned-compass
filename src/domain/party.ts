@@ -1,4 +1,5 @@
 import type { LimitedResource, ResourceWrite, ResourceWriteResult } from "./limited-resources.ts";
+import type { CombatEntries, CombatEntryCommand } from './combat-entries.ts';
 import type { DerivedOverrides, DerivedValueKey } from "./derived-values.ts";
 
 export const abilityScoreKeys = [
@@ -60,6 +61,7 @@ export type CharacterRecord = {
   spellcastingAbility: AbilityScoreKey | null;
   derivedOverrides: DerivedOverrides;
   limitedResources?: LimitedResource[];
+  combatEntries?: CombatEntries;
   fieldVersions: Partial<Record<OverviewFieldKey, number>>;
 };
 
@@ -104,5 +106,6 @@ export interface PartyData {
     expectedVersion: number,
   ): Promise<OverviewUpdateResult>;
   writeLimitedResource(slotId: string, resource: ResourceWrite, expectedVersion: number): Promise<ResourceWriteResult>;
+  updateCombatEntry(slotId: string, command: CombatEntryCommand): Promise<OverviewUpdateResult>;
   subscribeToParty(onPartyChanged: (party: Party) => void): () => void;
 }

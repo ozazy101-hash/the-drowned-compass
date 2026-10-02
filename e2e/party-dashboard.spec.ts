@@ -1,4 +1,5 @@
-import { expect, test, type Page, type TestInfo } from "@playwright/test";
+import { test, createPartyBrowserContext } from "./browser-fixtures";
+import { expect, type Page, type TestInfo } from "@playwright/test";
 
 async function enterAs(
   page: Page,
@@ -102,9 +103,7 @@ test("the Dungeon Master can enter and sign out", async ({
 });
 
 test("signing out leaves another browser signed in", async ({ browser, page }, testInfo) => {
-  const otherContext = await browser.newContext({
-    baseURL: String(testInfo.project.use.baseURL ?? "http://127.0.0.1:4173/the-drowned-compass/"),
-  });
+  const otherContext = await createPartyBrowserContext(browser, testInfo);
   const otherPage = await otherContext.newPage();
 
   await page.goto("./");
@@ -177,9 +176,7 @@ test("another signed-in browser receives a claimed identity without reloading", 
   page,
 }, testInfo) => {
   const url = isolatedPartyUrl(testInfo);
-  const otherContext = await browser.newContext({
-    baseURL: String(testInfo.project.use.baseURL ?? "http://127.0.0.1:4173/the-drowned-compass/"),
-  });
+  const otherContext = await createPartyBrowserContext(browser, testInfo);
   const otherPage = await otherContext.newPage();
 
   await page.goto(url);

@@ -79,14 +79,14 @@ test('Supabase resource write errors are exposed and later writes can retry', as
   expect(result.failed).toBe(true); expect(result.retry.ok).toBe(true); expect(attempts).toBe(2);
 });
 
-test('localStorage cross-tab Overview and resource writes preserve both accepted changes', async ({ page, context }) => {
+test('localStorage cross-tab Overview, resource and Combat writes preserve all accepted changes', async ({ page, context }) => {
   await page.goto('./');
   const other = await context.newPage(); await other.goto('./');
   await page.evaluate(() => {
     localStorage.setItem('drowned-compass-party', JSON.stringify({ name: 'Party', slots: [{ id: 'character-slot-1', position: 1, character: { characterName: 'Neris', abilityScores: {}, fieldVersions: {} } }] }));
   });
   for (let iteration = 0; iteration < 6; iteration++) {
-    const [resource, overview] = await Promise.all([
+    const [resource, overview, combat] = await Promise.all([
       page.evaluate(async iteration => {
         const path = '/the-drowned-compass/src/data/in-memory-party-data.ts';
         const { createInMemoryPartyData } = await import(path);
@@ -97,8 +97,16 @@ test('localStorage cross-tab Overview and resource writes preserve both accepted
         const { createInMemoryPartyData } = await import(path);
         return createInMemoryPartyData().updateCharacterOverviewField('character-slot-1', 'speed', 31 + iteration, iteration);
       }, iteration),
+      page.evaluate(async iteration => {
+        const path = '/the-drowned-compass/src/data/in-memory-party-data.ts';
+        const { createInMemoryPartyData } = await import(path);
+        return createInMemoryPartyData().updateCombatEntry('character-slot-1', {
+          type: 'save', id: '52000000-0000-4000-8000-000000000001', rank: 1, expectedVersion: iteration,
+          details: { kind: 'action', name: 'Help', ability: null, attackBonus: '', range: '', damage: '', damageType: '', notes: String(iteration) },
+        });
+      }, iteration),
     ]);
-    expect(resource.ok).toBe(true); expect(overview.ok).toBe(true);
+    expect(resource.ok).toBe(true); expect(overview.ok).toBe(true); expect(combat.ok).toBe(true);
   }
   const record = await page.evaluate(async () => {
     const path = '/the-drowned-compass/src/data/in-memory-party-data.ts';
@@ -107,5 +115,6 @@ test('localStorage cross-tab Overview and resource writes preserve both accepted
   });
   expect(record.speed).toBe(36); expect(record.fieldVersions.speed).toBe(6);
   expect(record.limitedResources[0]).toMatchObject({ current: 5, version: 6 });
+  expect(record.combatEntries.entries[0]).toMatchObject({ version: 6, details: { notes: '5' } });
   await other.close();
 });

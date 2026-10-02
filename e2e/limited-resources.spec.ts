@@ -46,6 +46,31 @@ test('limited resources add, correct, order, use, designate and remove persist',
   await expect(luck).toHaveCount(0); await expect(wind.getByLabel('Current')).toHaveValue('1');
 });
 
+test('Combat entries and limited resources persist together in the Party summary', async ({ page }, info) => {
+  await page.goto(isolatedPartyUrl(info));
+  await enterAs(page, 'Player');
+  await claimCharacter(page);
+  await combat(page);
+  await add(page, 'Second Wind');
+  await row(page, 'Second Wind').getByRole('button', { name: 'Make important' }).click();
+  await saved(row(page, 'Second Wind'));
+
+  await page.getByRole('button', { name: 'Add attack', exact: true }).click();
+  const attack = page.getByRole('article', { name: 'New attack', exact: true });
+  await attack.getByLabel('Name', { exact: true }).fill('Cutlass');
+  await attack.getByRole('button', { name: 'Save attack', exact: true }).click();
+  await expect(page.getByRole('article', { name: 'Cutlass', exact: true }).getByRole('status')).toHaveText('Saved');
+  await page.getByLabel('Primary attack', { exact: true }).selectOption({ label: 'Cutlass' });
+
+  await page.getByRole('button', { name: 'Back to the Party' }).click();
+  const card = page.getByRole('article', { name: 'Neris Vale, played by Mara' });
+  await expect(card).toContainText('Primary attack: Cutlass');
+  await expect(card).toContainText('Second Wind: 3 / 3');
+  await page.reload();
+  await expect(card).toContainText('Primary attack: Cutlass');
+  await expect(card).toContainText('Second Wind: 3 / 3');
+});
+
 test('a failed save retains resource values and explicit Retry persists them', async ({ page }, info) => {
   await page.goto(isolatedPartyUrl(info, '&failResourceSaves=once')); await enterAs(page, 'Player'); await claimCharacter(page); await combat(page);
   const form = page.getByRole('form', { name: 'New limited resource' });

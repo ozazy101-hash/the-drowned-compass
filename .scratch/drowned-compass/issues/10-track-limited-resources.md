@@ -19,6 +19,8 @@
 - Versioned tombstones and snapshot merging protect against delayed updates; resource drafts retain their starting version and newer typing through older acknowledgements. Failed/conflicting writes show Retry; remote removal permits copying/discarding a dirty draft.
 - Local acceptance is verified: all 68 browser cases passed across the preserved 14 laptop cases and the shared-lane 54-case completion run. The strengthened actual-migration fixture passed 25 database assertions and rolled back. Production build and diff whitespace checks passed. The standard database runner could not connect through the host; in-container SQL supplied the new migration/security verification. No persistent or hosted migration has been applied.
 - Integration and release details: `docs/implementation/limited-resources.md`. Status stays claimed while review/release is pending.
+- On 2026-10-02, merged accepted `main` (Ticket 09 attacks/actions and Ticket 06 Party Dashboard) into this branch. Combat now composes both sections; the dashboard card shows both the primary attack and important resource. Supabase reads/subscribes to both collections, and all localStorage Party writers share one Web Lock. The full integrated browser suite passed 96/96 (48 laptop, 48 phone); `pnpm test:calculations` passed 131/131 and the production build passed. The additional three-way cross-tab write race passed in both viewports. Ticket 16 remains an open peer PR and was not imported.
+- Retried `pnpm test:db` under the shared database lock and with the required sandbox access. It timed out connecting to `127.0.0.1` because Docker Desktop reports its engine manually paused. The previous 25/25 rollback-only migration rehearsal remains valid for Ticket 10 alone; the combined migration suite is pending a resumed local engine. No database reset or persistent migration occurred.
 
 ## Verification and review
 
@@ -31,4 +33,4 @@
 
 ## Review PR
 
-[PR #8 — Track limited resources in Combat](https://github.com/ozazy101-hash/the-drowned-compass/pull/8) is open against `main` from `codex/ticket-10-limited-resources` and attached to this task. Hosted migration/release remain pending approval. No peer changes were imported, and the shared verification lanes were released after the final commands exited.
+[PR #8 — Track limited resources in Combat](https://github.com/ozazy101-hash/the-drowned-compass/pull/8) is open against `main` from `codex/ticket-10-limited-resources` and attached to this task. The accepted Ticket 09 and Ticket 06 merges are integrated. Hosted migration/release remain pending approval.

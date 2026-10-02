@@ -761,6 +761,7 @@ main {
 }
 
 .setup-field > span,
+.setup-field > label > span,
 .setup-form legend {
   color: var(--gold);
   font-size: 0.65rem;
@@ -1268,3 +1269,13 @@ footer {
 .important-resource { color: #d5b875; font-size: .85rem; }
 [hidden] { display: none !important; }
 @media (max-width: 640px) { .resource-fields { grid-template-columns: 1fr 1fr; } .resource-fields label:first-child { grid-column: 1 / -1; } }
+.combat-entry-list { display: grid; gap: 1rem; margin: 1.5rem 0; }
+.combat-entry { border: 1px solid var(--line, #344946); border-radius: 12px; padding: 1.25rem; background: #0c191d; min-width: 0; }
+.combat-entry h3 { margin: 0; overflow-wrap: anywhere; }
+.combat-entry__fields { grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); margin-bottom: 1rem; }
+.combat-entry__actions { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin-top: 1rem; }
+.combat-primary { max-width: 28rem; }
+.combat-entry__guidance { color: #a5bab5; line-height: 1.6; }
+.setup-field textarea { width: 100%; box-sizing: border-box; padding: .8rem; border: 1px solid #36514f; border-radius: 6px; color: #e5eee9; background: #0c191d; font: inherit; resize: vertical; }
+.setup-field textarea:focus-visible { outline: 2px solid #c6a66a; outline-offset: 3px; }
+.primary-attack-summary { font-size: .8rem; overflow-wrap: anywhere; color: #c6a66a; }

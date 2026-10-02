@@ -8,11 +8,11 @@ The production table is membership-protected and read-only to browser roles outs
 
 ## Integration seams
 
-- Ticket 09 can add its attacks/actions component alongside `CombatResources` inside the Combat container. Navigation is a minimal additive activation of Overview and Combat; both section trees remain mounted to preserve drafts while switching sections.
-- Ticket 06 can place `ImportantResourceSummary` in its dashboard layout or call `importantResource` for the record. The current dashboard uses the small summary span inside the existing selectable character card.
+- Ticket 09's accepted attacks/actions component now sits alongside `CombatResources` in the Combat container. Both trees remain mounted while switching sections so unsaved drafts remain visible when the user returns.
+- Ticket 06's accepted dashboard card now receives both the primary attack and important-resource summaries through its read-only `playSummary` prop. The card remains one keyboard target.
 - Ticket 13 can select visible records by `recovery`, read `current`/`maximum`, and carry each record version into confirmed writes. Dawn and Manual remain separate timings. No rest preview or rest action ships here.
-- Peer adapters must use the same `drowned-compass-party-write` Web Lock for every localStorage read/modify/store mutation, including new repeatable records. Different locks cannot protect a shared Party document.
-- Party snapshots and acknowledgements must retain `mergeResources` alongside the existing Overview field-version merging. Supabase subscribes to resource INSERT/UPDATE events and reloads on reconnect.
+- Both local adapters now use the same `drowned-compass-party-write` Web Lock for every localStorage Party mutation. Different locks cannot protect a shared Party document.
+- Party snapshots and acknowledgements retain `mergeResources` and `mergeCombatEntries` alongside Overview field-version merging. Supabase reads both independent collections and subscribes to their change events, reloading on reconnect.
 
 ## Local verification and release
 
@@ -24,7 +24,9 @@ Migration `20260928221000_track_limited_resources.sql` is additive. Deploy it be
 
 All 68 distinct browser cases passed (34 laptop, 34 phone): 14 laptop regressions completed before the coordinator requested cancellation, then the remaining 54 passed under the shared browser lock in 16.8 minutes. The temporary resume config omitted only completed laptop cases; both viewport projects and port 4210 were retained. The 18 new resource cases cover UI, keyboard use, persistence, bounds, ordering, recovery, importance, independent/same-record edits, action Retry, failures, typing/snapshot guards, adapter contracts, and cross-tab localStorage parity. Both layout screenshots were inspected; neither viewport overflowed horizontally. A final wording-only edit removed implementation terminology from the product explanation.
 
-The actual migration plus strengthened fixture passed all 25 pgTAP assertions under the shared database lock and finished with `ROLLBACK`. The fixture establishes a known claim and nonzero Overview versions before capturing the preservation snapshot. The standard `pnpm test:db` host connection terminated twice, so the old 111-case baseline was not rerun successfully through that runner; only the new 25 assertions are claimed here. No persistent schema change was needed. Exact commands and earlier-run limitations are recorded in the ticket.
+The actual migration plus strengthened fixture passed all 25 pgTAP assertions under the shared database lock and finished with `ROLLBACK` before peer integration. The fixture establishes a known claim and nonzero Overview versions before capturing the preservation snapshot. On 2026-10-02 the standard `pnpm test:db` retry timed out connecting to local PostgreSQL; Docker Desktop reported that its engine was manually paused. The CLI reached the same timeout after sandbox access was granted. The full integrated database suite has not yet passed, so the merged migration runner and combined schema remain pending verification. No persistent schema change was made. Exact commands and earlier-run limitations are recorded in the ticket.
+
+After merging accepted Tickets 09 and 06 from `main`, the complete integrated Playwright suite passed all 96 cases (48 laptop, 48 phone) on reserved port 4210 with one worker. This includes a new journey that saves an attack and important resource, shows both Party summaries, and retains both after reload. A strengthened cross-tab race of simultaneous Overview, resource and Combat writes then passed in both viewports. The production build and 131 calculation cases pass. The peer Supabase adapter fixture now recognizes the independent resource read. The shared localStorage lock also covers Combat entry writes so a simultaneous resource or Overview write cannot overwrite them.
 
 ### Standards
 

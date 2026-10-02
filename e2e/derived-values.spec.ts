@@ -1,4 +1,5 @@
-import { expect, test, type Page } from '@playwright/test';
+import { test } from "./browser-fixtures";
+import { expect, type Page } from '@playwright/test';
 import { enterAs, isolatedPartyUrl, claimCharacter, openClaimedCharacter, saveInput, expectSaveFeedback, prepareTwoBrowsers } from './overview-helpers';
 
 function value(page: Page, label: string) { return page.getByLabel(`${label} value`, { exact:true }); }
@@ -190,6 +191,8 @@ test('invalid override drafts stay unsaved without replacing the calculated numb
 test('a remote same-field update before local submission keeps the draft stale until explicit Retry', async ({ browser,page },testInfo) => {
   const { otherPage, otherContext } = await prepareTwoBrowsers(browser,page,testInfo);
   await overrideValue(page,'Initiative','0');
+  // Both editors must start from the accepted version before this scenario makes one stale.
+  await expect(value(otherPage,'Initiative')).toHaveText('+0');
   const control = page.getByLabel('Initiative override');
   await control.fill('9');
   await overrideValue(otherPage,'Initiative','2');
