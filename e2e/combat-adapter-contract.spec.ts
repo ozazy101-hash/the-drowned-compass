@@ -26,6 +26,7 @@ for (const adapterName of ['memory','supabase'] as const) {
         else if (path.endsWith('/character_combat_entries')) json=combat.entries.map(e => ({ ...e,slot_id:row.id }));
         else if (path.endsWith('/character_primary_attacks')) json=[{ slot_id:row.id,primary_id:combat.primaryId,version:combat.primaryVersion }];
         else if (path.endsWith('/limited_resources')) json=[];
+        else if (path.endsWith('/character_text_entries')) json=[];
         else throw new Error(`Unexpected route: ${path}`);
         await route.fulfill({ json });
       });

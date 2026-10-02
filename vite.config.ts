@@ -1,4 +1,5 @@
 import { writeResource, type ResourceWrite, type LimitedResource } from "./src/domain/limited-resources.ts";
+import { setCharacterText, type CharacterTextDraft } from "./src/domain/character-text.ts";
 import { applyCombatEntryCommand, emptyCombatEntries, type CombatEntryCommand } from './src/domain/combat-entries.ts';
 import { setOverviewValue } from "./src/domain/overview-fields.ts";
 import type { CharacterRecord, OverviewFieldKey, OverviewFieldValue } from "./src/domain/party.ts";
@@ -98,6 +99,16 @@ function sharedInMemoryParty(): Plugin {
             } catch { response.statusCode = 400; response.end(JSON.stringify({ error: "Invalid resource" })); }
             return;
           }
+          if (requestBody.textEntry) {
+            try {
+              const character = slot.character as CharacterRecord;
+              const accepted = setCharacterText(character.textEntries ??= [], requestBody.textEntry as CharacterTextDraft, Number(requestBody.expectedVersion));
+              response.statusCode = accepted ? 200 : 409;
+            } catch { response.statusCode = 400; }
+            response.end(JSON.stringify(slot));
+            return;
+          }
+
           if (requestBody.combatCommand) {
             try {
               const character = slot.character as CharacterRecord;

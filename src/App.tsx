@@ -1,5 +1,7 @@
 import { CombatResources, ImportantResourceSummary } from "./components/CombatResources";
 import { mergeResources } from "./domain/limited-resources";
+import { mergeCharacterText } from "./domain/character-text";
+import { FeaturesStory } from "./features/FeaturesStory";
 import { CombatEntriesSection } from './components/CombatEntriesSection';
 import { mergeCombatEntries, primaryAttackSummary } from './domain/combat-entries';
 import { overviewValue, setOverviewValue } from "./domain/overview-fields";
@@ -59,6 +61,7 @@ function mergeCharacterRecords(current: CharacterRecord, incoming: CharacterReco
   const merged: CharacterRecord = {
     ...incoming,
     limitedResources: mergeResources(current.limitedResources, incoming.limitedResources),
+    textEntries: mergeCharacterText(current.textEntries, incoming.textEntries),
     combatEntries: mergeCombatEntries(current.combatEntries, incoming.combatEntries),
     abilityScores: { ...incoming.abilityScores },
     savingThrowProficiencies: { ...incoming.savingThrowProficiencies },
@@ -782,18 +785,20 @@ function CharacterPage({
       </section>
 
       <nav className="character-nav" aria-label="Character Record sections">
-        {['Overview', 'Combat', 'Magic', 'Inventory', 'Features', 'Story'].map((item) => (
+        {['Overview', 'Combat', 'Magic', 'Inventory', 'Features', 'Story'].map((item) => {
+          const enabled = ['Overview', 'Combat', 'Features', 'Story'].includes(item);
+          return (
           <button
             key={item}
             type="button"
             aria-current={item === section ? "page" : undefined}
-            disabled={item !== "Overview" && item !== "Combat"}
+            disabled={!enabled}
             onClick={() => setSection(item)}
-            title={item === "Overview" || item === "Combat" ? undefined : "Not available yet"}
+            title={enabled ? undefined : "Coming in a later ticket"}
           >
             {item}
           </button>
-        ))}
+        ); })}
       </nav>
 
       <div hidden={section !== "Combat"}>
@@ -801,6 +806,8 @@ function CharacterPage({
           onChanged={resources => onSlotChanged({ ...slot, character: { ...character, limitedResources: resources } })} />
         <CombatEntriesSection slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} />
       </div>
+      <div hidden={section !== 'Features'}><FeaturesStory key={`${slot.id}-features`} slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} area="Features" /></div>
+      <div hidden={section !== 'Story'}><FeaturesStory key={`${slot.id}-story`} slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} area="Story" /></div>
       <div hidden={section !== "Overview"}>
       <section className="overview-section" aria-labelledby="identity-heading">
         <div className="section-heading">

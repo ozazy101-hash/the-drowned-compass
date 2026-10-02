@@ -1,33 +1,25 @@
 import { readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 
-// Supabase mounts test SQL into the container, but not sibling migration files.
-// Expand the actual pending migration into a rollback-only rehearsal at runtime.
-const template = new URL('../supabase/tests/fixtures/derived_values_migration.sql.template', import.meta.url);
-const migration = new URL('../supabase/migrations/20260928200000_calculate_and_override_derived_values.sql', import.meta.url);
-const generated = new URL('../supabase/tests/database/derived_values_migration.generated.test.sql', import.meta.url);
-writeFileSync(generated, readFileSync(template, 'utf8').replace(
-  '-- __DERIVED_VALUES_MIGRATION__',
-  () => readFileSync(migration, 'utf8'),
-));
-const resourceTemplate = new URL('../supabase/tests/fixtures/limited_resources_migration.sql.template', import.meta.url);
-const resourceMigration = new URL('../supabase/migrations/20260928221000_track_limited_resources.sql', import.meta.url);
-const resourceGenerated = new URL('../supabase/tests/database/limited_resources_migration.generated.test.sql', import.meta.url);
-writeFileSync(resourceGenerated, readFileSync(resourceTemplate, 'utf8').replace(
-  '-- __LIMITED_RESOURCES_MIGRATION__', () => readFileSync(resourceMigration, 'utf8'),
-));
-const combatTemplate = new URL('../supabase/tests/fixtures/combat_entries_migration.sql.template', import.meta.url);
-const combatMigration = new URL('../supabase/migrations/20260928220900_manage_attacks_and_actions.sql', import.meta.url);
-const combatGenerated = new URL('../supabase/tests/database/combat_entries_migration.generated.test.sql', import.meta.url);
-writeFileSync(combatGenerated, readFileSync(combatTemplate, 'utf8').replace(
-  '-- __COMBAT_ENTRIES_MIGRATION__', () => readFileSync(combatMigration, 'utf8'),
-));
+// Rehearse actual pending migrations inside rollback-only tests.
+const rehearsals = [
+  ['derived_values', '20260928200000_calculate_and_override_derived_values.sql', '__DERIVED_VALUES_MIGRATION__'],
+  ['combat_entries', '20260928220900_manage_attacks_and_actions.sql', '__COMBAT_ENTRIES_MIGRATION__'],
+  ['limited_resources', '20260928221000_track_limited_resources.sql', '__LIMITED_RESOURCES_MIGRATION__'],
+  ['features_story', '20260928221600_record_features_and_story.sql', '__FEATURES_STORY_MIGRATION__'],
+];
+const generated = [];
 try {
+  for (const [name, migrationFile, marker] of rehearsals) {
+    const template = new URL(`../supabase/tests/fixtures/${name}_migration.sql.template`, import.meta.url);
+    const migration = new URL(`../supabase/migrations/${migrationFile}`, import.meta.url);
+    const output = new URL(`../supabase/tests/database/${name}_migration.generated.test.sql`, import.meta.url);
+    writeFileSync(output, readFileSync(template, 'utf8').replace(`-- ${marker}`, () => readFileSync(migration, 'utf8')));
+    generated.push(output);
+  }
   const result = spawnSync('supabase', ['test', 'db', ...process.argv.slice(2)], { stdio: 'inherit' });
   if (result.error) throw result.error;
   process.exitCode = result.status ?? 1;
 } finally {
-  rmSync(generated, { force: true });
-  rmSync(resourceGenerated, { force: true });
-  rmSync(combatGenerated, { force: true });
+  for (const output of generated) rmSync(output, { force: true });
 }

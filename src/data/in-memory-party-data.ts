@@ -1,4 +1,5 @@
 import { writeResource } from "../domain/limited-resources";
+import { setCharacterText, validateCharacterText } from "../domain/character-text";
 import { applyCombatEntryCommand, emptyCombatEntries } from '../domain/combat-entries';
 import { setOverviewValue } from "../domain/overview-fields";
 import {
@@ -50,6 +51,7 @@ function copyCharacter(character: CharacterRecord): CharacterRecord {
     skillProficiencies: { ...character.skillProficiencies },
     derivedOverrides: { ...character.derivedOverrides },
     fieldVersions: { ...character.fieldVersions },
+    textEntries: (character.textEntries ?? []).map(entry => ({ ...entry })),
   };
 }
 
@@ -216,6 +218,39 @@ export function createInMemoryPartyData(): PartyData {
         const result = writeResource(slot.character.limitedResources ?? [], resource, expectedVersion);
         if (result.ok) { slot.character.limitedResources = result.resources; storeParty(party); }
         return result;
+      });
+    },
+
+    async saveCharacterTextEntry(slotId, entry, expectedVersion) {
+      validateCharacterText(entry);
+      if (params.get("failTextSaves") === "once") {
+        const key = `failed-text-${slotId}-${entry.id}`;
+        if (!window.sessionStorage.getItem(key)) {
+          window.sessionStorage.setItem(key, 'true');
+          throw new Error('The save could not reach the Party.');
+        }
+      }
+      if (params.get("slowTextSaves") === "once" && !window.sessionStorage.getItem('slow-text')) {
+        window.sessionStorage.setItem('slow-text', 'true');
+        await new Promise(resolve => window.setTimeout(resolve, 1000));
+      }
+      if (testNamespace) {
+        const response = await fetch(testPartyUrl(testNamespace), {
+          method: 'PATCH', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ slotId, textEntry: entry, expectedVersion }),
+        });
+        if (!response.ok && response.status !== 409) throw new Error('The Character Record could not be saved.');
+        const slot = normalizeSlot(await response.json() as CharacterSlot);
+        return response.status === 409 ? { ok: false, reason: 'conflict', slot } : { ok: true, slot };
+      }
+      return navigator.locks.request("drowned-compass-party-write", () => {
+        const party = readParty();
+        const slot = party.slots.find(candidate => candidate.id === slotId);
+        if (!slot?.character) throw new Error('That Character Record is unavailable.');
+        const entries = slot.character.textEntries ??= [];
+        if (!setCharacterText(entries, entry, expectedVersion)) return { ok: false, reason: 'conflict', slot };
+        storeParty(party);
+        return { ok: true, slot };
       });
     },
 
