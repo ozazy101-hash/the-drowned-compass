@@ -4,13 +4,17 @@
 
 **Blocked by:** 04 — Edit and synchronize the Character Overview.
 
-**Status:** claimed
+**Status:** resolved
 
 - [x] The Combat area supports adding, editing, ordering, spending, restoring, and removing limited resources.
 - [x] Every resource records current, maximum, and Short Rest, Long Rest, Dawn, or Manual recovery timing.
 - [x] Current values remain within valid bounds while allowing direct correction.
 - [x] One resource can be designated as important and appears on the Party Dashboard.
 - [x] Resource changes save independently, synchronize across browsers, and expose clear save failures.
+
+## Answer
+
+Limited resources are live in Combat. Players can track bounded uses and recovery timing, designate one important resource for the Party Dashboard, and save independent versioned records with visible conflict recovery. See [the implementation record](../../../docs/implementation/limited-resources.md).
 
 ## Implementation notes
 
@@ -31,8 +35,12 @@
 - Earlier unwrapped/browser runs included budget/reload failures and were superseded; the full interrupted run had one obsolete Combat-disabled assertion (corrected) and one coordinator-requested interruption. Neither is counted as a passing case.
 - `pnpm test:db` twice failed with a host connection termination; the existing 111 assertions were not rerun successfully via that runner. Initial in-container rehearsal attempts exposed shared-transaction contention and a missing session search path; both were resolved before the final wrapped 25/25 run.
 - Independent code-review Standards and Spec re-reviews report no remaining findings after fixing action Retry intent, serializing all localStorage Party mutations, and typing save feedback.
-- Hosted migration, release, and live acceptance remain pending fresh Ticket 10 approval; ticket remains claimed. Peer integration is documented in `docs/implementation/limited-resources.md`.
+- Hosted migration, Pages release, and live acceptance completed on 2026-10-02; see the release record below. Peer integration is documented in `docs/implementation/limited-resources.md`.
 
 ## Review PR
 
-[PR #8 — Track limited resources in Combat](https://github.com/ozazy101-hash/the-drowned-compass/pull/8) is open against `main` from `codex/ticket-10-limited-resources` and attached to this task. The accepted Ticket 09 and Ticket 06 merges are integrated. Hosted migration/release remain pending approval.
+[PR #8 — Track limited resources in Combat](https://github.com/ozazy101-hash/the-drowned-compass/pull/8) merged into `main` as `9941e382a5564e177c1f9109c0bac99bf780935d`, integrating accepted Tickets 09, 06 and 16.
+
+## Comments
+
+2026-10-02 release: The user authorized merging Ticket 10 after the combined 204/204 database assertions, 120/120 browser cases, 131/131 calculation cases and production build passed. A fresh hosted dry run selected only `20260928221000_track_limited_resources.sql` (no seeds or roles). That migration was applied with `--include-all --skip-vault`; the postflight migration list matches locally and remotely. PR #8 merged, and the [Pages run](https://github.com/ozazy101-hash/the-drowned-compass/actions/runs/36977242530) succeeded. In a signed-in session on the existing Ticket 04 test character, a temporary resource was saved, marked important, spent from 2/2 to 1/2, shown on the Party card and verified after reload. It was then removed; the Party card cleared after reload. Ticket 10 is resolved.
