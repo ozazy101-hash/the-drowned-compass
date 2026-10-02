@@ -181,6 +181,12 @@ test('Combat and Features preserve drafts and accepted records across sections',
 
   const combat = page.getByRole('navigation', { name: 'Character Record sections' }).getByRole('button', { name: 'Combat', exact: true });
   await combat.click();
+  const resourceForm = page.getByRole('form', { name: 'New limited resource' });
+  await resourceForm.getByLabel('Name', { exact: true }).fill('Second Wind');
+  await resourceForm.getByLabel('Maximum').fill('2');
+  await resourceForm.getByLabel('Current').fill('2');
+  await resourceForm.getByRole('button', { name: 'Add resource' }).click();
+  await expect(page.getByRole('form', { name: 'Resource Second Wind' })).toBeVisible();
   await page.getByRole('button', { name: 'Add action', exact: true }).click();
   const action = page.getByRole('article', { name: 'New action', exact: true });
   await action.getByLabel('Name', { exact: true }).fill('Help');
@@ -202,4 +208,5 @@ test('Combat and Features preserve drafts and accepted records across sections',
   await expect(page.getByRole('textbox', { name: 'Backstory', exact: true })).toHaveValue('Raised aboard the Gull.');
   await combat.click();
   await expect(page.getByRole('article', { name: 'Help', exact: true })).toBeVisible();
+  await expect(page.getByRole('form', { name: 'Resource Second Wind' }).getByLabel('Current')).toHaveValue('2');
 });

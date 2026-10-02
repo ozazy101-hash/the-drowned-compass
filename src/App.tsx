@@ -1,3 +1,5 @@
+import { CombatResources, ImportantResourceSummary } from "./components/CombatResources";
+import { mergeResources } from "./domain/limited-resources";
 import { mergeCharacterText } from "./domain/character-text";
 import { FeaturesStory } from "./features/FeaturesStory";
 import { CombatEntriesSection } from './components/CombatEntriesSection';
@@ -58,6 +60,7 @@ const skillLabels = {
 function mergeCharacterRecords(current: CharacterRecord, incoming: CharacterRecord) {
   const merged: CharacterRecord = {
     ...incoming,
+    limitedResources: mergeResources(current.limitedResources, incoming.limitedResources),
     textEntries: mergeCharacterText(current.textEntries, incoming.textEntries),
     combatEntries: mergeCombatEntries(current.combatEntries, incoming.combatEntries),
     abilityScores: { ...incoming.abilityScores },
@@ -139,9 +142,12 @@ function UnclaimedSlot({
   );
 }
 
-function primaryAttackPlaySummary(slot: CharacterSlot) {
+function combatPlaySummary(slot: CharacterSlot) {
   const summary = primaryAttackSummary(slot.character?.combatEntries);
-  return summary ? <span className="primary-attack-summary">Primary attack: {summary}</span> : null;
+  return <>
+    {summary && <span className="primary-attack-summary">Primary attack: {summary}</span>}
+    <ImportantResourceSummary resources={slot.character?.limitedResources} />
+  </>;
 }
 
 type IdentityDraft = Pick<
@@ -726,7 +732,7 @@ function CharacterPage({
   onBack: () => void;
   onSlotChanged: (slot: CharacterSlot) => void;
 }) {
-  const [section, setSection] = useState('Overview');
+  const [section, setSection] = useState("Overview");
   const character = slot.character!;
   const derived = calculateDerivedValues({ ...character, totalLevel: character.level }, character.derivedOverrides);
   const version = (field: OverviewFieldKey) => character.fieldVersions[field] ?? 0;
@@ -795,9 +801,13 @@ function CharacterPage({
         ); })}
       </nav>
 
+      <div hidden={section !== "Combat"}>
+        <CombatResources slotId={slot.id} resources={character.limitedResources} partyData={partyData}
+          onChanged={resources => onSlotChanged({ ...slot, character: { ...character, limitedResources: resources } })} />
+        <CombatEntriesSection slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} />
+      </div>
       <div hidden={section !== 'Features'}><FeaturesStory key={`${slot.id}-features`} slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} area="Features" /></div>
       <div hidden={section !== 'Story'}><FeaturesStory key={`${slot.id}-story`} slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} area="Story" /></div>
-      <div hidden={section !== "Combat"}><CombatEntriesSection slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} /></div>
       <div hidden={section !== "Overview"}>
       <section className="overview-section" aria-labelledby="identity-heading">
         <div className="section-heading">
@@ -1102,7 +1112,7 @@ export function App({ partyData }: AppProps) {
                   key={slot.id}
                   slot={slot}
                   onSelect={() => setSelectedSlotId(slot.id)}
-                  playSummary={primaryAttackPlaySummary(slot)}
+                  playSummary={combatPlaySummary(slot)}
                 />
               ) : (
                 <UnclaimedSlot

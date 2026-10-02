@@ -1,3 +1,4 @@
+import { writeResource } from "../domain/limited-resources";
 import { setCharacterText, validateCharacterText } from "../domain/character-text";
 import { applyCombatEntryCommand, emptyCombatEntries } from '../domain/combat-entries';
 import { setOverviewValue } from "../domain/overview-fields";
@@ -43,6 +44,7 @@ function readStoredSession(): PartySession | null {
 function copyCharacter(character: CharacterRecord): CharacterRecord {
   return {
     ...character,
+    limitedResources: (character.limitedResources ?? []).map(resource => ({ ...resource })),
     combatEntries: structuredClone(character.combatEntries ?? emptyCombatEntries()),
     abilityScores: { ...character.abilityScores },
     savingThrowProficiencies: { ...character.savingThrowProficiencies },
@@ -141,12 +143,14 @@ export function createInMemoryPartyData(): PartyData {
         if (!response.ok) throw new Error("That Character Slot is no longer available.");
         return normalizeSlot(await response.json() as CharacterSlot);
       }
+      return navigator.locks.request("drowned-compass-party-write", () => {
       const party = readParty();
       const slot = party.slots.find((candidate) => candidate.id === slotId);
       if (!slot || slot.character) throw new Error("That Character Slot is no longer available.");
       slot.character = copyCharacter(character);
       storeParty(party);
       return slot;
+      });
     },
 
     async updateCharacterOverviewField(slotId, field, value, expectedVersion) {
@@ -178,6 +182,7 @@ export function createInMemoryPartyData(): PartyData {
         return { ok: true, slot };
       }
 
+      return navigator.locks.request("drowned-compass-party-write", () => {
       const party = readParty();
       const slot = party.slots.find((candidate) => candidate.id === slotId);
       if (!slot?.character) throw new Error("That Character Record is unavailable.");
@@ -189,6 +194,31 @@ export function createInMemoryPartyData(): PartyData {
       slot.character.fieldVersions[field] = currentVersion + 1;
       storeParty(party);
       return { ok: true, slot };
+      });
+    },
+
+    async writeLimitedResource(slotId, resource, expectedVersion) {
+      if (params.get("failResourceSaves") === "once" && !window.sessionStorage.getItem("failed-resource-save")) {
+        window.sessionStorage.setItem("failed-resource-save", "true");
+        throw new Error("The save could not reach the Party.");
+      }
+      if (testNamespace) {
+        const response = await fetch(testPartyUrl(testNamespace), {
+          method: "PATCH", headers: { "content-type": "application/json" },
+          body: JSON.stringify({ slotId, resource, expectedVersion }),
+        });
+        if (!response.ok) throw new Error("The resource could not be saved.");
+        return await response.json();
+      }
+      // Web Locks serialize localStorage read/modify/write across tabs, matching server CAS semantics.
+      return navigator.locks.request("drowned-compass-party-write", () => {
+        const party = readParty();
+        const slot = party.slots.find(candidate => candidate.id === slotId);
+        if (!slot?.character) throw new Error("That Character Record is unavailable.");
+        const result = writeResource(slot.character.limitedResources ?? [], resource, expectedVersion);
+        if (result.ok) { slot.character.limitedResources = result.resources; storeParty(party); }
+        return result;
+      });
     },
 
     async saveCharacterTextEntry(slotId, entry, expectedVersion) {
@@ -213,13 +243,15 @@ export function createInMemoryPartyData(): PartyData {
         const slot = normalizeSlot(await response.json() as CharacterSlot);
         return response.status === 409 ? { ok: false, reason: 'conflict', slot } : { ok: true, slot };
       }
-      const party = readParty();
-      const slot = party.slots.find(candidate => candidate.id === slotId);
-      if (!slot?.character) throw new Error('That Character Record is unavailable.');
-      const entries = slot.character.textEntries ??= [];
-      if (!setCharacterText(entries, entry, expectedVersion)) return { ok: false, reason: 'conflict', slot };
-      storeParty(party);
-      return { ok: true, slot };
+      return navigator.locks.request("drowned-compass-party-write", () => {
+        const party = readParty();
+        const slot = party.slots.find(candidate => candidate.id === slotId);
+        if (!slot?.character) throw new Error('That Character Record is unavailable.');
+        const entries = slot.character.textEntries ??= [];
+        if (!setCharacterText(entries, entry, expectedVersion)) return { ok: false, reason: 'conflict', slot };
+        storeParty(party);
+        return { ok: true, slot };
+      });
     },
 
     async updateCombatEntry(slotId, command) {
@@ -236,13 +268,15 @@ export function createInMemoryPartyData(): PartyData {
         const slot = normalizeSlot(await response.json() as CharacterSlot);
         return response.status === 409 ? { ok: false, reason: 'conflict', slot } : { ok: true, slot };
       }
-      const party = readParty();
-      const slot = party.slots.find(s => s.id === slotId);
-      if (!slot?.character) throw new Error('That Character Record is unavailable.');
-      const state = slot.character.combatEntries ??= emptyCombatEntries();
-      if (!applyCombatEntryCommand(state, command)) return { ok: false, reason: 'conflict', slot };
-      storeParty(party);
-      return { ok: true, slot };
+      return navigator.locks.request("drowned-compass-party-write", () => {
+        const party = readParty();
+        const slot = party.slots.find(s => s.id === slotId);
+        if (!slot?.character) throw new Error('That Character Record is unavailable.');
+        const state = slot.character.combatEntries ??= emptyCombatEntries();
+        if (!applyCombatEntryCommand(state, command)) return { ok: false, reason: 'conflict', slot };
+        storeParty(party);
+        return { ok: true, slot };
+      });
     },
 
     subscribeToParty(onPartyChanged) {

@@ -1256,6 +1256,19 @@ footer {
 .skill-editor { min-width: 0; }
 .skill-editor .derived-field { margin-top: .4rem; }
 
+/* Composable Combat resources section. */
+.resource-editor { border-top: 1px solid var(--color-border, #345052); padding: 1.25rem 0; }
+.resource-fields { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: .8rem; }
+.resource-fields label { display: flex; flex-direction: column; gap: .4rem; }
+.resource-fields input, .resource-fields select { width: 100%; min-width: 0; padding: .65rem; color: #eee5d2; background: #0c1b20; border: 1px solid #486066; border-radius: .3rem; font: inherit; }
+.resource-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .9rem; }
+.resource-editor button { color: #eee5d2; background: #20383d; border: 1px solid #697565; border-radius: .3rem; padding: .6rem .8rem; cursor: pointer; font: inherit; }
+.resource-editor button:disabled { opacity: .45; cursor: default; }
+.resource-editor button[aria-pressed="true"] { border-color: #d5b875; }
+.resource-editor :focus-visible { outline: 2px solid #d5b875; outline-offset: 3px; }
+.important-resource { color: #d5b875; font-size: .85rem; }
+[hidden] { display: none !important; }
+@media (max-width: 640px) { .resource-fields { grid-template-columns: 1fr 1fr; } .resource-fields label:first-child { grid-column: 1 / -1; } }
 /* Player-authored Features and Story: wrapping long text and independent editors. */
 .character-text > p { color: var(--muted); line-height: 1.6; }
 .character-text__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }

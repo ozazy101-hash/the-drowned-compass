@@ -5,6 +5,7 @@ import { spawnSync } from 'node:child_process';
 const rehearsals = [
   ['derived_values', '20260928200000_calculate_and_override_derived_values.sql', '__DERIVED_VALUES_MIGRATION__'],
   ['combat_entries', '20260928220900_manage_attacks_and_actions.sql', '__COMBAT_ENTRIES_MIGRATION__'],
+  ['limited_resources', '20260928221000_track_limited_resources.sql', '__LIMITED_RESOURCES_MIGRATION__'],
   ['features_story', '20260928221600_record_features_and_story.sql', '__FEATURES_STORY_MIGRATION__'],
 ];
 const generated = [];
