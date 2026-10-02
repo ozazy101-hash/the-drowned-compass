@@ -170,3 +170,36 @@ test('typing during a delayed Feature removal makes Retry restore the newer draf
   await page.reload(); await openClaimedCharacter(page); await area(page, 'Features');
   await expect(page.getByLabel('Summary')).toHaveValue('Newer reminder to keep');
 });
+
+test('Combat and Features preserve drafts and accepted records across sections', async ({ page }, info) => {
+  await prepareTextPage(page, info);
+  await area(page, 'Features');
+  await page.getByRole('button', { name: 'Add feature', exact: true }).click();
+  const feature = page.getByRole('article', { name: 'Class feature' });
+  await feature.getByLabel('Feature name').fill('Second Wind');
+  await feature.getByLabel('Summary').fill('An unfinished reminder');
+
+  const combat = page.getByRole('navigation', { name: 'Character Record sections' }).getByRole('button', { name: 'Combat', exact: true });
+  await combat.click();
+  await page.getByRole('button', { name: 'Add action', exact: true }).click();
+  const action = page.getByRole('article', { name: 'New action', exact: true });
+  await action.getByLabel('Name', { exact: true }).fill('Help');
+  await action.getByRole('button', { name: 'Save action', exact: true }).click();
+  await expect(page.getByRole('article', { name: 'Help', exact: true }).getByRole('status')).toHaveText('Saved');
+
+  await area(page, 'Features');
+  await expect(feature.getByLabel('Summary')).toHaveValue('An unfinished reminder');
+  await feature.getByRole('button', { name: 'Save feature' }).click();
+  await expect(feature.getByRole('status')).toHaveText('Saved');
+  await area(page, 'Story');
+  await saveStory(page, 'Backstory', 'Raised aboard the Gull.');
+
+  await page.reload();
+  await openClaimedCharacter(page);
+  await area(page, 'Features');
+  await expect(page.getByRole('article', { name: 'Class feature' }).getByLabel('Summary')).toHaveValue('An unfinished reminder');
+  await area(page, 'Story');
+  await expect(page.getByRole('textbox', { name: 'Backstory', exact: true })).toHaveValue('Raised aboard the Gull.');
+  await combat.click();
+  await expect(page.getByRole('article', { name: 'Help', exact: true })).toBeVisible();
+});

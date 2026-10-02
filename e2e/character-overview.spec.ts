@@ -1,4 +1,5 @@
-import { expect, test } from "@playwright/test";
+import { test } from "./browser-fixtures";
+import { expect } from "@playwright/test";
 import { enterAs, isolatedPartyUrl, claimCharacter, openClaimedCharacter, saveInput, expectSaveFeedback, prepareTwoBrowsers } from "./overview-helpers";
 
 test("the Character Overview is keyboard operable, responsive, and persists focused fields", async ({ page }, testInfo) => {
@@ -11,7 +12,7 @@ test("the Character Overview is keyboard operable, responsive, and persists focu
     await expect(navigation.getByRole("button", { name: section })).toBeVisible();
   }
   await expect(navigation.getByRole("button", { name: "Overview" })).toHaveAttribute("aria-current", "page");
-  await expect(navigation.getByRole("button", { name: "Combat" })).toBeDisabled();
+  await expect(navigation.getByRole("button", { name: "Combat" })).toBeEnabled();
 
   const characterName = page.getByLabel("Character name", { exact: true });
   await characterName.fill("Neris Stormwake");

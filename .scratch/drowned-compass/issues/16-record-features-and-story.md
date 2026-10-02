@@ -19,3 +19,5 @@
 Verification: production build and diff check pass; 40 selected laptop/phone browser tests pass, plus six repeated draft-race checks; 144 rollback-only database assertions pass, including 33 assertions rehearsing the actual new migration. Independent Standards and Spec review have no remaining findings. See `docs/implementation/features-and-story.md` for integration seams, commands and testing limits.
 
 Status remains claimed pending accepted release. Hosted migration and frontend deployment need user approval; apply `20260928221600_record_features_and_story.sql` before deploying the frontend. No hosted database migration or data edit was performed.
+
+2026-10-02: The user approved integration and deployment. The branch was reconciled with accepted Tickets 09 and 06. Integrated validation: 98/98 browser cases, two additional cross-feature laptop/phone journeys, 179 rollback-only database assertions, 131 calculation cases, production build and diff checks. Hosted migration dry run selected only the Ticket 16 migration; hosted release and acceptance are next.

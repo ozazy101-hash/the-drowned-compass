@@ -12,7 +12,7 @@ Migration `20260928221600_record_features_and_story.sql` adds `character_text_en
 
 Both production and in-memory adapters load and save entries. Vite's shared test transport uses the same validation and conditional writes as the in-memory adapter. All records, including removal tombstones, load with Party snapshots.
 
-Hosted migration and reviewed frontend deployment remain pending user approval. Apply this migration before deploying the new frontend; it expects the new table. No hosted data edits are authorized by this ticket implementation. Ticket 16 stays claimed while review/release is pending.
+The user approved Ticket 16 integration and deployment on 2026-10-02. Apply this migration before deploying the new frontend; it expects the new table. Ticket 16 stays claimed until hosted acceptance confirms the release.
 
 ## Integration seams
 
@@ -44,3 +44,9 @@ Independent static review found no remaining documented-standard violations or b
 Independent static review found no remaining correctness or acceptance blocker. All four Feature sources and five Story fields are implemented without private-note scope or rules automation. The final fix removes the obsolete effect that reproduced data loss. The boundary regression verifies draft survival, save and reload, and the long Story journey checks outgoing values as well as persistence. Earlier removal Retry feedback was addressed and covered by regression. Hosted end-to-end verification awaits approved migration/deployment.
 
 Remaining findings: Standards 0 (no worst issue); Spec 0 (no worst issue).
+
+## Integration with accepted main (2026-10-02)
+
+Accepted Ticket 09 attacks/actions and Ticket 06 Party Dashboard now compose with Features and Story. All four sections stay mounted during navigation, and Party snapshot merging retains both text and Combat record versions. Supabase loads both collections and subscribes to both change streams; the shared browser test transport accepts both commands. A new laptop/phone regression switches through Combat, Features and Story, preserves an unsaved Feature draft, then verifies all three accepted records after reload.
+
+The integrated production build, 131 calculation cases, 179 rollback-only database assertions and all 98 existing browser cases passed; the new cross-feature regression passed on both viewports. The hosted dry run selected only `20260928221600_record_features_and_story.sql`, with no seed or role changes. Temporary test port 4216 configuration was removed. Hosted acceptance follows migration and Pages deployment.

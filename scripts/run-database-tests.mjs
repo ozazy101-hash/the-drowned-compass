@@ -1,10 +1,10 @@
 import { readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 
-// Expand actual migrations into rollback-only rehearsals. Supabase mounts SQL
-// tests without their sibling migrations; no persistent local schema is changed.
+// Rehearse actual pending migrations inside rollback-only tests.
 const rehearsals = [
   ['derived_values', '20260928200000_calculate_and_override_derived_values.sql', '__DERIVED_VALUES_MIGRATION__'],
+  ['combat_entries', '20260928220900_manage_attacks_and_actions.sql', '__COMBAT_ENTRIES_MIGRATION__'],
   ['features_story', '20260928221600_record_features_and_story.sql', '__FEATURES_STORY_MIGRATION__'],
 ];
 const generated = [];

@@ -1,4 +1,5 @@
 import { setCharacterText, validateCharacterText } from "../domain/character-text";
+import { applyCombatEntryCommand, emptyCombatEntries } from '../domain/combat-entries';
 import { setOverviewValue } from "../domain/overview-fields";
 import {
   abilityScoreKeys,
@@ -42,6 +43,7 @@ function readStoredSession(): PartySession | null {
 function copyCharacter(character: CharacterRecord): CharacterRecord {
   return {
     ...character,
+    combatEntries: structuredClone(character.combatEntries ?? emptyCombatEntries()),
     abilityScores: { ...character.abilityScores },
     savingThrowProficiencies: { ...character.savingThrowProficiencies },
     skillProficiencies: { ...character.skillProficiencies },
@@ -220,6 +222,29 @@ export function createInMemoryPartyData(): PartyData {
       return { ok: true, slot };
     },
 
+    async updateCombatEntry(slotId, command) {
+      if (params.get('failCombatSaves') === 'once' && !window.sessionStorage.getItem('combat-save-failed')) {
+        window.sessionStorage.setItem('combat-save-failed', 'true');
+        throw new Error('The save could not reach the Party.');
+      }
+      if (testNamespace) {
+        const response = await fetch(testPartyUrl(testNamespace), {
+          method: 'PATCH', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ slotId, combatCommand: command }),
+        });
+        if (response.status !== 409 && !response.ok) throw new Error('The attack or action could not be saved.');
+        const slot = normalizeSlot(await response.json() as CharacterSlot);
+        return response.status === 409 ? { ok: false, reason: 'conflict', slot } : { ok: true, slot };
+      }
+      const party = readParty();
+      const slot = party.slots.find(s => s.id === slotId);
+      if (!slot?.character) throw new Error('That Character Record is unavailable.');
+      const state = slot.character.combatEntries ??= emptyCombatEntries();
+      if (!applyCombatEntryCommand(state, command)) return { ok: false, reason: 'conflict', slot };
+      storeParty(party);
+      return { ok: true, slot };
+    },
+
     subscribeToParty(onPartyChanged) {
       if (testNamespace) {
         let previousParty = "";
@@ -235,6 +260,7 @@ export function createInMemoryPartyData(): PartyData {
                 onPartyChanged(party);
               }
             })
+            .catch(() => {})
             .finally(() => { isReading = false; });
         }, 100);
         return () => window.clearInterval(interval);
