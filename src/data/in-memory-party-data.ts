@@ -1,3 +1,4 @@
+import { initialSurvival, transitionSurvival } from "../domain/survival";
 import { writeResource } from "../domain/limited-resources";
 import { setCharacterText, validateCharacterText } from "../domain/character-text";
 import { applyCombatEntryCommand, emptyCombatEntries } from '../domain/combat-entries';
@@ -44,6 +45,7 @@ function readStoredSession(): PartySession | null {
 function copyCharacter(character: CharacterRecord): CharacterRecord {
   return {
     ...character,
+    survival: structuredClone(character.survival ?? initialSurvival()),
     limitedResources: (character.limitedResources ?? []).map(resource => ({ ...resource })),
     combatEntries: structuredClone(character.combatEntries ?? emptyCombatEntries()),
     abilityScores: { ...character.abilityScores },
@@ -194,6 +196,32 @@ export function createInMemoryPartyData(): PartyData {
       slot.character.fieldVersions[field] = currentVersion + 1;
       storeParty(party);
       return { ok: true, slot };
+      });
+    },
+
+    async updateSurvival(slotId, command, expectedVersion, maximumVersion) {
+      if (params.get('failSurvivalSaves') === 'once' && !window.sessionStorage.getItem('failed-survival')) {
+        window.sessionStorage.setItem('failed-survival', 'true');
+        throw new Error('The save could not reach the Party.');
+      }
+      if (testNamespace) {
+        const response = await fetch(testPartyUrl(testNamespace), {
+          method: 'PATCH', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ slotId, survivalCommand: command, expectedVersion, maximumVersion }),
+        });
+        if (!response.ok && response.status !== 409) throw new Error('Survival could not be saved.');
+        const slot = normalizeSlot(await response.json() as CharacterSlot);
+        return response.status === 409 ? { ok: false, reason: 'conflict', slot } : { ok: true, slot };
+      }
+      return navigator.locks.request('drowned-compass-party-write', () => {
+        const party = readParty(); const slot = party.slots.find(s => s.id === slotId);
+        if (!slot?.character) throw new Error('That Character Record is unavailable.');
+        const state = slot.character.survival ?? initialSurvival();
+        if (state.version !== expectedVersion || (slot.character.fieldVersions.maxHitPoints ?? 0) !== maximumVersion) return { ok: false, reason: 'conflict', slot };
+        const next = transitionSurvival(state, command, slot.character.maxHitPoints, maximumVersion);
+        if (!next) return { ok: false, reason: 'conflict', slot };
+        slot.character.survival = next; storeParty(party);
+        return { ok: true, slot };
       });
     },
 
