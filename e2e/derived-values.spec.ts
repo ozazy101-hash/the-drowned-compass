@@ -1,4 +1,4 @@
-import { test } from "./browser-fixtures";
+import { createPartyBrowserContext, test } from "./browser-fixtures";
 import { expect, type Page } from '@playwright/test';
 import { enterAs, isolatedPartyUrl, claimCharacter, openClaimedCharacter, saveInput, expectSaveFeedback, prepareTwoBrowsers } from './overview-helpers';
 
@@ -158,22 +158,34 @@ test('an older override save response preserves newer typing and independent rea
   await otherContext.close();
 });
 
-test('legacy local Character Records preserve boolean proficiency choices on load', async ({ page }) => {
+test('legacy local Character Records preserve boolean proficiency choices on load', async ({ page, browser }, testInfo) => {
   await page.goto('./'); await enterAs(page,'Player'); await claimCharacter(page);
-  await page.evaluate(() => {
+  const legacyParty = await page.evaluate(() => {
     const party=JSON.parse(localStorage.getItem('drowned-compass-party')!);
     const character=party.slots[0].character;
     character.savingThrowProficiencies={ strength:false,dexterity:true,constitution:false,intelligence:false,wisdom:true,charisma:false };
     delete character.derivedOverrides;
-    localStorage.setItem('drowned-compass-party',JSON.stringify(party));
+    return party;
   });
-  await page.reload(); await openClaimedCharacter(page);
-  await expect(page.getByLabel('Wisdom saving throw proficiency')).toHaveValue('proficient');
-  await expect(page.getByLabel('Strength saving throw proficiency')).toHaveValue('none');
-  await expect(value(page,'Wisdom saving throw modifier')).toHaveText('+3');
-  await overrideValue(page,'Initiative','0');
-  await page.reload(); await openClaimedCharacter(page);
-  await expect(value(page,'Initiative')).toHaveText('+0');
+  // A fresh browser context has no committed IndexedDB snapshot, as an older
+  // installation would before importing its legacy localStorage Party.
+  const legacyContext = await createPartyBrowserContext(browser, testInfo);
+  await legacyContext.addInitScript(party => {
+    if (sessionStorage.getItem('legacy-import-seeded')) return;
+    localStorage.setItem('drowned-compass-party', JSON.stringify(party));
+    localStorage.setItem('drowned-compass-session-role', 'player');
+    sessionStorage.setItem('legacy-import-seeded', 'true');
+  }, legacyParty);
+  try {
+    const legacyPage = await legacyContext.newPage();
+    await legacyPage.goto('./'); await openClaimedCharacter(legacyPage);
+    await expect(legacyPage.getByLabel('Wisdom saving throw proficiency')).toHaveValue('proficient');
+    await expect(legacyPage.getByLabel('Strength saving throw proficiency')).toHaveValue('none');
+    await expect(value(legacyPage,'Wisdom saving throw modifier')).toHaveText('+3');
+    await overrideValue(legacyPage,'Initiative','0');
+    await legacyPage.reload(); await openClaimedCharacter(legacyPage);
+    await expect(value(legacyPage,'Initiative')).toHaveText('+0');
+  } finally { await legacyContext.close(); }
 });
 
 test('invalid override drafts stay unsaved without replacing the calculated number', async ({ page },testInfo) => {
