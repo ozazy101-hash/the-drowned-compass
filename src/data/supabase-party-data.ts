@@ -1,3 +1,4 @@
+import { initialSurvival } from "../domain/survival";
 import { readResources, mapResource, writeSupabaseResource } from "./supabase-limited-resources";
 import { validateCharacterText, type CharacterTextEntry } from "../domain/character-text";
 import { emptyCombatEntries, type CombatEntry, type CombatEntries } from '../domain/combat-entries';
@@ -150,12 +151,14 @@ export function createSupabasePartyData(
 
     if (slotsError) throw slotsError;
 
-    const [resources, textResult, entriesResult, primaryResult] = await Promise.all([
+    const [resources, textResult, entriesResult, primaryResult, survivalResult] = await Promise.all([
       readResources(client),
       client.from('character_text_entries').select('slot_id, entry_id, kind, title, body, deleted, version'),
       client.from('character_combat_entries').select('id, slot_id, details, rank, version, deleted').in('slot_id', (slots ?? []).map(slot => slot.id)),
       client.from('character_primary_attacks').select('slot_id, primary_id, version').in('slot_id', (slots ?? []).map(slot => slot.id)),
+      client.from('character_survival').select('slot_id,state'),
     ]);
+    if (survivalResult.error) throw survivalResult.error;
     if (textResult.error) throw textResult.error;
     if (entriesResult.error) throw entriesResult.error;
     if (primaryResult.error) throw primaryResult.error;
@@ -167,6 +170,7 @@ export function createSupabasePartyData(
       slots: ((slots ?? []) as CharacterSlotRow[]).map(row => {
         const slot = mapCharacterSlot(row);
         if (slot.character) {
+          slot.character.survival = survivalResult.data?.find(s => s.slot_id === slot.id)?.state ?? initialSurvival();
           slot.character.limitedResources = resources.filter(resource => resource.slot_id === slot.id).map(mapResource);
           slot.character.textEntries = texts
             .filter(text => text.slot_id === slot.id)
@@ -282,6 +286,15 @@ export function createSupabasePartyData(
         : { ok: false as const, reason: "conflict" as const, slot };
     },
 
+    async updateSurvival(slotId, command, expectedVersion, maximumVersion) {
+      const { data, error } = await client.rpc('update_character_survival', {
+        target_slot_id: slotId, command, expected_version: expectedVersion, maximum_version: maximumVersion,
+      });
+      if (error) throw error;
+      const slot = (await loadParty()).slots.find(s => s.id === slotId);
+      if (!slot?.character) throw new Error('That Character Record is unavailable.');
+      return data === true ? { ok: true, slot } : { ok: false, reason: 'conflict', slot };
+    },
     writeLimitedResource: (slotId, resource, expectedVersion) => writeSupabaseResource(client, slotId, resource, expectedVersion),
     async saveCharacterTextEntry(slotId, entry, expectedVersion) {
       validateCharacterText(entry);
@@ -326,6 +339,7 @@ export function createSupabasePartyData(
           { event: "*", schema: "public", table: "limited_resources" },
           reload,
         )
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'character_survival' }, reload)
         .on('postgres_changes',
           { event: '*', schema: 'public', table: 'character_text_entries' }, reload)
         .on('postgres_changes', { event: '*', schema: 'public', table: 'character_combat_entries' }, reload)

@@ -18,7 +18,7 @@ test("Party cards show accepted identity, health, defences and effective abiliti
   await back(page);
   await expect(card(page)).toContainText("Played by Mara");
   await expect(card(page)).toContainText("Level 3 Rogue · Thief");
-  await expect(card(page).getByText("Maximum HP", { exact: true }).locator("..")).toContainText("28");
+  await expect(card(page).getByText("Hit Points", { exact: true }).locator("..")).toContainText("28");
   await expect(card(page)).toContainText("Current HP unknown");
   await expect(card(page).getByText("Armor Class", { exact: true }).locator("..")).toContainText("16");
   const modifiers = { Strength: "-1", Dexterity: "+3", Constitution: "+1", Intelligence: "+2", Wisdom: "+1", Charisma: "+0" };
@@ -46,7 +46,7 @@ test("Party cards show accepted identity, health, defences and effective abiliti
   await page.reload();
   await expect(card(page)).toContainText("Level 5 Cleric · Life Domain");
   await expect(card(page).getByLabel("Spell save DC: 12", { exact: true })).toBeVisible();
-  await expect(card(page).getByText("Maximum HP", { exact: true }).locator("..")).toContainText("28");
+  await expect(card(page).getByText("Hit Points", { exact: true }).locator("..")).toContainText("28");
 });
 
 test("live cards follow dependent overrides, meaningful zero values and reset without reloading", async ({ browser, page }, testInfo) => {
@@ -85,10 +85,10 @@ test("cards retain accepted values through save failure, independent edits and a
   await input.fill("28"); await input.press("Enter");
   await expect(page.getByRole("alert")).toContainText("Not saved");
   await expect(input).toHaveValue("28");
-  await expect(card(otherPage).getByText("Maximum HP", { exact: true }).locator("..")).toContainText("1");
+  await expect(card(otherPage).getByText("Hit Points", { exact: true }).locator("..")).toContainText("1");
   await page.getByRole("button", { name: "Retry", exact: true }).click();
   await expectSaveFeedback(page, input, "Saved");
-  await expect(card(otherPage).getByText("Maximum HP", { exact: true }).locator("..")).toContainText("28");
+  await expect(card(otherPage).getByText("Hit Points", { exact: true }).locator("..")).toContainText("28");
   await openClaimedCharacter(otherPage);
   await input.fill("33");
   await saveInput(otherPage, "Maximum Hit Points", "40");
@@ -98,14 +98,14 @@ test("cards retain accepted values through save failure, independent edits and a
   await input.press("Enter");
   await expect(page.getByRole("alert")).toContainText("Changed elsewhere");
   await expect(input).toHaveValue("33");
-  await expect(card(otherPage).getByText("Maximum HP", { exact: true }).locator("..")).toContainText("40");
+  await expect(card(otherPage).getByText("Hit Points", { exact: true }).locator("..")).toContainText("40");
   await expect(card(otherPage).getByText("Armor Class", { exact: true }).locator("..")).toContainText("17");
   await page.getByRole("button", { name: "Retry", exact: true }).click();
   await expectSaveFeedback(page, input, "Saved");
-  await expect(card(otherPage).getByText("Maximum HP", { exact: true }).locator("..")).toContainText("33");
+  await expect(card(otherPage).getByText("Hit Points", { exact: true }).locator("..")).toContainText("33");
   await back(page); await page.reload();
   await expect(card(page).getByText("Armor Class", { exact: true }).locator("..")).toContainText("17");
-  await expect(card(page).getByText("Maximum HP", { exact: true }).locator("..")).toContainText("33");
+  await expect(card(page).getByText("Hit Points", { exact: true }).locator("..")).toContainText("33");
   await otherContext.close();
 });
 

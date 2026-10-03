@@ -1,3 +1,4 @@
+import { initialSurvival, survivalState } from "../domain/survival";
 import type { ReactNode } from "react";
 import { calculateDerivedValues, type DerivedValue } from "../domain/derived-values";
 import { abilityScoreKeys, type CharacterSlot } from "../domain/party";
@@ -27,6 +28,7 @@ export function ClaimedCharacterCard({ slot, onSelect, playSummary }: {
   slot: CharacterSlot; onSelect: () => void; playSummary?: ReactNode;
 }) {
   const character = slot.character!;
+  const survival = character.survival ?? initialSurvival();
   const derived = calculateDerivedValues(
     { ...character, totalLevel: character.level }, character.derivedOverrides,
   );
@@ -51,9 +53,13 @@ export function ClaimedCharacterCard({ slot, onSelect, playSummary }: {
         <span className="party-card__summary" id={summaryId}>
           <span className="party-card__vitals">
             <span className="party-card__health">
-              <span className="party-card__label">Maximum HP</span>
-              <strong>{character.maxHitPoints}</strong>
-              <span className="party-card__unknown">Current HP unknown</span>
+              <span className="party-card__label">Hit Points</span>
+              <strong>{survival.current ?? '?'} / {character.maxHitPoints}</strong>
+              {survival.current === null && <span className="party-card__unknown">Current HP unknown</span>}
+              {survival.temporary > 0 && <span>Temporary HP: {survival.temporary}</span>}
+              {survivalState(survival) && <span>{survivalState(survival)}</span>}
+              {(survival.current === 0 || survival.successes > 0 || survival.failures > 0) && <span>Death saves: {survival.successes} successes, {survival.failures} failures</span>}
+              {survival.inspiration && <span>Heroic Inspiration</span>}
             </span>
             <span className="party-card__defence">
               <span className="party-card__label">Armor Class</span>
