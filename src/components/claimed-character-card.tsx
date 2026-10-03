@@ -1,5 +1,6 @@
 import { initialSurvival, survivalState } from "../domain/survival";
 import { totalLevel, classSummary } from "../domain/character-classes";
+import { ConditionList } from "../features/conditions/ConditionsSection";
 import type { ReactNode } from "react";
 import { calculateDerivedValues, type DerivedValue } from "../domain/derived-values";
 import { abilityScoreKeys, type CharacterSlot } from "../domain/party";
@@ -86,6 +87,7 @@ export function ClaimedCharacterCard({ slot, onSelect, playSummary }: {
         </span>
         <span className="party-card__open" aria-hidden="true">Open Character Page <span>→</span></span>
       </button>
+      <ConditionList conditions={character.conditions} />
     </article>
   );
 }

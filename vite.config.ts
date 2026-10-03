@@ -1,5 +1,6 @@
 import { applyClassEdit, type ClassEdit } from './src/domain/character-classes.ts';
 import { setInventory, type InventoryDraft } from './src/domain/inventory.ts';
+import { applyConditionCommand, type ConditionCommand } from './src/domain/conditions.ts';
 import { writeResource, type ResourceWrite, type LimitedResource } from "./src/domain/limited-resources.ts";
 import { setCharacterText, type CharacterTextDraft } from "./src/domain/character-text.ts";
 import { initialSurvival, transitionSurvival, type SurvivalCommand } from './src/domain/survival.ts';
@@ -140,6 +141,14 @@ function sharedInMemoryParty(): Plugin {
             return;
           }
 
+          if (requestBody.conditionCommand) {
+            try {
+              const character = slot.character as CharacterRecord;
+              if (!applyConditionCommand(character.conditions ??= [], requestBody.conditionCommand as ConditionCommand)) response.statusCode = 409;
+            } catch { response.statusCode = 400; }
+            response.end(JSON.stringify(slot));
+            return;
+          }
           if (requestBody.combatCommand) {
             try {
               const character = slot.character as CharacterRecord;
