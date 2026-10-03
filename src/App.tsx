@@ -1,3 +1,5 @@
+import { SurvivalSection } from "./components/SurvivalSection";
+import { mergeSurvival } from "./domain/survival";
 import { CombatResources, ImportantResourceSummary } from "./components/CombatResources";
 import { mergeResources } from "./domain/limited-resources";
 import { mergeCharacterText } from "./domain/character-text";
@@ -60,6 +62,7 @@ const skillLabels = {
 function mergeCharacterRecords(current: CharacterRecord, incoming: CharacterRecord) {
   const merged: CharacterRecord = {
     ...incoming,
+    survival: mergeSurvival(current.survival, incoming.survival),
     limitedResources: mergeResources(current.limitedResources, incoming.limitedResources),
     textEntries: mergeCharacterText(current.textEntries, incoming.textEntries),
     combatEntries: mergeCombatEntries(current.combatEntries, incoming.combatEntries),
@@ -801,6 +804,7 @@ function CharacterPage({
         ); })}
       </nav>
 
+      <div hidden={section !== "Overview" && section !== "Combat"}><SurvivalSection key={slot.id} slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} /></div>
       <div hidden={section !== "Combat"}>
         <CombatResources slotId={slot.id} resources={character.limitedResources} partyData={partyData}
           onChanged={resources => onSlotChanged({ ...slot, character: { ...character, limitedResources: resources } })} />
