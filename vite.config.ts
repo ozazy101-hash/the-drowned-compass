@@ -1,3 +1,4 @@
+import { applyClassEdit, type ClassEdit } from './src/domain/character-classes.ts';
 import { writeResource, type ResourceWrite, type LimitedResource } from "./src/domain/limited-resources.ts";
 import { setCharacterText, type CharacterTextDraft } from "./src/domain/character-text.ts";
 import { initialSurvival, transitionSurvival, type SurvivalCommand } from './src/domain/survival.ts';
@@ -103,6 +104,13 @@ function sharedInMemoryParty(): Plugin {
               else response.statusCode = 409;
             } catch { response.statusCode = 400; }
             response.end(JSON.stringify(slot)); return;
+          }
+          if (requestBody.classEdit) {
+            try {
+              if (!applyClassEdit(slot.character as CharacterRecord, requestBody.classEdit as ClassEdit, Number(requestBody.expectedVersion))) response.statusCode = 409;
+            } catch { response.statusCode = 400; }
+            response.end(JSON.stringify(slot));
+            return;
           }
           if (requestBody.resource) {
             try {

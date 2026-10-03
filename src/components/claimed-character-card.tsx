@@ -1,4 +1,5 @@
 import { initialSurvival, survivalState } from "../domain/survival";
+import { totalLevel, classSummary } from "../domain/character-classes";
 import type { ReactNode } from "react";
 import { calculateDerivedValues, type DerivedValue } from "../domain/derived-values";
 import { abilityScoreKeys, type CharacterSlot } from "../domain/party";
@@ -30,7 +31,7 @@ export function ClaimedCharacterCard({ slot, onSelect, playSummary }: {
   const character = slot.character!;
   const survival = character.survival ?? initialSurvival();
   const derived = calculateDerivedValues(
-    { ...character, totalLevel: character.level }, character.derivedOverrides,
+    { ...character, totalLevel: totalLevel(character) }, character.derivedOverrides,
   );
   const summaryId = `party-summary-${slot.id}`;
   const hasSummaryOverride = abilityScoreKeys.some((key) => derived[`ability.${key}`].overridden)
@@ -46,7 +47,7 @@ export function ClaimedCharacterCard({ slot, onSelect, playSummary }: {
           <span className="party-card__names">
             <span className="character-slot__eyebrow">Played by {character.playerName}</span>
             <strong>{character.characterName}</strong>
-            <span className="party-card__class">Level {character.level} {character.primaryClass} · {character.subclass}</span>
+            <span className="party-card__class">{classSummary(character)}</span>
           </span>
           <span className="party-card__position" aria-hidden="true">{String(slot.position).padStart(2, "0")}</span>
         </span>

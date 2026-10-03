@@ -1,5 +1,7 @@
 import { SurvivalSection } from "./components/SurvivalSection";
 import { mergeSurvival } from "./domain/survival";
+import { ClassEntries } from "./features/ClassEntries";
+import { classSummary, totalLevel, mergeClasses, projectClasses } from "./domain/character-classes";
 import { CombatResources, ImportantResourceSummary } from "./components/CombatResources";
 import { mergeResources } from "./domain/limited-resources";
 import { mergeCharacterText } from "./domain/character-text";
@@ -63,6 +65,7 @@ function mergeCharacterRecords(current: CharacterRecord, incoming: CharacterReco
   const merged: CharacterRecord = {
     ...incoming,
     survival: mergeSurvival(current.survival, incoming.survival),
+    classes: mergeClasses(current, incoming),
     limitedResources: mergeResources(current.limitedResources, incoming.limitedResources),
     textEntries: mergeCharacterText(current.textEntries, incoming.textEntries),
     combatEntries: mergeCombatEntries(current.combatEntries, incoming.combatEntries),
@@ -76,10 +79,11 @@ function mergeCharacterRecords(current: CharacterRecord, incoming: CharacterReco
   for (const field of Object.keys(current.fieldVersions) as OverviewFieldKey[]) {
     const currentVersion = current.fieldVersions[field] ?? 0;
     if (currentVersion > (incoming.fieldVersions[field] ?? 0)) {
-      setOverviewValue(merged, field, overviewValue(current, field));
+      if (field !== 'primaryClass' && field !== 'level') setOverviewValue(merged, field, overviewValue(current, field));
       merged.fieldVersions[field] = currentVersion;
     }
   }
+  projectClasses(merged);
   return merged;
 }
 
@@ -737,7 +741,7 @@ function CharacterPage({
 }) {
   const [section, setSection] = useState("Overview");
   const character = slot.character!;
-  const derived = calculateDerivedValues({ ...character, totalLevel: character.level }, character.derivedOverrides);
+  const derived = calculateDerivedValues({ ...character, totalLevel: totalLevel(character) }, character.derivedOverrides);
   const version = (field: OverviewFieldKey) => character.fieldVersions[field] ?? 0;
 
   const saveField: SaveField = async (field, value, expectedVersion) => {
@@ -767,11 +771,9 @@ function CharacterPage({
   }> = [
     { field: "playerName", label: "Player name", value: character.playerName },
     { field: "characterName", label: "Character name", value: character.characterName },
-    { field: "primaryClass", label: "Primary class", value: character.primaryClass },
     { field: "subclass", label: "Subclass", value: character.subclass },
     { field: "species", label: "Species", value: character.species },
     { field: "background", label: "Background", value: character.background },
-    { field: "level", label: "Level", value: character.level, type: "number", min: 1, max: 20 },
   ];
 
   return (
@@ -782,7 +784,7 @@ function CharacterPage({
         <div>
           <p className="hero__kicker">Played by {character.playerName}</p>
           <h1 id="character-heading">{character.characterName}</h1>
-          <p>Level {character.level} {character.primaryClass} · {character.subclass}</p>
+          <p>{classSummary(character)}</p>
           <p>{character.species} · {character.background}</p>
         </div>
       </section>
@@ -824,6 +826,8 @@ function CharacterPage({
           ))}
         </div>
       </section>
+
+      <ClassEntries slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} />
 
       <section className="overview-section" aria-labelledby="ability-heading">
         <div className="section-heading">

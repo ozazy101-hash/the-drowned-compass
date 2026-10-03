@@ -1,4 +1,5 @@
 import { initialSurvival, transitionSurvival } from "../domain/survival";
+import { applyClassEdit, characterClasses } from "../domain/character-classes";
 import { writeResource } from "../domain/limited-resources";
 import { setCharacterText, validateCharacterText } from "../domain/character-text";
 import { applyCombatEntryCommand, emptyCombatEntries } from '../domain/combat-entries';
@@ -46,6 +47,7 @@ function copyCharacter(character: CharacterRecord): CharacterRecord {
   return {
     ...character,
     survival: structuredClone(character.survival ?? initialSurvival()),
+    classes: characterClasses(character).map(entry => ({ ...entry })),
     limitedResources: (character.limitedResources ?? []).map(resource => ({ ...resource })),
     combatEntries: structuredClone(character.combatEntries ?? emptyCombatEntries()),
     abilityScores: { ...character.abilityScores },
@@ -221,6 +223,26 @@ export function createInMemoryPartyData(): PartyData {
         const next = transitionSurvival(state, command, slot.character.maxHitPoints, maximumVersion);
         if (!next) return { ok: false, reason: 'conflict', slot };
         slot.character.survival = next; storeParty(party);
+        return { ok: true, slot };
+      });
+    },
+
+    async editCharacterClass(slotId, edit, expectedVersion) {
+      if (testNamespace) {
+        const response = await fetch(testPartyUrl(testNamespace), {
+          method: 'PATCH', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ slotId, classEdit: edit, expectedVersion }),
+        });
+        if (response.status !== 409 && !response.ok) throw new Error('The class could not be saved. Check total level and try again.');
+        const slot = normalizeSlot(await response.json() as CharacterSlot);
+        return response.status === 409 ? { ok: false, reason: 'conflict', slot } : { ok: true, slot };
+      }
+      return navigator.locks.request('drowned-compass-party-write', () => {
+        const party = readParty();
+        const slot = party.slots.find(candidate => candidate.id === slotId);
+        if (!slot?.character) throw new Error('That Character Record is unavailable.');
+        if (!applyClassEdit(slot.character, edit, expectedVersion)) return { ok: false, reason: 'conflict', slot };
+        storeParty(party);
         return { ok: true, slot };
       });
     },
