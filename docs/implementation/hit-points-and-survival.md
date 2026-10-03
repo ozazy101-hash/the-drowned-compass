@@ -11,3 +11,11 @@ Each accepted survival command increments one survival version. Damage, healing,
 The local adapter serializes shared localStorage writes using the existing Party write Web Lock. The test transport applies the same transition module under its serialized request handler. Supabase stores one independently addressable survival record per Character Slot. Browser roles can read it only through Party membership RLS and can write only through the conditional RPC. The RPC checks membership and claim, locks the Character Slot, validates command inputs, reads the accepted maximum and its version, applies the transition, and increments the survival version atomically. Realtime events and reconnect reloads deliver accepted state. Monotonic survival merging prevents delayed reads from rolling the Character Page back.
 
 The forward migration must be approved and applied before releasing this frontend to the hosted Supabase backend. All development database checks use rollback-only fixtures. This ticket does not apply hosted migrations or deploy the frontend.
+
+## Verification
+
+The production build and 146 calculation tests pass. The standard local database suite passed 239 assertions across nine rollback-only fixtures, including 35 new survival assertions; `plpgsql_check` reported zero findings in a rolled-back migration rehearsal. No persistent or hosted schema change was applied.
+
+The full browser suite passed 132/132 cases (66 laptop, 66 phone) in 6.5 minutes before the final touch-target/layout and validation polish. The final focused survival and adapter suite passed 14/14 cases in 42 seconds, including the new cross-tab survival/Overview/resource race. Both viewport screenshots were inspected with no horizontal overflow. The final 134-case integrated full regression remains pending: the coordinator requested cancellation while it was still queued behind the shared browser lock. No cases from that queued run executed.
+
+Earlier focused acceptance found delayed checkbox feedback and generic validation errors; both were corrected before the passing runs. Build, calculation and database results reflect the final implementation.
