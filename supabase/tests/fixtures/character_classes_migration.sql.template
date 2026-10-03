@@ -1,0 +1,69 @@
+begin;
+create extension if not exists pgtap with schema extensions;
+select no_plan();
+insert into auth.users(instance_id,id,aud,role,email,encrypted_password,email_confirmed_at,raw_app_meta_data,raw_user_meta_data,created_at,updated_at) values
+('00000000-0000-0000-0000-000000000000','30000000-0000-4000-8000-000000000001','authenticated','authenticated','players@drowned-compass.test','',now(),'{}','{}',now(),now()),
+('00000000-0000-0000-0000-000000000000','30000000-0000-4000-8000-000000000002','authenticated','authenticated','dm@drowned-compass.test','',now(),'{}','{}',now(),now()),
+('00000000-0000-0000-0000-000000000000','30000000-0000-4000-8000-000000000003','authenticated','authenticated','class-outsider@drowned-compass.test','',now(),'{}','{}',now(),now());
+-- Exercise preservation of records legal before this migration, including long names.
+update public.character_slots set claimed_at=now(),claimed_by='30000000-0000-4000-8000-000000000001',
+ player_name='Mara',character_name='Neris Vale',primary_class='Rogue',subclass='Thief',species='Human',background='Sailor',level=3,
+ strength=9,dexterity=17,constitution=13,intelligence=14,wisdom=12,charisma=11,
+ overview_field_versions='{"primaryClass":4,"level":8,"strength":3}',version=9 where position=1;
+update public.character_slots set claimed_at=now(),claimed_by='30000000-0000-4000-8000-000000000001',
+ player_name='Legacy',character_name='Long name',primary_class='  '||repeat('x',200)||'  ',subclass='Legacy',species='Human',background='Sailor',level=1,
+ strength=10,dexterity=10,constitution=10,intelligence=10,wisdom=10,charisma=10 where position=2;
+create temporary table before_classes as select to_jsonb(s) data from public.character_slots s order by position;
+-- __CHARACTER_CLASSES_MIGRATION__
+select results_eq($$select to_jsonb(s) from public.character_slots s order by position$$,$$select data from before_classes$$,'migration preserves every existing slot, claim, field and version exactly');
+select results_eq($$select c.name,c.level,c.version,c.deleted from public.character_classes c join public.character_slots s on s.id=c.slot_id where s.position=1$$,$$values ('Rogue'::text,3,1::bigint,false)$$,'legacy single-class record backfilled');
+select results_eq($$select c.name=c2.primary_class from public.character_classes c join public.character_slots c2 on c2.id=c.slot_id where c2.position=2$$,array[true],'long legacy class names preserved without trimming or truncation');
+select results_eq($$select count(*)::int from public.character_classes$$,array[2],'unclaimed slots receive no invented classes');
+set local role authenticated;
+set local "request.jwt.claim.sub"='30000000-0000-4000-8000-000000000001';
+select ok(has_function_privilege('authenticated','public.edit_character_class(uuid,text,text,integer,boolean,bigint)','EXECUTE'),'member RPC explicitly granted');
+select ok(not has_function_privilege('anon','public.edit_character_class(uuid,text,text,integer,boolean,bigint)','EXECUTE'),'anonymous denied RPC');
+select ok(not has_table_privilege('authenticated','public.character_classes','INSERT'),'direct inserts denied');
+select ok(not has_table_privilege('authenticated','public.character_classes','UPDATE'),'direct updates denied');
+select ok(not has_table_privilege('authenticated','public.character_classes','DELETE'),'direct deletes denied');
+select results_eq($$select public.edit_character_class((select id from public.character_slots where position=1),'primary','Ranger',3,false,1)$$,array[true],'Player independently edits primary class');
+select results_eq($$select public.edit_character_class((select id from public.character_slots where position=1),'11111111-1111-4111-8111-111111111111','Cleric',2,false,0)$$,array[true],'Player adds secondary class');
+select results_eq($$select level,primary_class from public.character_slots where position=1$$,$$values (5,'Ranger'::text)$$,'total and clear primary projected atomically');
+select results_eq($$select public.edit_character_class((select id from public.character_slots where position=1),'primary','Stale',4,false,1)$$,array[false],'stale primary edit conflicts');
+select throws_ok($$select public.edit_character_class((select id from public.character_slots where position=1),'primary','Ranger',3,true,2)$$,'23514',null,'primary cannot be removed');
+select throws_ok($$select public.edit_character_class((select id from public.character_slots where position=1),'11111111-1111-4111-8111-111111111111','Cleric',0,false,1)$$,'23514',null,'zero class levels rejected');
+select throws_ok($$select public.edit_character_class((select id from public.character_slots where position=1),'11111111-1111-4111-8111-111111111111','Cleric',-1,false,1)$$,'23514',null,'negative class levels rejected');
+select throws_ok($$select public.edit_character_class((select id from public.character_slots where position=1),'11111111-1111-4111-8111-111111111111','Cleric',18,false,1)$$,'23514',null,'total above 20 rejected atomically');
+select results_eq($$select level,version from public.character_classes where entry_id='11111111-1111-4111-8111-111111111111'$$,$$values (2,1::bigint)$$,'invalid writes preserve accepted entry/version');
+select throws_ok($$select public.edit_character_class((select id from public.character_slots where position=1),'11111111-1111-4111-8111-111111111111',' ',2,false,1)$$,'23514',null,'empty name rejected');
+select throws_ok($$select public.edit_character_class((select id from public.character_slots where position=1),'11111111-1111-4111-8111-111111111111',repeat('x',161),2,false,1)$$,'23514',null,'oversized edited name rejected');
+select throws_ok($$select public.edit_character_class((select id from public.character_slots where position=1),'bad','Cleric',1,false,0)$$,'23514',null,'malformed entry identity rejected');
+select throws_ok($$select public.edit_character_class((select id from public.character_slots where position=1),'primary','Ranger',3,false,-1)$$,'23514',null,'negative versions rejected');
+select throws_ok($$update public.character_slots set level=9 where position=1$$,'23514',null,'direct slot updates cannot diverge from class total');
+select throws_ok($$update public.character_slots set primary_class='Druid' where position=1$$,'23514',null,'direct slot updates cannot diverge from primary entry');
+select results_eq($$select accepted from public.update_character_overview_field((select id from public.character_slots where position=1),'level','4',8)$$,array[false],'old browser stale level edit cannot ignore secondary class');
+select results_eq($$select accepted from public.update_character_overview_field((select id from public.character_slots where position=1),'level','4',10)$$,array[true],'legacy level edit updates primary class entry');
+select results_eq($$select level from public.character_slots where position=1$$,array[4],'legacy total-level edit adjusts primary and retains other classes');
+select throws_ok($$select * from public.update_character_overview_field((select id from public.character_slots where position=1),'level','1.5',11)$$,'23514',null,'legacy decimal level rejected');
+select results_eq($$select accepted from public.update_character_overview_field((select id from public.character_slots where position=1),'strength','12',3)$$,array[true],'independent Overview still saves');
+set local "request.jwt.claim.sub"='30000000-0000-4000-8000-000000000002';
+select results_eq($$select public.edit_character_class((select id from public.character_slots where position=1),'11111111-1111-4111-8111-111111111111','Cleric',3,false,1)$$,array[true],'Dungeon Master edits secondary independently of primary');
+select results_eq($$select level from public.character_slots where position=1$$,array[5],'independent accepted class edits both survive');
+select results_eq($$select public.edit_character_class((select id from public.character_slots where position=1),'11111111-1111-4111-8111-111111111111','Cleric',3,true,2)$$,array[true],'removal is a conditional tombstone');
+select results_eq($$select level from public.character_slots where position=1$$,array[2],'removal retains positive primary level');
+select results_eq($$select public.edit_character_class((select id from public.character_slots where position=1),'11111111-1111-4111-8111-111111111111','Cleric',3,false,3)$$,array[false],'deleted entry cannot be resurrected by retry');
+select results_eq($$select strength from public.character_slots where position=1$$,array[12],'class edits preserve independent Overview');
+select results_eq($$select public.edit_character_class((select id from public.character_slots where position=3),'primary','Rogue',1,false,0)$$,array[false],'unclaimed slot cannot gain class entries');
+select results_eq($$update public.character_slots set claimed_at=now(),claimed_by='30000000-0000-4000-8000-000000000002',player_name='DM',character_name='Fresh',primary_class='Fighter',subclass='Champion',species='Human',background='Sailor',level=2,strength=10,dexterity=10,constitution=10,intelligence=10,wisdom=10,charisma=10 where position=3 returning character_name$$,array['Fresh'],'new claims still succeed');
+select results_eq($$select c.name,c.level from public.character_classes c join public.character_slots s on s.id=c.slot_id where s.position=3$$,$$values ('Fighter'::text,2)$$,'new claims atomically initialize primary entry');
+select ok(exists(select 1 from pg_publication_tables where pubname='supabase_realtime' and tablename='character_classes'),'class changes published for realtime');
+select set_config('test.class_slot',(select id::text from public.character_slots where position=1),true);
+set local "request.jwt.claim.sub"='30000000-0000-4000-8000-000000000003';
+select results_eq($$select name from public.character_classes$$,array[]::text[],'outsider cannot read classes');
+select results_eq($$select public.edit_character_class(current_setting('test.class_slot')::uuid,'primary','Intruder',1,false,3)$$,array[false],'outsider cannot edit classes');
+set local role anon;
+reset "request.jwt.claim.sub";
+select throws_ok($$select * from public.character_classes$$,'42501',null,'anonymous cannot read classes');
+select throws_ok($$select public.edit_character_class(current_setting('test.class_slot')::uuid,'primary','Intruder',1,false,3)$$,'42501',null,'anonymous cannot invoke class edits');
+select * from finish();
+rollback;
