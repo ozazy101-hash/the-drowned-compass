@@ -23,7 +23,7 @@ for (const adapterName of ['memory','supabase'] as const) {
           json=applyCombatEntryCommand(combat,body.command);
         } else if (path.endsWith('/parties')) json={ id:'test-party',name:'The Drowned Compass' };
         else if (path.endsWith('/character_slots')) json=[row];
-        else if (path.endsWith('/character_combat_entries')) json=combat.entries.map(e => ({ ...e,slot_id:row.id }));
+        else if (path.endsWith('/character_inventory_entries') || path.endsWith('/character_combat_entries')) json=combat.entries.map(e => ({ ...e,slot_id:row.id }));
         else if (path.endsWith('/character_primary_attacks')) json=[{ slot_id:row.id,primary_id:combat.primaryId,version:combat.primaryVersion }];
         else if (path.endsWith('/limited_resources')) json=[];
         else if (path.endsWith('/character_text_entries')) json=[];

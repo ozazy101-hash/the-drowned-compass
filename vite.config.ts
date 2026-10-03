@@ -1,3 +1,4 @@
+import { setInventory, type InventoryDraft } from './src/domain/inventory.ts';
 import { writeResource, type ResourceWrite, type LimitedResource } from "./src/domain/limited-resources.ts";
 import { setCharacterText, type CharacterTextDraft } from "./src/domain/character-text.ts";
 import { applyCombatEntryCommand, emptyCombatEntries, type CombatEntryCommand } from './src/domain/combat-entries.ts';
@@ -97,6 +98,15 @@ function sharedInMemoryParty(): Plugin {
               if (result.ok) slot.character.limitedResources = result.resources;
               response.end(JSON.stringify(result));
             } catch { response.statusCode = 400; response.end(JSON.stringify({ error: "Invalid resource" })); }
+            return;
+          }
+          if (requestBody.inventoryEntry) {
+            try {
+              const character = slot.character as CharacterRecord;
+              const accepted = setInventory(character.inventory ??= [], requestBody.inventoryEntry as InventoryDraft, Number(requestBody.expectedVersion));
+              response.statusCode = accepted ? 200 : 409;
+            } catch { response.statusCode = 400; }
+            response.end(JSON.stringify(slot));
             return;
           }
           if (requestBody.textEntry) {

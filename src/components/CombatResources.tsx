@@ -37,7 +37,9 @@ function ResourceEditor({ resource, isNew, save, onAdded, movePosition }: Editor
   latestResource.current = resource;
   const pending = useRef<{ write: ResourceWrite; intent?: ActionIntent } | null>(null);
   const saving = useRef(false);
-  useEffect(() => { if (!dirty && !saving.current) { setDraft(toDraft(resource)); startingVersion.current = resource.version; } }, [resource, dirty]);
+  useEffect(() => {
+    if (!dirty && !isSaving) { setDraft(toDraft(resource)); startingVersion.current = resource.version; }
+  }, [resource.id, resource.version, resource.name, resource.current, resource.maximum, resource.recovery, dirty, isSaving]);
 
   function change(key: keyof Draft, value: string) {
     if (!dirty) startingVersion.current = resource.version;
