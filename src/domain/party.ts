@@ -1,3 +1,4 @@
+import type { Survival, SurvivalCommand } from "./survival.ts";
 import type { LimitedResource, ResourceWrite, ResourceWriteResult } from "./limited-resources.ts";
 import type { CharacterTextDraft, CharacterTextEntry } from "./character-text.ts";
 import type { CombatEntries, CombatEntryCommand } from './combat-entries.ts';
@@ -61,6 +62,7 @@ export type CharacterRecord = {
   speed: number;
   spellcastingAbility: AbilityScoreKey | null;
   derivedOverrides: DerivedOverrides;
+  survival?: Survival;
   limitedResources?: LimitedResource[];
   textEntries?: CharacterTextEntry[];
   combatEntries?: CombatEntries;
@@ -107,6 +109,7 @@ export interface PartyData {
     value: OverviewFieldValue,
     expectedVersion: number,
   ): Promise<OverviewUpdateResult>;
+  updateSurvival(slotId: string, command: SurvivalCommand, expectedVersion: number, maximumVersion: number): Promise<OverviewUpdateResult>;
   writeLimitedResource(slotId: string, resource: ResourceWrite, expectedVersion: number): Promise<ResourceWriteResult>;
   saveCharacterTextEntry(
     slotId: string, entry: CharacterTextDraft, expectedVersion: number,
