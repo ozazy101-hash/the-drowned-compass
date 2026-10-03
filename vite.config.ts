@@ -1,6 +1,8 @@
+import { applyClassEdit, type ClassEdit } from './src/domain/character-classes.ts';
 import { setInventory, type InventoryDraft } from './src/domain/inventory.ts';
 import { writeResource, type ResourceWrite, type LimitedResource } from "./src/domain/limited-resources.ts";
 import { setCharacterText, type CharacterTextDraft } from "./src/domain/character-text.ts";
+import { initialSurvival, transitionSurvival, type SurvivalCommand } from './src/domain/survival.ts';
 import { applyCombatEntryCommand, emptyCombatEntries, type CombatEntryCommand } from './src/domain/combat-entries.ts';
 import { setOverviewValue } from "./src/domain/overview-fields.ts";
 import type { CharacterRecord, OverviewFieldKey, OverviewFieldValue } from "./src/domain/party.ts";
@@ -92,6 +94,25 @@ function sharedInMemoryParty(): Plugin {
             return;
           }
 
+          if (requestBody.survivalCommand) {
+            try {
+              const character = slot.character as CharacterRecord;
+              const state = character.survival ?? initialSurvival();
+              const maximumVersion = character.fieldVersions.maxHitPoints ?? 0;
+              const next = state.version === requestBody.expectedVersion && maximumVersion === requestBody.maximumVersion
+                ? transitionSurvival(state, requestBody.survivalCommand as SurvivalCommand, character.maxHitPoints, maximumVersion) : null;
+              if (next) character.survival = next;
+              else response.statusCode = 409;
+            } catch { response.statusCode = 400; }
+            response.end(JSON.stringify(slot)); return;
+          }
+          if (requestBody.classEdit) {
+            try {
+              if (!applyClassEdit(slot.character as CharacterRecord, requestBody.classEdit as ClassEdit, Number(requestBody.expectedVersion))) response.statusCode = 409;
+            } catch { response.statusCode = 400; }
+            response.end(JSON.stringify(slot));
+            return;
+          }
           if (requestBody.resource) {
             try {
               const result = writeResource((slot.character.limitedResources ?? []) as LimitedResource[], requestBody.resource as ResourceWrite, Number(requestBody.expectedVersion));

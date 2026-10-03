@@ -3,6 +3,8 @@ import { spawnSync } from 'node:child_process';
 
 // Rehearse actual pending migrations inside rollback-only tests.
 const rehearsals = [
+  ['survival', '20261003100700_track_hit_points_and_survival.sql', '__SURVIVAL_MIGRATION__'],
+  ['character_classes', '20261003140000_support_multiclass_characters.sql', '__CHARACTER_CLASSES_MIGRATION__'],
   ['inventory', '20261003150000_record_inventory.sql', '__INVENTORY_MIGRATION__'],
   ['derived_values', '20260928200000_calculate_and_override_derived_values.sql', '__DERIVED_VALUES_MIGRATION__'],
   ['combat_entries', '20260928220900_manage_attacks_and_actions.sql', '__COMBAT_ENTRIES_MIGRATION__'],
