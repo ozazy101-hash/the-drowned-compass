@@ -18,8 +18,18 @@ Browser roles have read-only table access; only authenticated Party members may 
 
 The localStorage adapter uses the shared `drowned-compass-party-write` Web Lock for class writes as well as existing mutations. The shared Vite test transport calls the same pure transition module; neither memory adapter repeats class rules.
 
+## Local verification (2026-10-03)
+
+The production build and whitespace checks pass. `pnpm test:calculations` passed all 149 cases, including 18 new class/compatibility cases. `pnpm test:db`, run through the shared database lock, passed 247 assertions across nine files, including 43 new multiclass assertions. Migration rehearsals ran in rollback-only transactions and made no persistent or hosted schema change.
+
+The complete branch Playwright suite passed **142/142 cases in 6.4 minutes**, with 71 laptop and 71 phone cases. All 22 new cases passed: editing/removal and reload, proficiency-dependent calculations, primary identity, total bounds, live Party summaries, independent class/Overview writes, same-entry conflicts and explicit Retry, remote removal, failed saves, delayed snapshots, equivalent memory/Supabase adapter outcomes, class realtime events, reconnect catch-up, and localStorage cross-tab serialization. Existing Overview, Combat, Derived Values, Features/Story, resources, dashboard and adapter regressions also passed.
+
+Browser verification used the shared browser lock, one worker, reserved port 4214 and a temporary uncommitted config with a 180000ms whole-test budget; assertion timeouts stayed unchanged. The temporary config was removed after the successful run. An earlier focused pass was 13/14: editing a Vite-loaded compatibility module during the run restarted its test server and cleared the in-memory Party for one laptop case. The corresponding phone case and the later full frozen-source run passed. No unchanged full-suite rerun was performed.
+
+There are no remaining implementation blockers. Combined peer integration and hosted acceptance are pending; this complete suite covers the Ticket 14 branch on accepted main, not unmerged peer implementations.
+
 ## Integration and release
 
-Peer tickets should preserve the `classes` merge and `projectClasses` call in Character Record snapshot composition, the independent class table read/subscription in the Supabase adapter, and the class-editor composition in Overview. The Party card's class summary is independent of health, Conditions and Inventory. The database test runner rehearses this migration inside a rollback-only fixture; no hosted migration or deployment is part of Ticket 14 implementation.
+Peer tickets should preserve the `classes` merge and `projectClasses` call in Character Record snapshot composition, the independent class table read/subscription in the Supabase adapter, and the class-editor composition in Overview. Any peer changes to the Overview RPC must retain the legacy class-write compatibility wrapper. The Party card's class summary is independent of health, Conditions and Inventory. The database test runner rehearses this migration inside a rollback-only fixture; no hosted migration or deployment is part of Ticket 14 implementation.
 
 Release requires later user authorization to merge the reviewed PR, apply the hosted migration and deploy the frontend. Hosted checks should cover existing single-class records, a labelled test Character's class edits/removal, refreshed sessions, two-session conflicts and Party summaries. The reviewed migration must be present before this frontend reads the class table. An older frontend can still edit primary class and total level through the compatibility RPC, but displays only the primary name with total level; refresh all sessions during release to show every class.
