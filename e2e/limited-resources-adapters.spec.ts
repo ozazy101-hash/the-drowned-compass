@@ -19,7 +19,8 @@ for (const backend of ['in-memory', 'Supabase']) {
             recovery: args.next_recovery, position: args.next_position, important: args.next_important && !args.next_deleted, deleted: args.next_deleted, version: args.expected_version + 1 };
           if (existing) Object.assign(existing, next); else resources.push(next);
         }
-      } else if (path.endsWith('/limited_resources')) json = resources;
+      } else if (path.endsWith('/character_survival') || path.endsWith('/character_classes')) json = [];
+      else if (path.endsWith('/limited_resources')) json = resources;
       await route.fulfill({ contentType: 'application/json', json });
     });
     await page.goto('./');
@@ -79,18 +80,19 @@ test('Supabase resource write errors are exposed and later writes can retry', as
   expect(result.failed).toBe(true); expect(result.retry.ok).toBe(true); expect(attempts).toBe(2);
 });
 
-test('localStorage cross-tab Overview, resource and Combat writes preserve all accepted changes', async ({ page, context }) => {
+test('local Party cross-tab Overview, resource, Combat and Inventory writes preserve all accepted changes', async ({ page, context }) => {
   await page.goto('./');
   const other = await context.newPage(); await other.goto('./');
   await page.evaluate(() => {
     localStorage.setItem('drowned-compass-party', JSON.stringify({ name: 'Party', slots: [{ id: 'character-slot-1', position: 1, character: { characterName: 'Neris', abilityScores: {}, fieldVersions: {} } }] }));
   });
-  for (let iteration = 0; iteration < 6; iteration++) {
-    const [resource, overview, combat] = await Promise.all([
+  await page.evaluate(async () => { const path = '/the-drowned-compass/src/data/in-memory-party-data.ts'; await (await import(path)).createInMemoryPartyData().getParty(); });
+  for (let iteration = 0; iteration < 100; iteration++) {
+    const [resource, overview, combat, inventory] = await Promise.all([
       page.evaluate(async iteration => {
         const path = '/the-drowned-compass/src/data/in-memory-party-data.ts';
         const { createInMemoryPartyData } = await import(path);
-        return createInMemoryPartyData().writeLimitedResource('character-slot-1', { id: '51000000-0000-4000-8000-000000000001', name: 'Luck', current: iteration, maximum: 6, recovery: 'Manual', position: 1, important: false, deleted: false }, iteration);
+        return createInMemoryPartyData().writeLimitedResource('character-slot-1', { id: '51000000-0000-4000-8000-000000000001', name: 'Luck', current: iteration, maximum: 100, recovery: 'Manual', position: 1, important: false, deleted: false }, iteration);
       }, iteration),
       other.evaluate(async iteration => {
         const path = '/the-drowned-compass/src/data/in-memory-party-data.ts';
@@ -105,16 +107,24 @@ test('localStorage cross-tab Overview, resource and Combat writes preserve all a
           details: { kind: 'action', name: 'Help', ability: null, attackBonus: '', range: '', damage: '', damageType: '', notes: String(iteration) },
         });
       }, iteration),
+      other.evaluate(async iteration => {
+        const path = '/the-drowned-compass/src/data/in-memory-party-data.ts';
+        return (await import(path)).createInMemoryPartyData().saveInventoryEntry('character-slot-1', {
+          id: 'item.53000000-0000-4000-8000-000000000001', kind: 'magic', title: 'Compass', body: String(iteration), rank: 0, deleted: false,
+        }, iteration);
+      }, iteration),
     ]);
-    expect(resource.ok).toBe(true); expect(overview.ok).toBe(true); expect(combat.ok).toBe(true);
+    expect(inventory.ok).toBe(true);
+    expect(resource.ok, JSON.stringify({ iteration, resource, overview, combat })).toBe(true); expect(overview.ok).toBe(true); expect(combat.ok).toBe(true);
   }
   const record = await page.evaluate(async () => {
     const path = '/the-drowned-compass/src/data/in-memory-party-data.ts';
     const { createInMemoryPartyData } = await import(path);
     return (await createInMemoryPartyData().getParty()).slots[0].character;
   });
-  expect(record.speed).toBe(36); expect(record.fieldVersions.speed).toBe(6);
-  expect(record.limitedResources[0]).toMatchObject({ current: 5, version: 6 });
-  expect(record.combatEntries.entries[0]).toMatchObject({ version: 6, details: { notes: '5' } });
+  expect(record.speed).toBe(130); expect(record.fieldVersions.speed).toBe(100);
+  expect(record.limitedResources[0]).toMatchObject({ current: 99, version: 100 });
+  expect(record.combatEntries.entries[0]).toMatchObject({ version: 100, details: { notes: '99' } });
+  expect(record.inventory[0]).toMatchObject({ body: '99', version: 100 });
   await other.close();
 });

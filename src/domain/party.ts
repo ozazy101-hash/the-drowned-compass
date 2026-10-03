@@ -1,3 +1,6 @@
+import type { Survival, SurvivalCommand } from "./survival.ts";
+import type { CharacterClass, ClassEdit } from "./character-classes.ts";
+import type { InventoryDraft, InventoryEntry } from "./inventory.ts";
 import type { LimitedResource, ResourceWrite, ResourceWriteResult } from "./limited-resources.ts";
 import type { CharacterTextDraft, CharacterTextEntry } from "./character-text.ts";
 import type { CombatEntries, CombatEntryCommand } from './combat-entries.ts';
@@ -63,8 +66,11 @@ export type CharacterRecord = {
   speed: number;
   spellcastingAbility: AbilityScoreKey | null;
   derivedOverrides: DerivedOverrides;
+  survival?: Survival;
+  classes?: CharacterClass[];
   limitedResources?: LimitedResource[];
   textEntries?: CharacterTextEntry[];
+  inventory?: InventoryEntry[];
   combatEntries?: CombatEntries;
   conditions?: Condition[];
   fieldVersions: Partial<Record<OverviewFieldKey, number>>;
@@ -110,7 +116,10 @@ export interface PartyData {
     value: OverviewFieldValue,
     expectedVersion: number,
   ): Promise<OverviewUpdateResult>;
+  updateSurvival(slotId: string, command: SurvivalCommand, expectedVersion: number, maximumVersion: number): Promise<OverviewUpdateResult>;
+  editCharacterClass(slotId: string, edit: ClassEdit, expectedVersion: number): Promise<OverviewUpdateResult>;
   writeLimitedResource(slotId: string, resource: ResourceWrite, expectedVersion: number): Promise<ResourceWriteResult>;
+  saveInventoryEntry(slotId: string, entry: InventoryDraft, expectedVersion: number): Promise<OverviewUpdateResult>;
   saveCharacterTextEntry(
     slotId: string, entry: CharacterTextDraft, expectedVersion: number,
   ): Promise<OverviewUpdateResult>;

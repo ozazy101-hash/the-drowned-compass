@@ -1,4 +1,6 @@
-import { ConditionList } from '../features/conditions/ConditionsSection';
+import { initialSurvival, survivalState } from "../domain/survival";
+import { totalLevel, classSummary } from "../domain/character-classes";
+import { ConditionList } from "../features/conditions/ConditionsSection";
 import type { ReactNode } from "react";
 import { calculateDerivedValues, type DerivedValue } from "../domain/derived-values";
 import { abilityScoreKeys, type CharacterSlot } from "../domain/party";
@@ -28,8 +30,9 @@ export function ClaimedCharacterCard({ slot, onSelect, playSummary }: {
   slot: CharacterSlot; onSelect: () => void; playSummary?: ReactNode;
 }) {
   const character = slot.character!;
+  const survival = character.survival ?? initialSurvival();
   const derived = calculateDerivedValues(
-    { ...character, totalLevel: character.level }, character.derivedOverrides,
+    { ...character, totalLevel: totalLevel(character) }, character.derivedOverrides,
   );
   const summaryId = `party-summary-${slot.id}`;
   const hasSummaryOverride = abilityScoreKeys.some((key) => derived[`ability.${key}`].overridden)
@@ -45,16 +48,20 @@ export function ClaimedCharacterCard({ slot, onSelect, playSummary }: {
           <span className="party-card__names">
             <span className="character-slot__eyebrow">Played by {character.playerName}</span>
             <strong>{character.characterName}</strong>
-            <span className="party-card__class">Level {character.level} {character.primaryClass} · {character.subclass}</span>
+            <span className="party-card__class">{classSummary(character)}</span>
           </span>
           <span className="party-card__position" aria-hidden="true">{String(slot.position).padStart(2, "0")}</span>
         </span>
         <span className="party-card__summary" id={summaryId}>
           <span className="party-card__vitals">
             <span className="party-card__health">
-              <span className="party-card__label">Maximum HP</span>
-              <strong>{character.maxHitPoints}</strong>
-              <span className="party-card__unknown">Current HP unknown</span>
+              <span className="party-card__label">Hit Points</span>
+              <strong>{survival.current ?? '?'} / {character.maxHitPoints}</strong>
+              {survival.current === null && <span className="party-card__unknown">Current HP unknown</span>}
+              {survival.temporary > 0 && <span>Temporary HP: {survival.temporary}</span>}
+              {survivalState(survival) && <span>{survivalState(survival)}</span>}
+              {(survival.current === 0 || survival.successes > 0 || survival.failures > 0) && <span>Death saves: {survival.successes} successes, {survival.failures} failures</span>}
+              {survival.inspiration && <span>Heroic Inspiration</span>}
             </span>
             <span className="party-card__defence">
               <span className="party-card__label">Armor Class</span>

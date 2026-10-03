@@ -24,6 +24,7 @@ export async function prepareTextPage(page: Page, info: TestInfo, extra = '') {
 export async function prepareTextBrowsers(browser: Browser, page: Page, info: TestInfo) {
   const url = await prepareTextPage(page, info);
   const otherContext = await browser.newContext({ baseURL: String(info.project.use.baseURL) });
+  await otherContext.route("https://fonts.googleapis.com/**", route => route.fulfill({ contentType: "text/css", body: "" }));
   const otherPage = await otherContext.newPage();
   await otherPage.goto(url); await enterAs(otherPage, 'Dungeon Master'); await openClaimedCharacter(otherPage);
   return { otherContext, otherPage };
