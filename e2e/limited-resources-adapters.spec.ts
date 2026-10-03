@@ -19,7 +19,7 @@ for (const backend of ['in-memory', 'Supabase']) {
             recovery: args.next_recovery, position: args.next_position, important: args.next_important && !args.next_deleted, deleted: args.next_deleted, version: args.expected_version + 1 };
           if (existing) Object.assign(existing, next); else resources.push(next);
         }
-      } else if (path.endsWith('/character_classes')) json = [];
+      } else if (path.endsWith('/character_survival') || path.endsWith('/character_classes')) json = [];
       else if (path.endsWith('/limited_resources')) json = resources;
       await route.fulfill({ contentType: 'application/json', json });
     });

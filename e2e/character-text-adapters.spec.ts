@@ -31,7 +31,7 @@ for (const source of ['in-memory', 'supabase'] as const) {
       else if (path.endsWith('/character_text_entries')) {
         expect(new URL(route.request().url()).searchParams.get('select')).toContain('version');
         json = entries;
-      } else if (path.endsWith('/character_combat_entries') || path.endsWith('/character_primary_attacks') || (path.endsWith('/limited_resources') || path.endsWith('/character_classes'))) json = [];
+      } else if (path.endsWith('/character_combat_entries') || path.endsWith('/character_primary_attacks') || path.endsWith('/character_survival') || path.endsWith('/limited_resources') || path.endsWith('/character_classes')) json = [];
       else throw new Error(`Unexpected contract endpoint ${path}`);
       await route.fulfill({ contentType: 'application/json', json });
     });
@@ -90,7 +90,7 @@ test('Supabase subscribes to text events and reloads missed text after reconnect
     const path = new URL(route.request().url()).pathname;
     const json = path.endsWith('/parties') ? { id: 'party', name: 'The Drowned Compass' }
       : path.endsWith('/character_text_entries') ? [{ slot_id: 'slot', entry_id: 'story.notes', kind: 'notes', title: '', body: text, deleted: false, version }]
-      : path.endsWith('/character_combat_entries') || path.endsWith('/character_primary_attacks') || (path.endsWith('/limited_resources') || path.endsWith('/character_classes')) ? []
+      : path.endsWith('/character_combat_entries') || path.endsWith('/character_primary_attacks') || path.endsWith('/character_survival') || path.endsWith('/limited_resources') || path.endsWith('/character_classes') ? []
       : [{ id: 'slot', position: 1, claimed_at: '2026-09-28', overview_field_versions: {} }];
     await route.fulfill({ contentType: 'application/json', json });
   });

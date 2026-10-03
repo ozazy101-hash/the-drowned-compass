@@ -73,7 +73,7 @@ test('the Supabase adapter maps and conditionally persists proficiency and indep
         row.overview_field_versions[field]=currentVersion+1;
       }
       json=[{ accepted,current_version:row.overview_field_versions[field] }];
-    } else if ((url.pathname.endsWith('/limited_resources') || url.pathname.endsWith('/character_classes'))) json=[];
+    } else if (url.pathname.endsWith('/character_survival') || url.pathname.endsWith('/character_classes') || url.pathname.endsWith('/limited_resources')) json=[];
     else if (url.pathname.endsWith('/parties')) json={ id:'test-party',name:'The Drowned Compass' };
     else if (url.pathname.endsWith('/character_text_entries')) json=[];
     else if (url.pathname.endsWith('/character_combat_entries') || url.pathname.endsWith('/character_primary_attacks')) json=[];
