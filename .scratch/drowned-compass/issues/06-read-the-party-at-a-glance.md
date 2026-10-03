@@ -4,7 +4,7 @@
 
 **Blocked by:** 05 — Calculate and override Derived Values.
 
-**Status:** claimed
+**Status:** resolved
 
 - [x] Each claimed card shows character and player identity, primary class, subclass, total level, health, Armor Class, and compact Ability modifiers.
 - [x] Each card shows Passive Perception and spell save DC when applicable.
@@ -12,6 +12,10 @@
 - [x] Selecting any claimed card opens its Character Page; returning opens the Party Dashboard.
 - [x] Phone cards prioritize identity, health, Armor Class, and critical state, while laptops show the richer summary across six readable cards.
 - [x] State is communicated with text, icons, and numbers rather than colour alone.
+
+## Answer
+
+The Party Dashboard is live with six readable Character Slot cards, accepted Character Record summaries, keyboard-openable claimed cards, and honest health labels while current Hit Points remain untracked. The [implementation record](../../../docs/implementation/party-dashboard.md) describes its scope and verification.
 
 ## Comments
 
@@ -37,4 +41,8 @@ New concurrency acceptance exposed a released numeric/text editor gap: a remote 
 - Browser primary/secondary sessions follow the configured base URL and viewport. The shared fixture stubs only external Google Fonts CSS, using the existing local font fallbacks; application requests, assertions and save contracts are unchanged. Font delivery and hosted typography remain outside this local acceptance.
 - Standards and Spec reviewers independently reported zero actionable findings, including an incremental review of the browser fixture.
 
-No schema migration or adapter/transport changes; no local database mutation or hosted Character Record edit was performed. This ticket remains **claimed** while PR review and accepted hosted release are pending. Hosted deployment requires fresh explicit approval.
+No schema migration or adapter/transport changes were needed. The later release and live acceptance are recorded below.
+
+### Release — 2026-10-02
+
+[PR #5](https://github.com/ozazy101-hash/the-drowned-compass/pull/5) merged as `d01c23dde3ef9e87c4c8751004cef24f3ed99f06`. Ticket 06 had passed its complete 58/58 laptop-and-phone browser run, 131 calculation cases and production build. The dashboard then remained covered by the combined 120/120 browser suite before the Ticket 10 release. The [Pages deployment](https://github.com/ozazy101-hash/the-drowned-compass/actions/runs/36977242530) succeeded; signed-in live acceptance showed the claimed Character card, unclaimed slots and the accepted important-resource summary, which persisted after reload. Ticket 06 is resolved.
