@@ -1,0 +1,109 @@
+begin;
+create extension if not exists pgtap with schema extensions;
+select no_plan();
+create temporary table before_conditions_migration as select to_jsonb(s) data from public.character_slots s order by position;
+-- __CONDITIONS_MIGRATION__
+select results_eq($$select to_jsonb(s) from public.character_slots s order by position$$,
+  $$select data from before_conditions_migration$$, 'migration preserves all six slots, claims, data and versions');
+insert into auth.users (
+  instance_id, id, aud, role, email, encrypted_password, email_confirmed_at,
+  raw_app_meta_data, raw_user_meta_data, created_at, updated_at
+) values
+  (
+    '00000000-0000-0000-0000-000000000000',
+    '30000000-0000-4000-8000-000000000001',
+    'authenticated', 'authenticated', 'players@drowned-compass.test', '', now(),
+    '{}', '{}', now(), now()
+  ),
+  (
+    '00000000-0000-0000-0000-000000000000',
+    '30000000-0000-4000-8000-000000000002',
+    'authenticated', 'authenticated', 'dm@drowned-compass.test', '', now(),
+    '{}', '{}', now(), now()
+  ),
+  (
+    '00000000-0000-0000-0000-000000000000',
+    '30000000-0000-4000-8000-000000000003',
+    'authenticated', 'authenticated', 'overview-outsider@drowned-compass.test', '', now(),
+    '{}', '{}', now(), now()
+  );
+
+set local role authenticated;
+set local "request.jwt.claim.sub" = '30000000-0000-4000-8000-000000000001';
+
+select results_eq(
+  $$
+    update public.character_slots
+    set claimed_at = now(),
+      claimed_by = '30000000-0000-4000-8000-000000000001',
+      player_name = 'Mara', character_name = 'Neris Vale',
+      primary_class = 'Rogue', subclass = 'Thief', species = 'Human',
+      background = 'Sailor', level = 3,
+      strength = 9, dexterity = 17, constitution = 13,
+      intelligence = 14, wisdom = 12, charisma = 11,
+      version = 1, updated_at = now()
+    where position = 1
+    returning character_name
+  $$,
+  array['Neris Vale'],
+  'Player can prepare a complete claimed Character Record'
+);
+
+select ok(has_function_privilege('authenticated','public.update_character_condition(uuid,jsonb)','EXECUTE'), 'authenticated granted RPC');
+select ok(not has_function_privilege('anon','public.update_character_condition(uuid,jsonb)','EXECUTE'), 'anonymous denied RPC');
+select ok(not has_table_privilege('authenticated','public.character_conditions','INSERT'), 'direct INSERT denied');
+select ok(not has_table_privilege('authenticated','public.character_conditions','UPDATE'), 'direct UPDATE denied');
+select ok(not has_table_privilege('authenticated','public.character_conditions','DELETE'), 'direct DELETE denied');
+select is(public.update_character_condition((select id from public.character_slots where position=1),'{"id": "srd.Prone", "standard": "Prone", "label": "Prone", "deleted": false, "expectedVersion": 0}'::jsonb),true,'Player adds standard Condition');
+select is(public.update_character_condition((select id from public.character_slots where position=1),'{"id": "srd.Prone", "standard": "Prone", "label": "Prone", "deleted": false, "expectedVersion": 0}'::jsonb),false,'duplicate initial insert rejected');
+select is(public.update_character_condition((select id from public.character_slots where position=1),'{"id": "srd.Prone", "standard": "Prone", "label": "Prone", "deleted": true, "expectedVersion": 0}'::jsonb),false,'stale removal rejected');
+select is(public.update_character_condition((select id from public.character_slots where position=1),'{"id": "srd.Prone", "standard": "Prone", "label": "Prone", "deleted": true, "expectedVersion": 1}'::jsonb),true,'remove retains tombstone');
+select is(public.update_character_condition((select id from public.character_slots where position=1),'{"id": "srd.Prone", "standard": "Prone", "label": "Prone", "deleted": false, "expectedVersion": 1}'::jsonb),false,'stale re-add rejected');
+select is(public.update_character_condition((select id from public.character_slots where position=1),'{"id": "srd.Prone", "standard": "Prone", "label": "Prone", "deleted": false, "expectedVersion": 2}'::jsonb),true,'latest re-add accepted');
+set local "request.jwt.claim.sub" = '30000000-0000-4000-8000-000000000002';
+select is(public.update_character_condition((select id from public.character_slots where position=1),'{"id": "custom.11111111-1111-4111-8111-111111111111", "standard": null, "label": "Sea Curse", "deleted": false, "expectedVersion": 0}'::jsonb),true,'DM adds Character-scoped custom Condition');
+select is(public.update_character_condition((select id from public.character_slots where position=1),'{"id": "custom.11111111-1111-4111-8111-111111111111", "standard": null, "label": "Marked by the Deep", "deleted": false, "expectedVersion": 1}'::jsonb),true,'custom name updated independently');
+select is(public.update_character_condition((select id from public.character_slots where position=1),'{"id": "custom.22222222-2222-4222-8222-222222222222", "standard": null, "label": "Sea Curse", "deleted": false, "expectedVersion": 0}'::jsonb),true,'distinct custom Condition added');
+select is(public.update_character_condition((select id from public.character_slots where position=2),'{"id": "srd.Prone", "standard": "Prone", "label": "Prone", "deleted": false, "expectedVersion": 0}'::jsonb),false,'unclaimed Character cannot receive Conditions');
+select is((select count(*)::int from public.character_conditions),3,'independent Conditions preserved');
+select results_eq(
+  $$
+    update public.character_slots
+    set claimed_at = now(),
+      claimed_by = '30000000-0000-4000-8000-000000000001',
+      player_name = 'Mara', character_name = 'Neris Vale',
+      primary_class = 'Rogue', subclass = 'Thief', species = 'Human',
+      background = 'Sailor', level = 3,
+      strength = 9, dexterity = 17, constitution = 13,
+      intelligence = 14, wisdom = 12, charisma = 11,
+      version = 1, updated_at = now()
+    where position = 2
+    returning character_name
+  $$,
+  array['Neris Vale'],
+  'DM prepares another Character Record'
+);
+
+select is(public.update_character_condition((select id from public.character_slots where position=2),'{"id":"custom.33333333-3333-4333-8333-333333333333","standard":null,"label":"Sea Curse","deleted":false,"expectedVersion":0}'::jsonb),true,'Custom Condition names belong to one Character');
+
+select is((select label from public.character_conditions where id='srd.Prone'),'Prone','standard label immutable');
+select throws_ok($$select public.update_character_condition((select id from public.character_slots where position=1),'{"id": "srd.Prone", "standard": "Fake", "label": "Fake", "deleted": false, "expectedVersion": 0}'::jsonb)$$,'23514',null,'non-SRD standard rejected');
+select throws_ok($$select public.update_character_condition((select id from public.character_slots where position=1),'{"id": "srd.Blinded", "standard": "Blinded", "label": "Changed", "deleted": false, "expectedVersion": 0}'::jsonb)$$,'23514',null,'standard label rejected');
+select throws_ok($$select public.update_character_condition((select id from public.character_slots where position=1),'{"id": "custom.22222222-2222-4222-8222-222222222222", "standard": null, "label": "", "deleted": false, "expectedVersion": 1}'::jsonb)$$,'23514',null,'blank custom rejected');
+select throws_ok($$select public.update_character_condition((select id from public.character_slots where position=1),'{"id": "custom.22222222-2222-4222-8222-222222222222", "standard": null, "label": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", "deleted": false, "expectedVersion": 1}'::jsonb)$$,'23514',null,'oversized name rejected');
+select throws_ok($$select public.update_character_condition((select id from public.character_slots where position=1),'{"id": "srd.Prone", "standard": "Prone", "label": "Prone", "deleted": false, "expectedVersion": -1}'::jsonb)$$,'23514',null,'negative version rejected');
+select throws_ok($$select public.update_character_condition((select id from public.character_slots where position=1),'{"id": "custom.22222222-2222-4222-8222-222222222222", "standard": null, "label": "marked by the deep", "deleted": false, "expectedVersion": 1}'::jsonb)$$,'23505',null,'duplicate custom name rejected');
+select throws_ok($$select public.update_character_condition((select id from public.character_slots where position=1),'{"id": "srd.Unconscious", "standard": "Unconscious", "label": "Prone", "deleted": false, "expectedVersion": 1.5}'::jsonb)$$,'23514',null,'fractional version rejected');
+select is((select count(*)::int from public.character_slots),6,'six slots preserved');
+select is((select overview_field_versions from public.character_slots where position=1),'{}'::jsonb,'Conditions leave Overview versions intact');
+select ok(exists(select 1 from pg_publication_tables where pubname='supabase_realtime' and tablename='character_conditions'),'Conditions publish realtime');
+select set_config('test.condition_slot',(select id::text from public.character_slots where position=1),true);
+set local "request.jwt.claim.sub" = '30000000-0000-4000-8000-000000000003';
+select is((select count(*)::int from public.character_conditions),0,'non-member cannot read Conditions');
+select is(public.update_character_condition(current_setting('test.condition_slot')::uuid,'{"id": "srd.Prone", "standard": "Prone", "label": "Prone", "deleted": true, "expectedVersion": 3}'::jsonb),false,'non-member cannot write Conditions');
+set local role anon;
+reset "request.jwt.claim.sub";
+select throws_ok($$select * from public.character_conditions$$,'42501',null,'anonymous cannot read Conditions');
+select throws_ok($$select public.update_character_condition(current_setting('test.condition_slot')::uuid,'{}')$$,'42501',null,'anonymous cannot execute RPC');
+select * from finish();
+rollback;

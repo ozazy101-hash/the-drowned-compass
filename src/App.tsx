@@ -2,6 +2,8 @@ import { CombatResources, ImportantResourceSummary } from "./components/CombatRe
 import { mergeResources } from "./domain/limited-resources";
 import { mergeCharacterText } from "./domain/character-text";
 import { FeaturesStory } from "./features/FeaturesStory";
+import { ConditionsSection } from './features/conditions/ConditionsSection';
+import { mergeConditions } from './domain/conditions';
 import { CombatEntriesSection } from './components/CombatEntriesSection';
 import { mergeCombatEntries, primaryAttackSummary } from './domain/combat-entries';
 import { overviewValue, setOverviewValue } from "./domain/overview-fields";
@@ -62,6 +64,7 @@ function mergeCharacterRecords(current: CharacterRecord, incoming: CharacterReco
     ...incoming,
     limitedResources: mergeResources(current.limitedResources, incoming.limitedResources),
     textEntries: mergeCharacterText(current.textEntries, incoming.textEntries),
+    conditions: mergeConditions(current.conditions, incoming.conditions),
     combatEntries: mergeCombatEntries(current.combatEntries, incoming.combatEntries),
     abilityScores: { ...incoming.abilityScores },
     savingThrowProficiencies: { ...incoming.savingThrowProficiencies },
@@ -783,6 +786,8 @@ function CharacterPage({
           <p>{character.species} · {character.background}</p>
         </div>
       </section>
+
+      <ConditionsSection slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} />
 
       <nav className="character-nav" aria-label="Character Record sections">
         {['Overview', 'Combat', 'Magic', 'Inventory', 'Features', 'Story'].map((item) => {

@@ -1,3 +1,4 @@
+import { validateCondition, type Condition } from '../domain/conditions';
 import { readResources, mapResource, writeSupabaseResource } from "./supabase-limited-resources";
 import { validateCharacterText, type CharacterTextEntry } from "../domain/character-text";
 import { emptyCombatEntries, type CombatEntry, type CombatEntries } from '../domain/combat-entries';
@@ -150,12 +151,14 @@ export function createSupabasePartyData(
 
     if (slotsError) throw slotsError;
 
-    const [resources, textResult, entriesResult, primaryResult] = await Promise.all([
+    const [resources, textResult, entriesResult, primaryResult, conditionsResult] = await Promise.all([
       readResources(client),
       client.from('character_text_entries').select('slot_id, entry_id, kind, title, body, deleted, version'),
       client.from('character_combat_entries').select('id, slot_id, details, rank, version, deleted').in('slot_id', (slots ?? []).map(slot => slot.id)),
       client.from('character_primary_attacks').select('slot_id, primary_id, version').in('slot_id', (slots ?? []).map(slot => slot.id)),
+      client.from('character_conditions').select('slot_id, id, standard, label, deleted, version'),
     ]);
+    if (conditionsResult.error) throw conditionsResult.error;
     if (textResult.error) throw textResult.error;
     if (entriesResult.error) throw entriesResult.error;
     if (primaryResult.error) throw primaryResult.error;
@@ -167,6 +170,7 @@ export function createSupabasePartyData(
       slots: ((slots ?? []) as CharacterSlotRow[]).map(row => {
         const slot = mapCharacterSlot(row);
         if (slot.character) {
+          slot.character.conditions = (conditionsResult.data ?? []).filter(c => c.slot_id === slot.id).map(({ id, standard, label, deleted, version }) => ({ id, standard, label, deleted, version: Number(version) }) as Condition);
           slot.character.limitedResources = resources.filter(resource => resource.slot_id === slot.id).map(mapResource);
           slot.character.textEntries = texts
             .filter(text => text.slot_id === slot.id)
@@ -306,6 +310,17 @@ export function createSupabasePartyData(
       return accepted === true ? { ok: true, slot } : { ok: false, reason: 'conflict', slot };
     },
 
+    async updateCondition(slotId, command) {
+      validateCondition(command);
+      const { data: accepted, error } = await client.rpc('update_character_condition', { target_slot_id: slotId, command });
+      if (error?.code === '23505') throw new Error('That Custom Condition is already active.');
+      if (error) throw new Error('The Condition could not be saved. Please retry.');
+      const party = await loadParty();
+      const slot = party.slots.find(s => s.id === slotId);
+      if (!slot?.character) throw new Error('That Character Record is unavailable.');
+      return accepted === true ? { ok: true, slot } : { ok: false, reason: 'conflict', slot };
+    },
+
     subscribeToParty(onPartyChanged) {
       let active = true;
       const reload = () => {
@@ -330,6 +345,7 @@ export function createSupabasePartyData(
           { event: '*', schema: 'public', table: 'character_text_entries' }, reload)
         .on('postgres_changes', { event: '*', schema: 'public', table: 'character_combat_entries' }, reload)
         .on('postgres_changes', { event: '*', schema: 'public', table: 'character_primary_attacks' }, reload)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'character_conditions' }, reload)
         .subscribe((status) => {
           // Realtime does not replay changes missed while disconnected.
           if (status === "SUBSCRIBED") reload();

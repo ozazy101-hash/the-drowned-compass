@@ -1,0 +1,19 @@
+.rules-trigger, .rules-term { background: transparent; color: #e5c58c; border: 0; text-decoration: underline dotted; cursor: pointer; font: inherit; padding: .3rem; }
+.rules-trigger { border: 1px solid #776346; border-radius: 999px; padding: .4rem .7rem; }
+.rules-panel { position: fixed; z-index: 100; width: min(348px, calc(100vw - 24px)); max-height: 60vh; overflow-y: auto; background: #142528; color: #f4ede0; border: 1px solid #bda274; border-radius: 12px; box-shadow: 0 12px 40px #000b; padding: 1rem; }
+.rules-panel__heading { display: flex; align-items: center; gap: .5rem; justify-content: space-between; }
+.rules-panel h3 { margin: 0; }
+.rules-panel button, .rules-panel a { min-height: 32px; color: #e5c58c; }
+.rules-panel a { display: inline-block; margin-right: 1rem; }
+.rules-panel button { background: transparent; border: 1px solid #776346; border-radius: 6px; cursor: pointer; }
+.rules-panel .rules-term { display: inline; border: 0; padding: 0 .15rem; }
+.rules-panel p { line-height: 1.6; }
+.rules-trigger:focus-visible, .rules-panel :focus-visible { outline: 3px solid #e5c58c; outline-offset: 3px; }
+.condition-list { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; padding: .8rem; }
+.condition-chip { display: inline-flex; align-items: center; gap: .3rem; border: 1px solid #776346; border-radius: 10px; padding: .3rem; }
+.condition-chip input { max-width: 160px; }
+.conditions-section form { display: flex; gap: .6rem; flex-wrap: wrap; margin: 1rem 0; align-items: end; }
+.conditions-section label { display: flex; flex-direction: column; gap: .3rem; }
+.condition-selector { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .7rem; }
+.condition-selector button { min-height: 44px; }
+.condition-list .custom-label { overflow-wrap: anywhere; max-width: 240px; }

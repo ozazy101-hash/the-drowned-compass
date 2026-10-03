@@ -1,3 +1,4 @@
+import { applyConditionCommand, validateCondition } from '../domain/conditions';
 import { writeResource } from "../domain/limited-resources";
 import { setCharacterText, validateCharacterText } from "../domain/character-text";
 import { applyCombatEntryCommand, emptyCombatEntries } from '../domain/combat-entries';
@@ -44,6 +45,7 @@ function readStoredSession(): PartySession | null {
 function copyCharacter(character: CharacterRecord): CharacterRecord {
   return {
     ...character,
+    conditions: structuredClone(character.conditions ?? []),
     limitedResources: (character.limitedResources ?? []).map(resource => ({ ...resource })),
     combatEntries: structuredClone(character.combatEntries ?? emptyCombatEntries()),
     abilityScores: { ...character.abilityScores },
@@ -274,6 +276,31 @@ export function createInMemoryPartyData(): PartyData {
         if (!slot?.character) throw new Error('That Character Record is unavailable.');
         const state = slot.character.combatEntries ??= emptyCombatEntries();
         if (!applyCombatEntryCommand(state, command)) return { ok: false, reason: 'conflict', slot };
+        storeParty(party);
+        return { ok: true, slot };
+      });
+    },
+
+    async updateCondition(slotId, command) {
+      validateCondition(command);
+      if (params.get('failConditionSaves') === 'once' && !sessionStorage.getItem('condition-save-failed')) {
+        sessionStorage.setItem('condition-save-failed', 'true');
+        throw new Error('The save could not reach the Party.');
+      }
+      if (testNamespace) {
+        const response = await fetch(testPartyUrl(testNamespace), {
+          method: 'PATCH', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ slotId, conditionCommand: command }),
+        });
+        if (!response.ok && response.status !== 409) throw new Error('The Condition could not be saved.');
+        const slot = normalizeSlot(await response.json() as CharacterSlot);
+        return response.status === 409 ? { ok: false, reason: 'conflict', slot } : { ok: true, slot };
+      }
+      return navigator.locks.request('drowned-compass-party-write', () => {
+        const party = readParty();
+        const slot = party.slots.find(s => s.id === slotId);
+        if (!slot?.character) throw new Error('That Character Record is unavailable.');
+        if (!applyConditionCommand(slot.character.conditions ??= [], command)) return { ok: false, reason: 'conflict', slot };
         storeParty(party);
         return { ok: true, slot };
       });

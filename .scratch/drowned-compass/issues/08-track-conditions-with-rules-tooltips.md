@@ -4,7 +4,9 @@
 
 **Blocked by:** 06 — Read the Party at a glance.
 
-**Status:** ready-for-agent
+**Status:** claimed
+
+**Agent:** Ticket 08 — isolated `codex/ticket-08-conditions` worktree.
 
 - [ ] A searchable selector adds standard SRD Conditions to a Character Record and prevents accidental duplicates.
 - [ ] A player can add, label, and remove a Custom Condition without promoting it into the standard catalogue.
