@@ -11,3 +11,7 @@ The tracker uses the default Matt Pocock triage vocabulary. See `docs/agents/tri
 ### Domain docs
 
 This is a single-context repository using the root `CONTEXT.md` and `docs/adr/`. See `docs/agents/domain.md`.
+
+### Module design
+
+When implementing a ticket or extending `PartyData` or `App.tsx`, read `docs/agents/module-design.md`.
