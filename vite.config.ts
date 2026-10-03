@@ -1,3 +1,4 @@
+import { applyClassEdit, type ClassEdit } from './src/domain/character-classes.ts';
 import { writeResource, type ResourceWrite, type LimitedResource } from "./src/domain/limited-resources.ts";
 import { setCharacterText, type CharacterTextDraft } from "./src/domain/character-text.ts";
 import { applyCombatEntryCommand, emptyCombatEntries, type CombatEntryCommand } from './src/domain/combat-entries.ts';
@@ -91,6 +92,13 @@ function sharedInMemoryParty(): Plugin {
             return;
           }
 
+          if (requestBody.classEdit) {
+            try {
+              if (!applyClassEdit(slot.character as CharacterRecord, requestBody.classEdit as ClassEdit, Number(requestBody.expectedVersion))) response.statusCode = 409;
+            } catch { response.statusCode = 400; }
+            response.end(JSON.stringify(slot));
+            return;
+          }
           if (requestBody.resource) {
             try {
               const result = writeResource((slot.character.limitedResources ?? []) as LimitedResource[], requestBody.resource as ResourceWrite, Number(requestBody.expectedVersion));

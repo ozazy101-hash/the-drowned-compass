@@ -1,0 +1,25 @@
+# Multiclass Player Characters
+
+Ticket 14 adds independently saved class-and-level entries to the Character Page's Overview area. Initial setup still requests one primary class. The primary entry has a stable `primary` identity and cannot be removed; its name and level can be edited. Additional entries can be added, edited and removed. Subclass remains associated with the primary class. No class-choice legality, spell-slot, feature or equipment automation is introduced.
+
+## Module and state contract
+
+`src/domain/character-classes.ts` owns validation, conditional transitions, total level, the readable Party summary, compatibility projections and version-aware snapshot merging. `PartyData.editCharacterClass(slotId, edit, expectedVersion)` is the single new persistence command. It returns an accepted Character Slot or a conflict with the current slot; validation and transport failures reject the promise. `src/features/ClassEntries.tsx` owns drafts, explicit Save/Enter, Saving/Saved feedback, discard and Retry. Inputs are disabled during a save so newer typing cannot be mistaken for acknowledged data. Realtime changes update untouched entries while preserving drafts and their original expected versions.
+
+Every class level is an integer from 1 through 20, and total level is the sum of live entries, also bounded from 1 through 20 to preserve the existing Character Record level boundary. A class edit checks only that entry's version, so changes to different entries survive. Slot-level serialization also enforces the aggregate limit during concurrent writes. Removed entries retain versioned tombstones and cannot be restored by a delayed editor or Retry. A new class requires a fresh identity. The fixed primary entry ensures that removal always leaves a positive-level Character Record with a clear primary class.
+
+Derived Values use `totalLevel(character)`. Effective manual overrides retain the existing dependency behavior. The Party Dashboard and Character Page both use `classSummary(character)`; a single-class summary retains its previous wording, while multiclass records display total level and every live class level with an explicit primary marker. `CharacterRecord.level` and `primaryClass` remain compatibility projections. App composition merges versioned entries before projecting them, preventing delayed save responses from restoring old totals or deleted entries.
+
+## Persistence and compatibility
+
+Migration `20261003140000_support_multiclass_characters.sql` introduces the membership-protected `character_classes` table and `edit_character_class` RPC. Existing claims receive exactly one primary entry with the original class name and level, without modifying existing Character Slots, metadata or field versions. Legacy long or padded class names remain intact; new edits use trimmed names up to 160 characters. Newly claimed slots initialize their primary entry in the same database transaction.
+
+Browser roles have read-only table access; only authenticated Party members may invoke the conditional RPC for claimed slots. It locks the slot, checks the entry version and deletion state, validates positive class levels and aggregate total, then updates the entry and compatibility projections atomically. Direct slot writes cannot make primary class or total level diverge from entries. The original Overview RPC is wrapped so legacy primary-class writes update the primary entry, and legacy total-level writes adjust its level while retaining additional classes. Its existing field versions survive the migration and advance with class edits, rejecting stale legacy writes. Other Overview writes keep the previous path. Supabase Realtime publishes class changes, and reconnect reloads missed changes.
+
+The localStorage adapter uses the shared `drowned-compass-party-write` Web Lock for class writes as well as existing mutations. The shared Vite test transport calls the same pure transition module; neither memory adapter repeats class rules.
+
+## Integration and release
+
+Peer tickets should preserve the `classes` merge and `projectClasses` call in Character Record snapshot composition, the independent class table read/subscription in the Supabase adapter, and the class-editor composition in Overview. The Party card's class summary is independent of health, Conditions and Inventory. The database test runner rehearses this migration inside a rollback-only fixture; no hosted migration or deployment is part of Ticket 14 implementation.
+
+Release requires later user authorization to merge the reviewed PR, apply the hosted migration and deploy the frontend. Hosted checks should cover existing single-class records, a labelled test Character's class edits/removal, refreshed sessions, two-session conflicts and Party summaries. The reviewed migration must be present before this frontend reads the class table. An older frontend can still edit primary class and total level through the compatibility RPC, but displays only the primary name with total level; refresh all sessions during release to show every class.

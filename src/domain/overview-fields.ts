@@ -1,3 +1,4 @@
+import { applyClassEdit, characterClasses, totalLevel } from './character-classes.ts';
 import { abilityScoreKeys, skillKeys, type AbilityScoreKey, type CharacterRecord, type OverviewFieldKey, type OverviewFieldValue } from './party.ts';
 import { derivedValueKeys, type DerivedValueKey } from './derived-values.ts';
 
@@ -10,7 +11,11 @@ export function overviewValue(character: CharacterRecord, field: OverviewFieldKe
 }
 
 export function setOverviewValue(character: CharacterRecord, field: OverviewFieldKey, value: OverviewFieldValue) {
-  if (field.startsWith('override.')) {
+  if (field === 'primaryClass' || field === 'level') {
+    if ((field === 'primaryClass' && typeof value !== 'string') || (field === 'level' && typeof value !== 'number')) throw new Error('Invalid class value.');
+    const primary = characterClasses(character).find(entry => entry.id === 'primary')!;
+    applyClassEdit(character, { ...primary, name: field === 'primaryClass' ? String(value) : primary.name, level: field === 'level' ? Number(value) - (totalLevel(character) - primary.level) : primary.level }, primary.version);
+  } else if (field.startsWith('override.')) {
     const key = field.slice(9) as DerivedValueKey;
     if (!derivedValueKeys.includes(key) || (value !== null && (typeof value !== 'number' || !Number.isInteger(value) || value < -999 || value > 999))) {
       throw new Error('Invalid Derived Value override.');
