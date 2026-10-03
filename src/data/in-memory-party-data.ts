@@ -1,3 +1,4 @@
+import { setInventory, validateInventory } from '../domain/inventory';
 import { writeResource } from "../domain/limited-resources";
 import { setCharacterText, validateCharacterText } from "../domain/character-text";
 import { applyCombatEntryCommand, emptyCombatEntries } from '../domain/combat-entries';
@@ -51,6 +52,7 @@ function copyCharacter(character: CharacterRecord): CharacterRecord {
     skillProficiencies: { ...character.skillProficiencies },
     derivedOverrides: { ...character.derivedOverrides },
     fieldVersions: { ...character.fieldVersions },
+    inventory: (character.inventory ?? []).map(entry => ({ ...entry })),
     textEntries: (character.textEntries ?? []).map(entry => ({ ...entry })),
   };
 }
@@ -218,6 +220,39 @@ export function createInMemoryPartyData(): PartyData {
         const result = writeResource(slot.character.limitedResources ?? [], resource, expectedVersion);
         if (result.ok) { slot.character.limitedResources = result.resources; storeParty(party); }
         return result;
+      });
+    },
+
+    async saveInventoryEntry(slotId, entry, expectedVersion) {
+      validateInventory(entry);
+      if (params.get("failInventorySaves") === "once") {
+        const key = `failed-inventory-${slotId}-${entry.id}`;
+        if (!window.sessionStorage.getItem(key)) {
+          window.sessionStorage.setItem(key, 'true');
+          throw new Error('The save could not reach the Party.');
+        }
+      }
+      if (params.get("slowInventorySaves") === "once" && !window.sessionStorage.getItem('slow-inventory')) {
+        window.sessionStorage.setItem('slow-inventory', 'true');
+        await new Promise(resolve => window.setTimeout(resolve, 1000));
+      }
+      if (testNamespace) {
+        const response = await fetch(testPartyUrl(testNamespace), {
+          method: 'PATCH', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ slotId, inventoryEntry: entry, expectedVersion }),
+        });
+        if (!response.ok && response.status !== 409) throw new Error('The Character Record could not be saved.');
+        const slot = normalizeSlot(await response.json() as CharacterSlot);
+        return response.status === 409 ? { ok: false, reason: 'conflict', slot } : { ok: true, slot };
+      }
+      return navigator.locks.request("drowned-compass-party-write", () => {
+        const party = readParty();
+        const slot = party.slots.find(candidate => candidate.id === slotId);
+        if (!slot?.character) throw new Error('That Character Record is unavailable.');
+        const entries = slot.character.inventory ??= [];
+        if (!setInventory(entries, entry, expectedVersion)) return { ok: false, reason: 'conflict', slot };
+        storeParty(party);
+        return { ok: true, slot };
       });
     },
 

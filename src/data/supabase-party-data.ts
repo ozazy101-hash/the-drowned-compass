@@ -1,3 +1,4 @@
+import { validateInventory, type InventoryEntry } from '../domain/inventory';
 import { readResources, mapResource, writeSupabaseResource } from "./supabase-limited-resources";
 import { validateCharacterText, type CharacterTextEntry } from "../domain/character-text";
 import { emptyCombatEntries, type CombatEntry, type CombatEntries } from '../domain/combat-entries';
@@ -150,12 +151,14 @@ export function createSupabasePartyData(
 
     if (slotsError) throw slotsError;
 
-    const [resources, textResult, entriesResult, primaryResult] = await Promise.all([
+    const [resources, inventoryResult, textResult, entriesResult, primaryResult] = await Promise.all([
       readResources(client),
+      client.from('character_inventory_entries').select('slot_id, entry_id, kind, title, body, rank, deleted, version'),
       client.from('character_text_entries').select('slot_id, entry_id, kind, title, body, deleted, version'),
       client.from('character_combat_entries').select('id, slot_id, details, rank, version, deleted').in('slot_id', (slots ?? []).map(slot => slot.id)),
       client.from('character_primary_attacks').select('slot_id, primary_id, version').in('slot_id', (slots ?? []).map(slot => slot.id)),
     ]);
+    if (inventoryResult.error) throw inventoryResult.error;
     if (textResult.error) throw textResult.error;
     if (entriesResult.error) throw entriesResult.error;
     if (primaryResult.error) throw primaryResult.error;
@@ -168,6 +171,7 @@ export function createSupabasePartyData(
         const slot = mapCharacterSlot(row);
         if (slot.character) {
           slot.character.limitedResources = resources.filter(resource => resource.slot_id === slot.id).map(mapResource);
+          slot.character.inventory = (inventoryResult.data ?? []).filter(e => e.slot_id === slot.id).map(e => ({ id: e.entry_id, rank: e.rank, kind: e.kind, title: e.title, body: e.body, deleted: e.deleted, version: Number(e.version) }) as InventoryEntry);
           slot.character.textEntries = texts
             .filter(text => text.slot_id === slot.id)
             .map(text => ({ id: text.entry_id, kind: text.kind, title: text.title, body: text.body,
@@ -283,6 +287,20 @@ export function createSupabasePartyData(
     },
 
     writeLimitedResource: (slotId, resource, expectedVersion) => writeSupabaseResource(client, slotId, resource, expectedVersion),
+    async saveInventoryEntry(slotId, entry, expectedVersion) {
+      validateInventory(entry);
+      const { data, error } = await client.rpc('save_inventory_entry', {
+        target_slot_id: slotId, target_entry_id: entry.id, target_kind: entry.kind,
+        next_rank: entry.rank, next_title: entry.title, next_body: entry.body, next_deleted: entry.deleted,
+        expected_version: expectedVersion,
+      });
+      if (error) throw error;
+      const party = await loadParty();
+      const slot = party.slots.find(candidate => candidate.id === slotId);
+      if (!slot?.character) throw new Error('That Character Record is unavailable.');
+      const result = Array.isArray(data) ? data[0] : data;
+      return result?.accepted === true ? { ok: true, slot } : { ok: false, reason: 'conflict', slot };
+    },
     async saveCharacterTextEntry(slotId, entry, expectedVersion) {
       validateCharacterText(entry);
       const { data, error } = await client.rpc('save_character_text_entry', {
@@ -326,6 +344,7 @@ export function createSupabasePartyData(
           { event: "*", schema: "public", table: "limited_resources" },
           reload,
         )
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'character_inventory_entries' }, reload)
         .on('postgres_changes',
           { event: '*', schema: 'public', table: 'character_text_entries' }, reload)
         .on('postgres_changes', { event: '*', schema: 'public', table: 'character_combat_entries' }, reload)

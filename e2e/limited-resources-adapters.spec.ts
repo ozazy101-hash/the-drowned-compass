@@ -106,7 +106,7 @@ test('localStorage cross-tab Overview, resource and Combat writes preserve all a
         });
       }, iteration),
     ]);
-    expect(resource.ok).toBe(true); expect(overview.ok).toBe(true); expect(combat.ok).toBe(true);
+    expect(resource.ok, JSON.stringify({ iteration, resource, overview, combat })).toBe(true); expect(overview.ok).toBe(true); expect(combat.ok).toBe(true);
   }
   const record = await page.evaluate(async () => {
     const path = '/the-drowned-compass/src/data/in-memory-party-data.ts';

@@ -1,0 +1,11 @@
+# Inventory and equipment
+
+The Character Page Inventory records player-authored equipment and notable magic items, their notes and display order, and directly corrected CP/SP/EP/GP/PP amounts. Items do not feed Armor Class, attacks, derived values or carrying capacity. Lower order numbers display first; stable IDs break ties. Currency accepts whole amounts from zero through 999,999,999 without conversion.
+
+`inventory.ts` owns entry validation, conditional transitions, ordering and version-aware merging. `Inventory.tsx` owns drafts, focused saves, failure feedback and explicit conflict Retry. `App.tsx` only composes the section and merges incoming records. Removing the module would distribute validation and conflict rules into callers, so the interface keeps those rules together.
+
+`PartyData.saveInventoryEntry` writes one item or denomination using its expected version. Both adapters return the accepted slot or a conflict containing current data. Every localStorage mutation uses the existing Party Web Lock. Supabase maps independent rows and subscribes to inventory changes, including reload after reconnect. Tombstones preserve deletion versions so delayed snapshots cannot resurrect removed items. Unrelated Overview, Combat, Features and Story updates retain their own versions.
+
+Migration `20261003150000_record_inventory.sql` adds a new table and membership-checked RPC without changing existing slots or records. Browser roles cannot write the table directly. The RPC locks the claimed slot, checks membership and versions, enforces immutable entry kinds, validates text/currency/order bounds, and records update metadata. Anonymous and non-member access is denied. The migration must precede a frontend release; no hosted migration or deployment is authorized by this ticket.
+
+Verification exercises laptop and phone editing, ordering/removal, reload, simultaneous denomination corrections, stale drafts, failure/Retry and unchanged Armor Class. Adapter contracts cover equivalent write/conflict outcomes, persistence, errors and Supabase realtime catch-up. SQL rehearses the actual migration inside rollback-only transactions with grant, RLS, conditional-write and bound assertions. Exact final results are recorded in the local ticket.
