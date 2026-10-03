@@ -4,6 +4,7 @@ import { enterAs, claimCharacter, isolatedPartyUrl } from './overview-helpers';
 
 async function prepare(page: import('@playwright/test').Page, info: import('@playwright/test').TestInfo, extra = '') {
   await page.goto(isolatedPartyUrl(info, extra)); await enterAs(page, 'Player'); await claimCharacter(page);
+  await page.getByText('Add standard Conditions', { exact: true }).click();
 }
 test('search, duplicate prevention, custom naming, removal and reload remain Character-scoped', async ({ page }, info) => {
   await prepare(page, info);
@@ -23,6 +24,7 @@ test('search, duplicate prevention, custom naming, removal and reload remain Cha
   await expect(card.getByText('Marked by the Deep (Custom)', { exact: true })).toBeVisible();
   await page.reload(); await expect(card.getByRole('button', { name: 'Unconscious rules' })).toBeVisible();
   await card.getByRole('button', { name: 'Open Neris Vale Character Page', exact: true }).click();
+  await page.getByText('Add standard Conditions', { exact: true }).click();
   await page.getByRole('button', { name: 'Remove Unconscious Condition' }).click();
   await expect(page.getByRole('button', { name: 'Unconscious rules' })).toHaveCount(0);
   await page.getByRole('button', { name: 'Remove Marked by the Deep Condition' }).click();
@@ -46,6 +48,9 @@ test('Rules Tooltips support focus, nested keyboard navigation, dismissal and fo
   await expect(child).toBeVisible(); await expect(child.getByRole('button', { name: 'Back to previous rule' })).toBeFocused();
   await page.screenshot({ path: `/tmp/ticket08-${info.project.name}-rules.png` });
   await page.keyboard.press('Escape'); await expect(dialog).toBeVisible(); await expect(nested).toBeFocused();
+  const repeated = dialog.getByRole('button', { name: 'Prone', exact: true }).nth(1);
+  await repeated.click(); await expect(page.getByRole('dialog', { name: 'Prone', exact: true })).toBeVisible();
+  await page.keyboard.press('Escape'); await expect(repeated).toBeFocused();
   await page.keyboard.press('Escape'); await expect(page.getByRole('dialog')).toHaveCount(0); await expect(trigger).toBeFocused();
   await trigger.press('Tab'); await page.getByRole('button', { name: 'Remove Unconscious Condition' }).press('Shift+Tab');
   await expect(dialog).toBeVisible();
@@ -61,6 +66,10 @@ test('hover or mobile tap follows nested terms and outside dismissal on Characte
   const trigger = page.getByRole('button', { name: 'Paralyzed rules' });
   if (info.project.use.hasTouch) await trigger.tap(); else await trigger.hover();
   const dialog = page.getByRole('dialog', { name: 'Paralyzed', exact: true }); await expect(dialog).toBeVisible();
+  if (!info.project.use.hasTouch) {
+    await page.mouse.move(0, 0); await expect(page.getByRole('dialog')).toHaveCount(0);
+    await trigger.hover(); await expect(dialog).toBeVisible();
+  }
   if (info.project.use.hasTouch) await dialog.getByRole('button', { name: 'Incapacitated', exact: true }).tap();
   else await dialog.getByRole('button', { name: 'Incapacitated', exact: true }).click();
   await expect(page.getByRole('dialog', { name: 'Incapacitated', exact: true })).toBeVisible();
@@ -90,4 +99,16 @@ test('a failed save is visible and retry persists the intended Condition', async
   await expect(page.getByRole('button', { name: 'Blinded rules' })).toHaveCount(0);
   await page.getByRole('button', { name: 'Retry Condition save' }).click(); await expect(page.getByRole('button', { name: 'Blinded rules' })).toBeVisible();
   await page.getByRole('button', { name: '← Back to the Party' }).click(); await page.reload(); await expect(page.getByRole('button', { name: 'Blinded rules' })).toBeVisible();
+});
+
+
+test('typing the next Custom Condition during a pending save preserves the newer draft', async ({ page }, info) => {
+  await prepare(page, info, '&slowConditionSaves=once');
+  const input = page.getByLabel('Custom Condition name');
+  await input.fill('Sea Curse'); await page.getByRole('button', { name: 'Add Custom Condition', exact: true }).click();
+  await input.fill('Marked by the Deep');
+  await expect(page.getByText('Sea Curse (Custom)', { exact: true })).toBeVisible();
+  await expect(input).toHaveValue('Marked by the Deep');
+  await page.getByRole('button', { name: 'Add Custom Condition', exact: true }).click();
+  await expect(page.getByText('Marked by the Deep (Custom)', { exact: true })).toBeVisible();
 });

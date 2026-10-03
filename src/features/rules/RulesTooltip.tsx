@@ -12,6 +12,7 @@ export function RulesTooltip({ reference, references = rulesReferences }: {
   const panel = useRef<HTMLDivElement>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const suppressFocus = useRef(false);
+  const returnLinks = useRef<string[]>([]);
   const [trail, setTrail] = useState<RulesReference[]>([]);
   const [pinned, setPinned] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
@@ -24,7 +25,7 @@ export function RulesTooltip({ reference, references = rulesReferences }: {
     setTrail(previous => previous.length ? previous : [reference]);
   };
   const close = (restore = false) => {
-    cancel(); setTrail([]); setPinned(false);
+    cancel(); setTrail([]); setPinned(false); returnLinks.current = [];
     if (restore && document.activeElement !== trigger.current) { suppressFocus.current = true; trigger.current?.focus(); }
   };
   const leave = () => {
@@ -35,10 +36,10 @@ export function RulesTooltip({ reference, references = rulesReferences }: {
   };
   const back = () => {
     if (trail.length <= 1) { close(true); return; }
-    const name = active!.name;
+    const key = returnLinks.current.pop();
     setTrail(trail.slice(0, -1));
     requestAnimationFrame(() => {
-      const target = Array.from(panel.current?.querySelectorAll<HTMLButtonElement>('[data-rule-term]') ?? []).find(b => b.dataset.ruleTerm === name);
+      const target = panel.current?.querySelector<HTMLButtonElement>(`[data-rule-key="${key}"]`);
       (target ?? panel.current?.querySelector<HTMLButtonElement>('button'))?.focus();
     });
   };
@@ -55,13 +56,14 @@ export function RulesTooltip({ reference, references = rulesReferences }: {
     window.addEventListener('resize', reposition);
     return () => { document.removeEventListener('pointerdown', outside); document.removeEventListener('keydown', escape); window.removeEventListener('resize', reposition); };
   });
-  const text = (paragraph: string) => {
+  const text = (paragraph: string, paragraphIndex: number) => {
     const names = Object.keys(references).filter(name => name !== active?.name).sort((a,b) => b.length-a.length);
     if (!names.length) return paragraph;
     const escaped = names.map(name => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
     const pattern = new RegExp(`\\b(${escaped.join('|')})\\b`, 'g');
     return paragraph.split(pattern).map((part, index) => references[part] && part !== active?.name ?
-      <button key={index} type="button" className="rules-term" data-rule-term={part} onClick={() => {
+      <button key={index} type="button" className="rules-term" data-rule-term={part} data-rule-key={`${paragraphIndex}-${index}`} onClick={() => {
+        returnLinks.current.push(`${paragraphIndex}-${index}`);
         setPinned(true); setTrail([...trail, references[part]]);
         requestAnimationFrame(() => panel.current?.querySelector<HTMLButtonElement>('button')?.focus());
       }}>{part}</button> : part);
@@ -86,7 +88,7 @@ export function RulesTooltip({ reference, references = rulesReferences }: {
       }}>
       <div className="rules-panel__heading"><h3 id={`${id}-title`}>{active.name}</h3>
         <button type="button" onClick={back}>{trail.length > 1 ? 'Back to previous rule' : 'Close rules'}</button></div>
-      {active.paragraphs.map((p,i) => <p key={`${active.name}-${i}`}>{text(p)}</p>)}
+      {active.paragraphs.map((p,i) => <p key={`${active.name}-${i}`}>{text(p, i)}</p>)}
       <a href={srdSource} target="_blank" rel="noreferrer">SRD 5.2.1 source</a>
       <button type="button" onClick={() => close(true)}>Dismiss all rules</button>
     </div>, document.body)}

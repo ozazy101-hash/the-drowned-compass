@@ -101,15 +101,15 @@ test('Supabase subscribes to Condition events and reloads missed changes after r
     window.addEventListener('pagehide', unsubscribe, { once: true });
   });
   await expect.poll(() => joins).toBe(1);
-  await expect(page.locator('body')).toHaveAttribute('data-text-subscription', 'Before update');
-  text = 'After text event'; version += 1;
+  await expect(page.locator('body')).toHaveAttribute('data-condition-subscription', 'Before update');
+  text = 'After Condition event'; version += 1;
   socket!.send(JSON.stringify([channelJoinRef, null, channelTopic, 'postgres_changes', {
     ids: [conditionFilterId], data: { schema: 'public', table: 'character_conditions', type: 'UPDATE', commit_timestamp: '2026-09-28T00:00:00Z', new: {}, old: {}, columns: [], errors: null },
   }]));
-  await expect(page.locator('body')).toHaveAttribute('data-text-subscription', 'After text event');
+  await expect(page.locator('body')).toHaveAttribute('data-condition-subscription', 'After Condition event');
   // Changes missed during disconnect must be loaded by SUBSCRIBED catch-up.
   text = 'During disconnect'; version += 1;
-  socket!.close({ code: 1012, reason: 'Text reconnect acceptance' });
+  socket!.close({ code: 1012, reason: 'Condition reconnect acceptance' });
   await expect.poll(() => joins).toBe(2);
-  await expect(page.locator('body')).toHaveAttribute('data-text-subscription', 'During disconnect');
+  await expect(page.locator('body')).toHaveAttribute('data-condition-subscription', 'During disconnect');
 });

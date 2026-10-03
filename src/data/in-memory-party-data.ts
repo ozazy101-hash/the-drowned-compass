@@ -283,6 +283,10 @@ export function createInMemoryPartyData(): PartyData {
 
     async updateCondition(slotId, command) {
       validateCondition(command);
+      if (params.get('slowConditionSaves') === 'once' && !sessionStorage.getItem('condition-save-delayed')) {
+        sessionStorage.setItem('condition-save-delayed', 'true');
+        await new Promise(resolve => window.setTimeout(resolve, 1000));
+      }
       if (params.get('failConditionSaves') === 'once' && !sessionStorage.getItem('condition-save-failed')) {
         sessionStorage.setItem('condition-save-failed', 'true');
         throw new Error('The save could not reach the Party.');

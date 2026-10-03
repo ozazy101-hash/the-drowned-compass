@@ -44,7 +44,7 @@ export function ConditionsSection({ slot, partyData, onSlotChanged }: {
     try {
       const result = await partyData.updateCondition(slot.id, command);
       onSlotChanged(result.slot);
-      if (result.ok) { setMessage('Saved'); if (!command.standard && command.expectedVersion === 0) setLabel(''); }
+      if (result.ok) { setMessage('Saved'); if (!command.standard && command.expectedVersion === 0) setLabel(current => current === command.label ? '' : current); }
       else { setMessage('Conditions changed elsewhere. Review the current Conditions and retry.'); setRetry(command); }
     } catch (error) { setMessage(error instanceof Error ? error.message : 'The Condition could not be saved.'); setRetry(command); }
     finally { setBusy(false); }
@@ -54,6 +54,7 @@ export function ConditionsSection({ slot, partyData, onSlotChanged }: {
     <ConditionList conditions={conditions} busy={busy}
       remove={c => void save({ ...c, deleted: true, expectedVersion: c.version })}
       rename={(c, name) => void save({ ...c, label: name, expectedVersion: c.version })} />
+    <details className="condition-picker"><summary>Add standard Conditions</summary>
     <label>Search standard Conditions<input type="search" value={search} onChange={e => setSearch(e.target.value)} /></label>
     <div className="condition-selector">
       {standardConditionNames.filter(name => name.toLowerCase().includes(search.toLowerCase().trim())).map(name => {
@@ -64,6 +65,7 @@ export function ConditionsSection({ slot, partyData, onSlotChanged }: {
       })}
       {!standardConditionNames.some(name => name.toLowerCase().includes(search.toLowerCase().trim())) && <p>No standard Conditions match.</p>}
     </div>
+    </details>
     <form onSubmit={e => { e.preventDefault(); void save({ id: `custom.${crypto.randomUUID()}`, standard: null, label, deleted: false, expectedVersion: 0 }); }}>
       <label>Custom Condition name<input value={label} required maxLength={120} onChange={e => setLabel(e.target.value)} /></label>
       <button type="submit" disabled={busy || !label.trim()}>Add Custom Condition</button>
