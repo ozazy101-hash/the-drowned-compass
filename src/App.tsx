@@ -1,3 +1,4 @@
+import { RestSection } from './features/rests/RestSection';
 import { MagicSection } from './features/magic/MagicSection';
 import { mergeMagic } from './domain/character-magic';
 import { SrdLegal } from './features/magic/SrdLegal';
@@ -799,6 +800,7 @@ function CharacterPage({
         </div>
       </section>
 
+      <RestSection key={slot.id} slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} />
       <ConditionsSection slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} />
 
       <nav className="character-nav" aria-label="Character Record sections">

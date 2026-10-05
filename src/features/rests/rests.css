@@ -1,0 +1,6 @@
+.rest-actions { display: flex; flex-wrap: wrap; gap: .7rem; }
+.rest-preview { margin-top: 1rem; padding: 1rem; border: 1px solid var(--color-border, #52605e); border-radius: .5rem; }
+.rest-preview fieldset { margin: 1rem 0; }
+.rest-change { display: flex; align-items: center; gap: .8rem; padding: .7rem 0; }
+.rest-change input { width: 1.2rem; height: 1.2rem; flex-shrink: 0; }
+.rest-change span { overflow-wrap: anywhere; }

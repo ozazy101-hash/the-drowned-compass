@@ -1,3 +1,4 @@
+import { validateRestCommand } from '../domain/character-rests';
 import { emptyMagic, validateMagicCommand, type CharacterSpell, type SpellSlot } from '../domain/character-magic';
 import { initialSurvival } from "../domain/survival";
 import { validateClassEdit, projectClasses, type CharacterClass } from "../domain/character-classes";
@@ -364,6 +365,15 @@ export function createSupabasePartyData(
       if (error) throw error;
       const party = await loadParty();
       const slot = party.slots.find(s => s.id === slotId);
+      if (!slot?.character) throw new Error('That Character Record is unavailable.');
+      return accepted === true ? { ok: true, slot } : { ok: false, reason: 'conflict', slot };
+    },
+
+    async resolveRest(slotId, command) {
+      validateRestCommand(command);
+      const { data: accepted, error } = await client.rpc('resolve_character_rest', { target_slot_id: slotId, command });
+      if (error) throw new Error('The rest could not be saved. Retry the same selection.');
+      const slot = (await loadParty()).slots.find(s => s.id === slotId);
       if (!slot?.character) throw new Error('That Character Record is unavailable.');
       return accepted === true ? { ok: true, slot } : { ok: false, reason: 'conflict', slot };
     },

@@ -4,11 +4,15 @@
 
 **Blocked by:** 07 — Track Hit Points and survival; 10 — Track limited resources; 12 — Manage Character Spells and spell slots.
 
-**Status:** ready-for-agent
+**Status:** claimed
 
 - [ ] Short Rest proposes restoring only resources tagged for Short Rest.
-- [ ] Long Rest proposes restoring Short Rest and Long Rest resources, spell slots, and current Hit Points while clearing Temporary Hit Points and death saves.
+- [ ] Long Rest proposes restoring Short Rest and Long Rest resources, spell slots, and current Hit Points while clearing death saves and preserving legacy Temporary Hit Points.
 - [ ] The preview explains every proposed change before any data is modified.
 - [ ] A player can exclude individual changes and confirm only the selected recovery actions.
 - [ ] Confirmed rest changes synchronize as one understandable operation and do not replace unrelated Character Record data.
 - [ ] Calculation and browser tests cover mixed recovery timings, exclusions, and cancellation.
+
+## Ticket 13 scope reconciliation
+
+Ticket 19 removed Temporary Hit Points from active Health controls. Rests preserve any legacy stored Temporary Hit Points and do not reintroduce controls. This supersedes the original Long Rest clearing requirement.

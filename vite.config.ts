@@ -1,3 +1,4 @@
+import { applyRestCommand, type RestCommand } from './src/domain/character-rests.ts';
 import { applyMagicCommand, emptyMagic, type MagicCommand } from './src/domain/character-magic.ts';
 import { applyClassEdit, type ClassEdit } from './src/domain/character-classes.ts';
 import { setInventory, type InventoryDraft } from './src/domain/inventory.ts';
@@ -142,6 +143,11 @@ function sharedInMemoryParty(): Plugin {
             return;
           }
 
+          if (requestBody.restCommand) {
+            try { if (!applyRestCommand(slot.character as CharacterRecord, requestBody.restCommand as RestCommand)) response.statusCode = 409; }
+            catch { response.statusCode = 400; }
+            response.end(JSON.stringify(slot)); return;
+          }
           if (requestBody.magicCommand) {
             try {
               const character = slot.character as CharacterRecord;
