@@ -2,6 +2,14 @@ import { useRef, useState, type KeyboardEvent } from 'react';
 import { orderedInventoryItems, validateInventory } from '../domain/inventory';
 import type { InventoryDraft, InventoryEntry, InventoryKind } from '../domain/inventory';
 import type { CharacterSlot, PartyData } from '../domain/party';
+const currencyLabels = {
+  cp: 'Copper pieces (CP)',
+  sp: 'Silver pieces (SP)',
+  ep: 'Electrum pieces (EP)',
+  gp: 'Gold pieces (GP)',
+  pp: 'Platinum pieces (PP)',
+} as const;
+
 type SaveText = (entry: InventoryDraft, version: number) => Promise<boolean>;
 function ItemEditor({ entry, label, item, onSave, onCancelNew }: {
   entry: InventoryEntry; label: string; item?: boolean; onSave: SaveText; onCancelNew?: () => void;
@@ -116,6 +124,6 @@ export function Inventory({ slot, partyData, onSlotChanged }: {
     <button type="button" className="secondary-button" onClick={() => setLocal(list => [...list, { id: `item.${crypto.randomUUID()}`, kind, title: '', body: '', rank: entries.size, version: 0, deleted: false }])}>Add item</button>
     <div className="character-text__grid">{orderedInventoryItems([...entries.values()]).map(entry => <ItemEditor key={entry.id} entry={entry} label={entry.kind === 'magic' ? 'Notable magic item' : 'Equipment'} item onSave={save} onCancelNew={() => setLocal(list => list.filter(e => e.id !== entry.id))} />)}</div>
     <h3>Currency</h3><p>Enter each amount directly. No automatic conversion.</p>
-    <div className="character-text__grid">{(['cp','sp','ep','gp','pp'] as const).map(kind => <ItemEditor key={kind} entry={entries.get(`currency.${kind}`) ?? { id: `currency.${kind}`, kind, title: '', body: '0', rank: 0, version: 0, deleted: false }} label={kind.toUpperCase()} onSave={save} />)}</div>
+    <div className="character-text__grid">{(['cp','sp','ep','gp','pp'] as const).map(kind => <ItemEditor key={kind} entry={entries.get(`currency.${kind}`) ?? { id: `currency.${kind}`, kind, title: '', body: '0', rank: 0, version: 0, deleted: false }} label={currencyLabels[kind]} onSave={save} />)}</div>
   </section>;
 }
