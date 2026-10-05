@@ -1,0 +1,10 @@
+.combat-catalog { margin: 20px 0; }
+.combat-catalog > section { margin-top: 20px; padding: 18px; border: 1px solid #476269; border-radius: 8px; }
+.combat-catalog .spell-filters { margin: 18px 0; }
+.combat-catalog h4 { margin-top: 0; font-size: 1.25rem; }
+.combat-catalog h5 { margin-bottom: 0; font-size: 1rem; }
+.combat-catalog a { color: var(--color-accent, #c6ad75); }
+.combat-catalog button { overflow-wrap: anywhere; }
+@media (max-width: 650px) { .combat-catalog > section { padding: 12px; } }
+.combat-catalog .spell-results button { color: inherit; background: #122326; border: 1px solid #476269; border-radius: 4px; }
+.combat-catalog .spell-results button[aria-pressed="true"] { background: #294145; border-color: #c6ad75; }

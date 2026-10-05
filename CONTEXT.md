@@ -69,7 +69,7 @@ A portable copy of the information maintained by the Party Companion, including 
 _Avoid_: Campaign export, campaign backup
 
 **Rules Reference**:
-An explanation or external source associated with a spell, condition, attack, feature, or other game element. The prototype supplies Rules References for SRD spells and conditions; broader attack and feature coverage follows later.
+An explanation or external source associated with a spell, condition, attack, feature, or other game element. The prototype supplies Rules References for SRD spells and conditions; the Combat Catalog also supplies weapon and selected class-ability references.
 _Avoid_: Compendium, rulebook
 
 **Rules Tooltip**:
@@ -91,3 +91,7 @@ _Avoid_: Homebrew catalog entry, unofficial spell
 **Character Artwork**:
 The visual representation associated with a player character, initially supplied as a preloaded image and later replaceable by an upload.
 _Avoid_: Avatar, icon
+
+**Combat Catalog**:
+The read-only SRD weapon templates and selected class-ability summaries that players can inspect and use to start editable Combat entries. It supplies references and starting values, without applying character-based rules or effects.
+_Avoid_: Attack calculator, automatic combat engine
