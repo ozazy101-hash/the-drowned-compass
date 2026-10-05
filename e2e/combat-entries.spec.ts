@@ -12,7 +12,7 @@ async function prepareCombat(page: Page, url: string) {
     abilityScores:Object.fromEntries(abilityScoreKeys.map(key => [key,10])),
     savingThrowProficiencies:Object.fromEntries(abilityScoreKeys.map(key => [key,'none'])),
     skillProficiencies:Object.fromEntries(skillKeys.map(key => [key,'none'])),
-    armorClass:10,maxHitPoints:1,speed:30,spellcastingAbility:null,derivedOverrides:{},fieldVersions:{},
+    armorClass:10,maxHitPoints:1,speed:30,spellcastingAbility:null,derivedOverrides:{},fieldVersions:{},conditions:[{id:'custom.39000000-0000-4000-8000-000000000099',standard:null,label:'Sea curse',deleted:false,version:1}],
   } } });
   expect(seed.ok()).toBe(true);
   await enterAs(page,'Player'); await openClaimedCharacter(page); await combat(page);
@@ -55,21 +55,22 @@ test('attacks and actions can be entered, edited, ordered, selected and removed 
   await expect(page.locator('.combat-entry').getByRole('heading', { level:3 })).toHaveText(['Harpoon','Cutlass','Help']);
   await harpoon.getByRole('button', { name:'Move down', exact:true }).click();
   await expect(page.locator('.combat-entry').getByRole('heading', { level:3 })).toHaveText(['Cutlass','Harpoon','Help']);
-  await page.getByLabel('Primary attack', { exact:true }).selectOption({ label:'Cutlass' });
-  await expect(page.locator('.combat-primary').locator('..').getByRole('status').first()).toHaveText('Saved');
+  await page.getByRole('checkbox', { name:'Cutlass', exact:true }).check();
+  await expect(page.getByRole('region', { name:'Attacks & Actions' }).getByRole('status').first()).toHaveText('Saved');
   await page.getByRole('button', { name:'Back to the Party' }).click();
-  await expect(page.getByRole('article', { name:'Neris Vale, played by Mara' })).toContainText('Primary attack: Cutlass · +0 to hit · 1d6 + 3 Piercing · 5 feet');
+  await expect(page.getByRole('article', { name:'Neris Vale, played by Mara' })).toContainText('Other: Cutlass · +0 to hit · 1d6 + 3 Piercing · 5 feet');
   await page.reload(); await openClaimedCharacter(page); await combat(page);
-  await expect(page.getByLabel('Primary attack').locator('option:checked')).toHaveText('Cutlass');
+  await expect(page.getByRole('checkbox', { name:'Cutlass', exact:true })).toBeChecked();
   await expect(page.getByRole('article', { name:'Help', exact:true }).getByLabel('Notes')).toHaveValue('Distract the foe');
   await expect(page.locator('.combat-entry').getByRole('heading', { level:3 })).toHaveText(['Cutlass','Harpoon','Help']);
-  await page.getByLabel('Primary attack').selectOption({ label:'Harpoon' });
+  await page.getByRole('checkbox', { name:'Cutlass', exact:true }).uncheck();
+  await page.getByRole('checkbox', { name:'Harpoon', exact:true }).check();
   await page.getByRole('button', { name:'Back to the Party' }).click();
-  await expect(page.getByRole('article', { name:'Neris Vale, played by Mara' })).toContainText('Primary attack: Harpoon · Strength');
+  await expect(page.getByRole('article', { name:'Neris Vale, played by Mara' })).toContainText('Other: Harpoon · Strength');
   await openClaimedCharacter(page); await combat(page);
   await page.getByRole('article', { name:'Harpoon', exact:true }).getByRole('button', { name:'Remove attack', exact:true }).click();
   await expect(page.getByRole('article', { name:'Harpoon', exact:true })).toHaveCount(0);
-  await expect(page.getByLabel('Primary attack')).toHaveValue('');
+  await expect(page.locator('.combat-featured input:checked')).toHaveCount(0);
   await page.getByRole('article', { name:'Help', exact:true }).getByRole('button', { name:'Remove action', exact:true }).focus(); await page.keyboard.press('Enter');
   await expect(page.getByRole('article', { name:'Help', exact:true })).toHaveCount(0);
   await page.reload(); await openClaimedCharacter(page); await combat(page);
@@ -107,8 +108,8 @@ test('two sessions preserve independent records and reject a stale same-record d
     await edit(peer,'Cutlass','Remote accepted');
     await expect(draft.getByLabel('Notes')).toHaveValue('Local draft');
     // Let the realtime snapshot reach the drafting session before submission.
-    await page.getByLabel('Primary attack').selectOption({ label:'Cutlass' });
-    await expect(peer.getByLabel('Primary attack')).not.toHaveValue('');
+    await page.getByRole('checkbox', { name:'Cutlass', exact:true }).check();
+    await expect(peer.getByRole('checkbox', { name:'Cutlass', exact:true })).toBeChecked();
     await draft.getByRole('button', { name:'Save attack', exact:true }).click();
     await expect(draft.getByRole('alert')).toContainText('Changed elsewhere');
     await expect(peer.getByRole('article', { name:'Cutlass', exact:true }).getByLabel('Notes')).toHaveValue('Remote accepted');
@@ -152,8 +153,8 @@ test('new typing survives an older save acknowledgement and Retry sends the newe
 
 test('a delayed Party snapshot cannot revive a removed primary attack', async ({ page }, testInfo) => {
   await prepareCombat(page,isolatedPartyUrl(testInfo)); await add(page,'attack','Cutlass');
-  await page.getByLabel('Primary attack').selectOption({ label:'Cutlass' });
-  await expect(page.getByLabel('Primary attack')).not.toHaveValue('');
+  await page.getByRole('checkbox', { name:'Cutlass', exact:true }).check();
+  await expect(page.getByRole('checkbox', { name:'Cutlass', exact:true })).toBeChecked();
   let release!: () => void;
   const held = new Promise<void>(resolve => { release=resolve; });
   let captured = false;
@@ -170,11 +171,11 @@ test('a delayed Party snapshot cannot revive a removed primary attack', async ({
     await expect.poll(() => captured).toBe(true);
     await page.getByRole('article', { name:'Cutlass', exact:true }).getByRole('button', { name:'Remove attack', exact:true }).click();
     await expect(page.getByRole('article', { name:'Cutlass', exact:true })).toHaveCount(0);
-    await expect(page.getByLabel('Primary attack')).toHaveValue('');
+    await expect(page.locator('.combat-featured input:checked')).toHaveCount(0);
     release();
     await expect.poll(() => delivered).toBe(true);
     await expect(page.getByRole('article', { name:'Cutlass', exact:true })).toHaveCount(0);
-    await expect(page.getByLabel('Primary attack')).toHaveValue('');
+    await expect(page.locator('.combat-featured input:checked')).toHaveCount(0);
   } finally { release(); }
 });
 
@@ -186,11 +187,11 @@ test('primary selection, ordering and removal failures expose Retry and keep unr
     else await route.continue();
   });
   failNext=true;
-  await page.getByLabel('Primary attack').selectOption({ label:'Cutlass' });
+  await page.getByRole('checkbox', { name:'Cutlass', exact:true }).check();
   const section=page.getByRole('region', { name:'Attacks & Actions' });
   await expect(section.getByRole('alert')).toContainText('Not saved');
   await section.getByRole('button', { name:'Retry', exact:true }).click();
-  await expect(page.getByLabel('Primary attack')).not.toHaveValue('');
+  await expect(page.getByRole('checkbox', { name:'Cutlass', exact:true })).toBeChecked();
   const editor=page.getByRole('article', { name:'Cutlass', exact:true });
   failNext=true;
   await editor.getByRole('button', { name:'Move down', exact:true }).click();
@@ -202,7 +203,7 @@ test('primary selection, ordering and removal failures expose Retry and keep unr
   await expect(editor.getByRole('alert')).toContainText('Not saved');
   await editor.getByRole('button', { name:'Retry', exact:true }).click();
   await expect(editor).toHaveCount(0);
-  await expect(page.getByLabel('Primary attack')).toHaveValue('');
+  await expect(page.locator('.combat-featured input:checked')).toHaveCount(0);
   await expect(page.getByRole('article', { name:'Help', exact:true }).getByLabel('Notes')).toHaveValue('Player-authored reminder');
 });
 
@@ -221,4 +222,58 @@ test('a remote removal preserves unsaved notes until the editor discards them', 
   await expect(editor.getByRole('button', { name:'Save attack', exact:true })).toBeDisabled();
   await editor.getByRole('button', { name:'Discard draft', exact:true }).click();
   await expect(editor).toHaveCount(0);
+});
+
+test('several featured attacks synchronize, order, keyboard select, persist and prune conversions', async ({ page, browser }, testInfo) => {
+  const url=isolatedPartyUrl(testInfo); await prepareCombat(page,url);
+  await add(page,'attack','Cutlass'); await add(page,'attack','Harpoon'); await add(page,'attack','Mystery');
+  const editor=page.getByRole('article',{name:'Harpoon',exact:true}); await editor.getByLabel('Attack category').selectOption('ranged'); await editor.getByRole('button',{name:'Save attack',exact:true}).click(); await expect(editor.getByRole('status')).toHaveText('Saved');
+  const cutlass=page.getByRole('checkbox',{name:'Cutlass',exact:true}); await cutlass.focus(); await page.keyboard.press('Space'); await expect(cutlass).toBeChecked();
+  await page.getByRole('checkbox',{name:'Harpoon',exact:true}).check(); await expect(page.getByRole('checkbox',{name:'Harpoon',exact:true})).toBeChecked();
+  const context=await browser.newContext({baseURL:testInfo.project.use.baseURL,viewport:testInfo.project.use.viewport}); const peer=await context.newPage();
+  try {
+    await peer.goto(url); await enterAs(peer,'Dungeon Master'); await openClaimedCharacter(peer); await combat(peer);
+    await expect(peer.getByRole('checkbox',{name:'Cutlass',exact:true})).toBeChecked(); await expect(peer.getByRole('checkbox',{name:'Harpoon',exact:true})).toBeChecked();
+    await edit(peer,'Mystery','Independent edit');
+    await editor.getByRole('button',{name:'Move up',exact:true}).click(); await expect(page.locator('.combat-entry h3')).toHaveText(['Harpoon','Cutlass','Mystery']);
+    await page.getByRole('button',{name:'Back to the Party'}).click();
+    await expect(page.locator('.featured-attack')).toHaveText(['➶Ranged: Harpoon · +0 to hit · 1d6 + 3 Piercing · 5 feet','◇Other: Cutlass · +0 to hit · 1d6 + 3 Piercing · 5 feet']);
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+    const card=page.getByRole('article',{name:'Neris Vale, played by Mara'});
+    const conditions=await card.getByRole('group',{name:'Active Conditions'}).boundingBox(); const attacks=await card.locator('.featured-attacks').boundingBox();
+    expect(conditions!.y+conditions!.height).toBeLessThanOrEqual(attacks!.y);
+    const vitals=await card.locator('.party-card__vitals').boundingBox(); expect(vitals!.y+vitals!.height).toBeLessThanOrEqual(conditions!.y);
+    const cardBounds=await card.boundingBox();
+    for (const attack of await card.locator('.featured-attack').all()) {
+      const bounds=await attack.boundingBox();
+      expect(bounds!.y).toBeGreaterThanOrEqual(cardBounds!.y);
+      expect(bounds!.y+bounds!.height).toBeLessThanOrEqual(cardBounds!.y+cardBounds!.height);
+    }
+    await page.getByRole('button',{name:'Open Neris Vale Character Page'}).focus(); await page.keyboard.press('Enter'); await combat(page);
+    await page.reload(); await openClaimedCharacter(page); await combat(page); await expect(page.locator('.combat-featured input:checked')).toHaveCount(2);
+    const converted=peer.getByRole('article',{name:'Harpoon',exact:true}); await converted.getByLabel('Record type').selectOption('action'); await converted.getByRole('button',{name:'Save action',exact:true}).click(); await expect(converted.getByRole('status')).toHaveText('Saved');
+    await expect(page.getByRole('checkbox',{name:'Harpoon',exact:true})).toHaveCount(0); await expect(page.getByRole('checkbox',{name:'Cutlass',exact:true})).toBeChecked();
+    await page.getByRole('checkbox',{name:'Cutlass',exact:true}).uncheck(); await expect(peer.locator('.combat-featured input:checked')).toHaveCount(0);
+    await page.getByRole('button',{name:'Back to the Party'}).click(); await expect(page.locator('.featured-attack')).toHaveCount(0);
+  } finally { await context.close(); }
+});
+
+test('selection conflict preserves intent, recovers after remote removal and can adopt saved selection', async ({ page, browser }, testInfo) => {
+  const url=isolatedPartyUrl(testInfo); await prepareCombat(page,url); await add(page,'attack','Cutlass'); await add(page,'attack','Harpoon');
+  const context=await browser.newContext({baseURL:testInfo.project.use.baseURL,viewport:testInfo.project.use.viewport}); const peer=await context.newPage();
+  let release!:()=>void; const held=new Promise<void>(resolve=>{release=resolve;}); let captured=false;
+  await page.route('**/__drowned_compass_test_party?**',async route=>{
+    if(route.request().method()==='PATCH' && !captured){captured=true; await held; await route.continue();} else await route.continue();
+  });
+  try {
+    await peer.goto(url); await enterAs(peer,'Dungeon Master'); await openClaimedCharacter(peer); await combat(peer);
+    await page.getByRole('checkbox',{name:'Cutlass',exact:true}).check(); await expect.poll(()=>captured).toBe(true);
+    await peer.getByRole('checkbox',{name:'Harpoon',exact:true}).check(); await expect(peer.getByRole('region',{name:'Attacks & Actions'}).getByRole('status').first()).toHaveText('Saved');
+    release(); const section=page.getByRole('region',{name:'Attacks & Actions'}); await expect(section.getByRole('alert')).toContainText('Changed elsewhere');
+    await peer.getByRole('article',{name:'Cutlass',exact:true}).getByRole('button',{name:'Remove attack',exact:true}).click(); await expect(page.getByRole('checkbox',{name:'Cutlass',exact:true})).toHaveCount(0);
+    await section.getByRole('button',{name:'Retry',exact:true}).click(); await expect(section.getByRole('status').first()).toHaveText('Saved'); await expect(peer.locator('.combat-featured input:checked')).toHaveCount(0);
+    await page.route('**/__drowned_compass_test_party?**',async route=>{if(route.request().method()==='PATCH') await route.abort();else await route.continue();});
+    await page.getByRole('checkbox',{name:'Harpoon',exact:true}).check(); await expect(section.getByRole('alert')).toContainText('Not saved');
+    await section.getByRole('button',{name:'Use saved selection',exact:true}).click(); await expect(page.locator('.combat-featured input:checked')).toHaveCount(0);
+  } finally { release(); await context.close(); }
 });
