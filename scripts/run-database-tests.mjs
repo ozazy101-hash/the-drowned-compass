@@ -18,7 +18,7 @@ try {
     const template = new URL(`../supabase/tests/fixtures/${name}_migration.sql.template`, import.meta.url);
     const migration = new URL(`../supabase/migrations/${migrationFile}`, import.meta.url);
     const output = new URL(`../supabase/tests/database/${name}_migration.generated.test.sql`, import.meta.url);
-    writeFileSync(output, readFileSync(template, 'utf8').replace(`-- ${marker}`, () => readFileSync(migration, 'utf8')));
+    writeFileSync(output, readFileSync(template, 'utf8').replace(`-- ${marker}`, () => readFileSync(migration, 'utf8')).replace('-- __HEALTH_MIGRATION__', () => readFileSync(new URL('../supabase/migrations/20261005190000_simplify_health_controls.sql', import.meta.url), 'utf8')));
     generated.push(output);
   }
   const result = spawnSync('supabase', ['test', 'db', ...process.argv.slice(2)], { stdio: 'inherit' });

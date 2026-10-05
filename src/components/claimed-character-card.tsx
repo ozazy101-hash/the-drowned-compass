@@ -58,7 +58,6 @@ export function ClaimedCharacterCard({ slot, onSelect, playSummary }: {
               <span className="party-card__label">Hit Points</span>
               <strong>{survival.current ?? '?'} / {character.maxHitPoints}</strong>
               {survival.current === null && <span className="party-card__unknown">Current HP unknown</span>}
-              {survival.temporary > 0 && <span>Temporary HP: {survival.temporary}</span>}
               {survivalState(survival) && <span>{survivalState(survival)}</span>}
               {(survival.current === 0 || survival.successes > 0 || survival.failures > 0) && <span>Death saves: {survival.successes} successes, {survival.failures} failures</span>}
               {survival.inspiration && <span>Heroic Inspiration</span>}

@@ -19,3 +19,12 @@ The production build and 146 calculation tests pass. The standard local database
 The full browser suite passed 132/132 cases (66 laptop, 66 phone) in 6.5 minutes before the final touch-target/layout and validation polish. The final focused survival and adapter suite passed 14/14 cases in 42 seconds, including the new cross-tab survival/Overview/resource race. Both viewport screenshots were inspected with no horizontal overflow. The final 134-case integrated full regression remains pending: the coordinator requested cancellation while it was still queued behind the shared browser lock. No cases from that queued run executed.
 
 Earlier focused acceptance found delayed checkbox feedback and generic validation errors; both were corrected before the passing runs. Build, calculation and database results reflect the final implementation.
+
+
+## Ticket 19 Health compatibility and release
+
+Health uses the focused `add`, `subtract`, and `set-current` survival commands. The domain and RPC enforce whole numbers, explicit initial setup, 0..Maximum bounds, and version conflicts. Feature-local drafts and save feedback stay in SurvivalSection; PartyData retains its cohesive updateSurvival operation. Maximum still belongs to Character Record. Death saves, inspiration and manual unconscious remain independent trackers. App only composes the feature.
+
+Ticket 07 is deployed and existing saved Temporary HP must be preserved. The forward migration `20261005190000_simplify_health_controls.sql` replaces the RPC with support for the new commands; it does not rewrite saved rows, temporary values, or legacy undo snapshots. All new Health commands ignore Temporary HP, and both Health and Party cards omit it. Legacy damage/heal/correction/undo semantics remain available for already-open old clients and backups, with the existing shared version guard; old commands cannot cause a new visible subtraction to be absorbed. Current values above a newly lowered Maximum remain visible until corrected or a neutral operation clamps them into range. There is no undo control in the compact Health flow, so old history cannot be silently restored through it.
+
+Apply the forward hosted migration before releasing this frontend. Releasing the frontend first would cause its new commands to fail against the deployed Ticket 07 RPC. No hosted migration or deployment is performed by this ticket. No destructive cleanup of Temporary HP data is required.

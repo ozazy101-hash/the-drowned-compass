@@ -22,10 +22,10 @@ for (const backend of ['in-memory','Supabase']) test(`${backend} survival contra
   const result = await page.evaluate(async backend => {
     const memory = '/the-drowned-compass/src/data/in-memory-party-data.ts'; const production = '/the-drowned-compass/src/data/supabase-party-data.ts';
     const data = backend === 'in-memory' ? (await import(memory)).createInMemoryPartyData() : (await import(production)).createSupabasePartyData('https://survival-contract.invalid','test-key');
-    const first = await data.updateSurvival('slot',{kind:'correct',field:'current',value:20},0,0);
-    const damage = await data.updateSurvival('slot',{kind:'damage',amount:7},1,0);
+    const first = await data.updateSurvival('slot',{kind:'set-current',value:20},0,0);
+    const damage = await data.updateSurvival('slot',{kind:'subtract',amount:7},1,0);
     const staleUndo = await data.updateSurvival('slot',{kind:'undo'},1,0);
-    const staleMaximum = await data.updateSurvival('slot',{kind:'heal',amount:3},2,1);
+    const staleMaximum = await data.updateSurvival('slot',{kind:'add',amount:3},2,1);
     const undo = await data.updateSurvival('slot',{kind:'undo'},2,0);
     return {first,damage,staleUndo,staleMaximum,undo,reloaded:await data.getParty()};
   },backend);
@@ -38,8 +38,8 @@ for (const backend of ['in-memory','Supabase']) test(`${backend} survival contra
     const failure = await page.evaluate(async () => {
       const path='/the-drowned-compass/src/data/supabase-party-data.ts';
       const data=(await import(path)).createSupabasePartyData('https://survival-contract.invalid','test-key');
-      let failed=false; try {await data.updateSurvival('slot',{kind:'damage',amount:2},3,0);} catch {failed=true;}
-      return {failed,retry:await data.updateSurvival('slot',{kind:'damage',amount:2},3,0)};
+      let failed=false; try {await data.updateSurvival('slot',{kind:'subtract',amount:2},3,0);} catch {failed=true;}
+      return {failed,retry:await data.updateSurvival('slot',{kind:'subtract',amount:2},3,0)};
     });
     expect(failure.failed).toBe(true); expect(failure.retry.slot.character.survival.current).toBe(18);
   }

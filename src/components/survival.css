@@ -28,3 +28,8 @@
   .survival-panel label:has(input:not([type="checkbox"])), .survival-panel label:has(select) { flex: 1 1 100%; }
   .survival-panel input:not([type="checkbox"]), .survival-panel select { width: 100%; }
 }
+
+.health-stepper { display: flex; gap: .5rem; }
+.health-stepper button { min-width: 44px; font-size: 1.4rem; }
+.survival-panel details { flex-basis: 100%; }
+.survival-panel summary { cursor: pointer; padding: .6rem 0; }

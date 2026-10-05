@@ -87,5 +87,19 @@ select ok(not public.update_character_survival(current_setting('test.survival_sl
 set local role anon;
 select throws_ok($$select * from public.character_survival$$,'42501',null,'anon cannot read');
 select throws_ok($$select public.update_character_survival(current_setting('test.survival_slot')::uuid,'{"kind":"undo"}',7,1)$$,'42501',null,'anon cannot write');
+reset role;
+-- __HEALTH_MIGRATION__
+set local role authenticated;
+set local "request.jwt.claim.sub" = '30000000-0000-4000-8000-000000000001';
+select ok(public.update_character_survival(current_setting('test.survival_slot')::uuid,'{"kind":"correct","field":"temporary","value":8}',7,1),'legacy temporary values remain compatible');
+select ok(public.update_character_survival(current_setting('test.survival_slot')::uuid,'{"kind":"set-current","value":1}',8,1),'bounded setup accepted');
+select ok(public.update_character_survival(current_setting('test.survival_slot')::uuid,'{"kind":"subtract","amount":1}',9,1),'neutral subtraction accepted');
+select is((select state->>'current' from public.character_survival),'0','neutral subtraction ignores saved temporary');
+select is((select state->>'temporary' from public.character_survival),'8','saved temporary is preserved without absorption');
+select ok(public.update_character_survival(current_setting('test.survival_slot')::uuid,'{"kind":"add","amount":99}',10,1),'neutral addition accepted');
+select is((select state->>'current' from public.character_survival),'1','neutral addition capped');
+select ok(not public.update_character_survival(current_setting('test.survival_slot')::uuid,'{"kind":"subtract","amount":1}',10,1),'neutral stale write rejected');
+select throws_ok($$select public.update_character_survival(current_setting('test.survival_slot')::uuid,'{"kind":"set-current","value":2}',11,1)$$,'23514',null,'correction bounded');
+select throws_ok($$select public.update_character_survival(current_setting('test.survival_slot')::uuid,'{"kind":"subtract","amount":1.5}',11,1)$$,'23514',null,'neutral fraction rejected');
 select * from finish();
 rollback;

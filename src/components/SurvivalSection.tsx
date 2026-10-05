@@ -6,7 +6,7 @@ export function SurvivalSection({ slot, partyData, onSlotChanged }: { slot: Char
   const character = slot.character!; const state = character.survival ?? initialSurvival();
   const [pending, setPending] = useState<SurvivalCommand | null>(null);
   const [amount, setAmount] = useState(''); const [status, setStatus] = useState(''); const [busy, setBusy] = useState(false);
-  const [correction, setCorrection] = useState({ field: 'current' as 'current' | 'temporary', value: '' });
+  const [correction, setCorrection] = useState({ value: '' });
   async function save(command: SurvivalCommand) {
     setPending(command); setBusy(true); setStatus('Saving…');
     try {
@@ -18,21 +18,24 @@ export function SurvivalSection({ slot, partyData, onSlotChanged }: { slot: Char
     finally { setPending(null); setBusy(false); }
   }
   const number = (value: string) => value.trim() === '' ? NaN : Number(value);
-  return <section className="overview-panel survival-panel" aria-label="Hit Points and survival">
-    <h2>Hit Points and survival</h2>
-    <p className="survival-vitals">Current HP: <strong>{state.current ?? 'Unknown'}</strong> / {character.maxHitPoints}{state.temporary > 0 && <> · Temporary HP: {state.temporary}</>}</p>
+  return <section className="overview-panel survival-panel" aria-label="Health">
+    <h2>Health</h2>
+    <p className="survival-vitals">Current HP: <strong>{state.current ?? 'Unknown'}</strong> / {character.maxHitPoints}</p>
     {survivalState(state) && <p role="note">{survivalState(state)}</p>}
     <fieldset disabled={busy}>
       <legend>Health actions</legend>
-      <label>Damage or healing amount<input type="number" min="0" max="9999" value={amount} onChange={e => setAmount(e.target.value)} /></label>
-      <button type="button" onClick={() => void save({ kind: 'damage', amount: number(amount) })}>Apply Damage</button>
-      <button type="button" onClick={() => void save({ kind: 'heal', amount: number(amount) })}>Heal</button>
-      {state.undo && <p>Recent HP action: {state.undo.label}</p>}
-      <button type="button" disabled={!state.undo || state.undo.maximumVersion !== (character.fieldVersions.maxHitPoints ?? 0)} onClick={() => void save({ kind: 'undo' })}>Undo recent HP action</button>
-      <label>Correct health field<select value={correction.field} onChange={e => setCorrection({ ...correction, field: e.target.value as 'current' | 'temporary' })}><option value="current">Current Hit Points</option><option value="temporary">Temporary Hit Points</option></select></label>
-      <label>Corrected Hit Points<input type="number" min="0" max="9999" value={correction.value} onChange={e => setCorrection({ ...correction, value: e.target.value })} /></label>
-      <button type="button" onClick={() => void save({ kind: 'correct', field: correction.field, value: number(correction.value) })}>Save HP correction</button>
-      <p>Maximum Hit Points can be corrected in Overview. Temporary Hit Points absorb damage and remain separate from healing.</p>
+      <div className="health-stepper">
+        <button type="button" aria-label="Subtract one Hit Point" disabled={state.current === null || state.current === 0} onClick={() => void save({ kind: 'subtract', amount: 1 })}>−</button>
+        <button type="button" aria-label="Add one Hit Point" disabled={state.current === null || state.current >= character.maxHitPoints} onClick={() => void save({ kind: 'add', amount: 1 })}>+</button>
+      </div>
+      <label>Amount<input type="number" inputMode="numeric" min="0" max="9999" step="1" value={amount} onChange={e => setAmount(e.target.value)} /></label>
+      <button type="button" disabled={state.current === null} onClick={() => void save({ kind: 'subtract', amount: number(amount) })}>Subtract</button>
+      <button type="button" disabled={state.current === null} onClick={() => void save({ kind: 'add', amount: number(amount) })}>Add</button>
+      <details><summary>{state.current === null ? 'Set Current Hit Points' : 'Correct Current Hit Points'}</summary>
+        <label>Current Hit Points<input type="number" inputMode="numeric" min="0" max={character.maxHitPoints} step="1" value={correction.value} onChange={e => setCorrection({ value: e.target.value })} /></label>
+        <button type="button" onClick={() => void save({ kind: 'set-current', value: number(correction.value) })}>Save Current Hit Points</button>
+        <p>Maximum Hit Points comes from the Character Record in Overview.</p>
+      </details>
       {(['successes', 'failures'] as const).map(field => <label key={field}>Death-save {field}<select value={state[field]} onChange={e => void save({ kind: 'track', field, value: Number(e.target.value) })}>{[0,1,2,3].map(n => <option key={n} value={n}>{n}</option>)}</select></label>)}
       <label><input type="checkbox" checked={pending?.kind === 'track' && pending.field === 'inspiration' ? pending.value : state.inspiration} onChange={e => void save({ kind: 'track', field: 'inspiration', value: e.target.checked })} />Heroic Inspiration</label>
       <label><input type="checkbox" checked={pending?.kind === 'track' && pending.field === 'unconscious' ? pending.value : state.unconscious} onChange={e => void save({ kind: 'track', field: 'unconscious', value: e.target.checked })} />Unconscious (manual)</label>
