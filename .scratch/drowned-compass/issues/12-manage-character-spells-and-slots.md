@@ -15,7 +15,7 @@
 
 ## Implementation evidence — 5 October 2026
 
-Implemented in isolated branch `codex/ticket-12-character-spells` from main `e3dfe433f0a07a6a609d3206ba8e64bb99a20935`. Independent Standards/Spec review remains pending; this ticket remains claimed until the coordinator completes that loop.
+Implemented in isolated branch `codex/ticket-12-character-spells` from main `e3dfe433f0a07a6a609d3206ba8e64bb99a20935`. Independent Standards and Spec review are clear. This ticket remains claimed pending human release approval.
 
 - `CharacterMagic` exposes `updateMagic` commands for individually versioned spell associations/Custom Spells and spell-slot levels. Catalog associations store the pinned catalog ID, availability, source and notes; complete rules remain in the bundled catalog. Custom Spells remain scoped to a Character Record.
 - Known, Prepared, Always Prepared, Item granted and Feature granted have explicit manual semantics. Guidance considers all active Character classes and warns without blocking. Slots are manually configured; counts never derive from class levels.
@@ -39,3 +39,13 @@ Release order after human approval: apply `20261005200000_manage_character_magic
 Replaced SQL `\v` trim-set escapes with explicit `\u000b`. Added domain U+000B and direct-RPC `chr(11)` regression cases verifying that actual vertical tabs are trimmed while ordinary leading/trailing lowercase `v` remains intact (`vRev`, `vWavev`). Build/typecheck passed again; **221 domain tests passed** and **470 rollback-only database assertions passed**. No rendered UI code changed in this follow-up; the previously passing 76 distinct browser cases remain the browser matrix. Final exact-head Standards re-review remains pending.
 
 Coordinator production smoke: **2/2 passed**, one laptop and one Pixel 7, against the refreshed `6d0de5f` production preview on port 4434 using fresh localStorage contexts with no `partyTestId`. Catalog association, slot spending, reload persistence and no horizontal overflow passed; coordinator inspected production UI screenshots. The subsequent SQL escape/test-only fix leaves the production bundle unchanged. This is local production smoke; hosted smoke and release remain pending.
+
+## Independent review and coordinator acceptance
+
+Fixed baseline: `e3dfe433f0a07a6a609d3206ba8e64bb99a20935`. Exact reviewed implementation head: `5cd4aa6e74c9b36671e076d2c9ca7aad0d67ee95`. Independent Standards and Spec agents reviewed this full diff; both report zero unresolved actionable findings. Standards initially found inconsistent Unicode whitespace normalization, then PostgreSQL vertical-tab escaping; both were fixed with domain and direct-RPC database regressions. Reviewers inspected code and evidence without independently rerunning tests.
+
+Final test matrix: build/typecheck passed; **221 domain tests passed**; **470 rollback-only database assertions across 14 files passed**, including 58 Magic assertions; **76 distinct focused browser checks passed** (38 laptop, 38 Pixel 7). Affected 40 checks and final 18 UI/catalog checks were repeated after fixes and passed; these overlap and are not added to the distinct total. Coordinator production smoke passed **2/2** using fresh localStorage contexts, no `partyTestId`: catalog association, slot spending, reload persistence, and no horizontal overflow. Laptop and phone screenshots were inspected. The final SQL/test-only fix leaves the verified production bundle unchanged.
+
+Local production preview: http://127.0.0.1:4434/the-drowned-compass/ (in-memory adapter, browser-local data). Preview login uses `player-password` or `dm-password`. Existing previews on 4390 and 4422 were preserved. All implementation/review agents have completed their work; only the requested preview server remains running.
+
+Release state: review PR publication is authorized. Hosted migration not applied; PR not merged; frontend not deployed; hosted smoke not run; live Character data not modified. After human approval, apply `20261005200000_manage_character_magic.sql` before merging/deploying the matching frontend, then verify hosted behavior.
