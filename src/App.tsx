@@ -1,4 +1,5 @@
-import { SpellCatalog } from './features/magic/SpellCatalog';
+import { MagicSection } from './features/magic/MagicSection';
+import { mergeMagic } from './domain/character-magic';
 import { SrdLegal } from './features/magic/SrdLegal';
 import { SurvivalSection } from "./components/SurvivalSection";
 import { mergeSurvival } from "./domain/survival";
@@ -76,6 +77,7 @@ function mergeCharacterRecords(current: CharacterRecord, incoming: CharacterReco
     limitedResources: mergeResources(current.limitedResources, incoming.limitedResources),
     inventory: mergeInventory(current.inventory, incoming.inventory),
     textEntries: mergeCharacterText(current.textEntries, incoming.textEntries),
+    magic: mergeMagic(current.magic, incoming.magic),
     conditions: mergeConditions(current.conditions, incoming.conditions),
     combatEntries: mergeCombatEntries(current.combatEntries, incoming.combatEntries),
     abilityScores: { ...incoming.abilityScores },
@@ -822,7 +824,7 @@ function CharacterPage({
           onChanged={resources => onSlotChanged({ ...slot, character: { ...character, limitedResources: resources } })} />
         <CombatEntriesSection slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} />
       </div>
-      <div hidden={section !== 'Magic'}><SpellCatalog /></div>
+      <div hidden={section !== 'Magic'}><MagicSection key={slot.id} slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} /></div>
       <div hidden={section !== 'Inventory'}><Inventory key={slot.id} slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} /></div>
       <div hidden={section !== 'Features'}><FeaturesStory key={`${slot.id}-features`} slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} area="Features" /></div>
       <div hidden={section !== 'Story'}><FeaturesStory key={`${slot.id}-story`} slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} area="Story" /></div>

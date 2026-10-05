@@ -1,3 +1,4 @@
+import type { CharacterMagic, MagicCommand } from './character-magic.ts';
 import type { Survival, SurvivalCommand } from "./survival.ts";
 import type { CharacterClass, ClassEdit } from "./character-classes.ts";
 import type { InventoryDraft, InventoryEntry } from "./inventory.ts";
@@ -73,6 +74,7 @@ export type CharacterRecord = {
   inventory?: InventoryEntry[];
   combatEntries?: CombatEntries;
   conditions?: Condition[];
+  magic?: CharacterMagic;
   fieldVersions: Partial<Record<OverviewFieldKey, number>>;
 };
 
@@ -124,6 +126,7 @@ export interface PartyData {
     slotId: string, entry: CharacterTextDraft, expectedVersion: number,
   ): Promise<OverviewUpdateResult>;
   updateCombatEntry(slotId: string, command: CombatEntryCommand): Promise<OverviewUpdateResult>;
+  updateMagic(slotId: string, command: MagicCommand): Promise<OverviewUpdateResult>;
   updateCondition(slotId: string, command: ConditionCommand): Promise<OverviewUpdateResult>;
   subscribeToParty(onPartyChanged: (party: Party) => void): () => void;
 }

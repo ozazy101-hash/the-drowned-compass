@@ -1,3 +1,4 @@
+import { applyMagicCommand, emptyMagic, validateMagicCommand } from '../domain/character-magic';
 import { initialSurvival, transitionSurvival } from "../domain/survival";
 import { applyClassEdit, characterClasses } from "../domain/character-classes";
 import { readLocalParty, writeLocalParty } from "./local-party-store";
@@ -51,6 +52,7 @@ function copyCharacter(character: CharacterRecord): CharacterRecord {
     ...character,
     survival: structuredClone(character.survival ?? initialSurvival()),
     classes: characterClasses(character).map(entry => ({ ...entry })),
+    magic: structuredClone(character.magic ?? emptyMagic()),
     conditions: structuredClone(character.conditions ?? []),
     limitedResources: (character.limitedResources ?? []).map(resource => ({ ...resource })),
     combatEntries: structuredClone(character.combatEntries ?? emptyCombatEntries()),
@@ -371,6 +373,35 @@ export function createInMemoryPartyData(): PartyData {
         if (!slot?.character) throw new Error('That Character Record is unavailable.');
         const state = slot.character.combatEntries ??= emptyCombatEntries();
         if (!applyCombatEntryCommand(state, command)) return { ok: false, reason: 'conflict', slot };
+        await storeParty(party);
+        return { ok: true, slot };
+      });
+    },
+
+    async updateMagic(slotId, command) {
+      validateMagicCommand(command);
+      if (params.get('failMagicSaves') === 'once' && !sessionStorage.getItem('magic-save-failed')) {
+        sessionStorage.setItem('magic-save-failed', 'true');
+        throw new Error('The save could not reach the Party.');
+      }
+      if (params.get('slowMagicSaves') === 'once' && !sessionStorage.getItem('magic-save-delayed')) {
+        sessionStorage.setItem('magic-save-delayed', 'true');
+        await new Promise(resolve => window.setTimeout(resolve, 1000));
+      }
+      if (testNamespace) {
+        const response = await fetch(testPartyUrl(testNamespace), {
+          method: 'PATCH', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ slotId, magicCommand: command }),
+        });
+        if (!response.ok && response.status !== 409) throw new Error('Magic could not be saved.');
+        const slot = normalizeSlot(await response.json() as CharacterSlot);
+        return response.status === 409 ? { ok: false, reason: 'conflict', slot } : { ok: true, slot };
+      }
+      return navigator.locks.request('drowned-compass-party-write', async () => {
+        const party = await readParty();
+        const slot = party.slots.find(s => s.id === slotId);
+        if (!slot?.character) throw new Error('That Character Record is unavailable.');
+        if (!applyMagicCommand(slot.character.magic ??= emptyMagic(), command)) return { ok: false, reason: 'conflict', slot };
         await storeParty(party);
         return { ok: true, slot };
       });

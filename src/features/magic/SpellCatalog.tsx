@@ -5,11 +5,12 @@ import {
   spellClasses,
   spellSchools,
   type SpellFilters,
+  type CatalogSpell,
 } from "../../domain/spell-catalog";
 import { rulesReferences } from "../../domain/rules-reference";
 import { RulesTooltip } from "../rules/RulesTooltip";
 import "./spell-catalog.css";
-function RulesText({ text }: { text: string }) {
+export function RulesText({ text }: { text: string }) {
   const names = Object.keys(rulesReferences).sort(
     (a, b) => b.length - a.length,
   );
@@ -28,7 +29,9 @@ function RulesText({ text }: { text: string }) {
     </>
   );
 }
-export function SpellCatalog() {
+export function SpellCatalog({ onAdd, characterClasses = [], busy = false, activeIds = [] }: {
+  onAdd?: (id: string) => void; characterClasses?: string[]; busy?: boolean; activeIds?: string[];
+}) {
   const [filters, setFilters] = useState<SpellFilters>({});
   const [selected, setSelected] = useState<string>();
   const spells = searchSpells(filters),
@@ -139,11 +142,29 @@ export function SpellCatalog() {
           ))}
         </ul>
         {spell ? (
+          <SpellDetails spell={spell} onAdd={onAdd} characterClasses={characterClasses} busy={busy} activeIds={activeIds} />
+        ) : (
+          <p>Select a spell to inspect its rules.</p>
+        )}
+      </div>
+      {!spells.length && <p>No spells match. Clear or adjust the filters.</p>}
+    </section>
+  );
+}
+
+export function SpellDetails({ spell, onAdd, characterClasses = [], busy = false, activeIds = [] }: {
+  spell: CatalogSpell; onAdd?: (id: string) => void; characterClasses?: string[]; busy?: boolean; activeIds?: string[];
+}) {
+  return (
           <article
             className="spell-detail"
             aria-label={`${spell.name} spell details`}
           >
             <h3>{spell.name}</h3>
+            {onAdd && <>
+              {!!characterClasses.length && !characterClasses.some(name => spell.classes.some(c => c.toLowerCase() === name.toLowerCase())) && <p role="note">This spell is unusual for your Character’s classes ({characterClasses.join(', ')}). You can still add it for a feature, item, or manual choice.</p>}
+              <button type="button" disabled={busy || activeIds.includes(spell.id)} onClick={() => onAdd(spell.id)}>{activeIds.includes(spell.id) ? 'Already added to Character' : 'Add to Character Spells'}</button>
+            </>}
             <p>
               {spell.level === 0 ? "Cantrip" : `Level ${spell.level}`} ·{" "}
               {spell.school} · {spell.classes.join(", ")}
@@ -223,11 +244,5 @@ export function SpellCatalog() {
               SRD 5.2.1 · page {spell.source.page}
             </a>
           </article>
-        ) : (
-          <p>Select a spell to inspect its rules.</p>
-        )}
-      </div>
-      {!spells.length && <p>No spells match. Clear or adjust the filters.</p>}
-    </section>
   );
 }

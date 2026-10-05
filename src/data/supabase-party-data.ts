@@ -1,3 +1,4 @@
+import { emptyMagic, validateMagicCommand, type CharacterSpell, type SpellSlot } from '../domain/character-magic';
 import { initialSurvival } from "../domain/survival";
 import { validateClassEdit, projectClasses, type CharacterClass } from "../domain/character-classes";
 import { validateInventory, type InventoryEntry } from "../domain/inventory";
@@ -154,7 +155,7 @@ export function createSupabasePartyData(
 
     if (slotsError) throw slotsError;
 
-    const [resources, inventoryResult, textResult, entriesResult, primaryResult, survivalResult, classesResult, conditionsResult] = await Promise.all([
+    const [resources, inventoryResult, textResult, entriesResult, primaryResult, survivalResult, classesResult, conditionsResult, magicResult] = await Promise.all([
       readResources(client),
       client.from('character_inventory_entries').select('slot_id, entry_id, kind, title, body, rank, deleted, version'),
       client.from('character_text_entries').select('slot_id, entry_id, kind, title, body, deleted, version'),
@@ -163,10 +164,12 @@ export function createSupabasePartyData(
       client.from('character_survival').select('slot_id,state'),
       client.from('character_classes').select('slot_id, entry_id, name, level, version, deleted'),
       client.from('character_conditions').select('slot_id, id, standard, label, deleted, version'),
+      client.from('character_magic').select('slot_id, id, kind, state, version'),
     ]);
     if (survivalResult.error) throw survivalResult.error;
     if (classesResult.error) throw classesResult.error;
     if (inventoryResult.error) throw inventoryResult.error;
+    if (magicResult.error) throw magicResult.error;
     if (conditionsResult.error) throw conditionsResult.error;
     if (textResult.error) throw textResult.error;
     if (entriesResult.error) throw entriesResult.error;
@@ -183,6 +186,12 @@ export function createSupabasePartyData(
           slot.character.classes = (classesResult.data ?? []).filter(entry => entry.slot_id === slot.id).map(entry => ({ id: entry.entry_id, name: entry.name, level: entry.level, version: Number(entry.version), deleted: entry.deleted }) as CharacterClass);
           if (!slot.character.classes.length) delete slot.character.classes;
           projectClasses(slot.character);
+          const magic = emptyMagic();
+          for (const row of magicResult.data ?? []) if (row.slot_id === slot.id) {
+            if (row.kind === 'spell') magic.spells.push({ ...row.state, id: row.id, version: Number(row.version) } as CharacterSpell);
+            else magic.slots.push({ ...row.state, id: row.id, version: Number(row.version) } as SpellSlot);
+          }
+          slot.character.magic = magic;
           slot.character.conditions = (conditionsResult.data ?? []).filter(c => c.slot_id === slot.id).map(({ id, standard, label, deleted, version }) => ({ id, standard, label, deleted, version: Number(version) }) as Condition);
           slot.character.limitedResources = resources.filter(resource => resource.slot_id === slot.id).map(mapResource);
           slot.character.inventory = (inventoryResult.data ?? []).filter(e => e.slot_id === slot.id).map(e => ({ id: e.entry_id, rank: e.rank, kind: e.kind, title: e.title, body: e.body, deleted: e.deleted, version: Number(e.version) }) as InventoryEntry);
@@ -359,6 +368,16 @@ export function createSupabasePartyData(
       return accepted === true ? { ok: true, slot } : { ok: false, reason: 'conflict', slot };
     },
 
+    async updateMagic(slotId, command) {
+      validateMagicCommand(command);
+      const { data: accepted, error } = await client.rpc('update_character_magic', { target_slot_id: slotId, command });
+      if (error) throw new Error('Magic could not be saved. Please retry.');
+      const party = await loadParty();
+      const slot = party.slots.find(s => s.id === slotId);
+      if (!slot?.character) throw new Error('That Character Record is unavailable.');
+      return accepted === true ? { ok: true, slot } : { ok: false, reason: 'conflict', slot };
+    },
+
     async updateCondition(slotId, command) {
       validateCondition(command);
       const { data: accepted, error } = await client.rpc('update_character_condition', { target_slot_id: slotId, command });
@@ -398,6 +417,7 @@ export function createSupabasePartyData(
         .on('postgres_changes', { event: '*', schema: 'public', table: 'character_primary_attacks' }, reload)
         .on('postgres_changes', { event: '*', schema: 'public', table: 'character_classes' }, reload)
         .on('postgres_changes', { event: '*', schema: 'public', table: 'character_conditions' }, reload)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'character_magic' }, reload)
         .subscribe((status) => {
           // Realtime does not replay changes missed while disconnected.
           if (status === "SUBSCRIBED") reload();

@@ -1,3 +1,4 @@
+import { applyMagicCommand, emptyMagic, type MagicCommand } from './src/domain/character-magic.ts';
 import { applyClassEdit, type ClassEdit } from './src/domain/character-classes.ts';
 import { setInventory, type InventoryDraft } from './src/domain/inventory.ts';
 import { applyConditionCommand, type ConditionCommand } from './src/domain/conditions.ts';
@@ -141,6 +142,14 @@ function sharedInMemoryParty(): Plugin {
             return;
           }
 
+          if (requestBody.magicCommand) {
+            try {
+              const character = slot.character as CharacterRecord;
+              if (!applyMagicCommand(character.magic ??= emptyMagic(), requestBody.magicCommand as MagicCommand)) response.statusCode = 409;
+            } catch { response.statusCode = 400; }
+            response.end(JSON.stringify(slot));
+            return;
+          }
           if (requestBody.conditionCommand) {
             try {
               const character = slot.character as CharacterRecord;
