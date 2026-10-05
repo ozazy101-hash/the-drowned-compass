@@ -25,7 +25,7 @@ for (const adapterName of ['memory','supabase'] as const) {
         else if (path.endsWith('/character_slots')) json=[row];
         else if (path.endsWith('/character_inventory_entries') || path.endsWith('/character_conditions')) json=[];
         else if (path.endsWith('/character_combat_entries')) json=combat.entries.map(e => ({ ...e,slot_id:row.id }));
-        else if (path.endsWith('/character_primary_attacks')) json=[{ slot_id:row.id,primary_id:combat.primaryId,version:combat.primaryVersion }];
+        else if (path.endsWith('/character_primary_attacks')) json=[{ slot_id:row.id,primary_id:combat.primaryId,featured_ids:combat.featuredIds,version:combat.primaryVersion }];
         else if (path.endsWith('/character_survival') || path.endsWith('/character_classes') || path.endsWith('/limited_resources')) json=[];
         else if (path.endsWith('/character_text_entries')) json=[];
         else throw new Error(`Unexpected route: ${path}`);
@@ -47,8 +47,15 @@ for (const adapterName of ['memory','supabase'] as const) {
       const stale=await adapter.updateCombatEntry('character-slot-1',{ type:'move',id,rank:0,expectedVersion:1 });
       const moved=await adapter.updateCombatEntry('character-slot-1',{ type:'move',id,rank:0,expectedVersion:2 });
       const removed=await adapter.updateCombatEntry('character-slot-1',{ type:'remove',id,expectedVersion:3 });
+      const second='39000000-0000-4000-8000-000000000011';
+      await adapter.updateCombatEntry('character-slot-1',{type:'save',id:second,details,rank:10,expectedVersion:0});
+      const third='39000000-0000-4000-8000-000000000012';
+      await adapter.updateCombatEntry('character-slot-1',{type:'save',id:third,details:{...details,category:'ranged'},rank:5,expectedVersion:0});
+      const featured=await adapter.updateCombatEntry('character-slot-1',{type:'featured',ids:[second,third],expectedVersion:2});
+      const independent=await adapter.updateCombatEntry('character-slot-1',{type:'save',id:second,details:{...details,notes:'Independent'},rank:10,expectedVersion:1});
+      const selectionConflict=await adapter.updateCombatEntry('character-slot-1',{type:'featured',ids:[],expectedVersion:2});
       const loaded=await adapter.getParty();
-      return { initial,created,primary,edited,stale,moved,removed,loaded };
+      return { initial,created,primary,edited,stale,moved,removed,featured,independent,selectionConflict,loaded };
     }, { adapterName, abilities, saves, skills });
     const state = (result: typeof results.created) => result.slot.character.combatEntries;
     expect(results.initial.slots[0].character.combatEntries.entries).toEqual([]);
@@ -59,9 +66,11 @@ for (const adapterName of ['memory','supabase'] as const) {
     expect(state(results.stale).entries[0].rank).toBe(1024);
     expect(state(results.moved).entries[0]).toMatchObject({ rank:0,version:3 });
     expect(state(results.removed)).toMatchObject({ primaryId:null,primaryVersion:2,entries:[{ deleted:true,version:4 }] });
-    expect(results.loaded.slots[0].character.combatEntries).toEqual(state(results.removed));
+    expect(state(results.featured).featuredIds).toEqual(['39000000-0000-4000-8000-000000000011','39000000-0000-4000-8000-000000000012']);
+    expect(state(results.independent).primaryVersion).toBe(3); expect(results.selectionConflict.ok).toBe(false);
+    expect(results.loaded.slots[0].character.combatEntries).toEqual(state(results.independent));
     if (adapterName === 'supabase') {
-      expect(commands.map(command => command.expectedVersion)).toEqual([0,0,1,1,2,3]);
+      expect(commands.map(command => command.expectedVersion)).toEqual([0,0,1,1,2,3,0,0,2,1,2]);
       failNext=true;
     } else {
       await page.route('**/__drowned_compass_test_party?**', route => route.request().method() === 'PATCH' ? route.abort() : route.continue());

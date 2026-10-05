@@ -82,12 +82,12 @@ export function ClaimedCharacterCard({ slot, onSelect, playSummary }: {
               <span><span className="party-card__label">Spell save DC</span><SummaryValue label="Spell save DC" result={derived.spellSaveDC} /></span>
             )}
           </span>
-          {playSummary && <span className="party-card__play-summary">{playSummary}</span>}
           {hasSummaryOverride && <span className="party-card__override-note">* Override</span>}
         </span>
         <span className="party-card__open" aria-hidden="true">Open Character Page <span>→</span></span>
       </button>
       <ConditionList conditions={character.conditions} />
+      {playSummary && <span className="party-card__play-summary party-card__additional">{playSummary}</span>}
     </article>
   );
 }

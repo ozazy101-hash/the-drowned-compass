@@ -3,6 +3,7 @@ import { spawnSync } from 'node:child_process';
 
 // Rehearse actual pending migrations inside rollback-only tests.
 const rehearsals = [
+  ['featured_attacks', '20261005180000_feature_multiple_attacks.sql', '__FEATURED_ATTACKS_MIGRATION__'],
   ['survival', '20261003100700_track_hit_points_and_survival.sql', '__SURVIVAL_MIGRATION__'],
   ['character_classes', '20261003140000_support_multiclass_characters.sql', '__CHARACTER_CLASSES_MIGRATION__'],
   ['inventory', '20261003150000_record_inventory.sql', '__INVENTORY_MIGRATION__'],
@@ -18,7 +19,9 @@ try {
     const template = new URL(`../supabase/tests/fixtures/${name}_migration.sql.template`, import.meta.url);
     const migration = new URL(`../supabase/migrations/${migrationFile}`, import.meta.url);
     const output = new URL(`../supabase/tests/database/${name}_migration.generated.test.sql`, import.meta.url);
-    writeFileSync(output, readFileSync(template, 'utf8').replace(`-- ${marker}`, () => readFileSync(migration, 'utf8')));
+    let source = readFileSync(template, 'utf8').replace(`-- ${marker}`, () => readFileSync(migration, 'utf8'));
+    if (name === 'featured_attacks') source = source.replace('-- __COMBAT_ENTRIES_MIGRATION__', () => readFileSync(new URL('../supabase/migrations/20260928220900_manage_attacks_and_actions.sql', import.meta.url), 'utf8'));
+    writeFileSync(output, source);
     generated.push(output);
   }
   const result = spawnSync('supabase', ['test', 'db', ...process.argv.slice(2)], { stdio: 'inherit' });

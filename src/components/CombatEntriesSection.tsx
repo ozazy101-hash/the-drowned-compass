@@ -1,6 +1,6 @@
 import { useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { abilityScoreKeys, type CharacterSlot, type PartyData } from '../domain/party';
-import { emptyCombatEntries, visibleCombatEntries, validateCombatDetails, type CombatEntry, type CombatEntryDetails, type CombatEntryCommand } from '../domain/combat-entries';
+import { emptyCombatEntries, availableFeaturedAttackIds, featuredAttackIds, visibleCombatEntries, validateCombatDetails, type CombatEntry, type CombatEntryDetails, type CombatEntryCommand } from '../domain/combat-entries';
 
 type Save = (command: CombatEntryCommand) => Promise<boolean>;
 type FeedbackState = { status: 'idle' | 'unsaved' | 'saving' | 'saved' | 'error'; message: string };
@@ -64,8 +64,10 @@ function EntryEditor({ entry, onSave, onCreated, onCancel, initiallySaved = fals
       <div className="section-heading"><h3>{title}</h3><span>{draft.kind === 'attack' ? 'Attack' : 'Action'}</span></div>
       {entry.deleted && <p role="alert">Removed elsewhere. This draft cannot be saved. Copy your notes or discard the draft.</p>}
       <div className="overview-grid combat-entry__fields">
+        <EntryField label="Record type" id={`${entry.id}-kind`}><select id={`${entry.id}-kind`} value={draft.kind} onChange={e => change({ kind:e.target.value as CombatEntryDetails['kind'] })}><option value="attack">Attack</option><option value="action">Action</option></select></EntryField>
         <EntryField label="Name" id={`${entry.id}-name`}><input id={`${entry.id}-name`} maxLength={120} value={draft.name} onChange={e => change({ name:e.target.value })} /></EntryField>
         {draft.kind === 'attack' && <>
+          <EntryField label="Attack category" id={`${entry.id}-category`}><select id={`${entry.id}-category`} value={draft.category ?? 'other'} onChange={e => change({ category:e.target.value as CombatEntryDetails['category'] })}><option value="other">Other</option><option value="melee">Melee</option><option value="ranged">Ranged</option></select></EntryField>
           <EntryField label="Relevant Ability" id={`${entry.id}-relevant-ability`}><select id={`${entry.id}-relevant-ability`} value={draft.ability ?? ''} onChange={e => {
             change({ ability:(e.target.value || null) as CombatEntryDetails['ability'], ...(e.target.value ? { attackBonus:'' } : {}) });
           }}><option value="">Manual attack bonus</option>{abilityScoreKeys.map(key => <option key={key} value={key}>{key[0].toUpperCase() + key.slice(1)}</option>)}</select></EntryField>
@@ -95,6 +97,7 @@ export function CombatEntriesSection({ slot, partyData, onSlotChanged }: { slot:
   const visible = visibleCombatEntries(state);
   const [creating, setCreating] = useState<CombatEntry | null>(null);
   const [lastCreatedId, setLastCreatedId] = useState<string | null>(null);
+  const [selectionDraft, setSelectionDraft] = useState<string[] | null>(null);
   const [primaryFeedback, setPrimaryFeedback] = useState<FeedbackState>(idleFeedback);
   const primaryCommand = useRef<CombatEntryCommand | null>(null);
   const primaryRequest = useRef(0);
@@ -103,13 +106,16 @@ export function CombatEntriesSection({ slot, partyData, onSlotChanged }: { slot:
     onSlotChanged(result.slot);
     return result.ok;
   };
-  async function primary(id: string | null, expectedVersion = state.primaryVersion) {
+  async function primary(ids: string[], expectedVersion = state.primaryVersion) {
+    ids = availableFeaturedAttackIds(state, ids);
     const currentRequest = ++primaryRequest.current;
-    primaryCommand.current = { type:'primary', id, expectedVersion };
+    primaryCommand.current = { type:'featured', ids, expectedVersion };
+    setSelectionDraft(ids);
     setPrimaryFeedback({ status:'saving', message:'Saving…' });
     try {
       const ok = await save(primaryCommand.current);
-      if (primaryRequest.current === currentRequest) setPrimaryFeedback(ok ? { status:'saved', message:'Saved' } : { status:'error', message:'Changed elsewhere. Primary selection not saved.' });
+      if (primaryRequest.current === currentRequest && ok) setSelectionDraft(null);
+      if (primaryRequest.current === currentRequest) setPrimaryFeedback(ok ? { status:'saved', message:'Saved' } : { status:'error', message:'Changed elsewhere. Featured selection not saved.' });
     } catch { if (primaryRequest.current === currentRequest) setPrimaryFeedback({ status:'error', message:'Not saved. Check your connection and retry.' }); }
   }
   function add(kind: 'attack' | 'action') {
@@ -119,10 +125,14 @@ export function CombatEntriesSection({ slot, partyData, onSlotChanged }: { slot:
   return <section className="overview-section" aria-labelledby="attacks-heading">
     <div className="section-heading"><div><p className="section-heading__eyebrow">Combat</p><h2 id="attacks-heading">Attacks &amp; Actions</h2></div><p>Player-entered values. Save each attack or action when ready.</p></div>
     <p className="combat-entry__guidance">A relevant Ability is a reminder; enter attack and damage values from your Character Record. No weapon or class rules are applied.</p>
-    <EntryField label="Primary attack" id={`primary-attack-${slot.id}`} className="combat-primary"><select id={`primary-attack-${slot.id}`} disabled={primaryFeedback.status === 'saving'} value={state.primaryId ?? ''} onChange={e => void primary(e.target.value || null)}>
-      <option value="">None</option>{visible.filter(e => e.details.kind === 'attack').map(e => <option key={e.id} value={e.id}>{e.details.name}</option>)}
-    </select></EntryField>
-    <Feedback state={primaryFeedback} retry={() => { if (primaryCommand.current?.type === 'primary') void primary(primaryCommand.current.id); }} />
+    <fieldset className="combat-featured" disabled={primaryFeedback.status === 'saving'}>
+      <legend>Featured attacks on the Party Dashboard</legend>
+      <p>Choose any number of saved attacks, or leave all unchecked.</p>
+      {visible.filter(e => e.details.kind === 'attack').map(e => <label key={e.id}><input type="checkbox" checked={(selectionDraft ?? featuredAttackIds(state)).includes(e.id)} onChange={event => void primary(event.target.checked ? [...(selectionDraft ?? featuredAttackIds(state)), e.id] : (selectionDraft ?? featuredAttackIds(state)).filter(id => id !== e.id))} />{e.details.name}</label>)}
+      {visible.every(e => e.details.kind !== 'attack') && <p>Save an attack to feature it here.</p>}
+    </fieldset>
+    <Feedback state={primaryFeedback} retry={() => { if (primaryCommand.current?.type === 'featured') void primary(primaryCommand.current.ids); }} />
+    {selectionDraft !== null && primaryFeedback.status === 'error' && <button type="button" className="text-button" onClick={() => { setSelectionDraft(null); primaryCommand.current = null; setPrimaryFeedback(idleFeedback); }}>Use saved selection</button>}
     {visible.length === 0 && !creating && <p>No attacks or actions recorded yet.</p>}
     <div className="combat-entry-list">
       {state.entries.filter(e => e.id !== creating?.id).sort((a,b) => a.rank-b.rank || a.id.localeCompare(b.id)).map(entry => {

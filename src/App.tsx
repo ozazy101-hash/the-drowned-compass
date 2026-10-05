@@ -11,7 +11,8 @@ import { FeaturesStory } from "./features/FeaturesStory";
 import { ConditionsSection } from './features/conditions/ConditionsSection';
 import { mergeConditions } from './domain/conditions';
 import { CombatEntriesSection } from './components/CombatEntriesSection';
-import { mergeCombatEntries, primaryAttackSummary } from './domain/combat-entries';
+import { FeaturedAttackSummary } from './components/FeaturedAttackSummary';
+import { mergeCombatEntries } from './domain/combat-entries';
 import { overviewValue, setOverviewValue } from "./domain/overview-fields";
 import { ClaimedCharacterCard } from "./components/claimed-character-card";
 import { calculateDerivedValues, type DerivedValue, type DerivedValueKey } from "./domain/derived-values";
@@ -156,9 +157,8 @@ function UnclaimedSlot({
 }
 
 function combatPlaySummary(slot: CharacterSlot) {
-  const summary = primaryAttackSummary(slot.character?.combatEntries);
   return <>
-    {summary && <span className="primary-attack-summary">Primary attack: {summary}</span>}
+    <FeaturedAttackSummary state={slot.character?.combatEntries} />
     <ImportantResourceSummary resources={slot.character?.limitedResources} />
   </>;
 }
