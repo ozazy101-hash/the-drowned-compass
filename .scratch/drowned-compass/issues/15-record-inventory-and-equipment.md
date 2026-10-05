@@ -4,7 +4,7 @@
 
 **Blocked by:** 04 — Edit and synchronize the Character Overview.
 
-**Status:** claimed
+**Status:** resolved
 
 - [x] The Inventory area supports adding, editing, ordering, and removing equipment and notable magical items.
 - [x] Currency can be entered and corrected without automatic conversion or campaign-economy behaviour.
@@ -29,3 +29,7 @@
 - Integration follow-up: cherry-picked coordinator commit `63d5834` as `cc493ea` without conflicts. The three-file fix imports legacy data in a fresh browser context, permits peer feature endpoints in Inventory Supabase fixtures, and preserves Limited Resources drafts when unchanged Party snapshots arrive.
 - Updated Ticket 15 focused browser run: **50/50 passed** (25 laptop, 25 phone), exit 0, using the shared lock on isolated port 4215, one worker and 180000ms test budget. Coverage: Derived Values/legacy import, Inventory journeys and adapters, Limited Resources journeys, canonical local snapshots and mirror-quota delivery. Production build and whitespace checks passed. Temporary browser config removed.
 - Coordinator reports combined four-ticket integration validation passed **176/176 calculations, 353/353 rollback-only database assertions, 198/198 laptop/phone browser cases and build**, including **20/20** resource stress repetitions after this fix. These are coordinator-reported integrated results, distinct from this branch's 50-case follow-up run. No merge or deployment was performed.
+
+## Ticket17 prerequisite reconciliation
+
+Core acceptance and deployment were confirmed by the coordinator before Ticket17 began. Accepted release history includes PR #24 (Ticket12), baseline `5c6c52d14a34ca3bf606963e863d705252124504`, and PR #25 (Ticket13), baseline `d66394f6998123486c7dede9466774a16cc3ab4e`. This reconciles the tracker with that trusted release evidence; it does not claim an independent hosted verification or perform a new deployment. See [Ticket17 delivery ledger](../ticket-17-delivery.md).

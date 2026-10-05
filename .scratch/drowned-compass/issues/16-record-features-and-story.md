@@ -27,3 +27,7 @@ Status remains claimed pending accepted release. Hosted migration and frontend d
 2026-10-02: The user approved integration and deployment. The branch was reconciled with accepted Tickets 09 and 06. Integrated validation: 98/98 browser cases, two additional cross-feature laptop/phone journeys, 179 rollback-only database assertions, 131 calculation cases, production build and diff checks. Hosted migration dry run selected only the Ticket 16 migration; hosted release and acceptance are next.
 
 2026-10-02 release: PR #7 merged as `7f05e25d6e4ce45ab861116e44fb0dafe26abbb8`. The hosted migration `20260928221600_record_features_and_story.sql` applied successfully; local and remote migration lists match. The [Pages deployment](https://github.com/ozazy101-hash/the-drowned-compass/actions/runs/36974460174) completed successfully. The public app returned HTTP 200. In a signed-in session on the existing Ticket 04 test character, a Feature and Story field saved, survived reload, and their temporary contents were removed/cleared. Ticket 16 is resolved.
+
+## Ticket17 prerequisite reconciliation
+
+Core acceptance and deployment were confirmed by the coordinator before Ticket17 began. Accepted release history includes PR #24 (Ticket12), baseline `5c6c52d14a34ca3bf606963e863d705252124504`, and PR #25 (Ticket13), baseline `d66394f6998123486c7dede9466774a16cc3ab4e`. This reconciles the tracker with that trusted release evidence; it does not claim an independent hosted verification or perform a new deployment. See [Ticket17 delivery ledger](../ticket-17-delivery.md).

@@ -4,7 +4,7 @@
 
 **Blocked by:** 11 — Browse the SRD Spell Catalog.
 
-**Status:** claimed
+**Status:** resolved
 
 - [x] Selecting a Spell Catalog entry adds it to the Character Record without copying catalogue rules text into character-owned data.
 - [x] Class filters guide selection and an unusual class choice produces a warning rather than a block.
@@ -49,3 +49,7 @@ Final test matrix: build/typecheck passed; **221 domain tests passed**; **470 ro
 Local production preview: http://127.0.0.1:4434/the-drowned-compass/ (in-memory adapter, browser-local data). Preview login uses `player-password` or `dm-password`. Existing previews on 4390 and 4422 were preserved. All implementation/review agents have completed their work; only the requested preview server remains running.
 
 Release state: review PR publication is authorized. Hosted migration not applied; PR not merged; frontend not deployed; hosted smoke not run; live Character data not modified. After human approval, apply `20261005200000_manage_character_magic.sql` before merging/deploying the matching frontend, then verify hosted behavior.
+
+## Ticket17 prerequisite reconciliation
+
+Core acceptance and deployment were confirmed by the coordinator before Ticket17 began. Accepted release history includes PR #24 (Ticket12), baseline `5c6c52d14a34ca3bf606963e863d705252124504`, and PR #25 (Ticket13), baseline `d66394f6998123486c7dede9466774a16cc3ab4e`. This reconciles the tracker with that trusted release evidence; it does not claim an independent hosted verification or perform a new deployment. See [Ticket17 delivery ledger](../ticket-17-delivery.md).

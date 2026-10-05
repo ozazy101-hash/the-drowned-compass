@@ -44,3 +44,7 @@ Limited resources are live in Combat. Players can track bounded uses and recover
 ## Comments
 
 2026-10-02 release: The user authorized merging Ticket 10 after the combined 204/204 database assertions, 120/120 browser cases, 131/131 calculation cases and production build passed. A fresh hosted dry run selected only `20260928221000_track_limited_resources.sql` (no seeds or roles). That migration was applied with `--include-all --skip-vault`; the postflight migration list matches locally and remotely. PR #8 merged, and the [Pages run](https://github.com/ozazy101-hash/the-drowned-compass/actions/runs/36977242530) succeeded. In a signed-in session on the existing Ticket 04 test character, a temporary resource was saved, marked important, spent from 2/2 to 1/2, shown on the Party card and verified after reload. It was then removed; the Party card cleared after reload. Ticket 10 is resolved.
+
+## Ticket17 prerequisite reconciliation
+
+Core acceptance and deployment were confirmed by the coordinator before Ticket17 began. Accepted release history includes PR #24 (Ticket12), baseline `5c6c52d14a34ca3bf606963e863d705252124504`, and PR #25 (Ticket13), baseline `d66394f6998123486c7dede9466774a16cc3ab4e`. This reconciles the tracker with that trusted release evidence; it does not claim an independent hosted verification or perform a new deployment. See [Ticket17 delivery ledger](../ticket-17-delivery.md).
