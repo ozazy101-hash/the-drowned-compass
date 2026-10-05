@@ -4,7 +4,8 @@ export type Survival = Health & {
   undo: { before: Health; maximumVersion: number; label: string } | null;
 };
 export type SurvivalCommand =
-  | { kind: 'damage' | 'heal'; amount: number }
+  | { kind: 'damage' | 'heal' | 'add' | 'subtract'; amount: number }
+  | { kind: 'set-current'; value: number }
   | { kind: 'correct'; field: 'current' | 'temporary'; value: number }
   | { kind: 'track'; field: 'successes' | 'failures'; value: number }
   | { kind: 'track'; field: 'unconscious' | 'inspiration'; value: boolean }
@@ -17,7 +18,7 @@ function integer(value: number, maximum = 9999) {
 }
 // Unknown current HP remains explicit until a player supplies it. Corrections permit table rulings above maximum.
 export function transitionSurvival(state: Survival, command: SurvivalCommand, maximum: number, maximumVersion: number): Survival | null {
-  if (!['damage', 'heal', 'correct', 'track', 'undo'].includes(command.kind)) throw new Error('Invalid survival command.');
+  if (!['damage', 'heal', 'add', 'subtract', 'set-current', 'correct', 'track', 'undo'].includes(command.kind)) throw new Error('Invalid survival command.');
   if (command.kind === 'track' && !['successes', 'failures', 'unconscious', 'inspiration'].includes(command.field)) throw new Error('Invalid survival field.');
   const next = structuredClone(state);
   if (command.kind === 'undo') {
@@ -28,10 +29,16 @@ export function transitionSurvival(state: Survival, command: SurvivalCommand, ma
     else if (typeof command.value !== 'boolean') throw new Error('Choose a survival state.');
     Object.assign(next, { [command.field]: command.value });
   } else {
-    const value = command.kind === 'correct' ? command.value : command.amount;
+    const value = (command.kind === 'correct' || command.kind === 'set-current') ? command.value : command.amount;
     integer(value);
-    if (command.kind !== 'correct' && state.current === null) throw new Error('Set Current Hit Points before applying damage or healing.');
-    if (command.kind === 'correct') {
+    if (command.kind !== 'correct' && command.kind !== 'set-current' && state.current === null) throw new Error('Set Current Hit Points before adding or subtracting.');
+    if (command.kind === 'set-current') {
+      integer(value, maximum); next.current = value;
+    } else if (command.kind === 'subtract') {
+      next.current = Math.min(maximum, Math.max(0, state.current! - value));
+    } else if (command.kind === 'add') {
+      next.current = Math.min(maximum, Math.max(0, state.current! + value));
+    } else if (command.kind === 'correct') {
       if (!['current', 'temporary'].includes(command.field)) throw new Error('Invalid health field.');
       next[command.field] = value;
     } else if (command.kind === 'damage') {

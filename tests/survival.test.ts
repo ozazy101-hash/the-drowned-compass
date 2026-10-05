@@ -34,3 +34,13 @@ test('delayed snapshots retain the latest accepted survival version', () => {
   expect(mergeSurvival(current,{...initialSurvival(),current:18,version:2})).toEqual(current);
   expect(mergeSurvival(current,{...current,current:9,version:4}).current).toBe(9);
 });
+
+for (const [kind,current,amount,expected] of [['subtract',20,1,19],['subtract',3,99,0],['add',19,5,20],['subtract',27,1,20]] as const) test(`neutral ${kind} ${current} by ${amount}`, () => {
+ const next=transitionSurvival({...initialSurvival(),current,temporary:9},{kind,amount},20,0)!;
+ expect(next).toMatchObject({current:expected,temporary:9});
+});
+test('bounded initial setup and correction preserve survival trackers',()=> {
+ expect(transitionSurvival({...initialSurvival(),inspiration:true},{kind:'set-current',value:20},20,0)).toMatchObject({current:20,inspiration:true});
+ expect(()=>transitionSurvival(initialSurvival(),{kind:'set-current',value:21},20,0)).toThrow();
+ expect(()=>transitionSurvival(initialSurvival(),{kind:'subtract',amount:1},20,0)).toThrow('Set Current');
+});

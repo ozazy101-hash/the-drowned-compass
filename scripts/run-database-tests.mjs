@@ -21,6 +21,7 @@ try {
     const output = new URL(`../supabase/tests/database/${name}_migration.generated.test.sql`, import.meta.url);
     let source = readFileSync(template, 'utf8').replace(`-- ${marker}`, () => readFileSync(migration, 'utf8'));
     if (name === 'featured_attacks') source = source.replace('-- __COMBAT_ENTRIES_MIGRATION__', () => readFileSync(new URL('../supabase/migrations/20260928220900_manage_attacks_and_actions.sql', import.meta.url), 'utf8'));
+    source = source.replace('-- __HEALTH_MIGRATION__', () => readFileSync(new URL('../supabase/migrations/20261005190000_simplify_health_controls.sql', import.meta.url), 'utf8'));
     writeFileSync(output, source);
     generated.push(output);
   }
