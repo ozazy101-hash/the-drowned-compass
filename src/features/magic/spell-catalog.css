@@ -109,3 +109,16 @@
   font-weight: bold;
   padding: 8px 0;
 }
+.spell-catalog button:not(.rules-trigger) {
+  min-height: 44px;
+  padding: .65rem .8rem;
+  color: var(--ink);
+  font: inherit;
+  background: #142528;
+  border: 1px solid #776346;
+  border-radius: .3rem;
+  cursor: pointer;
+}
+.spell-catalog button:not(.rules-trigger):disabled { opacity: .5; cursor: default; }
+.spell-catalog .spell-results [aria-pressed="true"] { border-color: #c6ad75; background: #294145; }
+.spell-catalog :is(button, input, select):focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 3px; }

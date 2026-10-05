@@ -73,7 +73,7 @@ test('Supabase subscribes to Condition events and reloads missed changes after r
     const path = new URL(route.request().url()).pathname;
     const json = path.endsWith('/parties') ? { id: 'party', name: 'The Drowned Compass' }
       : path.endsWith('/character_conditions') ? [{ slot_id: 'slot', id: 'custom.11111111-1111-4111-8111-111111111111', standard: null, label: text, deleted: false, version }]
-      : path.endsWith('/character_text_entries') || path.endsWith('/character_combat_entries') || path.endsWith('/character_primary_attacks') || path.endsWith('/limited_resources') ? []
+      : path.endsWith('/character_magic') || path.endsWith('/character_text_entries') || path.endsWith('/character_combat_entries') || path.endsWith('/character_primary_attacks') || path.endsWith('/limited_resources') ? []
       : [{ id: 'slot', position: 1, claimed_at: '2026-09-28', overview_field_versions: {} }];
     await route.fulfill({ contentType: 'application/json', json });
   });
