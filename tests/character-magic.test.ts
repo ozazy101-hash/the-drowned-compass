@@ -61,7 +61,7 @@ test('delayed snapshots retain accepted slot levels and spell tombstones', () =>
 });
 
 test('Unicode surrounding whitespace normalizes Custom Spell names and granted sources', () => {
-  const whitespace = '\u0020\t\n\r\f\v\u00a0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000\ufeff';
+  const whitespace = '\u0020\t\n\r\f\u000b\u00a0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000\ufeff';
   const state = emptyMagic();
   applyMagicCommand(state, command({ ...custom, name: `${whitespace}Sea Lantern${whitespace}`, availability: 'Item granted', source: `${whitespace}Moon gift${whitespace}` }));
   expect(state.spells[0]).toMatchObject({ name: 'Sea Lantern', source: 'Moon gift' });
@@ -70,3 +70,9 @@ for (const [label, spell] of [
   ['name', { ...custom, name: '\u00a0' }],
   ['granted source', { ...custom, availability: 'Item granted' as const, source: '\u00a0' }],
 ] as const) test(`NBSP-only ${label} rejected`, () => expect(() => applyMagicCommand(emptyMagic(), command(spell))).toThrow());
+
+test('vertical tabs trim while ordinary lowercase v edges are preserved', () => {
+  const state = emptyMagic();
+  applyMagicCommand(state, command({ ...custom, name: '\u000bvRev\u000b', availability: 'Item granted', source: '\u000bvWavev\u000b' }));
+  expect(state.spells[0]).toMatchObject({ name: 'vRev', source: 'vWavev' });
+});
