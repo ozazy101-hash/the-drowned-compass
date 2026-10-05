@@ -243,6 +243,12 @@ test('several featured attacks synchronize, order, keyboard select, persist and 
     const conditions=await card.getByRole('group',{name:'Active Conditions'}).boundingBox(); const attacks=await card.locator('.featured-attacks').boundingBox();
     expect(conditions!.y+conditions!.height).toBeLessThanOrEqual(attacks!.y);
     const vitals=await card.locator('.party-card__vitals').boundingBox(); expect(vitals!.y+vitals!.height).toBeLessThanOrEqual(conditions!.y);
+    const cardBounds=await card.boundingBox();
+    for (const attack of await card.locator('.featured-attack').all()) {
+      const bounds=await attack.boundingBox();
+      expect(bounds!.y).toBeGreaterThanOrEqual(cardBounds!.y);
+      expect(bounds!.y+bounds!.height).toBeLessThanOrEqual(cardBounds!.y+cardBounds!.height);
+    }
     await page.getByRole('button',{name:'Open Neris Vale Character Page'}).focus(); await page.keyboard.press('Enter'); await combat(page);
     await page.reload(); await openClaimedCharacter(page); await combat(page); await expect(page.locator('.combat-featured input:checked')).toHaveCount(2);
     const converted=peer.getByRole('article',{name:'Harpoon',exact:true}); await converted.getByLabel('Record type').selectOption('action'); await converted.getByRole('button',{name:'Save action',exact:true}).click(); await expect(converted.getByRole('status')).toHaveText('Saved');
