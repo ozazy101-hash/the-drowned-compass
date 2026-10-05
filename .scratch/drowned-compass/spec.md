@@ -163,7 +163,7 @@ Session play is supported through hit-point actions, optional Temporary Hit Poin
 - Full character creation, legal-choice validation, automatic levelling, or a comprehensive 2024 rules engine
 - Automatic Armor Class, maximum Hit Point, weapon, damage, equipment, multiclass spell-slot, or feature calculation
 - Non-SRD spell descriptions or other copied proprietary rulebook content
-- Rich Rules References for every attack and feature beyond SRD spells and Conditions
+- Exhaustive Rules References for every attack and feature; Ticket 21 adds SRD weapons and selected class-ability references without automatic calculations
 - Character-art upload, AI generation, cropping, moderation, or gallery management
 - Offline editing, conflict reconciliation after offline work, or installable PWA behaviour
 - Dice rolling
@@ -180,3 +180,7 @@ Session play is supported through hit-point actions, optional Temporary Hit Poin
 - `docs/prototype-brief.md` captures the agreed product boundary, while the research notes under `docs/research/` provide primary-source support for Supabase, the Party Dashboard, and SRD spell content.
 - The source repository is intentionally created after the spec and ticket breakdown are approved and before implementation starts.
 - The Party Data Backup is a stretch goal and must not block core acceptance.
+
+## Combat Catalog extension (Ticket 21)
+
+The accepted extension adds searchable SRD weapon templates and selected class combat references to Combat. Choosing an entry opens an editable draft using the existing save and shared-update path. Weapons start with base dice and a blank attack bonus; class abilities create Action references. Automatic character-based weapon, damage, proficiency, or feature calculation remains outside this scope. See `issues/21-browse-the-combat-catalog.md` and `docs/rules/srd-combat-catalog.md`.

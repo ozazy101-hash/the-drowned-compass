@@ -2,6 +2,9 @@ import { useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { abilityScoreKeys, type CharacterSlot, type PartyData } from '../domain/party';
 import { emptyCombatEntries, availableFeaturedAttackIds, featuredAttackIds, visibleCombatEntries, validateCombatDetails, type CombatEntry, type CombatEntryDetails, type CombatEntryCommand } from '../domain/combat-entries';
 
+import { CombatCatalog } from '../features/combat/CombatCatalog';
+import { combatCatalogDraft, type CombatCatalogEntry } from '../domain/combat-catalog';
+
 type Save = (command: CombatEntryCommand) => Promise<boolean>;
 type FeedbackState = { status: 'idle' | 'unsaved' | 'saving' | 'saved' | 'error'; message: string };
 const idleFeedback: FeedbackState = { status:'idle', message:'' };
@@ -118,13 +121,18 @@ export function CombatEntriesSection({ slot, partyData, onSlotChanged }: { slot:
       if (primaryRequest.current === currentRequest) setPrimaryFeedback(ok ? { status:'saved', message:'Saved' } : { status:'error', message:'Changed elsewhere. Featured selection not saved.' });
     } catch { if (primaryRequest.current === currentRequest) setPrimaryFeedback({ status:'error', message:'Not saved. Check your connection and retry.' }); }
   }
+  function addTemplate(entry: CombatCatalogEntry) {
+    if (creating) return;
+    setCreating({ id:crypto.randomUUID(), version:0, deleted:false, rank:(visible.at(-1)?.rank ?? 0)+1024, details:combatCatalogDraft(entry) });
+  }
   function add(kind: 'attack' | 'action') {
     setCreating({ id:crypto.randomUUID(), version:0, deleted:false, rank:(visible.at(-1)?.rank ?? 0)+1024,
       details:{ kind, name:'', attackBonus:'', ability:null, range:'', damage:'', damageType:'', notes:'' } });
   }
   return <section className="overview-section" aria-labelledby="attacks-heading">
     <div className="section-heading"><div><p className="section-heading__eyebrow">Combat</p><h2 id="attacks-heading">Attacks &amp; Actions</h2></div><p>Player-entered values. Save each attack or action when ready.</p></div>
-    <p className="combat-entry__guidance">A relevant Ability is a reminder; enter attack and damage values from your Character Record. No weapon or class rules are applied.</p>
+    <p className="combat-entry__guidance">A relevant Ability is a reminder; enter attack and damage values from your Character Record. Catalog templates provide starting values and references; attack bonuses, total damage, and effects remain player-entered.</p>
+    <CombatCatalog onChoose={addTemplate} disabled={!!creating} />
     <fieldset className="combat-featured" disabled={primaryFeedback.status === 'saving'}>
       <legend>Featured attacks on the Party Dashboard</legend>
       <p>Choose any number of saved attacks, or leave all unchecked.</p>

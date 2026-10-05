@@ -17,7 +17,7 @@ export function SrdLegal() {
       </p>
       <p>
         Spell text is reproduced with formatting changes and line-wrap repairs
-        from SRD 5.2.1. Rules Tooltips contain application-owned summaries.
+        from SRD 5.2.1. The Combat Catalog includes weapon-table templates and selected class-ability summaries, adapted from SRD 5.2.1. Rules Tooltips contain application-owned summaries.
       </p>
     </details>
   );
