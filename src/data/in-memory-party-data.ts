@@ -1,3 +1,4 @@
+import { applyRestCommand, validateRestCommand } from '../domain/character-rests';
 import { applyMagicCommand, emptyMagic, validateMagicCommand } from '../domain/character-magic';
 import { initialSurvival, transitionSurvival } from "../domain/survival";
 import { applyClassEdit, characterClasses } from "../domain/character-classes";
@@ -375,6 +376,25 @@ export function createInMemoryPartyData(): PartyData {
         if (!applyCombatEntryCommand(state, command)) return { ok: false, reason: 'conflict', slot };
         await storeParty(party);
         return { ok: true, slot };
+      });
+    },
+
+    async resolveRest(slotId, command) {
+      validateRestCommand(command);
+      if (params.get('failRestSaves') === 'once' && !sessionStorage.getItem('rest-save-failed')) {
+        sessionStorage.setItem('rest-save-failed', 'true'); throw new Error('The rest could not reach the Party. Retry the same selection.');
+      }
+      if (testNamespace) {
+        const response = await fetch(testPartyUrl(testNamespace), { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ slotId, restCommand: command }) });
+        if (!response.ok && response.status !== 409) throw new Error('The rest could not be saved. Retry the same selection.');
+        const slot = normalizeSlot(await response.json() as CharacterSlot);
+        return response.status === 409 ? { ok: false, reason: 'conflict', slot } : { ok: true, slot };
+      }
+      return navigator.locks.request('drowned-compass-party-write', async () => {
+        const party = await readParty(); const slot = party.slots.find(s => s.id === slotId);
+        if (!slot?.character) throw new Error('That Character Record is unavailable.');
+        if (!applyRestCommand(slot.character, command)) return { ok: false, reason: 'conflict', slot };
+        await storeParty(party); return { ok: true, slot };
       });
     },
 

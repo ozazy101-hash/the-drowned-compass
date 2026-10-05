@@ -1,3 +1,4 @@
+import type { RestCommand } from './character-rests.ts';
 import type { CharacterMagic, MagicCommand } from './character-magic.ts';
 import type { Survival, SurvivalCommand } from "./survival.ts";
 import type { CharacterClass, ClassEdit } from "./character-classes.ts";
@@ -75,6 +76,7 @@ export type CharacterRecord = {
   combatEntries?: CombatEntries;
   conditions?: Condition[];
   magic?: CharacterMagic;
+  lastRest?: RestCommand;
   fieldVersions: Partial<Record<OverviewFieldKey, number>>;
 };
 
@@ -126,6 +128,7 @@ export interface PartyData {
     slotId: string, entry: CharacterTextDraft, expectedVersion: number,
   ): Promise<OverviewUpdateResult>;
   updateCombatEntry(slotId: string, command: CombatEntryCommand): Promise<OverviewUpdateResult>;
+  resolveRest(slotId: string, command: RestCommand): Promise<OverviewUpdateResult>;
   updateMagic(slotId: string, command: MagicCommand): Promise<OverviewUpdateResult>;
   updateCondition(slotId: string, command: ConditionCommand): Promise<OverviewUpdateResult>;
   subscribeToParty(onPartyChanged: (party: Party) => void): () => void;

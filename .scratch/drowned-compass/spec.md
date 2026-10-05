@@ -74,7 +74,7 @@ Session play is supported through hit-point actions, optional Temporary Hit Poin
 54. As a player, I want a Short Rest or Long Rest action to preview every proposed change, so that I remain in control.
 55. As a player, I want to exclude individual changes from a rest before confirming, so that exceptions can be respected.
 56. As a player, I want Short Rest to restore Short Rest resources, so that frequently recovering abilities are quick to reset.
-57. As a player, I want Long Rest to propose restoring Short Rest and Long Rest resources, spell slots, and current Hit Points while clearing Temporary Hit Points and death saves, so that normal recovery is efficient.
+57. As a player, I want Long Rest to propose restoring Short Rest and Long Rest resources, spell slots, and current Hit Points while clearing death saves and preserving legacy Temporary Hit Points, so that normal recovery is efficient.
 58. As a player, I want a Magic area showing spellcasting statistics, spell slots, and Character Spells, so that magic is usable during play.
 59. As a player, I want to enter maximum spell slots by spell level, so that multiclassing and special casting systems remain under player control.
 60. As a player, I want to spend and restore spell slots interactively, so that remaining slots are visible during a session.
@@ -184,3 +184,7 @@ Session play is supported through hit-point actions, optional Temporary Hit Poin
 ## Combat Catalog extension (Ticket 21)
 
 The accepted extension adds searchable SRD weapon templates and selected class combat references to Combat. Choosing an entry opens an editable draft using the existing save and shared-update path. Weapons start with base dice and a blank attack bonus; class abilities create Action references. Automatic character-based weapon, damage, proficiency, or feature calculation remains outside this scope. See `issues/21-browse-the-combat-catalog.md` and `docs/rules/srd-combat-catalog.md`.
+
+## Ticket 13 scope reconciliation
+
+Ticket 19 removed Temporary Hit Points from active Health controls. Rests preserve any legacy stored Temporary Hit Points and do not reintroduce controls. This supersedes the original Long Rest clearing requirement.
