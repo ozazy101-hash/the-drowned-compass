@@ -60,14 +60,15 @@ test('Combat entries and limited resources persist together in the Party summary
   await attack.getByLabel('Name', { exact: true }).fill('Cutlass');
   await attack.getByRole('button', { name: 'Save attack', exact: true }).click();
   await expect(page.getByRole('article', { name: 'Cutlass', exact: true }).getByRole('status')).toHaveText('Saved');
-  await page.getByLabel('Primary attack', { exact: true }).selectOption({ label: 'Cutlass' });
+  await page.getByRole('checkbox', { name: 'Cutlass', exact: true }).check();
+  await expect(page.getByRole('region', { name: 'Attacks & Actions' }).getByRole('status').first()).toHaveText('Saved');
 
   await page.getByRole('button', { name: 'Back to the Party' }).click();
   const card = page.getByRole('article', { name: 'Neris Vale, played by Mara' });
-  await expect(card).toContainText('Primary attack: Cutlass');
+  await expect(card).toContainText('Other: Cutlass');
   await expect(card).toContainText('Second Wind: 3 / 3');
   await page.reload();
-  await expect(card).toContainText('Primary attack: Cutlass');
+  await expect(card).toContainText('Other: Cutlass');
   await expect(card).toContainText('Second Wind: 3 / 3');
 });
 

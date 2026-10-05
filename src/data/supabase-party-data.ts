@@ -159,7 +159,7 @@ export function createSupabasePartyData(
       client.from('character_inventory_entries').select('slot_id, entry_id, kind, title, body, rank, deleted, version'),
       client.from('character_text_entries').select('slot_id, entry_id, kind, title, body, deleted, version'),
       client.from('character_combat_entries').select('id, slot_id, details, rank, version, deleted').in('slot_id', (slots ?? []).map(slot => slot.id)),
-      client.from('character_primary_attacks').select('slot_id, primary_id, version').in('slot_id', (slots ?? []).map(slot => slot.id)),
+      client.from('character_primary_attacks').select('slot_id, primary_id, featured_ids, version').in('slot_id', (slots ?? []).map(slot => slot.id)),
       client.from('character_survival').select('slot_id,state'),
       client.from('character_classes').select('slot_id, entry_id, name, level, version, deleted'),
       client.from('character_conditions').select('slot_id, id, standard, label, deleted, version'),
@@ -173,7 +173,7 @@ export function createSupabasePartyData(
     if (primaryResult.error) throw primaryResult.error;
     const texts = textResult.data ?? [];
     const entries = (entriesResult.data ?? []) as (CombatEntry & { slot_id: string })[];
-    const primary = (primaryResult.data ?? []) as { slot_id: string; primary_id: string | null; version: number }[];
+    const primary = (primaryResult.data ?? []) as { slot_id: string; primary_id: string | null; featured_ids?: string[]; version: number }[];
     return {
       name: party.name,
       slots: ((slots ?? []) as CharacterSlotRow[]).map(row => {
@@ -191,7 +191,7 @@ export function createSupabasePartyData(
             .map(text => ({ id: text.entry_id, kind: text.kind, title: text.title, body: text.body,
               deleted: text.deleted, version: Number(text.version) }) as CharacterTextEntry);
           const selection = primary.find(p => p.slot_id === slot.id);
-          const state: CombatEntries = { ...emptyCombatEntries(), entries: entries.filter(e => e.slot_id === slot.id).map(({ id, details, rank, version, deleted }) => ({ id, details, rank, version, deleted })), primaryId: selection?.primary_id ?? null, primaryVersion: selection?.version ?? 0 };
+          const state: CombatEntries = { ...emptyCombatEntries(), entries: entries.filter(e => e.slot_id === slot.id).map(({ id, details, rank, version, deleted }) => ({ id, details, rank, version, deleted })), primaryId: selection?.primary_id ?? null, featuredIds: selection?.featured_ids ?? (selection?.primary_id ? [selection.primary_id] : []), primaryVersion: selection?.version ?? 0 };
           slot.character.combatEntries = state;
         }
         return slot;
