@@ -1,0 +1,6 @@
+.party-backup { margin: 2rem auto; max-width: 78rem; padding: 1.4rem; border: 1px solid var(--border, #334542); background: #0b1919; border-radius: .7rem; }
+.party-backup h2 { margin-top: 0; }
+.party-backup p { color: #b7c4be; line-height: 1.6; }
+.party-backup button { padding: .8rem 1rem; background: #d6cf97; color: #172422; border: 1px solid #d6cf97; border-radius: .25rem; font: inherit; cursor: pointer; }
+.party-backup button:disabled { opacity: .6; cursor: wait; }
+.party-backup button:focus-visible { outline: 2px solid #edf3dc; outline-offset: 3px; }

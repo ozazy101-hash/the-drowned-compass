@@ -4,7 +4,7 @@
 
 **Blocked by:** 06 — Read the Party at a glance; 07 — Track Hit Points and survival; 08 — Track Conditions with Rules Tooltips; 09 — Manage attacks and actions; 10 — Track limited resources; 12 — Manage Character Spells and spell slots; 13 — Preview and resolve rests; 14 — Support multiclass Player Characters; 15 — Record inventory and equipment; 16 — Record features and story.
 
-**Status:** ready-for-agent
+**Status:** claimed
 
 - [ ] Dungeon Master access offers a clearly labelled Party Data Backup download after core acceptance is complete.
 - [ ] The JSON contains Character Records, Character Spells, Session Trackers, and Party Companion settings with an explicit schema version.

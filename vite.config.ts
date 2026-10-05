@@ -1,3 +1,4 @@
+import { createPartyBackup } from './src/domain/party-backup.ts';
 import { applyRestCommand, type RestCommand } from './src/domain/character-rests.ts';
 import { applyMagicCommand, emptyMagic, type MagicCommand } from './src/domain/character-magic.ts';
 import { applyClassEdit, type ClassEdit } from './src/domain/character-classes.ts';
@@ -34,6 +35,7 @@ function createEmptyTestParty(): TestParty {
 
 function sharedInMemoryParty(): Plugin {
   const parties = new Map<string, TestParty>();
+  const sessions = new Map<string, { namespace: string; role: 'player' | 'dungeon-master' }>();
 
   return {
     name: "shared-in-memory-party",
@@ -41,11 +43,37 @@ function sharedInMemoryParty(): Plugin {
       server.middlewares.use((request, response, next) => {
         const testRequest = request as unknown as {
           url?: string;
+          headers: { authorization?: string };
           method?: string;
           on(event: "data", listener: (chunk: unknown) => void): void;
           on(event: "end", listener: () => void): void;
         };
         const url = new URL(testRequest.url ?? "/", "http://localhost");
+        if (url.pathname === '/__drowned_compass_test_session' || url.pathname === '/__drowned_compass_test_backup') {
+          const namespace = url.searchParams.get('namespace'); response.setHeader('content-type', 'application/json');
+          if (!namespace) { response.statusCode = 400; response.end('{}'); return; }
+          const bearer = String(testRequest.headers.authorization ?? '').replace(/^Bearer /, ''); const session = sessions.get(bearer);
+          if (url.pathname.endsWith('_backup')) {
+            if (testRequest.method !== 'GET') { response.statusCode = 405; response.end('{}'); return; }
+            if (session?.namespace !== namespace || session.role !== 'dungeon-master') { response.statusCode = 403; response.end('{}'); return; }
+            const party = parties.get(namespace) ?? createEmptyTestParty();
+            response.end(JSON.stringify(createPartyBackup(party as unknown as import('./src/domain/party.ts').Party))); return;
+          }
+          if (testRequest.method === 'POST') {
+            let body = ''; testRequest.on('data', chunk => { body += String(chunk); }); testRequest.on('end', () => {
+              try {
+                const { role, password } = JSON.parse(body); const accepted = (role === 'player' && password === 'player-password') || (role === 'dungeon-master' && password === 'dm-password');
+                if (!accepted) { response.statusCode = 403; response.end('{}'); return; }
+                if (session?.namespace === namespace) sessions.delete(bearer);
+                const token = crypto.randomUUID(); sessions.set(token, { namespace, role }); response.end(JSON.stringify({ token, role }));
+              } catch { response.statusCode = 400; response.end('{}'); }
+            }); return;
+          }
+          if (session?.namespace !== namespace) { response.statusCode = 403; response.end('{}'); return; }
+          if (testRequest.method === 'DELETE') { sessions.delete(bearer); response.end('{}'); return; }
+          if (testRequest.method === 'GET') { response.end(JSON.stringify({ role: session.role })); return; }
+          response.statusCode = 405; response.end('{}'); return;
+        }
         if (url.pathname !== "/__drowned_compass_test_party") {
           next();
           return;

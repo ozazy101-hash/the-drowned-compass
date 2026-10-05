@@ -1,3 +1,4 @@
+import { PartyBackupDownload } from './features/backup/PartyBackupDownload';
 import { RestSection } from './features/rests/RestSection';
 import { MagicSection } from './features/magic/MagicSection';
 import { mergeMagic } from './domain/character-magic';
@@ -1176,6 +1177,7 @@ export function App({ partyData }: AppProps) {
         <LoginScreen partyData={partyData} onSignedIn={setSession} />
       )}
 
+      {session?.role === 'dungeon-master' && <PartyBackupDownload partyData={partyData} />}
       <SrdLegal />
       {session && (
         <footer>

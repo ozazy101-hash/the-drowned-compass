@@ -1,8 +1,9 @@
+import { createPartyBackup } from '../domain/party-backup';
 import { applyRestCommand, validateRestCommand } from '../domain/character-rests';
 import { applyMagicCommand, emptyMagic, validateMagicCommand } from '../domain/character-magic';
 import { initialSurvival, transitionSurvival } from "../domain/survival";
 import { applyClassEdit, characterClasses } from "../domain/character-classes";
-import { readLocalParty, writeLocalParty } from "./local-party-store";
+import { readLocalParty, writeLocalParty, readLocalSession, writeLocalSession, removeLocalSession } from "./local-party-store";
 import { setInventory, validateInventory } from "../domain/inventory";
 import { applyConditionCommand, validateCondition } from "../domain/conditions";
 import { writeResource } from "../domain/limited-resources";
@@ -138,17 +139,57 @@ function normalizeSlot(slot: CharacterSlot): CharacterSlot {
 export function createInMemoryPartyData(): PartyData {
   const params = new URLSearchParams(window.location.search);
   const testNamespace = params.get("partyTestId");
+  const tokenKey = `drowned-compass-session-token:${testNamespace ?? 'local'}`;
+  const token = () => window.localStorage.getItem(tokenKey);
+  const testAuthUrl = () => { const url = new URL('/__drowned_compass_test_session', location.origin); url.searchParams.set('namespace', testNamespace!); return url.toString(); };
+  const authorization = () => ({ authorization: `Bearer ${token() ?? ''}` });
 
   return {
-    async getSession() { return readStoredSession(); },
+    async getSession() {
+      if (testNamespace) {
+        const response = await fetch(testAuthUrl(), { headers: authorization() });
+        return response.ok ? await response.json() as PartySession : null;
+      }
+      return token() ? await readLocalSession(token()) : readStoredSession();
+    },
 
     async signIn(role, password): Promise<SignInResult> {
       if (prototypePasswords[role] !== password) return { ok: false };
+      const sessionToken = crypto.randomUUID();
+      if (testNamespace) {
+        const response = await fetch(testAuthUrl(), { method: 'POST', headers: { 'content-type': 'application/json', ...authorization() }, body: JSON.stringify({ role, password }) });
+        if (!response.ok) return { ok: false };
+        const session = await response.json() as { token: string; role: AccessRole };
+        window.localStorage.setItem(tokenKey, session.token);
+      } else { await removeLocalSession(token()); await writeLocalSession(sessionToken, role); window.localStorage.setItem(tokenKey, sessionToken); }
       window.localStorage.setItem(sessionStorageKey, role);
       return { ok: true, session: { role } };
     },
 
-    async signOut() { window.localStorage.removeItem(sessionStorageKey); },
+    async signOut() {
+      if (testNamespace) await fetch(testAuthUrl(), { method: 'DELETE', headers: authorization() });
+      else await removeLocalSession(token());
+      window.localStorage.removeItem(tokenKey); window.localStorage.removeItem(sessionStorageKey);
+    },
+
+    async exportPartyBackup() {
+      if (params.get('failBackupDownloads') === 'once' && !sessionStorage.getItem('backup-download-failed')) {
+        sessionStorage.setItem('backup-download-failed', 'true'); throw new Error('The Party Data Backup could not be prepared. Please retry.');
+      }
+      if (testNamespace) {
+        const url = new URL('/__drowned_compass_test_backup', location.origin); url.searchParams.set('namespace', testNamespace);
+        const response = await fetch(url, { headers: authorization() });
+        if (response.status === 403) throw new Error('Dungeon Master access is required. Sign in again to download a Party Data Backup.');
+        if (!response.ok) throw new Error('The Party Data Backup could not be prepared. Please retry.');
+        return await response.json();
+      }
+      // Capture the committed Party under its existing write lock, and recheck
+      // capability there; UI-supplied roles and unsaved drafts are never inputs.
+      return navigator.locks.request('drowned-compass-party-write', async () => {
+        if ((await readLocalSession(token()))?.role !== 'dungeon-master') throw new Error('Dungeon Master access is required. Sign in again to download a Party Data Backup.');
+        return createPartyBackup(await readParty());
+      });
+    },
 
     async getParty() {
       return testNamespace ? readSharedTestParty(testNamespace) : readParty();
