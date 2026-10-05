@@ -1,3 +1,5 @@
+import { SpellCatalog } from './features/magic/SpellCatalog';
+import { SrdLegal } from './features/magic/SrdLegal';
 import { SurvivalSection } from "./components/SurvivalSection";
 import { mergeSurvival } from "./domain/survival";
 import { ClassEntries } from "./features/ClassEntries";
@@ -799,7 +801,7 @@ function CharacterPage({
 
       <nav className="character-nav" aria-label="Character Record sections">
         {['Overview', 'Combat', 'Magic', 'Inventory', 'Features', 'Story'].map((item) => {
-          const enabled = ['Overview', 'Combat', 'Inventory', 'Features', 'Story'].includes(item);
+          const enabled = ['Overview', 'Combat', 'Magic', 'Inventory', 'Features', 'Story'].includes(item);
           return (
           <button
             key={item}
@@ -820,6 +822,7 @@ function CharacterPage({
           onChanged={resources => onSlotChanged({ ...slot, character: { ...character, limitedResources: resources } })} />
         <CombatEntriesSection slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} />
       </div>
+      <div hidden={section !== 'Magic'}><SpellCatalog /></div>
       <div hidden={section !== 'Inventory'}><Inventory key={slot.id} slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} /></div>
       <div hidden={section !== 'Features'}><FeaturesStory key={`${slot.id}-features`} slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} area="Features" /></div>
       <div hidden={section !== 'Story'}><FeaturesStory key={`${slot.id}-story`} slot={slot} partyData={partyData} onSlotChanged={onSlotChanged} area="Story" /></div>
@@ -1169,6 +1172,7 @@ export function App({ partyData }: AppProps) {
         <LoginScreen partyData={partyData} onSignedIn={setSession} />
       )}
 
+      <SrdLegal />
       {session && (
         <footer>
           <span>One party</span>

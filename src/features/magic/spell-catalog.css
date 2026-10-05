@@ -1,0 +1,111 @@
+.spell-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+  gap: 12px;
+  align-items: end;
+}
+.spell-filters label {
+  display: grid;
+  gap: 6px;
+}
+.spell-filters input,
+.spell-filters select {
+  width: 100%;
+  min-width: 0;
+  padding: 10px;
+  color: inherit;
+  background: #122326;
+  border: 1px solid #476269;
+  border-radius: 4px;
+}
+.spell-browser {
+  display: grid;
+  grid-template-columns: minmax(190px, 0.7fr) minmax(0, 1.5fr);
+  gap: 24px;
+}
+.spell-results {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 560px;
+  overflow: auto;
+}
+.spell-results button {
+  width: 100%;
+  text-align: left;
+  padding: 12px;
+}
+.spell-results span {
+  display: block;
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+.spell-results [aria-pressed="true"] {
+  border-color: #c6ad75;
+  background: #294145;
+}
+.spell-detail {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.spell-detail dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+.spell-detail dt {
+  font-weight: bold;
+}
+.spell-detail dd {
+  margin: 3px 0;
+}
+.spell-detail p {
+  line-height: 1.65;
+}
+@media (max-width: 650px) {
+  .spell-browser {
+    grid-template-columns: 1fr;
+  }
+  .spell-results {
+    max-height: 230px;
+  }
+}
+.spell-stat-block {
+  white-space: pre-wrap;
+  font-family: monospace;
+  font-size: 0.9rem;
+  padding: 12px;
+  background: #122326;
+}
+.srd-legal {
+  margin: 24px 0;
+  padding: 16px;
+  border-top: 1px solid #476269;
+}
+.srd-legal p {
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.spell-description {
+  white-space: pre-line;
+}
+.spell-table-wrap {
+  overflow-x: auto;
+  margin: 16px 0;
+}
+.spell-table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.spell-table-wrap th,
+.spell-table-wrap td {
+  padding: 8px;
+  border: 1px solid #476269;
+  text-align: left;
+}
+.spell-table-wrap caption {
+  text-align: left;
+  font-weight: bold;
+  padding: 8px 0;
+}
