@@ -136,10 +136,10 @@ select is(current_setting('test.backup_snapshot')::jsonb#>>'{slots,0,character,t
 select is(current_setting('test.backup_snapshot')::jsonb#>>'{slots,0,character,textEntries,3,body}','Character notes are included','Character notes included');
 select is(current_setting('test.backup_snapshot')::jsonb#>>'{slots,0,character,combatEntries,entries,0,details,notes}','Keep reminder','Combat notes included');
 select is(current_setting('test.backup_snapshot')::jsonb#>>'{slots,0,character,combatEntries,featuredIds,0}','11111111-1111-4111-8111-111111111120','featured attack selection retained');
-select unlike(current_setting('test.backup_snapshot'),'%DO-NOT-EXPORT%','unknown nested fields and operational receipt excluded by backend allowlist');
-select unlike(current_setting('test.backup_snapshot'),'%claimed_by%','auth ownership audit identifier excluded');
-select unlike(current_setting('test.backup_snapshot'),'%updated_by%','auth audit fields excluded');
-select unlike(current_setting('test.backup_snapshot'),'%party_members%','unrelated membership data excluded');
+select ok(current_setting('test.backup_snapshot') not like '%DO-NOT-EXPORT%','unknown nested fields and operational receipt excluded by backend allowlist');
+select ok(current_setting('test.backup_snapshot') not like '%claimed_by%','auth ownership audit identifier excluded');
+select ok(current_setting('test.backup_snapshot') not like '%updated_by%','auth audit fields excluded');
+select ok(current_setting('test.backup_snapshot') not like '%party_members%','unrelated membership data excluded');
 reset role;
 select results_eq($$select (select jsonb_agg(to_jsonb(s)) from public.character_slots s),(select jsonb_agg(to_jsonb(s)) from public.character_survival s),(select jsonb_agg(to_jsonb(m)) from public.character_magic m)$$,$$select slots,survival,magic from backup_rows_before$$,'snapshot is read-only and does not mutate Character data');
 update public.party_members set role='player' where user_id='30000000-0000-4000-8000-000000000002';
