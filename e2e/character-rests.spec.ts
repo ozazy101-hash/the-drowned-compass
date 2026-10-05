@@ -40,13 +40,14 @@ for (const local of [false, true]) test(`${local ? 'IndexedDB' : 'shared transpo
   await page.getByRole('button', { name: 'Combat', exact: true }).click(); await expect(page.getByRole('heading', { name: 'Health', exact: true })).toBeVisible(); await expect(page.locator('body')).toHaveJSProperty('scrollWidth', await page.evaluate(() => innerWidth));
 });
 test('all selected recoveries synchronize while independent concurrent writes and dirty Magic draft survive', async ({ page }, info) => {
-  await prepare(page, info); await page.getByRole('button', { name: 'Magic', exact: true }).click();
+  await prepare(page, info); await page.getByText('Correct Current Hit Points', { exact: true }).click(); await page.getByLabel('Current Hit Points', { exact: true }).fill('9'); await page.getByRole('button', { name: 'Magic', exact: true }).click();
   const slots = page.getByRole('article', { name: 'Level 1 spell slots', exact: true }); await slots.getByLabel('Maximum slots', { exact: true }).fill('8');
   await page.getByRole('button', { name: 'Preview Long Rest', exact: true }).click(); await mutate(page, 'independent');
   await page.getByRole('button', { name: 'Confirm Long Rest', exact: true }).click(); await expect(page.getByText('Long Rest saved. 6 selected recoveries accepted together.', { exact: true })).toBeVisible();
   const c = await saved(page); expect(c.characterName).toBe('Neris Updated'); expect(c.limitedResources.find((r: { recovery: string }) => r.recovery === 'Dawn').current).toBe(0); expect(c.survival).toMatchObject({ current: 20, temporary: 7, successes: 0, failures: 0 });
   await expect(slots.getByLabel('Maximum slots', { exact: true })).toHaveValue('8'); await expect(slots.getByText(/Saved values: 3 remaining, 3 maximum/)).toBeVisible(); await expect(slots.getByRole('button', { name: 'Save slot counts', exact: true })).toBeDisabled();
   await slots.getByRole('button', { name: 'Use saved slots', exact: true }).click(); await expect(slots.getByLabel('Maximum slots', { exact: true })).toHaveValue('3');
+  await page.getByRole('button', { name: 'Combat', exact: true }).click(); await expect(page.getByLabel('Current Hit Points', { exact: true })).toHaveValue('9'); await expect(page.getByText('Current HP:', { exact: false })).toContainText('20');
 });
 for (const kind of ['slot', 'maximum', 'removed']) test(`stale selected ${kind} rejects everything and fresh preview succeeds`, async ({ page }, info) => {
   await prepare(page, info); await page.getByRole('button', { name: 'Preview Long Rest', exact: true }).click(); await mutate(page, kind); const before = await saved(page);
@@ -68,4 +69,11 @@ test('lost HTTP acknowledgement retry does not restore over independent spend', 
   });
   await page.getByRole('button', { name: 'Preview Long Rest', exact: true }).click(); await page.getByRole('button', { name: 'Confirm Long Rest', exact: true }).click(); await expect(page.getByRole('button', { name: 'Retry rest save', exact: true })).toBeVisible();
   await mutate(page, 'slot'); const before = await saved(page); await page.getByRole('button', { name: 'Retry rest save', exact: true }).click(); await expect(page.getByText(/Long Rest saved\./)).toBeVisible(); expect(await saved(page)).toEqual(before);
+});
+
+test('unknown HP preview, no-change Short Rest and excluding every change stay deliberate', async ({ page }, info) => {
+  await page.goto(isolatedPartyUrl(info)); await enterAs(page, 'Player'); await claimCharacter(page); const before = await saved(page);
+  await page.getByRole('button', { name: 'Preview Short Rest', exact: true }).click(); await expect(page.getByText('No saved values need recovery.', { exact: true })).toBeVisible(); await expect(page.getByRole('button', { name: 'Confirm Short Rest', exact: true })).toBeDisabled(); await page.getByRole('button', { name: 'Cancel rest', exact: true }).click();
+  await page.getByRole('button', { name: 'Preview Long Rest', exact: true }).click(); await expect(preview(page).getByRole('checkbox')).toHaveCount(1); await expect(preview(page).getByRole('checkbox')).toHaveAccessibleName(/Unknown → 1/); await preview(page).getByRole('checkbox').uncheck(); await expect(page.getByRole('button', { name: 'Confirm Long Rest', exact: true })).toBeDisabled(); expect(await saved(page)).toEqual(before);
+  await page.getByRole('button', { name: 'Cancel rest', exact: true }).click(); expect(await saved(page)).toEqual(before); await page.getByRole('button', { name: 'Preview Long Rest', exact: true }).click(); await page.getByRole('button', { name: 'Confirm Long Rest', exact: true }).click(); await expect(page.getByText('Long Rest saved. 1 selected recoveries accepted together.', { exact: true })).toBeVisible(); expect((await saved(page)).survival.current).toBe(1);
 });

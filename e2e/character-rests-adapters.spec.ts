@@ -22,7 +22,7 @@ for (const source of ['local', 'shared', 'supabase'] as const) test(`${source} a
     if (path.endsWith('/character_survival')) json = [{ slot_id: 'slot', state: remote.survival }];
     if (path.endsWith('/limited_resources')) json = remote.limitedResources!.map(r => ({ ...r, slot_id: 'slot' }));
     if (path.endsWith('/character_magic')) json = remote.magic!.slots.map(({ id, version, ...state }) => ({ id, version, state, kind: 'slots', slot_id: 'slot' }));
-    if (path.endsWith('/rpc/resolve_character_rest')) { rpcCalls++; const { command, target_slot_id } = route.request().postDataJSON(); expect(target_slot_id).toBe('slot'); json = applyRestCommand(remote, command); }
+    if (path.endsWith('/rpc/resolve_character_rest')) { rpcCalls++; const { command, target_slot_id } = route.request().postDataJSON(); expect(target_slot_id).toBe('slot'); try { json = applyRestCommand(remote, command); } catch { await route.fulfill({ status: 400, contentType: 'application/json', json: { message: 'Rest operation identity cannot change.' } }); return; } }
     await route.fulfill({ contentType: 'application/json', json });
   });
   const result = await page.evaluate(async source => {
