@@ -3,6 +3,7 @@ import { spawnSync } from 'node:child_process';
 
 // Rehearse actual pending migrations inside rollback-only tests.
 const rehearsals = [
+  ['grid_maps', '20261007120000_saved_grid_maps.sql', '__GRID_MAPS_MIGRATION__'],
   ['handout_lifecycle', '20261007110000_handout_lifecycle.sql', '__HANDOUT_LIFECYCLE_MIGRATION__'],
   ['backup', '20261006220000_download_party_data_backup.sql', '__BACKUP_MIGRATION__'],
   ['rests', '20261006210000_preview_and_resolve_rests.sql', '__RESTS_MIGRATION__'],
