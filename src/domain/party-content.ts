@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+import { validateGridMap, fitMapBackground, type GridMapDocument, type MapBackgroundPlacement } from './grid-map';
 import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 
 export type Handout = { id: string; title: string; visibility: 'private' | 'revealed'; mime: string; size: number; createdAt: string; version: number; contentVersion: number };
@@ -7,6 +8,10 @@ export type HandoutChange = { id: string; expectedVersion: number; requestId: st
 export type HandoutChangeResult = { ok: true; item: Handout } | { ok: false; reason: 'conflict'; item: Handout };
 export type ContentSnapshot = { items: Handout[] } | { error: string };
 export interface PartyContent {
+  listMaps(query?: {search?:string; visibility?:'private'|'revealed'}): Promise<SavedGridMap[]>;
+  loadMap(id:string): Promise<SavedGridMap>;
+  saveMap(input:GridMapSave): Promise<GridMapSaveResult>;
+  openMapBackground(id:string,expectedVersion:number): Promise<Blob>;
   list(query?: { search?: string; visibility?: 'private' | 'revealed' }): Promise<Handout[]>;
   upload(input: HandoutUpload): Promise<Handout>;
   change(input: HandoutChange): Promise<HandoutChangeResult>;
@@ -88,4 +93,28 @@ export function transitionHandout(item: Handout & {lastRequestId?: string; lastS
   if (input.command.kind === 'withdraw') next.visibility='private';
   if (prepared.replacement) { next.mime=prepared.replacement.mime; next.size=prepared.replacement.size; next.contentVersion++; }
   return {ok:true,item:next};
+}
+
+export type MapBackground = MapBackgroundPlacement & {mime:string;size:number};
+export type SavedGridMap = {id:string;title:string;visibility:'private'|'revealed';createdAt:string;version:number;document:GridMapDocument;background:MapBackground|null};
+export type GridMapSave = {id:string;expectedVersion:number;requestId:string;title:string;document:GridMapDocument;background?:File|null};
+export type GridMapSaveResult = {ok:true;item:SavedGridMap}|{ok:false;reason:'conflict';item:SavedGridMap};
+export async function prepareGridMapSave(input:GridMapSave) {
+  const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  if (!uuid.test(input.id)||!uuid.test(input.requestId)||!Number.isSafeInteger(input.expectedVersion)||input.expectedVersion<0) throw new Error('Invalid map save request.');
+  const title=handoutTitle(input.title), document=validateGridMap(input.document);
+  let replacement: (MapBackground & {digest:string})|undefined;
+  if (input.background) {
+    if (!['image/png','image/jpeg','image/webp'].includes(input.background.type)) throw new Error('Choose a PNG, JPEG or WebP Map Background.');
+    const validated=await validateHandout({requestId:input.requestId,title,file:input.background});
+    const bitmap=await createImageBitmap(input.background);
+    try { replacement={...fitMapBackground(document,bitmap.width,bitmap.height),mime:input.background.type,size:input.background.size,digest:validated.digest}; } finally { bitmap.close(); }
+  }
+  const mode=input.background===undefined?'keep':input.background===null?'remove':'replace';
+  const signature=JSON.stringify({id:input.id,expectedVersion:input.expectedVersion,title,document,mode,replacement:replacement??null});
+  return {title,document,mode,replacement,signature};
+}
+export function filterGridMaps(items:SavedGridMap[],query:{search?:string;visibility?:'private'|'revealed'}={}) {
+  const search=(query.search??'').trim().toLowerCase();
+  return items.filter(item=>(!query.visibility||item.visibility===query.visibility)&&item.title.toLowerCase().includes(search)).sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
 }

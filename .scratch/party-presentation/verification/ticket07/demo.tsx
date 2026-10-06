@@ -1,0 +1,22 @@
+/** Opt-in verification UI only. No production adapter seed or private-map bypass. */
+import React from 'react';
+import {createRoot} from 'react-dom/client';
+import {DisplayControls} from '../../../../src/features/presentation/DisplayControls';
+import {createPartyDisplay} from '../../../../src/features/presentation/party-display';
+import {createInMemoryPartyData} from '../../../../src/data/in-memory-party-data';
+import {createGridMapEditor,fitMapBackground} from '../../../../src/domain/grid-map';
+import type {SavedGridMap} from '../../../../src/domain/party-content';
+import '../../../../src/styles.css';
+import '../../../../src/features/handouts/handouts.css';
+const data=createInMemoryPartyData();
+await data.signIn('dungeon-master','dm-password');
+const first=createGridMapEditor({columns:12,rows:8});first.draw('water',[{x:2.5,y:2.5},{x:5.5,y:2.5}]);first.draw('wall',[{x:1,y:1},{x:8,y:1}]);
+const second=createGridMapEditor(first.snapshot().document);second.draw('door',[{x:4,y:1}]);second.draw('floor',[{x:7.5,y:5.5}]);
+const canvas=document.createElement('canvas');canvas.width=600;canvas.height=300;
+const context=canvas.getContext('2d')!;context.fillStyle='#294b38';context.fillRect(0,0,600,300);context.strokeStyle='#4a8caf';context.lineWidth=80;context.beginPath();context.moveTo(0,200);context.quadraticCurveTo(300,0,600,200);context.stroke();
+const background=await new Promise<Blob>(resolve=>canvas.toBlob(blob=>resolve(blob!),'image/png'));
+const maps:SavedGridMap[]=[first,second,createGridMapEditor({columns:18,rows:10})].map((editor,index)=>({id:`00000000-0000-4000-8000-00000000000${index+1}`,title:`Demo saved map ${index+1}`,visibility:'revealed',createdAt:new Date().toISOString(),version:1,document:editor.snapshot().document,background:index<2?{...fitMapBackground(editor.snapshot().document,600,300),mime:'image/png',size:background.size}:null}));
+const content={...data.content,listMaps:async()=>maps,loadMap:async(id:string)=>{const item=maps.find(value=>value.id===id);if(!item)throw new Error('Unavailable demo map');return item;},openMapBackground:async()=>background};
+const display=createPartyDisplay(content,()=>data.getSession());
+Object.assign(window,{projectionDemo:{display,maps,content,data}});
+createRoot(document.getElementById('root')!).render(<main className="handout-library"><h1>Ticket 07 — local projection test</h1><p><strong>Demo only:</strong> these synthetic revealed saved maps are isolated fixtures. Normal app maps remain private until the later reveal workflow.</p><p>Open Party Display, move it to your extended screen, calibrate the test square using a ruler, then choose a demo map. Maps 1 and 2 share dimensions; map 3 differs. Pan, switch maps, resize and reopen the display to test retained scale. This page does not edit or reveal real saved maps.</p><DisplayControls display={display}/><section aria-label="Demo saved maps">{maps.map(item=><button key={item.id} onClick={()=>void display.presentMap(item.id)}>{item.title}</button>)}</section><p><a href="/the-drowned-compass/">Open normal app</a></p></main>);

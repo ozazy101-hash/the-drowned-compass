@@ -1,0 +1,22 @@
+.grid-map-editor { width: min(1200px, 100%); margin: 0 auto; padding: 1.25rem; box-sizing: border-box; }
+.grid-map-editor[hidden] { display: none; }
+.grid-map-editor h1 { font-size: clamp(1.8rem, 5vw, 3rem); }
+.grid-map-editor p { line-height: 1.5; }
+.grid-map-editor button, .grid-map-editor input, .grid-map-editor select { min-height: 44px; padding: .6rem .8rem; font: inherit; }
+.grid-map-editor button { color: #edf1df; background: #213b43; border: 1px solid #73888a; border-radius: .3rem; cursor: pointer; }
+.grid-map-editor button[aria-pressed=true] { background: #725233; border-color: #e9b871; }
+.grid-map-editor button:disabled { opacity: .45; cursor: default; }
+.grid-map-editor :focus-visible { outline: 3px solid #e9b871; outline-offset: 3px; }
+.map-fields, .map-toolbar { display: flex; flex-wrap: wrap; gap: .65rem; align-items: end; margin: 1rem 0; }
+.map-fields label, .map-toolbar label { display: grid; gap: .35rem; }
+.map-fields input { width: 7rem; max-width: 100%; }
+.map-scroll { max-width: 100%; max-height: 65vh; overflow: auto; border: 2px solid #788b91; overscroll-behavior: contain; }
+.map-canvas { display: block; max-width: none; touch-action: none; user-select: none; }
+.map-cursor { visibility: hidden; }
+.map-canvas:focus-visible .map-cursor { visibility: visible; }
+@media (max-width: 600px) { .grid-map-editor { padding: .75rem; } .map-scroll { max-height: 55vh; } .map-toolbar { gap: .4rem; } }
+
+.map-canvas.is-panning { touch-action: auto; cursor: grab; }
+
+.map-controls { border: 0; padding: 0; margin: 0; min-width: 0; }
+.map-controls input[type=file] { max-width: 100%; box-sizing: border-box; }

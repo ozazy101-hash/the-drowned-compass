@@ -1,4 +1,5 @@
 import { createPartyDisplay, type PartyDisplay } from './features/presentation/party-display';
+import { GridMapEditor } from './features/grid-map/GridMapEditor';
 import { HandoutLibrary } from './features/handouts/HandoutLibrary';
 import { reconcileParty, reconcilePartySlot } from './domain/party-state';
 import { PartyBackupDownload } from './features/backup/PartyBackupDownload';
@@ -973,6 +974,10 @@ export function App({ partyData }: AppProps) {
   const [session, setSession] = useState<PartySession | null | undefined>(undefined);
   const [setupSlotId, setSetupSlotId] = useState<string | null>(null);
   const [libraryOpen, setLibraryOpen] = useState(false);
+  const [mapOpen, setMapOpen] = useState(false);
+  const [selectedMapId,setSelectedMapId]=useState<string>();
+  const [mapLoadRevision,setMapLoadRevision]=useState(0);
+  const [libraryRevision,setLibraryRevision]=useState(0);
   const [display,setDisplay] = useState<PartyDisplay>();
   useEffect(()=>{
     if(session?.role!=='dungeon-master'){setDisplay(undefined);return;}
@@ -1019,6 +1024,8 @@ export function App({ partyData }: AppProps) {
     setSetupSlotId(null);
     setSelectedSlotId(null);
     setLibraryOpen(false);
+    setMapOpen(false);
+    setSelectedMapId(undefined);
     setSession(null);
   }
 
@@ -1042,7 +1049,7 @@ export function App({ partyData }: AppProps) {
 
   let authenticatedContent;
   if (libraryOpen && session) {
-    authenticatedContent = <HandoutLibrary content={partyData.content} display={display} role={session.role} onBack={() => setLibraryOpen(false)} />;
+    authenticatedContent = <HandoutLibrary key={libraryRevision} onOpenMap={id=>{setSelectedMapId(id);setMapLoadRevision(value=>value+1);setMapOpen(true);}} content={partyData.content} display={display} role={session.role} onBack={() => setLibraryOpen(false)} />;
   } else if (setupSlot) {
     authenticatedContent = (
       <CharacterSetup
@@ -1118,7 +1125,8 @@ export function App({ partyData }: AppProps) {
         {session ? (
           <div className="session-controls">
             <span>{session.role === "dungeon-master" ? "Dungeon Master" : "Player"}</span>
-            <button type="button" onClick={() => setLibraryOpen(true)}>{session.role==='dungeon-master'?'Dungeon Master Library':'Party Library'}</button>
+            {session.role === "dungeon-master" && <button onClick={() => setMapOpen(true)}>Grid Map editor</button>}
+            <button type="button" onClick={() => { setMapOpen(false); setLibraryOpen(true);setLibraryRevision(value=>value+1); }}>{session.role==='dungeon-master'?'Dungeon Master Library':'Party Library'}</button>
             <button type="button" onClick={handleSignOut}>Sign out</button>
           </div>
         ) : (
@@ -1126,7 +1134,8 @@ export function App({ partyData }: AppProps) {
         )}
       </header>
 
-      {session ? authenticatedContent : (
+      {session?.role === "dungeon-master" && <GridMapEditor content={partyData.content} mapId={selectedMapId} loadRevision={mapLoadRevision} onLibrary={()=>{setMapOpen(false);setLibraryOpen(true);setLibraryRevision(value=>value+1);}} active={mapOpen} onBack={() => { setMapOpen(false); setLibraryOpen(false); setSelectedSlotId(null); setSetupSlotId(null); }} />}
+      {session ? <div hidden={mapOpen && session.role === "dungeon-master"}>{authenticatedContent}</div> : (
         <LoginScreen partyData={partyData} onSignedIn={setSession} />
       )}
 

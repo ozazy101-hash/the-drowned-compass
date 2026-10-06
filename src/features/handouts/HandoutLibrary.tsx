@@ -1,3 +1,4 @@
+import { SavedMapLibrary } from '../grid-map/SavedMapLibrary';
 import { useEffect, useRef, useState } from 'react';
 import { filterHandouts, handoutLimits, type Handout, type HandoutChange, type PartyContent } from '../../domain/party-content';
 import type { AccessRole } from '../../domain/party';
@@ -17,7 +18,7 @@ function Download({blob,item}:{blob:Blob;item:Handout}) {
   const extension=item.mime==='application/pdf'?'pdf':item.mime==='image/jpeg'?'jpg':item.mime==='image/webp'?'webp':'png';
   return <a href={url||undefined} download={`${item.title.replace(/[^a-z0-9 _-]/gi,'_')}.${extension}`}>Download Handout</a>;
 }
-export function HandoutLibrary({ content, onBack,role='dungeon-master', display }: { content: PartyContent; onBack: () => void; role?:AccessRole; display?:PartyDisplay }) {
+export function HandoutLibrary({ content, onBack,role='dungeon-master', display, onOpenMap }: { content: PartyContent; onBack: () => void; role?:AccessRole; display?:PartyDisplay;onOpenMap?:(id:string)=>void }) {
   const dm=role==='dungeon-master';
   const [items, setItems] = useState<Handout[]>([]);
   const [search, setSearch] = useState('');
@@ -92,6 +93,7 @@ export function HandoutLibrary({ content, onBack,role='dungeon-master', display 
       </>}
       {blob?<><Download blob={blob} item={item}/><HandoutMedia key={`${item.id}:${item.contentVersion}`} blob={blob}/></>:<><p>Opening current Handout…</p><button onClick={()=>setOpenRetry(value=>value+1)}>Retry opening Handout</button></>}
     </section> : <>
+      {dm&&onOpenMap&&<SavedMapLibrary content={content} onOpen={onOpenMap} display={display}/>}
       {dm&&<form onSubmit={upload} aria-label="Upload Handout"><h2>Upload a private Handout</h2>
         <p>{handoutLimits}</p><label>Title<input value={title} maxLength={160} required disabled={busy} onChange={event => { setTitle(event.target.value); setRequestId(crypto.randomUUID()); }} /></label>
         <label>File<input type="file" accept="image/png,image/jpeg,image/webp,application/pdf" disabled={busy} onChange={event => { setFile(event.target.files?.[0]); setRequestId(crypto.randomUUID()); }} required /></label>

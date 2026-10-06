@@ -1,15 +1,15 @@
 # The Drowned Compass
 
-This context describes the shared language for The Drowned Compass, a party companion for a grim pirate campaign touched by supernatural ocean horror. It covers the party and its Player Characters, not the campaign's plot, world, sessions, or Dungeon Master notes.
+This context describes the shared language for The Drowned Compass, a party companion for a grim pirate campaign touched by supernatural ocean horror. It covers the Party, its Player Characters, and Handouts and Grid Maps the Dungeon Master prepares for sharing. The Campaign's wider plot, world, session history, and Dungeon Master notes remain outside this context.
 
 ## Language
 
 **Campaign**:
-The broader ongoing Dungeons & Dragons game in which the Party participates. The Campaign provides the product's theme and context but is not itself recorded or managed by the Party Companion.
+The broader ongoing Dungeons & Dragons game in which the Party participates. The Campaign provides the product's theme and context and the material shared as Handouts; its wider story, world, and session history are not managed by the Party Companion.
 _Avoid_: Party data, workspace
 
 **Party Companion**:
-The shared aid for viewing and maintaining the Party's Character Records and current play state.
+The shared aid for viewing and maintaining the Party's Character Records, current play state, revealed Handouts, and Grid Maps, with a private content collection for the Dungeon Master.
 _Avoid_: Campaign manager, virtual tabletop
 
 **Party**:
@@ -45,7 +45,7 @@ The player responsible for a player character and, in the eventual full product,
 _Avoid_: Account owner, administrator
 
 **Dungeon Master**:
-The person running the campaign who needs a concise view across the whole party.
+The person running the Campaign who assesses the Party and chooses which Handouts to reveal.
 _Avoid_: Admin, game owner
 
 **Ability Score**:
@@ -65,7 +65,7 @@ A standard or custom state currently affecting a Player Character, such as Blind
 _Avoid_: Status, effect
 
 **Party Data Backup**:
-A portable copy of the information maintained by the Party Companion, including Character Records and Session Trackers. It does not contain the Campaign's story, world, or session history.
+A portable copy of the Party's Character Records, Character Spells, Session Trackers, and Party Companion settings. It does not contain the Campaign's story, world, or session history.
 _Avoid_: Campaign export, campaign backup
 
 **Rules Reference**:
@@ -95,3 +95,47 @@ _Avoid_: Avatar, icon
 **Combat Catalog**:
 The read-only SRD weapon templates and selected class-ability summaries that players can inspect and use to start editable Combat entries. It supplies references and starting values, without applying character-based rules or effects.
 _Avoid_: Attack calculator, automatic combat engine
+
+**Handout**:
+An image or PDF containing material from the Campaign, such as a letter or map, that the Dungeon Master can reveal to the Party.
+_Avoid_: Asset, attachment
+
+**Dungeon Master Library**:
+The Dungeon Master's collection of Handouts and Grid Maps, including unrevealed material that players cannot access.
+_Avoid_: Secret database, private folder
+
+**Party Library**:
+The collection of revealed Handouts and Grid Maps that players can revisit on their own devices independently of what is being shown during play.
+_Avoid_: Revealed database, shared folder
+
+**Reveal**:
+The Dungeon Master's act of making a previously private Handout or Grid Map available to the Party.
+_Avoid_: Upload, display
+
+**Party Display**:
+The shared view of a Handout or Grid Map selected by the Dungeon Master for everyone to see during play. It is distinct from the Party Dashboard and from each player's independent reading in the Party Library.
+_Avoid_: Party Dashboard, DM screen
+
+**Present**:
+The Dungeon Master's act of choosing the Handout or Grid Map and, for a PDF, the page shown on the Party Display. Presenting private content also reveals it to the Party Library.
+_Avoid_: Upload, share screen
+
+**Withdraw**:
+The Dungeon Master's act of removing a revealed Handout or Grid Map from Party access while retaining it privately. Withdrawal does not undo what players have already seen or copied.
+_Avoid_: Delete, erase
+
+**Grid Map**:
+A visual map on a square grid for use with physical miniatures, created by the Dungeon Master from drawn walls, doors and terrain, an uploaded background image, or both. It does not enforce movement, attacks, or visibility rules.
+_Avoid_: Virtual tabletop, rules engine
+
+**Map Grid**:
+The square cells defining a Grid Map's dimensions and game distances, with five game feet per square as the default.
+_Avoid_: Screen pixels, physical square size
+
+**Map Background**:
+An uploaded image forming the visual landscape beneath a Grid Map's grid and any drawn details.
+_Avoid_: Editable terrain, generated map geometry
+
+**Display Calibration**:
+The adjustment that makes a projected Map Grid square match the desired physical size on the table. It is distinct from the Grid Map's game distances and ordinary viewing zoom.
+_Avoid_: Map scale, fit to screen
