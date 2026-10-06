@@ -1,6 +1,6 @@
 # 01 — Concentrate Party state reconciliation
 
-**Status:** claimed
+**Status:** resolved
 
 **Blocked by:** None
 
@@ -16,14 +16,14 @@ The Party-state module owns merging incoming saved/realtime state, feature versi
 
 ## Placement and reuse decision
 
-This is an optional extraction within the existing Party domain, not a new application-state framework. Keep existing feature merge implementations and use a focused domain helper only to concentrate their orchestration. Do not move pure reconciliation into the Supabase adapter or fold private campaign content into the Party snapshot. The new Party Display does not read Character Records, so this refactor is not a prerequisite for Tickets 02–09. Schedule it with the next character-state change if it remains worthwhile.
+This is an optional extraction within the existing Party domain, not a new application-state framework. Keep existing feature merge implementations and use a focused domain helper only to concentrate their orchestration. Do not move pure reconciliation into the Supabase adapter or fold private campaign content into the Party snapshot. The new Party Display does not read Character Records, so this refactor is not a prerequisite for Tickets 02–09. The user subsequently selected this cleanup as the first execution step; that ordering is now complete.
 
 ## Acceptance
 
-- [ ] Preserve newer local accepted field/feature values when an older realtime snapshot arrives, and accept genuinely newer state.
-- [ ] Use the same reconciliation for saved command results and realtime snapshots.
-- [ ] Retain current class projection, slot/claim handling, rest results and unrelated feature data.
-- [ ] Keep navigation, authentication, Character Page drafts and current UX unchanged.
+- [x] Preserve newer local accepted field/feature values when an older realtime snapshot arrives, and accept genuinely newer state.
+- [x] Use the same reconciliation for saved command results and realtime snapshots.
+- [x] Retain current class projection, slot/claim handling, rest results and unrelated feature data.
+- [x] Keep navigation, authentication, Character Page drafts and current UX unchanged.
 
 ## Verification and architecture review
 
@@ -38,3 +38,9 @@ Complete the [shared depth/review gate](../spec.md#implementation-and-review-gat
 2026-10-06: Reviewed planned placement against existing modules; updated reuse guidance before implementation.
 
 2026-10-06: User authorized implementing this cleanup first with implementation and independent review agents. Selected as the first execution step; Tickets 02–09 remain on hold until this ticket is verified and resolved.
+
+### 2026-10-06 — Implementation and independent review complete
+
+Extracted `reconcileParty` and `reconcilePartySlot` into `src/domain/party-state.ts`; App delegates without feature merge knowledge. Reused all existing feature rules. Standards/depth and Spec review both pass with zero findings/outstanding requirements. Full calculation/domain suite: 272/272, including 12 new interface tests; independent reviewer reran 12/12. Build passes. Focused laptop/phone browser journeys: 50/50. Database/schema checks are not applicable. No application deployment performed.
+
+[Review, exact-source fingerprints and verification evidence](../verification/ticket01/review.md). Tickets 02–09 may now proceed in their existing dependency order, but implementation has not begun on them.

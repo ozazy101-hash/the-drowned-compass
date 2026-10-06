@@ -140,3 +140,7 @@ The user requested implementation tickets with deep modules, simple interfaces a
 ## Placement review before implementation
 
 The user requested checking whether planned behavior belongs in existing modules. Reviewed existing data factories, session/client initialization, PartyData, local-party-store, feature domains and character editors. Findings and code evidence are in module-placement-review.md. Updated all nine tickets: reuse existing auth/composition; put Handouts and map persistence in one content capability; treat calibration as an extension of Party Display; avoid separate persistence/stage facades. Grid drawing remains a justified new domain module. Optional reconciliation Ticket 01 is needs-triage and no longer blocks Ticket 04. No feature code changed.
+
+## Ticket 01 resolved
+
+User-selected cleanup first is complete. App now delegates to the focused Party-state module. One implementation agent and one independent review agent completed; no findings required another iteration. Standards/depth and Spec pass; 272/272 calculation/domain checks, 50/50 laptop/phone browser checks, build and diff checks pass. Exact source and review evidence are in verification/ticket01/review.md. No content feature tickets have started and no application release was performed.

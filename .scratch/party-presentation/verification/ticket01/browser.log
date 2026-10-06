@@ -1,0 +1,72 @@
+$ playwright test e2e/character-overview.spec.ts e2e/character-rests.spec.ts e2e/character-classes.spec.ts e2e/story-draft-regression.spec.ts --workers=2
+[WebServer] (node:82661) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] $ vite --host 127.0.0.1 --port 4173
+[WebServer] (node:82673) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 50 tests using 2 workers
+
+(node:82682) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:82681) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [laptop-chromium] › e2e/character-classes.spec.ts:51:1 › invalid class levels and totals remain unsaved while the primary cannot be removed (6.2s)
+  ✓   2 [laptop-chromium] › e2e/character-classes.spec.ts:18:1 › multiclass entries update totals, Derived Values, primary identity and Party summary after reload (8.1s)
+  ✓   3 [laptop-chromium] › e2e/character-classes.spec.ts:70:1 › two sessions retain independent class and Overview edits and show the shared summary live (5.1s)
+  ✓   4 [laptop-chromium] › e2e/character-classes.spec.ts:93:1 › same-entry conflicts retain drafts and explicit retry converges without losing other fields (4.5s)
+  ✓   5 [laptop-chromium] › e2e/character-classes.spec.ts:111:1 › remote removal keeps an unsaved draft visible without resurrecting its class (4.2s)
+  ✓   6 [laptop-chromium] › e2e/character-classes.spec.ts:125:1 › failed class saves preserve drafts for retry and acknowledged reload (3.4s)
+  ✓   7 [laptop-chromium] › e2e/character-classes.spec.ts:145:1 › delayed save responses cannot replace newer accepted classes or unrelated fields (3.8s)
+  ✓   9 [laptop-chromium] › e2e/character-overview.spec.ts:62:1 › a rejected save stays visible and retries without losing the draft (2.0s)
+  ✓   8 [laptop-chromium] › e2e/character-overview.spec.ts:5:1 › the Character Overview is keyboard operable, responsive, and persists focused fields (5.7s)
+  ✓  10 [laptop-chromium] › e2e/character-overview.spec.ts:77:1 › typing during a pending save preserves the newer unsaved draft (3.2s)
+  ✓  11 [laptop-chromium] › e2e/character-overview.spec.ts:111:1 › a delayed save response does not replace newer realtime fields (4.1s)
+  ✓  12 [laptop-chromium] › e2e/character-overview.spec.ts:141:3 › a conflicting skill choice preserves its draft for retry (3.9s)
+  ✓  13 [laptop-chromium] › e2e/character-overview.spec.ts:141:3 › a conflicting saving throw choice preserves its draft for retry (4.1s)
+  ✓  14 [laptop-chromium] › e2e/character-overview.spec.ts:182:1 › two signed-in browsers preserve different-field edits and receive them live (3.3s)
+  ✓  15 [laptop-chromium] › e2e/character-overview.spec.ts:196:1 › two signed-in browsers visibly converge on the latest accepted same-field value (3.8s)
+  ✓  16 [laptop-chromium] › e2e/character-rests.spec.ts:30:36 › shared transport mixed timing, exclusions, cancellation and accepted synchronization (2.8s)
+  ✓  17 [laptop-chromium] › e2e/character-rests.spec.ts:30:36 › IndexedDB mixed timing, exclusions, cancellation and accepted synchronization (2.9s)
+  ✓  18 [laptop-chromium] › e2e/character-rests.spec.ts:42:1 › all selected recoveries synchronize while independent concurrent writes and dirty Magic draft survive (2.6s)
+  ✓  19 [laptop-chromium] › e2e/character-rests.spec.ts:52:52 › stale selected slot rejects everything and fresh preview succeeds (2.4s)
+  ✓  20 [laptop-chromium] › e2e/character-rests.spec.ts:52:52 › stale selected maximum rejects everything and fresh preview succeeds (2.4s)
+  ✓  21 [laptop-chromium] › e2e/character-rests.spec.ts:52:52 › stale selected removed rejects everything and fresh preview succeeds (2.4s)
+  ✓  22 [laptop-chromium] › e2e/character-rests.spec.ts:60:1 › failure freezes exact selection and retry applies once (2.2s)
+  ✓  23 [laptop-chromium] › e2e/character-rests.spec.ts:65:1 › lost HTTP acknowledgement retry does not restore over independent spend (2.4s)
+  ✓  24 [laptop-chromium] › e2e/character-rests.spec.ts:74:1 › unknown HP preview, no-change Short Rest and excluding every change stay deliberate (2.4s)
+(node:82891) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  25 [laptop-chromium] › e2e/story-draft-regression.spec.ts:5:1 › typing during a neighboring Story save survives and persists (3.3s)
+(node:82907) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  27 [phone-chromium] › e2e/character-classes.spec.ts:51:1 › invalid class levels and totals remain unsaved while the primary cannot be removed (4.2s)
+  ✓  26 [phone-chromium] › e2e/character-classes.spec.ts:18:1 › multiclass entries update totals, Derived Values, primary identity and Party summary after reload (7.9s)
+  ✓  28 [phone-chromium] › e2e/character-classes.spec.ts:70:1 › two sessions retain independent class and Overview edits and show the shared summary live (4.2s)
+  ✓  29 [phone-chromium] › e2e/character-classes.spec.ts:93:1 › same-entry conflicts retain drafts and explicit retry converges without losing other fields (4.6s)
+  ✓  30 [phone-chromium] › e2e/character-classes.spec.ts:111:1 › remote removal keeps an unsaved draft visible without resurrecting its class (4.2s)
+  ✓  31 [phone-chromium] › e2e/character-classes.spec.ts:125:1 › failed class saves preserve drafts for retry and acknowledged reload (4.1s)
+  ✓  32 [phone-chromium] › e2e/character-classes.spec.ts:145:1 › delayed save responses cannot replace newer accepted classes or unrelated fields (3.9s)
+  ✓  34 [phone-chromium] › e2e/character-overview.spec.ts:62:1 › a rejected save stays visible and retries without losing the draft (2.1s)
+  ✓  33 [phone-chromium] › e2e/character-overview.spec.ts:5:1 › the Character Overview is keyboard operable, responsive, and persists focused fields (5.4s)
+  ✓  35 [phone-chromium] › e2e/character-overview.spec.ts:77:1 › typing during a pending save preserves the newer unsaved draft (3.4s)
+  ✓  36 [phone-chromium] › e2e/character-overview.spec.ts:111:1 › a delayed save response does not replace newer realtime fields (3.6s)
+  ✓  37 [phone-chromium] › e2e/character-overview.spec.ts:141:3 › a conflicting skill choice preserves its draft for retry (3.8s)
+  ✓  38 [phone-chromium] › e2e/character-overview.spec.ts:141:3 › a conflicting saving throw choice preserves its draft for retry (4.4s)
+  ✓  39 [phone-chromium] › e2e/character-overview.spec.ts:182:1 › two signed-in browsers preserve different-field edits and receive them live (4.0s)
+  ✓  40 [phone-chromium] › e2e/character-overview.spec.ts:196:1 › two signed-in browsers visibly converge on the latest accepted same-field value (3.8s)
+  ✓  41 [phone-chromium] › e2e/character-rests.spec.ts:30:36 › shared transport mixed timing, exclusions, cancellation and accepted synchronization (2.8s)
+  ✓  42 [phone-chromium] › e2e/character-rests.spec.ts:30:36 › IndexedDB mixed timing, exclusions, cancellation and accepted synchronization (2.7s)
+  ✓  43 [phone-chromium] › e2e/character-rests.spec.ts:42:1 › all selected recoveries synchronize while independent concurrent writes and dirty Magic draft survive (2.4s)
+  ✓  44 [phone-chromium] › e2e/character-rests.spec.ts:52:52 › stale selected slot rejects everything and fresh preview succeeds (2.3s)
+  ✓  45 [phone-chromium] › e2e/character-rests.spec.ts:52:52 › stale selected maximum rejects everything and fresh preview succeeds (2.2s)
+  ✓  46 [phone-chromium] › e2e/character-rests.spec.ts:52:52 › stale selected removed rejects everything and fresh preview succeeds (2.2s)
+  ✓  47 [phone-chromium] › e2e/character-rests.spec.ts:60:1 › failure freezes exact selection and retry applies once (2.1s)
+  ✓  48 [phone-chromium] › e2e/character-rests.spec.ts:65:1 › lost HTTP acknowledgement retry does not restore over independent spend (2.1s)
+  ✓  49 [phone-chromium] › e2e/character-rests.spec.ts:74:1 › unknown HP preview, no-change Short Rest and excluding every change stay deliberate (2.1s)
+  ✓  50 [phone-chromium] › e2e/story-draft-regression.spec.ts:5:1 › typing during a neighboring Story save survives and persists (3.1s)
+
+  50 passed (1.7m)
