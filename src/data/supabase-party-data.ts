@@ -1,3 +1,4 @@
+import { supabasePartyContent } from './supabase-party-content';
 import { createPartyBackup } from '../domain/party-backup';
 import { validateRestCommand } from '../domain/character-rests';
 import { emptyMagic, validateMagicCommand, type CharacterSpell, type SpellSlot } from '../domain/character-magic';
@@ -122,6 +123,7 @@ function mapCharacterSlot(row: CharacterSlotRow): CharacterSlot {
 async function readMembership(
   client: SupabaseClient,
   userId: string,
+  distinguishFailure = false,
 ): Promise<PartySession | null> {
   const { data, error } = await client
     .from("party_members")
@@ -129,7 +131,11 @@ async function readMembership(
     .eq("user_id", userId)
     .maybeSingle();
 
-  if (error || !isAccessRole(data?.role)) return null;
+  if (error) {
+    if(distinguishFailure && !['PGRST301','PGRST302','PGRST303'].includes(error.code)) throw new Error('Session authority could not be checked. Check your connection.');
+    return null;
+  }
+  if (!isAccessRole(data?.role)) return null;
   return { role: data.role };
 }
 
@@ -211,10 +217,12 @@ export function createSupabasePartyData(
   }
 
   return {
+    content: supabasePartyContent(client),
     async getSession() {
       const { data, error } = await client.auth.getSession();
-      if (error || !data.session) return null;
-      return readMembership(client, data.session.user.id);
+      if(error){if([401,403].includes(error.status??0)||['bad_jwt','refresh_token_not_found','refresh_token_already_used','session_not_found','user_not_found'].includes(error.code??''))return null;throw new Error('Session authority could not be checked. Check your connection.');}
+      if(!data.session)return null;
+      return readMembership(client, data.session.user.id, true);
     },
 
     async signIn(role, password): Promise<SignInResult> {

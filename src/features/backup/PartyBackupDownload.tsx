@@ -22,7 +22,7 @@ export function PartyBackupDownload({ partyData }: { partyData: PartyData }) {
   return <section className="party-backup" aria-labelledby="party-backup-heading">
     <h2 id="party-backup-heading">Party Data Backup</h2>
     <p>Download saved Character Records, Character Spells, Session Trackers and Party Companion settings as portable JSON. Character backstories and notes are included. Unsaved editor drafts are excluded.</p>
-    <p>This is not a backup of campaign story, world, sessions or Dungeon Master preparation. This app does not import or restore backup files.</p>
+    <p>This is not a backup of campaign story, world, sessions or Dungeon Master preparation. Uploaded Handout files and Grid Maps are excluded; retain your original files. This app does not import or restore backup files.</p>
     <button disabled={busy} onClick={() => void download()}>{busy ? 'Preparing backup…' : failed ? 'Retry Party Data Backup' : 'Download Party Data Backup'}</button>
     <p role={failed ? 'alert' : 'status'}>{message}</p>
   </section>;

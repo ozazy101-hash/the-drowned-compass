@@ -1,3 +1,4 @@
+import type { PartyContent } from './party-content';
 import type { PartyBackup } from './party-backup.ts';
 import type { RestCommand } from './character-rests.ts';
 import type { CharacterMagic, MagicCommand } from './character-magic.ts';
@@ -107,6 +108,8 @@ export type OverviewUpdateResult =
   | { ok: false; reason: "conflict"; slot: CharacterSlot };
 
 export interface PartyData {
+  content: PartyContent;
+  /** Null confirms no authorized session; transient authority-read failures may reject. */
   getSession(): Promise<PartySession | null>;
   signIn(role: AccessRole, password: string): Promise<SignInResult>;
   signOut(): Promise<void>;

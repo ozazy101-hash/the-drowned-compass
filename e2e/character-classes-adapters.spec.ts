@@ -1,4 +1,4 @@
-import { expect, type WebSocketRoute } from '@playwright/test';
+import { expect, type Page, type WebSocketRoute } from '@playwright/test';
 import { test } from './browser-fixtures';
 import { claimCharacter, enterAs, isolatedPartyUrl } from './overview-helpers';
 import { applyClassEdit, type ClassEdit } from '../src/domain/character-classes';
@@ -109,10 +109,14 @@ test('Supabase class subscriptions deliver edits and catch up after reconnect', 
   await expect(page.locator('body')).toHaveAttribute('data-class-total', '7');
 });
 
-test('localStorage class and Overview writes use one cross-tab lock', async ({ context, page }) => {
+test('local class and Overview writes use one cross-tab lock', async ({ context, page }) => {
   await page.goto('./'); await enterAs(page, 'Player'); await claimCharacter(page);
   const peer = await context.newPage(); await peer.goto('./');
-  const before = await page.evaluate(() => JSON.parse(localStorage.getItem('drowned-compass-party')!));
+  const readCommitted = (tab: Page) => tab.evaluate(async () => {
+    const path = '/the-drowned-compass/src/data/in-memory-party-data.ts';
+    return (await import(path)).createInMemoryPartyData().getParty();
+  });
+  const before = await readCommitted(page);
   const edits = [
     { id: '11111111-1111-4111-8111-111111111111', name: 'Cleric', level: 2, deleted: false },
     { id: '22222222-2222-4222-8222-222222222222', name: 'Fighter', level: 1, deleted: false },
@@ -126,9 +130,13 @@ test('localStorage class and Overview writes use one cross-tab lock', async ({ c
     return (await import(path)).createInMemoryPartyData().updateCharacterOverviewField('character-slot-1', 'armorClass', 18, 0);
   })]);
   expect(outcomes.every(outcome => outcome.ok)).toBe(true);
-  const after = await page.evaluate(() => JSON.parse(localStorage.getItem('drowned-compass-party')!));
+  // IndexedDB is the committed cross-tab authority; localStorage is a legacy
+  // mirror whose renderer cache may lag the peer's accepted write.
+  const after = await readCommitted(page);
+  expect(await readCommitted(peer)).toEqual(after);
   expect(after.slots[0].character.classes.filter((entry: { deleted: boolean }) => !entry.deleted)).toHaveLength(3);
   expect(after.slots[0].character.level).toBe(6);
   expect(after.slots[0].character.armorClass).toBe(18);
+  expect(after.slots[0].character.fieldVersions.armorClass).toBe(1);
   expect(after.slots[0].character.abilityScores).toEqual(before.slots[0].character.abilityScores);
 });

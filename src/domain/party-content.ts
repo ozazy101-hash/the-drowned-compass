@@ -1,0 +1,91 @@
+/// <reference types="vite/client" />
+import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
+
+export type Handout = { id: string; title: string; visibility: 'private' | 'revealed'; mime: string; size: number; createdAt: string; version: number; contentVersion: number };
+export type HandoutUpload = { requestId: string; title: string; file: File };
+export type HandoutChange = { id: string; expectedVersion: number; requestId: string; command: { kind: 'rename'; title: string } | { kind: 'reveal' | 'withdraw' } | { kind: 'replace'; file: File } };
+export type HandoutChangeResult = { ok: true; item: Handout } | { ok: false; reason: 'conflict'; item: Handout };
+export type ContentSnapshot = { items: Handout[] } | { error: string };
+export interface PartyContent {
+  list(query?: { search?: string; visibility?: 'private' | 'revealed' }): Promise<Handout[]>;
+  upload(input: HandoutUpload): Promise<Handout>;
+  change(input: HandoutChange): Promise<HandoutChangeResult>;
+  subscribe(onChanged: (snapshot: ContentSnapshot) => void): () => void;
+  open(id: string, expectedContentVersion?: number): Promise<Blob>;
+}
+export const handoutLimits = 'PNG, JPEG, WebP or PDF; up to 20 MiB. Images up to 16 million pixels; PDFs up to 100 pages. Password-protected PDFs are unsupported.';
+export const handoutAccessError = 'Dungeon Master access is required. Sign in again to open your Library.';
+export function handoutTitle(title: string): string {
+  const value = title.trim();
+  if (!value || value.length > 160) throw new Error('Enter a title between 1 and 160 characters.');
+  return value;
+}
+export async function readHandoutPdf(blob: Blob) {
+  const { getDocument, GlobalWorkerOptions } = await import('pdfjs-dist');
+  GlobalWorkerOptions.workerSrc = workerUrl;
+  const task = getDocument({ data: new Uint8Array(await blob.arrayBuffer()) });
+  try { const pdf = await task.promise; return Object.assign(pdf, { dispose: () => task.destroy() }); } catch (error) { await task.destroy(); throw error; }
+}
+export async function validateHandout(input: HandoutUpload): Promise<{ title: string; digest: string }> {
+  const title = handoutTitle(input.title);
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(input.requestId)) throw new Error('Invalid upload request. Choose the file again.');
+  if (!['image/png', 'image/jpeg', 'image/webp', 'application/pdf'].includes(input.file.type)) throw new Error('Unsupported file. Choose PNG, JPEG, WebP or PDF.');
+  if (!input.file.size || input.file.size > 20 * 1024 * 1024) throw new Error('Choose a nonempty file no larger than 20 MiB.');
+  const bytes = new Uint8Array(await input.file.arrayBuffer());
+  if (input.file.type === 'application/pdf') {
+    if (!new TextDecoder().decode(bytes.slice(0, 8)).startsWith('%PDF-') || !new TextDecoder().decode(bytes.slice(-2048)).includes('%%EOF')) throw new Error('The PDF is incomplete or corrupt.');
+    let pdf;
+    try {
+      pdf = await readHandoutPdf(input.file);
+      if (pdf.numPages > 100) throw new Error('PDFs must contain at most 100 pages.');
+      for (let page = 1; page <= pdf.numPages; page++) await (await pdf.getPage(page)).getOperatorList();
+    } catch (error) {
+      if (error instanceof Error && error.message.includes('100 pages')) throw error;
+      throw new Error('The PDF is corrupt or password-protected. Choose an unprotected PDF.');
+    } finally { await pdf?.dispose(); }
+  } else {
+    const matches = input.file.type === 'image/png' ? bytes[0] === 137 && bytes[1] === 80 && bytes[2] === 78 && bytes[3] === 71
+      : input.file.type === 'image/jpeg' ? bytes[0] === 255 && bytes[1] === 216
+      : new TextDecoder().decode(bytes.slice(0,4)) === 'RIFF' && new TextDecoder().decode(bytes.slice(8,12)) === 'WEBP';
+    if (!matches) throw new Error('The image contents do not match its file type.');
+    let bitmap;
+    try { bitmap = await createImageBitmap(input.file); } catch { throw new Error('The image is corrupt or unsupported.'); }
+    const pixels = bitmap.width * bitmap.height; bitmap.close();
+    if (pixels > 16_000_000) throw new Error('Images must contain at most 16 million pixels.');
+  }
+  const hash = await crypto.subtle.digest('SHA-256', bytes);
+  return { title, digest: Array.from(new Uint8Array(hash), byte => byte.toString(16).padStart(2, '0')).join('') };
+}
+export function filterHandouts(items: Handout[], query: { search?: string; visibility?: 'private' | 'revealed' } = {}) {
+  const search = (query.search ?? '').trim().toLowerCase();
+  return items.filter(item => (!query.visibility || item.visibility === query.visibility) && item.title.toLowerCase().includes(search)).sort((a,b) => b.createdAt.localeCompare(a.createdAt));
+}
+
+export type PreparedHandoutChange = { signature: string; replacement?: { digest: string; mime: string; size: number }; title?: string };
+export async function prepareHandoutChange(input: HandoutChange): Promise<PreparedHandoutChange> {
+  if (!Number.isSafeInteger(input.expectedVersion) || input.expectedVersion < 1) throw new Error('Reload this Handout before making changes.');
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(input.requestId)) throw new Error('Invalid change request. Please retry.');
+  if (input.command.kind === 'rename') { const title=handoutTitle(input.command.title); return {title,signature:`rename|${title}`}; }
+  if (input.command.kind === 'replace') {
+    const validated=await validateHandout({requestId:input.requestId,title:'Replacement',file:input.command.file});
+    const replacement={digest:validated.digest,mime:input.command.file.type,size:input.command.file.size};
+    return {replacement,signature:`replace|${input.requestId}|${replacement.digest}|${replacement.size}|${replacement.mime}`};
+  }
+  if (input.command.kind !== 'reveal' && input.command.kind !== 'withdraw') throw new Error('Unsupported Handout change.');
+  return {signature:input.command.kind};
+}
+// Both adapters implement this accepted-state/version contract. Persisted retry
+// bookkeeping stays internal; the caller only receives the accepted Handout.
+export function transitionHandout(item: Handout & {lastRequestId?: string; lastSignature?: string}, input: HandoutChange, prepared: PreparedHandoutChange): HandoutChangeResult {
+  if (item.lastRequestId === input.requestId) {
+    if (item.lastSignature !== prepared.signature) throw new Error('This change request was already used for different content.');
+    return {ok:true,item};
+  }
+  if (item.version !== input.expectedVersion) return {ok:false,reason:'conflict',item};
+  const next={...item,version:item.version+1};
+  if (input.command.kind === 'rename') next.title=prepared.title!;
+  if (input.command.kind === 'reveal') next.visibility='revealed';
+  if (input.command.kind === 'withdraw') next.visibility='private';
+  if (prepared.replacement) { next.mime=prepared.replacement.mime; next.size=prepared.replacement.size; next.contentVersion++; }
+  return {ok:true,item:next};
+}
