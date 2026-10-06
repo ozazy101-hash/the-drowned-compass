@@ -1,0 +1,2 @@
+import { defineConfig, devices } from '@playwright/test';
+export default defineConfig({testDir:'./e2e',testMatch:['party-backup.spec.ts','party-backup-adapters.spec.ts'],workers:1,reporter:'list',use:{baseURL:'http://127.0.0.1:4184/the-drowned-compass/'},projects:[{name:'laptop',use:{...devices['Desktop Chrome'],channel:'chrome'}},{name:'phone',use:{...devices['Pixel 7'],channel:'chrome'}}],webServer:{command:'VITE_USE_IN_MEMORY_DATA=true pnpm dev --host 127.0.0.1 --port 4184',url:'http://127.0.0.1:4184/the-drowned-compass/',reuseExistingServer:false}});

@@ -8,3 +8,6 @@ test-results/
 .env.*.local
 .DS_Store
 supabase/tests/database/*.generated.test.sql
+
+# Focused content runs may coexist with calculation/backup verification.
+test-results-handouts/

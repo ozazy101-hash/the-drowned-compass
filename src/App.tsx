@@ -1,3 +1,5 @@
+import { createPartyDisplay, type PartyDisplay } from './features/presentation/party-display';
+import { HandoutLibrary } from './features/handouts/HandoutLibrary';
 import { reconcileParty, reconcilePartySlot } from './domain/party-state';
 import { PartyBackupDownload } from './features/backup/PartyBackupDownload';
 import { RestSection } from './features/rests/RestSection';
@@ -970,13 +972,20 @@ export function App({ partyData }: AppProps) {
   const [party, setParty] = useState<Party | null>(null);
   const [session, setSession] = useState<PartySession | null | undefined>(undefined);
   const [setupSlotId, setSetupSlotId] = useState<string | null>(null);
+  const [libraryOpen, setLibraryOpen] = useState(false);
+  const [display,setDisplay] = useState<PartyDisplay>();
+  useEffect(()=>{
+    if(session?.role!=='dungeon-master'){setDisplay(undefined);return;}
+    const presentation=createPartyDisplay(partyData.content,()=>partyData.getSession());setDisplay(presentation);
+    return ()=>presentation.dispose();
+  },[partyData,session]);
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
 
   useEffect(() => {
     let isCurrent = true;
     partyData.getSession().then((nextSession) => {
       if (isCurrent) setSession(nextSession);
-    });
+    }).catch(()=>{if(isCurrent)setSession(null);});
     return () => { isCurrent = false; };
   }, [partyData]);
 
@@ -1005,9 +1014,11 @@ export function App({ partyData }: AppProps) {
   }
 
   async function handleSignOut() {
+    display?.dispose();
     await partyData.signOut();
     setSetupSlotId(null);
     setSelectedSlotId(null);
+    setLibraryOpen(false);
     setSession(null);
   }
 
@@ -1030,7 +1041,9 @@ export function App({ partyData }: AppProps) {
   );
 
   let authenticatedContent;
-  if (setupSlot) {
+  if (libraryOpen && session) {
+    authenticatedContent = <HandoutLibrary content={partyData.content} display={display} role={session.role} onBack={() => setLibraryOpen(false)} />;
+  } else if (setupSlot) {
     authenticatedContent = (
       <CharacterSetup
         slot={setupSlot}
@@ -1105,6 +1118,7 @@ export function App({ partyData }: AppProps) {
         {session ? (
           <div className="session-controls">
             <span>{session.role === "dungeon-master" ? "Dungeon Master" : "Player"}</span>
+            <button type="button" onClick={() => setLibraryOpen(true)}>{session.role==='dungeon-master'?'Dungeon Master Library':'Party Library'}</button>
             <button type="button" onClick={handleSignOut}>Sign out</button>
           </div>
         ) : (

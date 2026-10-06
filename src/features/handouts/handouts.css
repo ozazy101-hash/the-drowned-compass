@@ -1,0 +1,17 @@
+.handout-library { max-width: 1100px; margin: 2rem auto; padding: 1rem; }
+.handout-library form, .handout-filters { display: flex; flex-wrap: wrap; gap: 1rem; align-items: end; margin: 1.5rem 0; }
+.handout-library form h2, .handout-library form p { flex-basis: 100%; margin: 0; }
+.handout-library label { display: grid; gap: .5rem; min-width: 0; }
+.handout-library input, .handout-library select { max-width: 100%; padding: .7rem; background: #182423; color: inherit; border: 1px solid #63716a; border-radius: .3rem; }
+.handout-library button { padding: .65rem; color: inherit; background: #24302e; border: 1px solid #687c71; border-radius: .3rem; cursor: pointer; }
+.handout-library button:disabled { opacity: .6; cursor: wait; }
+.handout-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(240px,100%),1fr)); gap: 1rem; }
+.handout-grid article button { width: 100%; display: grid; gap: .7rem; text-align: left; }
+.handout-grid .handout-media { height: 160px; overflow: hidden; }
+.handout-grid .handout-media img, .handout-grid .handout-media canvas { height: 100%; width: 100%; object-fit: contain; }
+.handout-media img, .handout-media canvas { display: block; max-width: 100%; height: auto; margin: auto; }
+.handout-pages { display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; justify-content: center; margin: 1rem 0; }
+@media(max-width: 600px) { .handout-library form label, .handout-filters label { width: 100%; } }
+
+.handout-library a { display: inline-block; padding: .8rem 0; color: #d8ca82; }
+.handout-actions { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1rem 0; }

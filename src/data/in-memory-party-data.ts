@@ -1,3 +1,4 @@
+import { localPartyContent } from './local-party-content';
 import { createPartyBackup } from '../domain/party-backup';
 import { applyRestCommand, validateRestCommand } from '../domain/character-rests';
 import { applyMagicCommand, emptyMagic, validateMagicCommand } from '../domain/character-magic';
@@ -145,6 +146,7 @@ export function createInMemoryPartyData(): PartyData {
   const authorization = () => ({ authorization: `Bearer ${token() ?? ''}` });
 
   return {
+    content: localPartyContent(token),
     async getSession() {
       if (testNamespace) {
         const response = await fetch(testAuthUrl(), { headers: authorization() });
