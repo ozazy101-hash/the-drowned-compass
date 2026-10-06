@@ -1,0 +1,42 @@
+[WebServer] (node:20607) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] $ vite --host 127.0.0.1 --port 4392 --strictPort
+[WebServer] (node:20617) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 22 tests using 2 workers
+
+(node:20623) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:20624) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [laptop-chromium] › e2e/combat-adapter-contract.spec.ts:6:3 › memory adapter loads records, maps versions, submits conditional writes, rejects conflicts and reports errors (1.8s)
+  ✓   2 [laptop-chromium] › e2e/combat-adapter-contract.spec.ts:6:3 › supabase adapter loads records, maps versions, submits conditional writes, rejects conflicts and reports errors (2.1s)
+[WebServer] 10:08:25 PM [vite] (client) [console.warn] GoTrueClient@sb-supabase-combat-contract-auth-token:1 (2.116.0) 2026-10-05T21:08:25.275Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+  ✓   4 [laptop-chromium] › e2e/combat-entries.spec.ts:81:1 › failed creation retains the draft and Retry saves it once (4.1s)
+  ✓   3 [laptop-chromium] › e2e/combat-entries.spec.ts:42:1 › attacks and actions can be entered, edited, ordered, selected and removed with persistence and keyboard access (8.3s)
+  ✓   5 [laptop-chromium] › e2e/combat-entries.spec.ts:95:1 › two sessions preserve independent records and reject a stale same-record draft before explicit Retry (6.8s)
+  ✓   6 [laptop-chromium] › e2e/combat-entries.spec.ts:126:1 › new typing survives an older save acknowledgement and Retry sends the newer draft (4.2s)
+  ✓   7 [laptop-chromium] › e2e/combat-entries.spec.ts:154:1 › a delayed Party snapshot cannot revive a removed primary attack (2.5s)
+  ✓   8 [laptop-chromium] › e2e/combat-entries.spec.ts:182:1 › primary selection, ordering and removal failures expose Retry and keep unrelated records (2.9s)
+  ✓   9 [laptop-chromium] › e2e/combat-entries.spec.ts:210:1 › a remote removal preserves unsaved notes until the editor discards them (2.7s)
+  ✓  11 [laptop-chromium] › e2e/combat-entries.spec.ts:261:1 › selection conflict preserves intent, recovers after remote removal and can adopt saved selection (9.3s)
+(node:20775) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  10 [laptop-chromium] › e2e/combat-entries.spec.ts:227:1 › several featured attacks synchronize, order, keyboard select, persist and prune conversions (12.9s)
+(node:20797) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  12 [phone-chromium] › e2e/combat-adapter-contract.spec.ts:6:3 › memory adapter loads records, maps versions, submits conditional writes, rejects conflicts and reports errors (853ms)
+[WebServer] 10:08:57 PM [vite] (client) [console.warn] GoTrueClient@sb-supabase-combat-contract-auth-token:1 (2.116.0) 2026-10-05T21:08:57.860Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+  ✓  13 [phone-chromium] › e2e/combat-adapter-contract.spec.ts:6:3 › supabase adapter loads records, maps versions, submits conditional writes, rejects conflicts and reports errors (3.0s)
+  ✓  15 [phone-chromium] › e2e/combat-entries.spec.ts:81:1 › failed creation retains the draft and Retry saves it once (4.8s)
+  ✓  14 [phone-chromium] › e2e/combat-entries.spec.ts:42:1 › attacks and actions can be entered, edited, ordered, selected and removed with persistence and keyboard access (10.4s)
+  ✓  17 [phone-chromium] › e2e/combat-entries.spec.ts:126:1 › new typing survives an older save acknowledgement and Retry sends the newer draft (5.2s)
+  ✓  16 [phone-chromium] › e2e/combat-entries.spec.ts:95:1 › two sessions preserve independent records and reject a stale same-record draft before explicit Retry (9.2s)
+  ✓  18 [phone-chromium] › e2e/combat-entries.spec.ts:154:1 › a delayed Party snapshot cannot revive a removed primary attack (2.2s)
+  ✓  20 [phone-chromium] › e2e/combat-entries.spec.ts:210:1 › a remote removal preserves unsaved notes until the editor discards them (3.0s)
+  ✓  19 [phone-chromium] › e2e/combat-entries.spec.ts:182:1 › primary selection, ordering and removal failures expose Retry and keep unrelated records (3.4s)
+  ✓  22 [phone-chromium] › e2e/combat-entries.spec.ts:261:1 › selection conflict preserves intent, recovers after remote removal and can adopt saved selection (5.6s)
+  ✓  21 [phone-chromium] › e2e/combat-entries.spec.ts:227:1 › several featured attacks synchronize, order, keyboard select, persist and prune conversions (7.1s)
+
+  22 passed (1.0m)

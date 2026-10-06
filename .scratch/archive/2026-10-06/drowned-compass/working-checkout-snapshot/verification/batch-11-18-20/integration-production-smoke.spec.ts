@@ -1,0 +1,42 @@
+import { test } from './e2e/browser-fixtures';
+import { expect } from '@playwright/test';
+import { enterAs, claimCharacter, saveInput, openClaimedCharacter } from './e2e/overview-helpers';
+test('combined production UI preserves Health, featured attacks, currency and spell browsing across reload', async ({page}, info) => {
+  await page.goto('./'); await enterAs(page, 'Player'); await claimCharacter(page);
+  await saveInput(page, 'Maximum Hit Points', '20');
+  const health = page.getByRole('region', {name:'Health'});
+  await health.locator('summary').click();
+  await health.getByLabel('Current Hit Points', {exact:true}).fill('20');
+  await health.getByRole('button', {name:'Save Current Hit Points'}).click();
+  await expect(health.getByRole('status')).toHaveText('Saved');
+  await health.getByRole('button', {name:'Subtract one Hit Point'}).click();
+  await expect(health).toContainText('Current HP: 19 / 20');
+  await page.getByRole('button', {name:'Combat', exact:true}).click();
+  for (const name of ['Cutlass','Harpoon']) {
+    await page.getByRole('button', {name:'Add attack', exact:true}).click();
+    const editor = page.getByRole('article', {name:'New attack', exact:true});
+    await editor.getByLabel('Name', {exact:true}).fill(name);
+    await editor.getByRole('button', {name:'Save attack', exact:true}).click();
+    await expect(page.getByRole('article', {name, exact:true}).getByRole('status')).toHaveText('Saved');
+    await page.getByRole('checkbox', {name, exact:true}).check();
+    await expect(page.getByRole('region', {name:'Attacks & Actions'}).getByRole('status').first()).toHaveText('Saved');
+  }
+  await page.getByRole('button', {name:'Inventory', exact:true}).click();
+  for (const label of ['Copper pieces (CP)','Silver pieces (SP)','Electrum pieces (EP)','Gold pieces (GP)','Platinum pieces (PP)']) await expect(page.getByRole('textbox', {name:label, exact:true})).toBeVisible();
+  const coin = page.getByRole('article', {name:'Gold pieces (GP)',exact:true});
+  await coin.getByLabel('Gold pieces (GP)', {exact:true}).fill('42');
+  await coin.getByRole('button', {name:'Save Gold pieces (GP)'}).click();
+  await expect(coin.getByRole('status')).toHaveText('Saved');
+  await page.getByRole('button', {name:'Magic',exact:true}).click();
+  await page.getByLabel('Search spells by name').fill('hold person');
+  await page.getByRole('list',{name:'Matching spells'}).getByRole('button').click();
+  await expect(page.getByRole('article', {name:'Hold Person spell details'})).toBeVisible();
+  await page.getByRole('button', {name:'Back to the Party'}).click();
+  const card = page.getByRole('article', {name:'Neris Vale, played by Mara'});
+  await expect(card).toContainText('19 / 20'); await expect(card).toContainText('Cutlass'); await expect(card).toContainText('Harpoon');
+  await page.reload(); await expect(card).toContainText('19 / 20'); await expect(card).toContainText('Cutlass');
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({path:'/tmp/drowned-compass-production-'+info.project.name+'.png',fullPage:true,animations:"disabled"});
+  await openClaimedCharacter(page); await page.getByRole('button',{name:'Inventory',exact:true}).click();
+  await expect(page.getByRole('textbox',{name:'Gold pieces (GP)',exact:true})).toHaveValue('42');
+});

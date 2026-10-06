@@ -1,0 +1,11 @@
+
+Running 2 tests using 1 worker
+
+(node:20751) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [laptop-chromium] › integration-production-smoke.spec.ts:4:1 › combined production UI preserves Health, featured attacks, currency and spell browsing across reload (6.5s)
+(node:20819) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 [phone-chromium] › integration-production-smoke.spec.ts:4:1 › combined production UI preserves Health, featured attacks, currency and spell browsing across reload (7.7s)
+
+  2 passed (22.9s)

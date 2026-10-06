@@ -1,0 +1,55 @@
+[WebServer] (node:20122) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] $ vite --host 127.0.0.1 --port 4392 --strictPort
+[WebServer] (node:20140) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 2 workers
+
+(node:20154) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:20153) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [phone-chromium] › e2e/combat-entries.spec.ts:227:1 › several featured attacks synchronize, order, keyboard select, persist and prune conversions (7.6s)
+  ✘  1 [laptop-chromium] › e2e/combat-entries.spec.ts:227:1 › several featured attacks synchronize, order, keyboard select, persist and prune conversions (7.7s)
+
+
+  1) [laptop-chromium] › e2e/combat-entries.spec.ts:227:1 › several featured attacks synchronize, order, keyboard select, persist and prune conversions 
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 949.2456665039062
+    Received:    1057.228271484375
+
+      248 |       const bounds=await attack.boundingBox();
+      249 |       expect(bounds!.y).toBeGreaterThanOrEqual(cardBounds!.y);
+    > 250 |       expect(bounds!.y+bounds!.height).toBeLessThanOrEqual(cardBounds!.y+cardBounds!.height);
+          |                                        ^
+      251 |     }
+      252 |     await page.getByRole('button',{name:'Open Neris Vale Character Page'}).focus(); await page.keyboard.press('Enter'); await combat(page);
+      253 |     await page.reload(); await openClaimedCharacter(page); await combat(page); await expect(page.locator('.combat-featured input:checked')).toHaveCount(2);
+        at /Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/e2e/combat-entries.spec.ts:250:40
+
+    Error Context: test-results/combat-entries-several-fea-0a679-rsist-and-prune-conversions-laptop-chromium/error-context.md
+
+  2) [phone-chromium] › e2e/combat-entries.spec.ts:227:1 › several featured attacks synchronize, order, keyboard select, persist and prune conversions 
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 883.8098754882812
+    Received:    1003.792236328125
+
+      248 |       const bounds=await attack.boundingBox();
+      249 |       expect(bounds!.y).toBeGreaterThanOrEqual(cardBounds!.y);
+    > 250 |       expect(bounds!.y+bounds!.height).toBeLessThanOrEqual(cardBounds!.y+cardBounds!.height);
+          |                                        ^
+      251 |     }
+      252 |     await page.getByRole('button',{name:'Open Neris Vale Character Page'}).focus(); await page.keyboard.press('Enter'); await combat(page);
+      253 |     await page.reload(); await openClaimedCharacter(page); await combat(page); await expect(page.locator('.combat-featured input:checked')).toHaveCount(2);
+        at /Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/e2e/combat-entries.spec.ts:250:40
+
+    Error Context: test-results/combat-entries-several-fea-0a679-rsist-and-prune-conversions-phone-chromium/error-context.md
+
+  2 failed
+    [laptop-chromium] › e2e/combat-entries.spec.ts:227:1 › several featured attacks synchronize, order, keyboard select, persist and prune conversions 
+    [phone-chromium] › e2e/combat-entries.spec.ts:227:1 › several featured attacks synchronize, order, keyboard select, persist and prune conversions 

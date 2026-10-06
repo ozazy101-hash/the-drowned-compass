@@ -1,0 +1,33 @@
+$ node scripts/run-database-tests.mjs
+Connecting to local database...
+psql:/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/character_classes_migration.generated.test.sql:2: NOTICE:  extension "pgtap" already exists, skipping
+/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/character_classes_migration.generated.test.sql .. ok
+psql:/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/character_overview_rls.test.sql:3: NOTICE:  extension "pgtap" already exists, skipping
+/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/character_overview_rls.test.sql ................. ok
+psql:/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/character_slot_claim_rls.test.sql:3: NOTICE:  extension "pgtap" already exists, skipping
+/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/character_slot_claim_rls.test.sql ............... ok
+psql:/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/combat_entries_migration.generated.test.sql:3: NOTICE:  extension "pgtap" already exists, skipping
+/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/combat_entries_migration.generated.test.sql ..... ok
+psql:/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/conditions_migration.generated.test.sql:2: NOTICE:  extension "pgtap" already exists, skipping
+/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/conditions_migration.generated.test.sql ......... ok
+psql:/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/derived_values_migration.generated.test.sql:4: NOTICE:  extension "pgtap" already exists, skipping
+/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/derived_values_migration.generated.test.sql ..... ok
+psql:/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/derived_values_rls.test.sql:2: NOTICE:  extension "pgtap" already exists, skipping
+/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/derived_values_rls.test.sql ..................... ok
+psql:/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/featured_attacks_migration.generated.test.sql:3: NOTICE:  extension "pgtap" already exists, skipping
+/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/featured_attacks_migration.generated.test.sql ... ok
+psql:/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/features_story_migration.generated.test.sql:2: NOTICE:  extension "pgtap" already exists, skipping
+/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/features_story_migration.generated.test.sql ..... ok
+psql:/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/inventory_migration.generated.test.sql:2: NOTICE:  extension "pgtap" already exists, skipping
+/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/inventory_migration.generated.test.sql .......... ok
+psql:/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/limited_resources_migration.generated.test.sql:3: NOTICE:  extension "pgtap" already exists, skipping
+/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/limited_resources_migration.generated.test.sql .. ok
+psql:/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/party_access_rls.test.sql:3: NOTICE:  extension "pgtap" already exists, skipping
+/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/party_access_rls.test.sql ....................... ok
+psql:/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/survival_migration.generated.test.sql:2: NOTICE:  extension "pgtap" already exists, skipping
+/Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/supabase/tests/database/survival_migration.generated.test.sql ........... ok
+All tests successful.
+Files=13, Tests=412,  2 wallclock secs ( 0.15 usr  0.08 sys +  0.16 cusr  0.16 csys =  0.55 CPU)
+Result: PASS
+A new version of Supabase CLI is available: v2.119.0 (currently installed v2.117.0)
+We recommend updating regularly for new features and bug fixes: https://supabase.com/docs/guides/cli/getting-started#updating-the-supabase-cli

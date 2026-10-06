@@ -1,0 +1,16 @@
+[WebServer] (node:22632) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] $ vite --host 127.0.0.1 --port 4394 --strictPort
+[WebServer] (node:22657) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 2 workers
+
+(node:22665) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:22664) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [laptop-chromium] › e2e/limited-resources.spec.ts:49:1 › Combat entries and limited resources persist together in the Party summary (4.0s)
+  ✓  2 [phone-chromium] › e2e/limited-resources.spec.ts:49:1 › Combat entries and limited resources persist together in the Party summary (4.0s)
+
+  2 passed (7.0s)

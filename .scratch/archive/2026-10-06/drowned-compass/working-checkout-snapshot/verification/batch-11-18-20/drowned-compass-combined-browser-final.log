@@ -1,0 +1,278 @@
+[WebServer] (node:21135) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] $ vite --host 127.0.0.1 --port 4393 --strictPort
+[WebServer] (node:21151) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 206 tests using 2 workers
+
+(node:21158) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:21157) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓    1 [laptop-chromium] › e2e/character-classes-adapters.spec.ts:8:3 › in-memory class adapter preserves independent edits, conflicts, tombstones and reload totals (5.0s)
+  ✓    2 [laptop-chromium] › e2e/character-classes-adapters.spec.ts:8:3 › Supabase class adapter preserves independent edits, conflicts, tombstones and reload totals (5.5s)
+[WebServer] 10:10:26 PM [vite] (client) [console.warn] GoTrueClient@sb-class-contract-auth-token:1 (2.116.0) 2026-10-05T21:10:26.198Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+  ✓    3 [laptop-chromium] › e2e/character-classes-adapters.spec.ts:67:1 › Supabase class subscriptions deliver edits and catch up after reconnect (4.4s)
+  ✓    4 [laptop-chromium] › e2e/character-classes-adapters.spec.ts:112:1 › localStorage class and Overview writes use one cross-tab lock (4.4s)
+  ✓    6 [laptop-chromium] › e2e/character-classes.spec.ts:51:1 › invalid class levels and totals remain unsaved while the primary cannot be removed (6.0s)
+  ✓    5 [laptop-chromium] › e2e/character-classes.spec.ts:18:1 › multiclass entries update totals, Derived Values, primary identity and Party summary after reload (7.9s)
+  ✓    7 [laptop-chromium] › e2e/character-classes.spec.ts:70:1 › two sessions retain independent class and Overview edits and show the shared summary live (5.3s)
+  ✓    8 [laptop-chromium] › e2e/character-classes.spec.ts:93:1 › same-entry conflicts retain drafts and explicit retry converges without losing other fields (4.4s)
+  ✓   10 [laptop-chromium] › e2e/character-classes.spec.ts:125:1 › failed class saves preserve drafts for retry and acknowledged reload (3.9s)
+  ✓    9 [laptop-chromium] › e2e/character-classes.spec.ts:111:1 › remote removal keeps an unsaved draft visible without resurrecting its class (4.8s)
+  ✓   11 [laptop-chromium] › e2e/character-classes.spec.ts:145:1 › delayed save responses cannot replace newer accepted classes or unrelated fields (4.1s)
+  ✓   13 [laptop-chromium] › e2e/character-overview.spec.ts:62:1 › a rejected save stays visible and retries without losing the draft (2.0s)
+  ✓   12 [laptop-chromium] › e2e/character-overview.spec.ts:5:1 › the Character Overview is keyboard operable, responsive, and persists focused fields (6.3s)
+  ✓   14 [laptop-chromium] › e2e/character-overview.spec.ts:77:1 › typing during a pending save preserves the newer unsaved draft (6.1s)
+  ✓   15 [laptop-chromium] › e2e/character-overview.spec.ts:111:1 › a delayed save response does not replace newer realtime fields (5.9s)
+  ✓   17 [laptop-chromium] › e2e/character-overview.spec.ts:141:3 › a conflicting saving throw choice preserves its draft for retry (8.1s)
+  ✓   16 [laptop-chromium] › e2e/character-overview.spec.ts:141:3 › a conflicting skill choice preserves its draft for retry (8.3s)
+  ✓   19 [laptop-chromium] › e2e/character-overview.spec.ts:196:1 › two signed-in browsers visibly converge on the latest accepted same-field value (8.5s)
+  ✓   18 [laptop-chromium] › e2e/character-overview.spec.ts:182:1 › two signed-in browsers preserve different-field edits and receive them live (8.7s)
+  ✓   20 [laptop-chromium] › e2e/character-text-adapters.spec.ts:5:3 › in-memory adapter loads, independently writes, conflicts and reports Character text failures (3.8s)
+  ✓   21 [laptop-chromium] › e2e/character-text-adapters.spec.ts:5:3 › supabase adapter loads, independently writes, conflicts and reports Character text failures (3.9s)
+  ✓   22 [laptop-chromium] › e2e/character-text-adapters.spec.ts:68:1 › Supabase text RPC errors propagate without an acknowledged save (2.0s)
+  ✓   24 [laptop-chromium] › e2e/combat-adapter-contract.spec.ts:6:3 › memory adapter loads records, maps versions, submits conditional writes, rejects conflicts and reports errors (1.6s)
+  ✓   23 [laptop-chromium] › e2e/character-text-adapters.spec.ts:81:1 › Supabase subscribes to text events and reloads missed text after reconnect (3.9s)
+[WebServer] 10:11:25 PM [vite] (client) [console.warn] GoTrueClient@sb-supabase-combat-contract-auth-token:1 (2.116.0) 2026-10-05T21:11:25.082Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+  ✓   25 [laptop-chromium] › e2e/combat-adapter-contract.spec.ts:6:3 › supabase adapter loads records, maps versions, submits conditional writes, rejects conflicts and reports errors (1.6s)
+  ✓   27 [laptop-chromium] › e2e/combat-entries.spec.ts:81:1 › failed creation retains the draft and Retry saves it once (3.8s)
+  ✓   26 [laptop-chromium] › e2e/combat-entries.spec.ts:42:1 › attacks and actions can be entered, edited, ordered, selected and removed with persistence and keyboard access (7.9s)
+  ✓   28 [laptop-chromium] › e2e/combat-entries.spec.ts:95:1 › two sessions preserve independent records and reject a stale same-record draft before explicit Retry (6.2s)
+  ✓   29 [laptop-chromium] › e2e/combat-entries.spec.ts:126:1 › new typing survives an older save acknowledgement and Retry sends the newer draft (5.3s)
+  ✓   30 [laptop-chromium] › e2e/combat-entries.spec.ts:154:1 › a delayed Party snapshot cannot revive a removed primary attack (6.6s)
+  ✓   31 [laptop-chromium] › e2e/combat-entries.spec.ts:182:1 › primary selection, ordering and removal failures expose Retry and keep unrelated records (6.4s)
+  ✓   32 [laptop-chromium] › e2e/combat-entries.spec.ts:210:1 › a remote removal preserves unsaved notes until the editor discards them (7.3s)
+  ✓   33 [laptop-chromium] › e2e/combat-entries.spec.ts:227:1 › several featured attacks synchronize, order, keyboard select, persist and prune conversions (13.2s)
+  ✓   34 [laptop-chromium] › e2e/combat-entries.spec.ts:261:1 › selection conflict preserves intent, recovers after remote removal and can adopt saved selection (9.6s)
+  ✓   35 [laptop-chromium] › e2e/conditions-adapters.spec.ts:5:3 › local adapter preserves independent Conditions, duplicate prevention, versions and tombstones (3.8s)
+  ✓   36 [laptop-chromium] › e2e/conditions-adapters.spec.ts:5:3 › shared adapter preserves independent Conditions, duplicate prevention, versions and tombstones (2.6s)
+  ✓   38 [laptop-chromium] › e2e/conditions-adapters.spec.ts:54:1 › Supabase Condition save errors do not acknowledge a save (1.2s)
+  ✓   37 [laptop-chromium] › e2e/conditions-adapters.spec.ts:5:3 › supabase adapter preserves independent Conditions, duplicate prevention, versions and tombstones (4.1s)
+  ✓   39 [laptop-chromium] › e2e/conditions-adapters.spec.ts:64:1 › Supabase subscribes to Condition events and reloads missed changes after reconnect (3.9s)
+  ✓   40 [laptop-chromium] › e2e/conditions.spec.ts:9:1 › search, duplicate prevention, custom naming, removal and reload remain Character-scoped (6.9s)
+  ✓   41 [laptop-chromium] › e2e/conditions.spec.ts:38:1 › Rules Tooltips support focus, nested keyboard navigation, dismissal and focus return (5.5s)
+  ✓   42 [laptop-chromium] › e2e/conditions.spec.ts:64:1 › hover or mobile tap follows nested terms and outside dismissal on Character Page and Party Dashboard (6.0s)
+  ✓   43 [laptop-chromium] › e2e/conditions.spec.ts:84:1 › Conditions synchronize in two browsers without overwriting independent Overview edits (6.3s)
+  ✓   44 [laptop-chromium] › e2e/conditions.spec.ts:96:1 › a failed save is visible and retry persists the intended Condition (5.8s)
+  ✓   45 [laptop-chromium] › e2e/conditions.spec.ts:105:1 › typing the next Custom Condition during a pending save preserves the newer draft (5.5s)
+  ✓   46 [laptop-chromium] › e2e/derived-values.spec.ts:18:1 › Derived Values follow accepted Ability, level, proficiency and spellcasting inputs (4.0s)
+  ✓   48 [laptop-chromium] › e2e/derived-values.spec.ts:61:1 › overrides feed dependencies, persist on reload, and unset spell statistics stay honest (4.6s)
+  ✓   47 [laptop-chromium] › e2e/derived-values.spec.ts:45:1 › every displayed Derived Value supports a keyboard zero override and reset (19.6s)
+  ✓   49 [laptop-chromium] › e2e/derived-values.spec.ts:82:1 › a rejected override remains unsaved and reset shows its calculation before acknowledgement (12.2s)
+  ✓   51 [laptop-chromium] › e2e/derived-values.spec.ts:133:1 › an older override save response preserves newer typing and independent realtime values (6.2s)
+  ✓   50 [laptop-chromium] › e2e/derived-values.spec.ts:106:1 › two sessions preserve independent overrides and reject a stale same-override draft (7.0s)
+  ✓   53 [laptop-chromium] › e2e/derived-values.spec.ts:191:1 › invalid override drafts stay unsaved without replacing the calculated number (3.2s)
+  ✓   52 [laptop-chromium] › e2e/derived-values.spec.ts:161:1 › legacy local Character Records preserve boolean proficiency choices on load (9.6s)
+  ✓   54 [laptop-chromium] › e2e/derived-values.spec.ts:203:1 › a remote same-field update before local submission keeps the draft stale until explicit Retry (7.5s)
+  ✓   55 [laptop-chromium] › e2e/features-story.spec.ts:16:1 › all Feature sources persist long text with keyboard and responsive access (6.5s)
+  ✓   56 [laptop-chromium] › e2e/features-story.spec.ts:38:1 › all Story fields preserve long party-visible text (5.4s)
+  ✓   58 [laptop-chromium] › e2e/features-story.spec.ts:102:1 › failed Story saves retain text and section drafts while Retry persists it (6.7s)
+  ✓   57 [laptop-chromium] › e2e/features-story.spec.ts:61:1 › independent Feature and Story edits survive and stale same-field drafts conflict until explicit Retry (7.9s)
+  ✓   60 [laptop-chromium] › e2e/features-story.spec.ts:147:1 › typing during a delayed Feature removal makes Retry restore the newer draft (6.9s)
+  ✓   59 [laptop-chromium] › e2e/features-story.spec.ts:118:1 › older save acknowledgements preserve newer typing and delayed snapshots preserve newer records (9.8s)
+  ✓   62 [laptop-chromium] › e2e/inventory-adapters.spec.ts:5:3 › in-memory adapter loads, independently writes, conflicts and reports Inventory failures (1.9s)
+  ✓   61 [laptop-chromium] › e2e/features-story.spec.ts:174:1 › Combat and Features preserve drafts and accepted records across sections (4.1s)
+  ✓   64 [laptop-chromium] › e2e/inventory-adapters.spec.ts:68:1 › Supabase inventory RPC errors propagate without an acknowledged save (684ms)
+  ✓   63 [laptop-chromium] › e2e/inventory-adapters.spec.ts:5:3 › supabase adapter loads, independently writes, conflicts and reports Inventory failures (2.0s)
+  ✓   65 [laptop-chromium] › e2e/inventory-adapters.spec.ts:81:1 › Supabase subscribes to inventory events and reloads missed inventory after reconnect (2.7s)
+  ✓   66 [laptop-chromium] › e2e/inventory.spec.ts:6:1 › equipment and magic items persist, reorder and remove without changing defenses (5.4s)
+  ✓   67 [laptop-chromium] › e2e/inventory.spec.ts:26:1 › independent currencies synchronize, stale corrections conflict and retry (6.3s)
+  ✓   68 [laptop-chromium] › e2e/inventory.spec.ts:50:1 › failed saves preserve inventory drafts across navigation and retry (2.7s)
+  ✓   69 [laptop-chromium] › e2e/inventory.spec.ts:59:1 › invalid currency stays unsaved with useful feedback (2.1s)
+  ✓   71 [laptop-chromium] › e2e/limited-resources-adapters.spec.ts:4:3 › in-memory adapter preserves independent resources, conflicts, importance and tombstones (663ms)
+  ✓   72 [laptop-chromium] › e2e/limited-resources-adapters.spec.ts:4:3 › Supabase adapter preserves independent resources, conflicts, importance and tombstones (513ms)
+  ✓   73 [laptop-chromium] › e2e/limited-resources-adapters.spec.ts:61:1 › Supabase resource write errors are exposed and later writes can retry (457ms)
+  ✓   70 [laptop-chromium] › e2e/inventory.spec.ts:71:1 › currency labels explain every denomination and independently saved amounts (4.0s)
+  ✓   74 [laptop-chromium] › e2e/limited-resources-adapters.spec.ts:83:1 › local Party cross-tab Overview, resource, Combat and Inventory writes preserve all accepted changes (1.6s)
+  ✓   75 [laptop-chromium] › e2e/limited-resources.spec.ts:16:1 › limited resources add, correct, order, use, designate and remove persist (5.6s)
+  ✓   77 [laptop-chromium] › e2e/limited-resources.spec.ts:74:1 › a failed save retains resource values and explicit Retry persists them (3.2s)
+  ✓   78 [laptop-chromium] › e2e/limited-resources.spec.ts:86:1 › independent records synchronize, same-resource drafts conflict and Retry adopts the latest version (4.6s)
+  ✓   79 [laptop-chromium] › e2e/limited-resources.spec.ts:129:1 › newer typing survives an older successful resource acknowledgement (2.2s)
+  ✓   80 [laptop-chromium] › e2e/limited-resources.spec.ts:153:1 › delayed Party snapshots cannot reverse newer resource edits or resurrect removal (2.2s)
+  ✓   81 [laptop-chromium] › e2e/local-party-data.spec.ts:5:3 › committed local Party snapshots preserve independently accepted versions across tabs (1.7s)
+  ✓   82 [laptop-chromium] › e2e/local-party-data.spec.ts:34:1 › committed local inventory synchronizes when the legacy mirror cannot be written (890ms)
+  ✓   83 [laptop-chromium] › e2e/party-dashboard.spec.ts:61:1 › a player can enter the protected Party and stay signed in after refresh (785ms)
+  ✓   84 [laptop-chromium] › e2e/party-dashboard.spec.ts:81:1 › invalid credentials show one non-revealing error (523ms)
+  ✓   85 [laptop-chromium] › e2e/party-dashboard.spec.ts:91:1 › the Dungeon Master can enter and sign out (690ms)
+  ✓   86 [laptop-chromium] › e2e/party-dashboard.spec.ts:105:1 › signing out leaves another browser signed in (1.8s)
+  ✓   87 [laptop-chromium] › e2e/party-dashboard.spec.ts:125:1 › a player completes both setup steps and opens the Character Page (2.0s)
+  ✓   88 [laptop-chromium] › e2e/party-dashboard.spec.ts:174:1 › another signed-in browser receives a claimed identity without reloading (2.8s)
+  ✘   76 [laptop-chromium] › e2e/limited-resources.spec.ts:49:1 › Combat entries and limited resources persist together in the Party summary (30.1s)
+  ✓   89 [laptop-chromium] › e2e/party-summary.spec.ts:12:1 › Party cards show accepted identity, health, defences and effective abilities, persist, and open by keyboard (2.5s)
+(node:21791) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   90 [laptop-chromium] › e2e/party-summary.spec.ts:77:1 › cards retain accepted values through save failure, independent edits and a stale same-field draft until Retry (5.6s)
+  ✓   91 [laptop-chromium] › e2e/party-summary.spec.ts:52:1 › live cards follow dependent overrides, meaningful zero values and reset without reloading (6.4s)
+  ✓   92 [laptop-chromium] › e2e/party-summary.spec.ts:112:1 › six claimed cards remain readable with health before secondary values and every card opens (4.4s)
+  ✓   93 [laptop-chromium] › e2e/spell-catalog.spec.ts:4:1 › Magic searches and composes filters, presents complete spell rules and works offline (2.8s)
+  ✓   94 [laptop-chromium] › e2e/spell-catalog.spec.ts:91:1 › spell tables retain headers and row associations on laptop and phone (2.7s)
+  ✓   95 [laptop-chromium] › e2e/story-draft-regression.spec.ts:5:1 › typing during a neighboring Story save survives and persists (3.4s)
+  ✓   97 [laptop-chromium] › e2e/supabase-party-data.spec.ts:52:1 › the Supabase adapter maps and conditionally persists proficiency and independent overrides (696ms)
+  ✓   98 [laptop-chromium] › e2e/survival-adapters.spec.ts:4:49 › in-memory survival contract rejects stale writes, preserves unrelated data, reloads and reports failure (467ms)
+  ✓   96 [laptop-chromium] › e2e/supabase-party-data.spec.ts:4:1 › the Supabase adapter catches up when a realtime connection returns (3.0s)
+  ✓   99 [laptop-chromium] › e2e/survival-adapters.spec.ts:4:49 › Supabase survival contract rejects stale writes, preserves unrelated data, reloads and reports failure (923ms)
+[WebServer] 10:14:28 PM [vite] (client) [console.warn] GoTrueClient@sb-survival-contract-auth-token:1 (2.116.0) 2026-10-05T21:14:28.298Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+  ✓  100 [laptop-chromium] › e2e/survival-adapters.spec.ts:48:1 › cross-tab survival, Overview and resource writes keep every accepted change (1.3s)
+  ✓  102 [laptop-chromium] › e2e/survival.spec.ts:47:1 › failed saves retain correction draft and retry persists; empty and fractional input cannot change health (3.5s)
+  ✓  101 [laptop-chromium] › e2e/survival.spec.ts:17:1 › health actions, correction, survival state and reload are usable at the table (6.9s)
+(node:21871) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  103 [laptop-chromium] › e2e/survival.spec.ts:62:1 › a delayed shared subtraction cannot overwrite a newer HP action (6.4s)
+(node:21891) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  104 [phone-chromium] › e2e/character-classes-adapters.spec.ts:8:3 › in-memory class adapter preserves independent edits, conflicts, tombstones and reload totals (3.0s)
+[WebServer] 10:14:42 PM [vite] (client) [console.warn] GoTrueClient@sb-class-contract-auth-token:1 (2.116.0) 2026-10-05T21:14:42.980Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+  ✓  105 [phone-chromium] › e2e/character-classes-adapters.spec.ts:8:3 › Supabase class adapter preserves independent edits, conflicts, tombstones and reload totals (2.6s)
+  ✓  106 [phone-chromium] › e2e/character-classes-adapters.spec.ts:67:1 › Supabase class subscriptions deliver edits and catch up after reconnect (2.7s)
+  ✓  107 [phone-chromium] › e2e/character-classes-adapters.spec.ts:112:1 › localStorage class and Overview writes use one cross-tab lock (3.1s)
+  ✓  109 [phone-chromium] › e2e/character-classes.spec.ts:51:1 › invalid class levels and totals remain unsaved while the primary cannot be removed (4.2s)
+  ✓  108 [phone-chromium] › e2e/character-classes.spec.ts:18:1 › multiclass entries update totals, Derived Values, primary identity and Party summary after reload (7.3s)
+  ✓  110 [phone-chromium] › e2e/character-classes.spec.ts:70:1 › two sessions retain independent class and Overview edits and show the shared summary live (4.4s)
+  ✓  111 [phone-chromium] › e2e/character-classes.spec.ts:93:1 › same-entry conflicts retain drafts and explicit retry converges without losing other fields (4.0s)
+  ✓  112 [phone-chromium] › e2e/character-classes.spec.ts:111:1 › remote removal keeps an unsaved draft visible without resurrecting its class (4.1s)
+  ✓  113 [phone-chromium] › e2e/character-classes.spec.ts:125:1 › failed class saves preserve drafts for retry and acknowledged reload (4.0s)
+  ✓  114 [phone-chromium] › e2e/character-classes.spec.ts:145:1 › delayed save responses cannot replace newer accepted classes or unrelated fields (3.9s)
+  ✓  116 [phone-chromium] › e2e/character-overview.spec.ts:62:1 › a rejected save stays visible and retries without losing the draft (2.1s)
+  ✓  115 [phone-chromium] › e2e/character-overview.spec.ts:5:1 › the Character Overview is keyboard operable, responsive, and persists focused fields (5.9s)
+  ✓  117 [phone-chromium] › e2e/character-overview.spec.ts:77:1 › typing during a pending save preserves the newer unsaved draft (5.8s)
+  ✓  118 [phone-chromium] › e2e/character-overview.spec.ts:111:1 › a delayed save response does not replace newer realtime fields (6.4s)
+  ✓  120 [phone-chromium] › e2e/character-overview.spec.ts:141:3 › a conflicting saving throw choice preserves its draft for retry (5.4s)
+  ✓  119 [phone-chromium] › e2e/character-overview.spec.ts:141:3 › a conflicting skill choice preserves its draft for retry (6.6s)
+  ✓  121 [phone-chromium] › e2e/character-overview.spec.ts:182:1 › two signed-in browsers preserve different-field edits and receive them live (5.2s)
+  ✓  122 [phone-chromium] › e2e/character-overview.spec.ts:196:1 › two signed-in browsers visibly converge on the latest accepted same-field value (5.2s)
+  ✓  124 [phone-chromium] › e2e/character-text-adapters.spec.ts:5:3 › in-memory adapter loads, independently writes, conflicts and reports Character text failures (2.3s)
+  ✓  123 [phone-chromium] › e2e/character-text-adapters.spec.ts:5:3 › supabase adapter loads, independently writes, conflicts and reports Character text failures (2.6s)
+  ✓  125 [phone-chromium] › e2e/character-text-adapters.spec.ts:68:1 › Supabase text RPC errors propagate without an acknowledged save (925ms)
+  ✓  127 [phone-chromium] › e2e/combat-adapter-contract.spec.ts:6:3 › memory adapter loads records, maps versions, submits conditional writes, rejects conflicts and reports errors (569ms)
+[WebServer] 10:15:27 PM [vite] (client) [console.warn] GoTrueClient@sb-supabase-combat-contract-auth-token:1 (2.116.0) 2026-10-05T21:15:27.690Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+  ✓  128 [phone-chromium] › e2e/combat-adapter-contract.spec.ts:6:3 › supabase adapter loads records, maps versions, submits conditional writes, rejects conflicts and reports errors (1.1s)
+  ✓  126 [phone-chromium] › e2e/character-text-adapters.spec.ts:81:1 › Supabase subscribes to text events and reloads missed text after reconnect (2.8s)
+  ✓  130 [phone-chromium] › e2e/combat-entries.spec.ts:81:1 › failed creation retains the draft and Retry saves it once (3.6s)
+  ✓  129 [phone-chromium] › e2e/combat-entries.spec.ts:42:1 › attacks and actions can be entered, edited, ordered, selected and removed with persistence and keyboard access (7.6s)
+  ✓  131 [phone-chromium] › e2e/combat-entries.spec.ts:95:1 › two sessions preserve independent records and reject a stale same-record draft before explicit Retry (8.0s)
+  ✓  132 [phone-chromium] › e2e/combat-entries.spec.ts:126:1 › new typing survives an older save acknowledgement and Retry sends the newer draft (4.9s)
+  ✓  133 [phone-chromium] › e2e/combat-entries.spec.ts:154:1 › a delayed Party snapshot cannot revive a removed primary attack (2.7s)
+  ✓  134 [phone-chromium] › e2e/combat-entries.spec.ts:182:1 › primary selection, ordering and removal failures expose Retry and keep unrelated records (2.6s)
+  ✓  135 [phone-chromium] › e2e/combat-entries.spec.ts:210:1 › a remote removal preserves unsaved notes until the editor discards them (2.1s)
+  ✓  137 [phone-chromium] › e2e/combat-entries.spec.ts:261:1 › selection conflict preserves intent, recovers after remote removal and can adopt saved selection (4.4s)
+  ✓  136 [phone-chromium] › e2e/combat-entries.spec.ts:227:1 › several featured attacks synchronize, order, keyboard select, persist and prune conversions (6.7s)
+  ✓  138 [phone-chromium] › e2e/conditions-adapters.spec.ts:5:3 › local adapter preserves independent Conditions, duplicate prevention, versions and tombstones (2.5s)
+  ✓  139 [phone-chromium] › e2e/conditions-adapters.spec.ts:5:3 › shared adapter preserves independent Conditions, duplicate prevention, versions and tombstones (2.2s)
+  ✓  141 [phone-chromium] › e2e/conditions-adapters.spec.ts:54:1 › Supabase Condition save errors do not acknowledge a save (617ms)
+  ✓  140 [phone-chromium] › e2e/conditions-adapters.spec.ts:5:3 › supabase adapter preserves independent Conditions, duplicate prevention, versions and tombstones (2.3s)
+  ✓  142 [phone-chromium] › e2e/conditions-adapters.spec.ts:64:1 › Supabase subscribes to Condition events and reloads missed changes after reconnect (2.4s)
+  ✓  144 [phone-chromium] › e2e/conditions.spec.ts:38:1 › Rules Tooltips support focus, nested keyboard navigation, dismissal and focus return (2.4s)
+  ✓  143 [phone-chromium] › e2e/conditions.spec.ts:9:1 › search, duplicate prevention, custom naming, removal and reload remain Character-scoped (4.2s)
+  ✓  145 [phone-chromium] › e2e/conditions.spec.ts:64:1 › hover or mobile tap follows nested terms and outside dismissal on Character Page and Party Dashboard (3.3s)
+  ✓  146 [phone-chromium] › e2e/conditions.spec.ts:84:1 › Conditions synchronize in two browsers without overwriting independent Overview edits (4.0s)
+  ✓  147 [phone-chromium] › e2e/conditions.spec.ts:96:1 › a failed save is visible and retry persists the intended Condition (2.3s)
+  ✓  148 [phone-chromium] › e2e/conditions.spec.ts:105:1 › typing the next Custom Condition during a pending save preserves the newer draft (3.5s)
+  ✓  149 [phone-chromium] › e2e/derived-values.spec.ts:18:1 › Derived Values follow accepted Ability, level, proficiency and spellcasting inputs (3.6s)
+  ✓  151 [phone-chromium] › e2e/derived-values.spec.ts:61:1 › overrides feed dependencies, persist on reload, and unset spell statistics stay honest (3.6s)
+  ✓  152 [phone-chromium] › e2e/derived-values.spec.ts:82:1 › a rejected override remains unsaved and reset shows its calculation before acknowledgement (3.2s)
+  ✓  150 [phone-chromium] › e2e/derived-values.spec.ts:45:1 › every displayed Derived Value supports a keyboard zero override and reset (9.2s)
+  ✓  153 [phone-chromium] › e2e/derived-values.spec.ts:106:1 › two sessions preserve independent overrides and reject a stale same-override draft (7.2s)
+  ✓  154 [phone-chromium] › e2e/derived-values.spec.ts:133:1 › an older override save response preserves newer typing and independent realtime values (6.1s)
+  ✓  156 [phone-chromium] › e2e/derived-values.spec.ts:191:1 › invalid override drafts stay unsaved without replacing the calculated number (6.1s)
+  ✓  155 [phone-chromium] › e2e/derived-values.spec.ts:161:1 › legacy local Character Records preserve boolean proficiency choices on load (14.0s)
+  ✓  157 [phone-chromium] › e2e/derived-values.spec.ts:203:1 › a remote same-field update before local submission keeps the draft stale until explicit Retry (11.7s)
+  ✓  158 [phone-chromium] › e2e/features-story.spec.ts:16:1 › all Feature sources persist long text with keyboard and responsive access (5.0s)
+  ✓  159 [phone-chromium] › e2e/features-story.spec.ts:38:1 › all Story fields preserve long party-visible text (11.1s)
+  ✓  160 [phone-chromium] › e2e/features-story.spec.ts:61:1 › independent Feature and Story edits survive and stale same-field drafts conflict until explicit Retry (14.1s)
+  ✓  161 [phone-chromium] › e2e/features-story.spec.ts:102:1 › failed Story saves retain text and section drafts while Retry persists it (5.8s)
+  ✓  162 [phone-chromium] › e2e/features-story.spec.ts:118:1 › older save acknowledgements preserve newer typing and delayed snapshots preserve newer records (4.5s)
+  ✓  163 [phone-chromium] › e2e/features-story.spec.ts:147:1 › typing during a delayed Feature removal makes Retry restore the newer draft (3.8s)
+  ✓  165 [phone-chromium] › e2e/inventory-adapters.spec.ts:5:3 › in-memory adapter loads, independently writes, conflicts and reports Inventory failures (4.7s)
+  ✓  164 [phone-chromium] › e2e/features-story.spec.ts:174:1 › Combat and Features preserve drafts and accepted records across sections (8.0s)
+  ✓  166 [phone-chromium] › e2e/inventory-adapters.spec.ts:5:3 › supabase adapter loads, independently writes, conflicts and reports Inventory failures (5.0s)
+  ✓  167 [phone-chromium] › e2e/inventory-adapters.spec.ts:68:1 › Supabase inventory RPC errors propagate without an acknowledged save (3.1s)
+  ✓  168 [phone-chromium] › e2e/inventory-adapters.spec.ts:81:1 › Supabase subscribes to inventory events and reloads missed inventory after reconnect (4.0s)
+  ✓  169 [phone-chromium] › e2e/inventory.spec.ts:6:1 › equipment and magic items persist, reorder and remove without changing defenses (6.7s)
+  ✓  171 [phone-chromium] › e2e/inventory.spec.ts:50:1 › failed saves preserve inventory drafts across navigation and retry (2.5s)
+  ✓  170 [phone-chromium] › e2e/inventory.spec.ts:26:1 › independent currencies synchronize, stale corrections conflict and retry (7.3s)
+  ✓  172 [phone-chromium] › e2e/inventory.spec.ts:59:1 › invalid currency stays unsaved with useful feedback (2.7s)
+  ✓  174 [phone-chromium] › e2e/limited-resources-adapters.spec.ts:4:3 › in-memory adapter preserves independent resources, conflicts, importance and tombstones (745ms)
+  ✓  175 [phone-chromium] › e2e/limited-resources-adapters.spec.ts:4:3 › Supabase adapter preserves independent resources, conflicts, importance and tombstones (838ms)
+  ✓  176 [phone-chromium] › e2e/limited-resources-adapters.spec.ts:61:1 › Supabase resource write errors are exposed and later writes can retry (1.0s)
+  ✓  173 [phone-chromium] › e2e/inventory.spec.ts:71:1 › currency labels explain every denomination and independently saved amounts (4.5s)
+  ✓  177 [phone-chromium] › e2e/limited-resources-adapters.spec.ts:83:1 › local Party cross-tab Overview, resource, Combat and Inventory writes preserve all accepted changes (3.3s)
+  ✓  178 [phone-chromium] › e2e/limited-resources.spec.ts:16:1 › limited resources add, correct, order, use, designate and remove persist (7.0s)
+  ✓  180 [phone-chromium] › e2e/limited-resources.spec.ts:74:1 › a failed save retains resource values and explicit Retry persists them (3.8s)
+  ✓  181 [phone-chromium] › e2e/limited-resources.spec.ts:86:1 › independent records synchronize, same-resource drafts conflict and Retry adopts the latest version (5.1s)
+  ✓  182 [phone-chromium] › e2e/limited-resources.spec.ts:129:1 › newer typing survives an older successful resource acknowledgement (2.3s)
+  ✓  183 [phone-chromium] › e2e/limited-resources.spec.ts:153:1 › delayed Party snapshots cannot reverse newer resource edits or resurrect removal (2.5s)
+  ✓  184 [phone-chromium] › e2e/local-party-data.spec.ts:5:3 › committed local Party snapshots preserve independently accepted versions across tabs (1.9s)
+  ✓  185 [phone-chromium] › e2e/local-party-data.spec.ts:34:1 › committed local inventory synchronizes when the legacy mirror cannot be written (881ms)
+  ✓  186 [phone-chromium] › e2e/party-dashboard.spec.ts:61:1 › a player can enter the protected Party and stay signed in after refresh (693ms)
+  ✓  187 [phone-chromium] › e2e/party-dashboard.spec.ts:81:1 › invalid credentials show one non-revealing error (528ms)
+  ✓  188 [phone-chromium] › e2e/party-dashboard.spec.ts:91:1 › the Dungeon Master can enter and sign out (579ms)
+  ✓  189 [phone-chromium] › e2e/party-dashboard.spec.ts:105:1 › signing out leaves another browser signed in (1.9s)
+  ✓  190 [phone-chromium] › e2e/party-dashboard.spec.ts:125:1 › a player completes both setup steps and opens the Character Page (2.1s)
+  ✓  191 [phone-chromium] › e2e/party-dashboard.spec.ts:174:1 › another signed-in browser receives a claimed identity without reloading (3.1s)
+  ✘  179 [phone-chromium] › e2e/limited-resources.spec.ts:49:1 › Combat entries and limited resources persist together in the Party summary (30.2s)
+(node:22494) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  192 [phone-chromium] › e2e/party-summary.spec.ts:12:1 › Party cards show accepted identity, health, defences and effective abilities, persist, and open by keyboard (3.6s)
+  ✓  193 [phone-chromium] › e2e/party-summary.spec.ts:52:1 › live cards follow dependent overrides, meaningful zero values and reset without reloading (8.1s)
+  ✓  194 [phone-chromium] › e2e/party-summary.spec.ts:77:1 › cards retain accepted values through save failure, independent edits and a stale same-field draft until Retry (8.0s)
+  ✓  196 [phone-chromium] › e2e/spell-catalog.spec.ts:4:1 › Magic searches and composes filters, presents complete spell rules and works offline (3.3s)
+  ✓  195 [phone-chromium] › e2e/party-summary.spec.ts:112:1 › six claimed cards remain readable with health before secondary values and every card opens (7.8s)
+  ✓  197 [phone-chromium] › e2e/spell-catalog.spec.ts:91:1 › spell tables retain headers and row associations on laptop and phone (5.6s)
+  ✓  198 [phone-chromium] › e2e/story-draft-regression.spec.ts:5:1 › typing during a neighboring Story save survives and persists (4.5s)
+  ✓  199 [phone-chromium] › e2e/supabase-party-data.spec.ts:4:1 › the Supabase adapter catches up when a realtime connection returns (2.7s)
+  ✓  200 [phone-chromium] › e2e/supabase-party-data.spec.ts:52:1 › the Supabase adapter maps and conditionally persists proficiency and independent overrides (1.2s)
+  ✓  201 [phone-chromium] › e2e/survival-adapters.spec.ts:4:49 › in-memory survival contract rejects stale writes, preserves unrelated data, reloads and reports failure (1.1s)
+[WebServer] 10:18:23 PM [vite] (client) [console.warn] GoTrueClient@sb-survival-contract-auth-token:1 (2.116.0) 2026-10-05T21:18:23.402Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+  ✓  202 [phone-chromium] › e2e/survival-adapters.spec.ts:4:49 › Supabase survival contract rejects stale writes, preserves unrelated data, reloads and reports failure (1.3s)
+  ✓  203 [phone-chromium] › e2e/survival-adapters.spec.ts:48:1 › cross-tab survival, Overview and resource writes keep every accepted change (1.7s)
+  ✓  205 [phone-chromium] › e2e/survival.spec.ts:47:1 › failed saves retain correction draft and retry persists; empty and fractional input cannot change health (2.8s)
+  ✓  204 [phone-chromium] › e2e/survival.spec.ts:17:1 › health actions, correction, survival state and reload are usable at the table (6.0s)
+  ✓  206 [phone-chromium] › e2e/survival.spec.ts:62:1 › a delayed shared subtraction cannot overwrite a newer HP action (4.4s)
+
+
+  1) [laptop-chromium] › e2e/limited-resources.spec.ts:49:1 › Combat entries and limited resources persist together in the Party summary 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.selectOption: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByLabel('Primary attack', { exact: true })
+
+
+      61 |   await attack.getByRole('button', { name: 'Save attack', exact: true }).click();
+      62 |   await expect(page.getByRole('article', { name: 'Cutlass', exact: true }).getByRole('status')).toHaveText('Saved');
+    > 63 |   await page.getByLabel('Primary attack', { exact: true }).selectOption({ label: 'Cutlass' });
+         |                                                            ^
+      64 |
+      65 |   await page.getByRole('button', { name: 'Back to the Party' }).click();
+      66 |   const card = page.getByRole('article', { name: 'Neris Vale, played by Mara' });
+        at /Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/e2e/limited-resources.spec.ts:63:60
+
+    Error Context: test-results/limited-resources-Combat-e-f4e86-gether-in-the-Party-summary-laptop-chromium/error-context.md
+
+  2) [phone-chromium] › e2e/limited-resources.spec.ts:49:1 › Combat entries and limited resources persist together in the Party summary 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.selectOption: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByLabel('Primary attack', { exact: true })
+
+
+      61 |   await attack.getByRole('button', { name: 'Save attack', exact: true }).click();
+      62 |   await expect(page.getByRole('article', { name: 'Cutlass', exact: true }).getByRole('status')).toHaveText('Saved');
+    > 63 |   await page.getByLabel('Primary attack', { exact: true }).selectOption({ label: 'Cutlass' });
+         |                                                            ^
+      64 |
+      65 |   await page.getByRole('button', { name: 'Back to the Party' }).click();
+      66 |   const card = page.getByRole('article', { name: 'Neris Vale, played by Mara' });
+        at /Users/oscarpauwels/.codex/worktrees/batch-11-18-20-integration/Dungeons&Dragons/e2e/limited-resources.spec.ts:63:60
+
+    Error Context: test-results/limited-resources-Combat-e-f4e86-gether-in-the-Party-summary-phone-chromium/error-context.md
+
+  2 failed
+    [laptop-chromium] › e2e/limited-resources.spec.ts:49:1 › Combat entries and limited resources persist together in the Party summary 
+    [phone-chromium] › e2e/limited-resources.spec.ts:49:1 › Combat entries and limited resources persist together in the Party summary 
+  204 passed (8.2m)
