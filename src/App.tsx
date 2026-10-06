@@ -1,23 +1,17 @@
+import { reconcileParty, reconcilePartySlot } from './domain/party-state';
 import { PartyBackupDownload } from './features/backup/PartyBackupDownload';
 import { RestSection } from './features/rests/RestSection';
 import { MagicSection } from './features/magic/MagicSection';
-import { mergeMagic } from './domain/character-magic';
 import { SrdLegal } from './features/magic/SrdLegal';
 import { SurvivalSection } from "./components/SurvivalSection";
-import { mergeSurvival } from "./domain/survival";
 import { ClassEntries } from "./features/ClassEntries";
-import { classSummary, totalLevel, mergeClasses, projectClasses } from "./domain/character-classes";
-import { mergeInventory } from "./domain/inventory";
+import { classSummary, totalLevel } from "./domain/character-classes";
 import { Inventory } from "./features/Inventory";
 import { CombatResources, ImportantResourceSummary } from "./components/CombatResources";
-import { mergeResources } from "./domain/limited-resources";
-import { mergeCharacterText } from "./domain/character-text";
 import { FeaturesStory } from "./features/FeaturesStory";
 import { ConditionsSection } from './features/conditions/ConditionsSection';
-import { mergeConditions } from './domain/conditions';
 import { CombatEntriesSection } from './components/CombatEntriesSection';
 import { FeaturedAttackSummary } from './components/FeaturedAttackSummary';
-import { mergeCombatEntries } from './domain/combat-entries';
 import { overviewValue, setOverviewValue } from "./domain/overview-fields";
 import { ClaimedCharacterCard } from "./components/claimed-character-card";
 import { calculateDerivedValues, type DerivedValue, type DerivedValueKey } from "./domain/derived-values";
@@ -70,51 +64,6 @@ const skillLabels = {
   stealth: "Stealth",
   survival: "Survival",
 } as const;
-
-function mergeCharacterRecords(current: CharacterRecord, incoming: CharacterRecord) {
-  const merged: CharacterRecord = {
-    ...incoming,
-    survival: mergeSurvival(current.survival, incoming.survival),
-    classes: mergeClasses(current, incoming),
-    limitedResources: mergeResources(current.limitedResources, incoming.limitedResources),
-    inventory: mergeInventory(current.inventory, incoming.inventory),
-    textEntries: mergeCharacterText(current.textEntries, incoming.textEntries),
-    magic: mergeMagic(current.magic, incoming.magic),
-    conditions: mergeConditions(current.conditions, incoming.conditions),
-    combatEntries: mergeCombatEntries(current.combatEntries, incoming.combatEntries),
-    abilityScores: { ...incoming.abilityScores },
-    savingThrowProficiencies: { ...incoming.savingThrowProficiencies },
-    skillProficiencies: { ...incoming.skillProficiencies },
-    derivedOverrides: { ...incoming.derivedOverrides },
-    fieldVersions: { ...incoming.fieldVersions },
-  };
-
-  for (const field of Object.keys(current.fieldVersions) as OverviewFieldKey[]) {
-    const currentVersion = current.fieldVersions[field] ?? 0;
-    if (currentVersion > (incoming.fieldVersions[field] ?? 0)) {
-      if (field !== 'primaryClass' && field !== 'level') setOverviewValue(merged, field, overviewValue(current, field));
-      merged.fieldVersions[field] = currentVersion;
-    }
-  }
-  projectClasses(merged);
-  return merged;
-}
-
-function mergePartySnapshot(current: Party | null, incoming: Party): Party {
-  if (!current) return incoming;
-  return {
-    ...incoming,
-    slots: incoming.slots.map((slot) => {
-      const currentSlot = current.slots.find((candidate) => candidate.id === slot.id);
-      if (!currentSlot?.character) return slot;
-      if (!slot.character) return currentSlot;
-      return {
-        ...slot,
-        character: mergeCharacterRecords(currentSlot.character, slot.character),
-      };
-    }),
-  };
-}
 
 function CompassMark() {
   return (
@@ -1039,10 +988,10 @@ export function App({ partyData }: AppProps) {
 
     let isCurrent = true;
     const unsubscribe = partyData.subscribeToParty((nextParty) => {
-      if (isCurrent) setParty((current) => mergePartySnapshot(current, nextParty));
+      if (isCurrent) setParty((current) => reconcileParty(current, nextParty));
     });
     void partyData.getParty().then((nextParty) => {
-      if (isCurrent) setParty((current) => mergePartySnapshot(current, nextParty));
+      if (isCurrent) setParty((current) => reconcileParty(current, nextParty));
     });
 
     return () => {
@@ -1072,17 +1021,7 @@ export function App({ partyData }: AppProps) {
   }
 
   function handleSlotChanged(changedSlot: CharacterSlot) {
-    setParty((current) => current && ({
-      ...current,
-      slots: current.slots.map((slot) => {
-        if (slot.id !== changedSlot.id) return slot;
-        if (!slot.character || !changedSlot.character) return changedSlot;
-        return {
-          ...changedSlot,
-          character: mergeCharacterRecords(slot.character, changedSlot.character),
-        };
-      }),
-    }));
+    setParty((current) => reconcilePartySlot(current, changedSlot));
   }
 
   const setupSlot = party?.slots.find((slot) => slot.id === setupSlotId && !slot.character);
