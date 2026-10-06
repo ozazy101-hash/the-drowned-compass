@@ -4,7 +4,7 @@
 
 **Blocked by:** 06 — Read the Party at a glance.
 
-**Status:** claimed
+**Status:** resolved
 
 - [x] Apply Damage consumes Temporary Hit Points before current Hit Points and never produces negative Hit Points.
 - [x] Heal restores current Hit Points without exceeding the maximum.
@@ -23,3 +23,7 @@ Implemented survival commands and persistence in `92e2091`, and Character Page/P
 Coordinator requested cancellation of the still-queued final full run on 2026-10-03 because the shared browser lane is saturated. It was cancelled before acquiring the lane or launching a browser; no final integrated full-suite case ran. The reviewable PR therefore carries explicit pending final integrated full-suite verification, backed by the completed 132/132 full run (6.5 minutes) before final styling/validation polish and 14/14 final focused cases (42 seconds). The ticket remains claimed pending integration review. Laptop and phone screenshots were inspected and neither viewport overflowed. Final build, 146 calculations, 239 database assertions, and zero SQL lint findings remain green.
 
 Reviewable PR: [#14 — Track shared Hit Points and survival with safe undo](https://github.com/ozazy101-hash/the-drowned-compass/pull/14). Integration review and the final integrated full-browser gate remain pending; hosted migration and deployment require later authorization.
+
+## Ticket17 prerequisite reconciliation
+
+Core acceptance and deployment were confirmed by the coordinator before Ticket17 began. Accepted release history includes PR #24 (Ticket12), baseline `5c6c52d14a34ca3bf606963e863d705252124504`, and PR #25 (Ticket13), baseline `d66394f6998123486c7dede9466774a16cc3ab4e`. This reconciles the tracker with that trusted release evidence; it does not claim an independent hosted verification or perform a new deployment. See [Ticket17 delivery ledger](../ticket-17-delivery.md).

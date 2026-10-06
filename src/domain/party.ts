@@ -1,3 +1,4 @@
+import type { PartyBackup } from './party-backup.ts';
 import type { RestCommand } from './character-rests.ts';
 import type { CharacterMagic, MagicCommand } from './character-magic.ts';
 import type { Survival, SurvivalCommand } from "./survival.ts";
@@ -110,6 +111,7 @@ export interface PartyData {
   signIn(role: AccessRole, password: string): Promise<SignInResult>;
   signOut(): Promise<void>;
   getParty(): Promise<Party>;
+  exportPartyBackup(): Promise<PartyBackup>;
   claimCharacterSlot(
     slotId: string,
     character: CharacterRecord,

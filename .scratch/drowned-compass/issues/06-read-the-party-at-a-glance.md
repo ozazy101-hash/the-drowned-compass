@@ -46,3 +46,7 @@ No schema migration or adapter/transport changes were needed. The later release 
 ### Release — 2026-10-02
 
 [PR #5](https://github.com/ozazy101-hash/the-drowned-compass/pull/5) merged as `d01c23dde3ef9e87c4c8751004cef24f3ed99f06`. Ticket 06 had passed its complete 58/58 laptop-and-phone browser run, 131 calculation cases and production build. The dashboard then remained covered by the combined 120/120 browser suite before the Ticket 10 release. The [Pages deployment](https://github.com/ozazy101-hash/the-drowned-compass/actions/runs/36977242530) succeeded; signed-in live acceptance showed the claimed Character card, unclaimed slots and the accepted important-resource summary, which persisted after reload. Ticket 06 is resolved.
+
+## Ticket17 prerequisite reconciliation
+
+Core acceptance and deployment were confirmed by the coordinator before Ticket17 began. Accepted release history includes PR #24 (Ticket12), baseline `5c6c52d14a34ca3bf606963e863d705252124504`, and PR #25 (Ticket13), baseline `d66394f6998123486c7dede9466774a16cc3ab4e`. This reconciles the tracker with that trusted release evidence; it does not claim an independent hosted verification or perform a new deployment. See [Ticket17 delivery ledger](../ticket-17-delivery.md).

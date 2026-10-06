@@ -4,7 +4,7 @@
 
 **Blocked by:** 06 — Read the Party at a glance.
 
-**Status:** claimed
+**Status:** resolved
 
 **Agent:** Ticket 08 — isolated `codex/ticket-08-conditions` worktree.
 
@@ -36,3 +36,7 @@
 - **Pending:** integrated full browser regression, explicitly deferred by the coordinator due to shared lane saturation; PR review, later authorized hosted migration and release. No merge or hosted change performed.
 
 See [implementation and verification record](../../../docs/implementation/conditions-and-rules-tooltips.md).
+
+## Ticket17 prerequisite reconciliation
+
+Core acceptance and deployment were confirmed by the coordinator before Ticket17 began. Accepted release history includes PR #24 (Ticket12), baseline `5c6c52d14a34ca3bf606963e863d705252124504`, and PR #25 (Ticket13), baseline `d66394f6998123486c7dede9466774a16cc3ab4e`. This reconciles the tracker with that trusted release evidence; it does not claim an independent hosted verification or perform a new deployment. See [Ticket17 delivery ledger](../ticket-17-delivery.md).

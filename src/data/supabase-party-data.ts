@@ -1,3 +1,4 @@
+import { createPartyBackup } from '../domain/party-backup';
 import { validateRestCommand } from '../domain/character-rests';
 import { emptyMagic, validateMagicCommand, type CharacterSpell, type SpellSlot } from '../domain/character-magic';
 import { initialSurvival } from "../domain/survival";
@@ -239,6 +240,15 @@ export function createSupabasePartyData(
     },
 
     getParty: loadParty,
+
+    async exportPartyBackup() {
+      // One backend-authorized statement supplies a coherent saved snapshot.
+      // Never fall back to a series of table reads or a displayed Party cache.
+      const { data, error } = await client.rpc('export_party_data_snapshot');
+      if (error?.code === '42501') throw new Error('Dungeon Master access is required. Sign in again to download a Party Data Backup.');
+      if (error || !data) throw new Error('The Party Data Backup could not be prepared. Please retry.');
+      return createPartyBackup(data as Party);
+    },
 
     async claimCharacterSlot(slotId, character: CharacterRecord) {
       const { data: authData, error: authError } = await client.auth.getUser();
