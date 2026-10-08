@@ -122,5 +122,5 @@ test('multiclass guidance uses every class and Magic saves preserve Combat entri
   const draft = page.getByRole('article', { name: 'New attack', exact: true }); await draft.getByRole('button', { name: 'Save attack', exact: true }).click(); await expect(page.getByRole('article', { name: 'Dagger', exact: true }).getByRole('status')).toHaveText('Saved');
   await page.getByRole('button', { name: 'Magic', exact: true }).click(); await addCatalog(page); await expect(page.getByText(/This spell is unusual/)).toHaveCount(0); await configure(page, 1, '4', '4');
   await page.getByRole('button', { name: 'Combat', exact: true }).click(); await expect(page.getByRole('article', { name: 'Dagger', exact: true }).getByLabel('Damage', { exact: true })).toHaveValue('1d4');
-  await page.getByRole('button', { name: 'Magic', exact: true }).click(); await page.screenshot({ path: `/tmp/ticket12-${info.project.name}-magic.png`, fullPage: true });
+  await page.getByRole('button', { name: 'Magic', exact: true }).click(); await page.screenshot({ path: info.outputPath('character-magic.spec.png'), fullPage: true });
 });

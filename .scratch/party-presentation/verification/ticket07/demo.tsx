@@ -15,7 +15,7 @@ const second=createGridMapEditor(first.snapshot().document);second.draw('door',[
 const canvas=document.createElement('canvas');canvas.width=600;canvas.height=300;
 const context=canvas.getContext('2d')!;context.fillStyle='#294b38';context.fillRect(0,0,600,300);context.strokeStyle='#4a8caf';context.lineWidth=80;context.beginPath();context.moveTo(0,200);context.quadraticCurveTo(300,0,600,200);context.stroke();
 const background=await new Promise<Blob>(resolve=>canvas.toBlob(blob=>resolve(blob!),'image/png'));
-const maps:SavedGridMap[]=[first,second,createGridMapEditor({columns:18,rows:10})].map((editor,index)=>({id:`00000000-0000-4000-8000-00000000000${index+1}`,title:`Demo saved map ${index+1}`,visibility:'revealed',createdAt:new Date().toISOString(),version:1,document:editor.snapshot().document,background:index<2?{...fitMapBackground(editor.snapshot().document,600,300),mime:'image/png',size:background.size}:null}));
+const maps:SavedGridMap[]=[first,second,createGridMapEditor({columns:18,rows:10})].map((editor,index)=>({id:`00000000-0000-4000-8000-00000000000${index+1}`,title:`Demo saved map ${index+1}`,visibility:'revealed',createdAt:new Date().toISOString(),version:1,document:editor.snapshot().document,background:index<2?{...fitMapBackground(editor.snapshot().document,600,300),mime:'image/png',size:background.size,registration:'ticket07-identical-artwork'}:null}));
 const content={...data.content,listMaps:async()=>maps,loadMap:async(id:string)=>{const item=maps.find(value=>value.id===id);if(!item)throw new Error('Unavailable demo map');return item;},openMapBackground:async()=>background};
 const display=createPartyDisplay(content,()=>data.getSession());
 Object.assign(window,{projectionDemo:{display,maps,content,data}});

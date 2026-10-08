@@ -36,7 +36,7 @@ test('draw room, doors and terrain, erase, gesture undo/redo and zoom on laptop/
   await page.getByRole('button', { name: 'Undo', exact: true }).click(); await expect(page.locator('[data-terrain="difficult"]')).toHaveCount(1);
   await page.getByRole('button', { name: 'Floor', exact: true }).click(); await stroke(page, [[4.5, 4.5]]); await expect(page.getByRole('button', { name: 'Redo', exact: true })).toBeDisabled();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-  await page.screenshot({ path: `/private/tmp/ticket05-${info.project.name}-editor.png`, fullPage: true });
+  await page.screenshot({ path: info.outputPath('grid-map.spec.png'), fullPage: true });
 });
 test('validation, keyboard editing, navigation retention, DM-only local draft isolation', async ({ page }) => {
   await open(page); await page.getByLabel('Columns', { exact: true }).fill('81'); await page.getByRole('button', { name: 'Create blank map' }).click();

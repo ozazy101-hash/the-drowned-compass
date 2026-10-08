@@ -1,9 +1,9 @@
 import { validateGridMap, validateMapBackground } from '../domain/grid-map';
-import { filterGridMaps, prepareGridMapSave, filterHandouts, prepareHandoutChange, transitionHandout, validateHandout, type Handout, type PartyContent, type SavedGridMap } from '../domain/party-content';
+import { filterGridMaps, prepareGridMapSave, prepareGridMapChange, transitionGridMap, filterHandouts, prepareHandoutChange, transitionHandout, validateHandout, type Handout, type PartyContent, type SavedGridMap } from '../domain/party-content';
 import { localContentTransaction } from './local-party-store';
 import { contentSubscription } from './content-subscription';
 type LocalMap = SavedGridMap & {kind:'grid-map';blob:Blob|null;requests:Record<string,{signature:string;item:SavedGridMap}>};
-const mapMetadata=({kind:_kind,blob:_blob,requests:_requests,...item}:LocalMap):SavedGridMap=>{const document=validateGridMap(item.document);if(item.background)validateMapBackground(document,item.background);return {...item,document};};
+const mapMetadata=({kind:_kind,blob:_blob,requests:_requests,...item}:LocalMap):SavedGridMap=>{const document=validateGridMap(item.document);if(item.background)validateMapBackground(document,item.background);return {...item,document,background:item.background?{...item.background,registration:item.background.registration??item.id}:null};};
 type SavedHandout = Handout & { blob: Blob; digest: string; lastRequestId?: string; lastSignature?: string };
 const metadata = ({ blob: _blob, digest: _digest, lastRequestId: _request, lastSignature: _signature, ...item }: SavedHandout): Handout => ({...item,version:item.version??1,contentVersion:item.contentVersion??1});
 const event='drowned-compass-content-changed';
@@ -31,11 +31,31 @@ export function localPartyContent(token: () => string | null): PartyContent {
             if(!saved&&input.expectedVersion!==0)throw new Error('This map is unavailable.');
             let background=saved?.background??null, blob=saved?.blob??null;
             if(prepared.mode==='remove'){background=null;blob=null;}
-            if(prepared.replacement){const {digest:_digest,...metadata}=prepared.replacement;background=metadata;blob=input.background!;}
+            if(prepared.replacement){const {digest:_digest,...metadata}=prepared.replacement;background={...metadata,registration:_digest};blob=input.background!;}
             if(background)validateMapBackground(prepared.document,background);
             const item:SavedGridMap={id:input.id,title:prepared.title,visibility:saved?.visibility??'private',createdAt:saved?.createdAt??new Date().toISOString(),version:(saved?.version??0)+1,document:prepared.document,background};
             const next:LocalMap={...item,kind:'grid-map',blob,requests:{...saved?.requests,[input.requestId]:{signature:prepared.signature,item}}};
             store.put(next);complete({ok:true,item});
+          }catch{store.transaction.abort();}
+        };
+      });changed();return result;
+    },
+    async changeMap(input){
+      const prepared=prepareGridMapChange(input);
+      const result=await localContentTransaction<Awaited<ReturnType<PartyContent['changeMap']>>>(token(),true,(store,complete)=>{
+        const request=store.getAll();request.onsuccess=()=>{
+          const records=request.result as (LocalMap|SavedHandout)[];
+          try {
+            const receipt=records.filter((item):item is LocalMap=>'kind' in item).map(item=>item.requests[input.requestId]).find(Boolean);
+            if(receipt){if(receipt.signature!==prepared.signature)throw new Error('This change request was already used for different content.');complete({ok:true,item:receipt.item});return;}
+            const saved=records.find(item=>item.id===input.id);
+            if(!saved||!('kind' in saved))throw new Error('This Grid Map is unavailable.');
+            const outcome=transitionGridMap(mapMetadata(saved),input,prepared,new Date().toISOString());
+            if(!outcome.ok){complete(outcome);return;}
+            const copyId=prepared.command.kind==='copy'?prepared.command.id:undefined;
+            if(copyId&&records.some(item=>item.id===copyId))throw new Error('This content identity is already used.');
+            const next:LocalMap={...outcome.item,kind:'grid-map',blob:saved.blob,requests:{...(prepared.command.kind==='copy'?{}:saved.requests),[input.requestId]:{signature:prepared.signature,item:outcome.item}}};
+            store.put(next);complete(outcome);
           }catch{store.transaction.abort();}
         };
       });changed();return result;

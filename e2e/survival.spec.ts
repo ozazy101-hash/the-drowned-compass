@@ -42,7 +42,7 @@ test('health actions, correction, survival state and reload are usable at the ta
   await expect(panel(page)).toContainText('Unconscious');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await panel(page).scrollIntoViewIfNeeded();
-  await panel(page).screenshot({path:`/tmp/ticket19-${info.project.name}.png`});
+  await panel(page).screenshot({path: info.outputPath('survival.spec.png')});
 });
 test('failed saves retain correction draft and retry persists; empty and fractional input cannot change health', async ({page},info) => {
   await page.goto(isolatedPartyUrl(info,'&failSurvivalSaves=once')); await enterAs(page,'Player'); await claimCharacter(page);

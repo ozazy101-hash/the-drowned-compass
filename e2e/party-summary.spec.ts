@@ -134,7 +134,7 @@ test("six claimed cards remain readable with health before secondary values and 
     expect(position.width).toBeGreaterThan(280);
     expect(position.healthY).toBeLessThan(position.abilitiesY);
   }
-  await page.screenshot({ path: `/tmp/drowned-compass-dashboard-${testInfo.project.name}.png`, fullPage: true });
+  await page.screenshot({ path: testInfo.outputPath('party-summary.spec.png'), fullPage: true });
   for (let position = 1; position <= 6; position += 1) {
     const name = `Neris ${position} of the Moonlit Undertow`;
     const open = page.getByRole("button", { name: `Open ${name} Character Page`, exact: true });

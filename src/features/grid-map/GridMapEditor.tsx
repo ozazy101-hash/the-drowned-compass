@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { createGridMapEditor, gridMapLimits, viewPointToGrid, type GridMapDocument, type GridPoint, type GridTool } from '../../domain/grid-map';
-import { prepareGridMapSave, type PartyContent, type SavedGridMap, type GridMapSave, type MapBackground } from '../../domain/party-content';
+import { prepareGridMapSave, type PartyContent, type SavedGridMap, type GridMapSave, type MapBackground, type GridMapChange } from '../../domain/party-content';
 import './grid-map.css';
 const tools: GridTool[] = ['wall', 'door', 'floor', 'water', 'difficult', 'erase'];
-function MapDrawing({ document, background }: { document: GridMapDocument; background?:{url:string;placement:MapBackground} }) {
+export function MapDrawing({ document, background }: { document: GridMapDocument; background?:{url:string;placement:MapBackground} }) {
   return <>
     <defs><pattern id="map-grid" width="1" height="1" patternUnits="userSpaceOnUse"><path d="M 1 0 L 0 0 0 1" fill="none" stroke="#788b91" strokeWidth="0.025" /></pattern></defs>
     <rect width={document.columns} height={document.rows} fill="#142630" />
@@ -25,6 +25,8 @@ export function GridMapEditor({ active, onBack, content, mapId, loadRevision, on
   const [backgroundUrl,setBackgroundUrl]=useState('');
   const identity=useRef<string>(crypto.randomUUID());
   const retry=useRef<GridMapSave|undefined>(undefined);
+  const copyRetry=useRef<GridMapChange|undefined>(undefined);
+  const [copied,setCopied]=useState<SavedGridMap>();
   const loadGeneration=useRef(0);
   const [editor, setEditor] = useState(() => createGridMapEditor());
   const [snapshot, setSnapshot] = useState(editor.snapshot);
@@ -47,7 +49,7 @@ export function GridMapEditor({ active, onBack, content, mapId, loadRevision, on
       const blob=item.background?await content.openMapBackground(id,item.version):undefined;
       if(generation!==loadGeneration.current)return;
       const next=createGridMapEditor(item.document);
-      setEditor(next);setSnapshot(next.snapshot());setPreview(undefined);setCursor({x:.5,y:.5});setSaved(item);identity.current=id;setTitle(item.title);setColumns(String(item.document.columns));setRows(String(item.document.rows));setFeet(String(item.document.feetPerSquare));setBackground(item.background);setBackgroundBlob(blob);setBackgroundIntent(undefined);setConflict(false);retry.current=undefined;setMessage('Loaded saved map.');
+      setEditor(next);setSnapshot(next.snapshot());setPreview(undefined);setCursor({x:.5,y:.5});setSaved(item);setCopied(undefined);copyRetry.current=undefined;identity.current=id;setTitle(item.title);setColumns(String(item.document.columns));setRows(String(item.document.rows));setFeet(String(item.document.feetPerSquare));setBackground(item.background);setBackgroundBlob(blob);setBackgroundIntent(undefined);setConflict(false);retry.current=undefined;setMessage('Loaded saved map.');
     }catch(failure){if(generation===loadGeneration.current){setFailedLoadId(id);setError(`${(failure as Error).message} Your draft is retained. Retry opening this Grid Map.`);}}
     finally{if(generation===loadGeneration.current)setBusy(false);}
   }
@@ -65,8 +67,20 @@ export function GridMapEditor({ active, onBack, content, mapId, loadRevision, on
       const blob=current.background?await content.openMapBackground(current.id,current.version):undefined;
       if(generation!==loadGeneration.current)return;
       if(JSON.stringify(current.document)!==JSON.stringify(snapshot.document)){const next=createGridMapEditor(current.document);setEditor(next);setSnapshot(next.snapshot());}
-      setCursor({x:.5,y:.5});setColumns(String(current.document.columns));setRows(String(current.document.rows));setFeet(String(current.document.feetPerSquare));setSaved(current);setTitle(current.title);setBackground(current.background);setBackgroundBlob(blob);setBackgroundIntent(undefined);retry.current=undefined;setMessage(current.visibility==='revealed'?'Saved for everyone.':'Saved privately.');
+      setCursor({x:.5,y:.5});setColumns(String(current.document.columns));setRows(String(current.document.rows));setFeet(String(current.document.feetPerSquare));setSaved(current);setCopied(undefined);copyRetry.current=undefined;setTitle(current.title);setBackground(current.background);setBackgroundBlob(blob);setBackgroundIntent(undefined);retry.current=undefined;setMessage(current.visibility==='revealed'?'Saved for everyone.':'Saved privately.');
     }catch(failure){if(generation===loadGeneration.current)setError(`${(failure as Error).message} Your draft is retained. Retry save to confirm its current state.`);}
+    finally{if(generation===loadGeneration.current)setBusy(false);}
+  }
+  async function copySaved() {
+    if(!saved||busy)return;
+    const generation=++loadGeneration.current;cancel();setBusy(true);setError('');setMessage('');
+    copyRetry.current??={id:saved.id,expectedVersion:saved.version,requestId:crypto.randomUUID(),command:{kind:'copy',id:crypto.randomUUID(),title:`${saved.title.slice(0,155)} copy`}};
+    try {
+      const result=await content.changeMap(copyRetry.current);
+      if(generation!==loadGeneration.current)return;
+      if(!result.ok){copyRetry.current=undefined;setError('The saved source changed elsewhere. Your draft is retained. Reload the saved map before copying.');return;}
+      setCopied(result.item);copyRetry.current=undefined;setMessage(`Saved private copy: ${result.item.title}. Your original draft is retained.`);
+    }catch(failure){if(generation===loadGeneration.current)setError(`${(failure as Error).message} Retry Save as copy to confirm the same copy.`);}
     finally{if(generation===loadGeneration.current)setBusy(false);}
   }
   function edited(){retry.current=undefined;setMessage('');}
@@ -101,6 +115,7 @@ export function GridMapEditor({ active, onBack, content, mapId, loadRevision, on
     <button onClick={() => { cancel(); onBack(); }}>Back to Party</button><button onClick={()=>{cancel();onLibrary();}}>Open Dungeon Master Library</button><h1>Grid Map editor</h1>
     <p>DM draft. Save explicitly to keep a private Grid Map in your Library. Unsaved edits stay on this device and are discarded on reload or sign out.</p>
     <div className="map-toolbar"><label>Map title<input value={title} maxLength={160} onChange={event=>{setTitle(event.target.value);edited();}} /></label><button disabled={busy||conflict} onClick={()=>void save()}>{busy?'Saving…':error&&retry.current?'Retry save':saved?.visibility==='revealed'?'Save for everyone':'Save private Grid Map'}</button>{(saved||mapId||conflict)&&<button onClick={()=>void load(conflict?identity.current:saved?.id??mapId!)}>Reload saved map (discard draft)</button>}</div>
+    {saved&&<div><p>Save as copy uses saved version {saved.version} only. Unsaved title, drawing and background changes are excluded. Save first to include them.</p><button disabled={busy||conflict} onClick={()=>void copySaved()}>Save as copy (saved version only)</button>{copied&&<button onClick={()=>void load(copied.id)}>Open private copy (discard current draft)</button>}</div>}
     <p role="status">{busy?'Working…':message||(saved&&JSON.stringify(saved.document)===JSON.stringify(snapshot.document)&&saved.title===title&&backgroundIntent===undefined?'Saved':'Unsaved changes')}{saved&&` · version ${saved.version} · ${saved.visibility==='revealed'?'Revealed':'Private'}`}</p>
     <div className="map-toolbar"><label>Map Background<input type="file" accept="image/png,image/jpeg,image/webp" onChange={event=>{void chooseBackground(event.target.files?.[0]);event.target.value='';}} /></label><button disabled={!background} onClick={()=>{cancel();setBackground(null);setBackgroundBlob(undefined);setBackgroundIntent(null);edited();}}>Remove background</button></div>
     <p>PNG, JPEG or WebP, up to 20 MiB and 16 million pixels. Artwork fits proportionally inside the Map Grid; grid, terrain and walls overlay it. Drawing undo/redo does not change the selected image.</p>

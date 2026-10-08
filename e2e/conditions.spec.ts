@@ -46,7 +46,7 @@ test('Rules Tooltips support focus, nested keyboard navigation, dismissal and fo
   await nested.focus(); await nested.press('Enter');
   const child = page.getByRole('dialog', { name: 'Incapacitated', exact: true });
   await expect(child).toBeVisible(); await expect(child.getByRole('button', { name: 'Back to previous rule' })).toBeFocused();
-  await page.screenshot({ path: `/tmp/ticket08-${info.project.name}-rules.png` });
+  await page.screenshot({ path: info.outputPath('conditions.spec.png') });
   await page.keyboard.press('Escape'); await expect(dialog).toBeVisible(); await expect(nested).toBeFocused();
   const repeated = dialog.getByRole('button', { name: 'Prone', exact: true }).nth(1);
   await repeated.click(); await expect(page.getByRole('dialog', { name: 'Prone', exact: true })).toBeVisible();

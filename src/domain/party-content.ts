@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
-import { validateGridMap, fitMapBackground, type GridMapDocument, type MapBackgroundPlacement } from './grid-map';
 import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
+import { validateGridMap, fitMapBackground, type GridMapDocument, type MapBackgroundPlacement } from './grid-map';
 
 export type Handout = { id: string; title: string; visibility: 'private' | 'revealed'; mime: string; size: number; createdAt: string; version: number; contentVersion: number };
 export type HandoutUpload = { requestId: string; title: string; file: File };
@@ -10,6 +10,7 @@ export type ContentSnapshot = { items: Handout[] } | { error: string };
 export interface PartyContent {
   listMaps(query?: {search?:string; visibility?:'private'|'revealed'}): Promise<SavedGridMap[]>;
   loadMap(id:string): Promise<SavedGridMap>;
+  changeMap(input:GridMapChange): Promise<GridMapSaveResult>;
   saveMap(input:GridMapSave): Promise<GridMapSaveResult>;
   openMapBackground(id:string,expectedVersion:number): Promise<Blob>;
   list(query?: { search?: string; visibility?: 'private' | 'revealed' }): Promise<Handout[]>;
@@ -95,7 +96,7 @@ export function transitionHandout(item: Handout & {lastRequestId?: string; lastS
   return {ok:true,item:next};
 }
 
-export type MapBackground = MapBackgroundPlacement & {mime:string;size:number};
+export type MapBackground = MapBackgroundPlacement & {mime:string;size:number;registration?:string};
 export type SavedGridMap = {id:string;title:string;visibility:'private'|'revealed';createdAt:string;version:number;document:GridMapDocument;background:MapBackground|null};
 export type GridMapSave = {id:string;expectedVersion:number;requestId:string;title:string;document:GridMapDocument;background?:File|null};
 export type GridMapSaveResult = {ok:true;item:SavedGridMap}|{ok:false;reason:'conflict';item:SavedGridMap};
@@ -117,4 +118,25 @@ export async function prepareGridMapSave(input:GridMapSave) {
 export function filterGridMaps(items:SavedGridMap[],query:{search?:string;visibility?:'private'|'revealed'}={}) {
   const search=(query.search??'').trim().toLowerCase();
   return items.filter(item=>(!query.visibility||item.visibility===query.visibility)&&item.title.toLowerCase().includes(search)).sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
+}
+
+/** Commands operate exclusively on an accepted saved version; drafts never enter this interface. */
+export type GridMapChange = {id:string;expectedVersion:number;requestId:string;command:{kind:'reveal'|'withdraw'}|{kind:'copy';id:string;title:string}};
+export function prepareGridMapChange(input:GridMapChange) {
+  const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  if(!uuid.test(input.id)||!uuid.test(input.requestId)||!Number.isSafeInteger(input.expectedVersion)||input.expectedVersion<1)throw new Error('Reload this saved Grid Map before making changes.');
+  let command:GridMapChange['command'];
+  if(input.command.kind==='copy') {
+    if(!uuid.test(input.command.id)||input.command.id===input.id)throw new Error('Choose an independent map identity.');
+    command={...input.command,title:handoutTitle(input.command.title)};
+  } else {
+    if(input.command.kind!=='reveal'&&input.command.kind!=='withdraw')throw new Error('Unsupported Grid Map change.');
+    command={kind:input.command.kind};
+  }
+  return {command,signature:JSON.stringify({id:input.id,expectedVersion:input.expectedVersion,command})};
+}
+export function transitionGridMap(item:SavedGridMap,input:GridMapChange,prepared:ReturnType<typeof prepareGridMapChange>,createdAt:string):GridMapSaveResult {
+  if(item.version!==input.expectedVersion)return {ok:false,reason:'conflict',item};
+  if(prepared.command.kind==='copy')return {ok:true,item:{...item,id:prepared.command.id,title:prepared.command.title,visibility:'private',version:1,createdAt,document:validateGridMap(item.document),background:item.background?{...item.background}:null}};
+  return {ok:true,item:{...item,visibility:prepared.command.kind==='reveal'?'revealed':'private',version:item.version+1}};
 }

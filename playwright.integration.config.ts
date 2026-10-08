@@ -1,0 +1,3 @@
+import {defineConfig,devices} from '@playwright/test';
+const focused=process.env.TICKET09_FOCUSED==='true',port=focused?4213:4215;
+export default defineConfig({testDir:'./e2e',testIgnore:'production-artifact.spec.ts',fullyParallel:false,workers:1,reporter:'list',timeout:90_000,outputDir:focused?'/private/tmp/ticket09-focused':'/private/tmp/ticket09-combined',use:{baseURL:`http://127.0.0.1:${port}/the-drowned-compass/`,trace:'off'},projects:[{name:'laptop-chromium',use:{...devices['Desktop Chrome'],channel:'chrome'}},{name:'phone-chromium',use:{...devices['Pixel 7'],channel:'chrome'}}],webServer:{command:`VITE_USE_IN_MEMORY_DATA=true pnpm dev --host 127.0.0.1 --port ${port} --strictPort`,url:`http://127.0.0.1:${port}/the-drowned-compass/`,reuseExistingServer:false}});

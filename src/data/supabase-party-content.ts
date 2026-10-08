@@ -1,6 +1,6 @@
 import { validateGridMap, validateMapBackground } from '../domain/grid-map';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { filterGridMaps, prepareGridMapSave, filterHandouts, prepareHandoutChange, validateHandout, type Handout, type PartyContent, type SavedGridMap } from '../domain/party-content';
+import { filterGridMaps, prepareGridMapSave, prepareGridMapChange, filterHandouts, prepareHandoutChange, validateHandout, type Handout, type PartyContent, type SavedGridMap } from '../domain/party-content';
 import { contentSubscription } from './content-subscription';
 const bucket = 'party-handouts';
 const columns = 'id,party_id,title,visibility,mime,size,created_at,digest,object_id,version,content_version,last_request_id,last_signature';
@@ -9,7 +9,7 @@ type MapRow={id:string;party_id:string;title:string;visibility:'private'|'reveal
 function mapMetadata(row:MapRow):SavedGridMap {
   const document=validateGridMap(row.document);
   let background:SavedGridMap['background']=null;
-  if(row.background){const {object_id:_object,digest:_digest,...placement}=row.background;validateMapBackground(document,placement);background=placement;}
+  if(row.background){const {object_id:_object,digest:_digest,...placement}=row.background;validateMapBackground(document,placement);background={...placement,registration:_digest};}
   return {id:row.id,title:row.title,visibility:row.visibility,createdAt:row.created_at,version:row.version,document,background};
 }
 const metadata = (row: Row): Handout => ({ id: row.id, title: row.title, visibility: row.visibility, mime: row.mime, size: row.size, createdAt: row.created_at,version:row.version,contentVersion:row.content_version });
@@ -70,6 +70,25 @@ export function supabasePartyContent(client: SupabaseClient): PartyContent {
       if(!outcome.ok){if(prepared.replacement)await cleanup(staged);return {ok:false,reason:'conflict',item:mapMetadata(outcome.item)};}
       if(outcome.old_object_id)await cleanup({party_id:outcome.item.party_id,object_id:outcome.old_object_id});changed();return {ok:true,item:mapMetadata(outcome.item)};
     },
+    async changeMap(input){
+      const prepared=prepareGridMapChange(input);
+      const accepted=await receipt(input.requestId);
+      const resultId=prepared.command.kind==='copy'?prepared.command.id:input.id;
+      const accept=(saved:NonNullable<Awaited<ReturnType<typeof receipt>>>)=>{
+        if(saved.client_signature!==prepared.signature||saved.item.id!==resultId)throw new Error('This change request was already used for different content.');
+        changed();return {ok:true as const,item:mapMetadata(saved.item)};
+      };
+      if(accepted)return accept(accepted);
+      const result=await client.rpc('change_party_grid_map',{p_id:input.id,p_expected_version:input.expectedVersion,p_request_id:input.requestId,p_kind:prepared.command.kind,p_copy_id:prepared.command.kind==='copy'?prepared.command.id:null,p_title:prepared.command.kind==='copy'?prepared.command.title:null,p_client_signature:prepared.signature});
+      if(result.error){
+        const committed=await receipt(input.requestId);if(committed)return accept(committed);
+        const current=await readMap(input.id);
+        if(current&&current.version!==input.expectedVersion)return {ok:false,reason:'conflict',item:mapMetadata(current)};
+        throw failure();
+      }
+      const outcome=result.data as {ok:boolean;item:MapRow};changed();
+      return outcome.ok?{ok:true,item:mapMetadata(outcome.item)}:{ok:false,reason:'conflict',item:mapMetadata(outcome.item)};
+    },
     async openMapBackground(id,expectedVersion){
       const row=await readMap(id);if(!row?.background||row.version!==expectedVersion)throw new Error('The Grid Map changed or is unavailable. Reload it before opening its background.');
       const blob=await usable({party_id:row.party_id,object_id:row.background.object_id});
@@ -126,7 +145,7 @@ export function supabasePartyContent(client: SupabaseClient): PartyContent {
     },
     subscribe:listener=>contentSubscription(()=>content.list(),invalidate=>{
       events.addEventListener('changed',invalidate);
-      const channel=client.channel(`party-content-${crypto.randomUUID()}`).on('postgres_changes',{event:'*',schema:'public',table:'party_handouts'},invalidate).subscribe();
+      const channel=client.channel(`party-content-${crypto.randomUUID()}`).on('postgres_changes',{event:'*',schema:'public',table:'party_handouts'},invalidate).on('postgres_changes',{event:'*',schema:'public',table:'party_grid_maps'},invalidate).subscribe();
       return ()=>{events.removeEventListener('changed',invalidate);void client.removeChannel(channel);};
     },listener),
   };return content;

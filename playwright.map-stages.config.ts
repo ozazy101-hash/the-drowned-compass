@@ -1,0 +1,4 @@
+import {defineConfig,devices} from '@playwright/test';
+const port=Number(process.env.MAP_TEST_PORT??4210);
+if(![4210,4211,4212].includes(port))throw new Error('Use the dedicated Ticket08 implementation/review/coordinator ports.');
+export default defineConfig({testDir:'./e2e',testMatch:(process.env.MAP_TEST_MATCH??'map-stages.spec.ts').split(','),workers:1,reporter:'list',outputDir:process.env.MAP_BROWSER_OUTPUT??'/private/tmp/ticket08-implementer-browser',use:{baseURL:`http://127.0.0.1:${port}/the-drowned-compass/`,trace:process.env.MAP_LIVE_URL?'off':'retain-on-failure'},projects:[{name:'laptop-chromium',use:{...devices['Desktop Chrome'],channel:'chrome'}},{name:'phone-chromium',use:{...devices['Pixel 7'],channel:'chrome'}}],webServer:{command:`VITE_USE_IN_MEMORY_DATA=true pnpm dev --host 127.0.0.1 --port ${port} --strictPort`,url:`http://127.0.0.1:${port}/the-drowned-compass/`,reuseExistingServer:false}});
