@@ -1,0 +1,33 @@
+begin;
+create extension if not exists pgtap with schema extensions;
+select no_plan();
+-- Replay08 only within a rollback transaction;06 is the explicit prerequisite.
+select has_table('public','party_grid_maps','saved-map prerequisite exists');
+drop function if exists public.change_party_grid_map(uuid,integer,uuid,text,uuid,text,text);
+-- __MAP_STAGES_MIGRATION__
+insert into auth.users(id,email,raw_app_meta_data,raw_user_meta_data) values('80000000-0000-4000-8000-000000000001','stages-dm@verification.test','{}','{}'),('80000000-0000-4000-8000-000000000002','stages-player@verification.test','{}','{}');
+insert into public.party_members(party_id,user_id,role)values('00000000-0000-4000-8000-000000000001','80000000-0000-4000-8000-000000000001','dungeon-master'),('00000000-0000-4000-8000-000000000001','80000000-0000-4000-8000-000000000002','player');
+insert into storage.objects(bucket_id,name,metadata)values('party-handouts','00000000-0000-4000-8000-000000000001/80000000-0000-4000-8000-000000000003','{"size":68,"mimetype":"image/png"}');
+insert into public.party_grid_maps(id,party_id,title,visibility,version,document,background)values('80000000-0000-4000-8000-000000000004','00000000-0000-4000-8000-000000000001','Stage 1','private',1,'{"columns":8,"rows":6,"feetPerSquare":5,"terrain":[],"edges":[]}','{"x":0,"y":1,"width":8,"height":4,"pixelWidth":800,"pixelHeight":400,"size":68,"mime":"image/png","digest":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","object_id":"80000000-0000-4000-8000-000000000003"}');
+set local role authenticated;set local "request.jwt.claim.sub"='80000000-0000-4000-8000-000000000001';
+select is((public.change_party_grid_map('80000000-0000-4000-8000-000000000004',1,'80000000-0000-4000-8000-000000000005','copy','80000000-0000-4000-8000-000000000006','Stage 2','copy')->'item'->>'visibility'),'private','copy is private');
+select is((select background from public.party_grid_maps where id='80000000-0000-4000-8000-000000000006'),(select background from public.party_grid_maps where id='80000000-0000-4000-8000-000000000004'),'copied background identical');
+select is((public.change_party_grid_map('80000000-0000-4000-8000-000000000004',1,'80000000-0000-4000-8000-000000000007','reveal',null,null,'reveal')->'item'->>'version')::integer,2,'reveal increments version');
+select is((public.change_party_grid_map('80000000-0000-4000-8000-000000000004',1,'80000000-0000-4000-8000-000000000005','copy','80000000-0000-4000-8000-000000000006','Stage 2','copy')->'item'->>'version')::integer,1,'copy retry after source changes replays accepted receipt');
+select throws_ok($$select public.change_party_grid_map('80000000-0000-4000-8000-000000000004',1,'80000000-0000-4000-8000-000000000005','copy','80000000-0000-4000-8000-000000000006','Altered','copy')$$,'P0001','This change request was already used for different content','payload changed retry denied');
+select is((public.change_party_grid_map('80000000-0000-4000-8000-000000000004',1,'80000000-0000-4000-8000-000000000008','withdraw',null,null,'stale')->>'ok')::boolean,false,'stale withdrawal conflicts');
+select is((public.change_party_grid_map('80000000-0000-4000-8000-000000000004',1,'80000000-0000-4000-8000-000000000008','copy','80000000-0000-4000-8000-000000000009','Stale','stale')->>'ok')::boolean,false,'stale copy conflicts');
+select is((public.change_party_grid_map('80000000-0000-4000-8000-000000000006',1,'80000000-0000-4000-8000-000000000010','reveal',null,null,'second')->>'ok')::boolean,true,'reveal copy');
+select is((public.change_party_grid_map('80000000-0000-4000-8000-000000000004',2,'80000000-0000-4000-8000-000000000011','withdraw',null,null,'withdraw')->>'ok')::boolean,true,'withdraw source independently');
+set local "request.jwt.claim.sub"='80000000-0000-4000-8000-000000000002';
+select is((select count(*) from public.party_grid_maps where id='80000000-0000-4000-8000-000000000004'),0::bigint,'player cannot read withdrawn source');
+select is((select count(*) from public.party_grid_maps where id='80000000-0000-4000-8000-000000000006'),1::bigint,'player retains revealed copy');
+select is((select count(*) from storage.objects where name='00000000-0000-4000-8000-000000000001/80000000-0000-4000-8000-000000000003'),1::bigint,'player reads artwork through revealed copy');
+select throws_ok($$select public.change_party_grid_map('80000000-0000-4000-8000-000000000006',2,'80000000-0000-4000-8000-000000000012','withdraw',null,null,'player')$$,'42501','Dungeon Master access is required to change Grid Maps','player command denied');
+select is((select count(*) from public.party_grid_map_requests where request_id='80000000-0000-4000-8000-000000000005'),0::bigint,'private copy receipt is DM only');
+set local "request.jwt.claim.sub"='80000000-0000-4000-8000-000000000001';
+select is((public.change_party_grid_map('80000000-0000-4000-8000-000000000006',2,'80000000-0000-4000-8000-000000000012','withdraw',null,null,'last')->>'ok')::boolean,true,'withdraw last revealed reference');
+set local "request.jwt.claim.sub"='80000000-0000-4000-8000-000000000002';
+select is((select count(*) from storage.objects where name='00000000-0000-4000-8000-000000000001/80000000-0000-4000-8000-000000000003'),0::bigint,'last withdrawal removes player artwork access');
+select * from finish();
+rollback;

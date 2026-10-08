@@ -14,7 +14,7 @@ export function DisplayControls({display,item}:{display:PartyDisplay;item?:Hando
       <label>Test square display pixels<input type="number" min="8" max="512" step="1" value={state.squarePixels} onChange={event=>display.calibration({kind:'start',squarePixels:Number(event.target.value)})}/></label>
       <button disabled={state.window!=='open'} onClick={()=>display.calibration({kind:'confirm'})}>Confirm measured square</button>
       <button onClick={()=>display.calibration({kind:'reset'})}>Reset calibration / ordinary viewing</button>
-      {state.setupChanged&&<p role="alert">Display viewport changed. Scale and pan are retained; measure again, then confirm or recalibrate.</p>}
+      {state.setupChanged&&<p role="alert">{state.registrationChanged?'Map registration changed. Square size is retained and position reset. Reposition the map, measure again, then confirm or recalibrate.':'Display viewport changed. Scale and pan are retained; measure again, then confirm or recalibrate.'}</p>}
     </>}
     {item&&<button disabled={state.busy||state.window!=='open'} onClick={()=>void display.present(item)}>{item.visibility==='private'?'Reveal and present':'Present on Party Display'}</button>}
     {(state.selected||state.mode!=='ordinary')&&<>

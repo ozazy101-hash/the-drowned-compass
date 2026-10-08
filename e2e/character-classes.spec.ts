@@ -34,7 +34,7 @@ test('multiclass entries update totals, Derived Values, primary identity and Par
   await expect(classes(page)).toContainText('Total level: 6');
   await expect(primary(page).getByLabel('Primary class', { exact: true })).toHaveValue('Rogue');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  await page.screenshot({ path: `/tmp/ticket14-${info.project.name}.png`, fullPage: true });
+  await page.screenshot({ path: info.outputPath('character-classes.spec.png'), fullPage: true });
   await page.getByRole('button', { name: 'Back to the Party' }).click();
   const card = page.getByRole('article', { name: 'Neris Vale, played by Mara' });
   await expect(card).toContainText('Level 6 · Rogue 3 (primary) / Cleric 3 · Thief');

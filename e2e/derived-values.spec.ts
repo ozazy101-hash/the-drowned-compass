@@ -38,7 +38,7 @@ test('Derived Values follow accepted Ability, level, proficiency and spellcastin
   await expect(value(page,'Passive Perception')).toHaveText('15');
   await expect(value(page,'Spell attack modifier')).toHaveText('+2');
   await expect(value(page,'Spell save DC')).toHaveText('10');
-  await page.screenshot({ path:`/tmp/drowned-compass-derived-${testInfo.project.name}.png`,fullPage:true });
+  await page.screenshot({ path: testInfo.outputPath('derived-values.spec.png'),fullPage:true });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 
