@@ -4,11 +4,12 @@ import {createServer} from 'node:http';
 import {performance} from 'node:perf_hooks';
 import {Buffer} from 'node:buffer';
 import {createArtworkVerifier,sha256} from './worker.mjs';
+const prefix=process.env.PROBE_CORPUS==='live'?'live-':'';
 const origin='http://127.0.0.1:8081',authorization='local-rie-fixture-only',objects=new Map();
 let calls=0,loseNext=false;
 const ready=(async()=>{
- objects.set('/source.png',await readFile(new URL('./corpus/source.png',import.meta.url)));
- objects.set('/candidate.png',await readFile(new URL('./corpus/candidate.png',import.meta.url)));
+ objects.set('/source.png',await readFile(new URL(`./corpus/${prefix}source.png`,import.meta.url)));
+ objects.set('/candidate.png',await readFile(new URL(`./corpus/${prefix}candidate.png`,import.meta.url)));
  const server=createServer(async(request,response)=>{
   if(request.headers.authorization!==authorization){response.writeHead(403);response.end();return;}
   const path=request.url;
@@ -30,7 +31,7 @@ export async function handler(event){
  const cpu=process.cpuUsage(),started=performance.now();await ready;calls++;
  const operationId=event.operationId??'op-rie-one',deadline=Date.now()+55000;
  const source=descriptor('/source.png',objects.get('/source.png'),deadline),candidate=descriptor('/candidate.png',objects.get('/candidate.png'),deadline);
- const intent={mode:event.mode??'verify',operationId,sourceIdentity:'synthetic-retained-sea-cave',authorization,deadline,source,candidate,region:{x:650,y:160,width:220,height:240}};
+ const intent={mode:event.mode??'verify',operationId,sourceIdentity:prefix?'retained-live-sea-cave':'synthetic-retained-sea-cave',authorization,deadline,source,candidate,region:{x:650,y:160,width:220,height:240}};
  if(event.loseStoreResponse)loseNext=true;
  if(intent.mode==='reverify'){
   const path=`/provisional/${operationId}.png`,bytes=objects.get(path);
@@ -38,7 +39,7 @@ export async function handler(event){
   intent.provisional={...descriptor(path,bytes,deadline),operationId,sourceIdentity:intent.sourceIdentity,sourceDigest:source.digest,candidateDigest:candidate.digest,region:intent.region};
  }
  const result=await createArtworkVerifier({storageOrigin:origin,authorization}).verifyArtwork(intent);
- const elapsed=process.cpuUsage(cpu),stats={node:process.version,architecture:process.arch,invocation:calls,wallMs:Math.round(performance.now()-started),cpuMs:Math.round((elapsed.user+elapsed.system)/1000),processMemory:process.memoryUsage(),cgroup:{}};
+ const elapsed=process.cpuUsage(cpu),stats={node:process.version,architecture:process.arch,corpus:prefix?'retained-live':'synthetic',invocation:calls,wallMs:Math.round(performance.now()-started),cpuMs:Math.round((elapsed.user+elapsed.system)/1000),processMemory:process.memoryUsage(),cgroup:{}};
  for(const name of ['memory.peak','memory.current','memory.max','cpu.max'])try{stats.cgroup[name]=(await readFile(`/sys/fs/cgroup/${name}`,'utf8')).trim();}catch{stats.cgroup[name]='unavailable';}
  return {...result,stats};
 }
