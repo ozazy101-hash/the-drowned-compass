@@ -28,3 +28,14 @@ test('private fresh-stage ingress rejects client proof and forged nonce even wit
  const result=await request.post('http://127.0.0.1:49176/internal-verifier',{headers:{Authorization:'Bearer '+jwt,'X-Verifier-Token':'forged','X-Internal-Stage':'finalize','X-Internal-Proof':'{}'},data:new Uint8Array([1,2,3])});expect(result.status()).toBe(403);expect(await result.text()).toBe('Denied');
  const publicResult=await request.post('http://127.0.0.1:49176/',{headers:{Authorization:'Bearer '+jwt,'X-Map-Passed':'true'},data:{kind:'read',requestId:randomUUID()}});expect(publicResult.status()).toBe(422);expect(await publicResult.json()).toEqual({ok:false,code:'invalid-command'});
 });
+
+test('late receipt: timed-out reconciliation cannot save retained valid PNG or switch display',async({page})=>{
+ const c=config(process.env.MAP_LIVE_LATE_JWT!);await connect(page,c);await page.getByRole('button',{name:'Create fixture'}).click();await expect(page.locator('#status')).toContainText('uncertain');
+ const job=JSON.parse(await page.locator('#status').innerText()).job;
+ // This owned fixture has a1second server receipt window. Wait for its real
+ // deadline without invoking reconciliation early enough to accept the receipt.
+ await expect.poll(()=>Date.now(),{intervals:[100],timeout:5000}).toBeGreaterThan(Date.parse(job.createdAt)+1100);
+ await page.getByRole('button',{name:'Reconcile',exact:true}).click();await expect(page.locator('#status')).toContainText('provider-timeout');await expect(page.locator('#status')).toContainText('failed');
+ await page.getByRole('button',{name:'Save fixture output'}).click();await expect(page.locator('#status')).toContainText('unavailable');
+ const workspace=await page.evaluate(()=>(window as any).content.readMapWorkspace());expect(workspace.versions).toHaveLength(0);expect(workspace.presentation.version).toBeNull();expect(workspace.jobs.find((j:any)=>j.id===c.requestId).state).toBe('failed');
+});

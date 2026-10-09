@@ -21,4 +21,4 @@ export function liveProvider({key,fetchImpl=fetch,encodeMask}){
   }catch{return {kind:'uncertain'};}
  }};
 }
-export function fixtureProvider(bytes){return {async generate(){return {kind:'image',bytes};},async reconcile(){return {kind:'uncertain'};}};}
+export function fixtureProvider(bytes,{uncertain=false}={}){return {async generate(){return uncertain?{kind:'uncertain'}:{kind:'image',bytes};},async reconcile(){return uncertain?{kind:'image',bytes}:{kind:'uncertain'};}};}

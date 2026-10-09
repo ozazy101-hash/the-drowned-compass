@@ -21,7 +21,7 @@ Deno.serve(async request=>{
  if([...request.headers.keys()].some(k=>k.startsWith('x-internal-')||['x-map-proof','x-map-digest','x-map-passed'].includes(k)))return Response.json({ok:false,code:'invalid-command'},{status:422,headers});
  try{const user=await authenticatedUser(request,{url,anonKey});
  const verifier=boundedVerifier({gatewayUrl:'http://127.0.0.1:9000/internal-verifier',nonce});
- const provider=fixtureBytes?fixtureProvider(fixtureBytes):liveProvider({key:Deno.env.get('OPENAI_API_KEY'),encodeMask:verifier.mask});
+ const provider=fixtureBytes?fixtureProvider(fixtureBytes,{uncertain:user===Deno.env.get('MAP_LOCAL_FIXTURE_UNCERTAIN_USER')}):liveProvider({key:Deno.env.get('OPENAI_API_KEY'),encodeMask:verifier.mask});
  const app=generationApplication({mode:fixture?'fixture':'live',store,provider,verifier});
  const result=await app.handle(user,request);return result.bytes?new Response(result.bytes,{headers:{...headers,'Content-Type':'image/png'}}):Response.json(result,{status:result.ok?200:422,headers});}
  catch{return Response.json({ok:false,code:'access-denied'},{status:403,headers});}

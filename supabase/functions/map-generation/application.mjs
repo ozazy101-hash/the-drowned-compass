@@ -55,6 +55,7 @@ export function generationApplication({store,provider,verifier,mode='live',now=D
   return store.complete(j,j.proof,verified,background);
  }
  async function acceptCandidate(j,response){
+  if(Date.parse(j.deadline)<=now())return transition(j,'failed',{code:'provider-timeout'});
   if(response.kind==='uncertain')return transition(j,'uncertain',{code:'submission-unknown'});
   if(response.kind!=='image')return transition(j,'failed',{code:response.code==='rate-limit'?'rate-limit':'provider-failed'});
   if(!(response.bytes instanceof Uint8Array)||!response.bytes.length||response.bytes.length>20*1024*1024)return transition(j,'failed',{code:'invalid-provider-output'});
@@ -69,6 +70,7 @@ export function generationApplication({store,provider,verifier,mode='live',now=D
  async function submit(user,input){
   const intent=validateIntent(input);let j=await store.reserve(user,intent,mode);
   if(j.state!=='queued')return reconcile(user,j.id);
+  if(Date.parse(j.deadline)<=now())return snapshot(await transition(j,'failed',{code:'expired-submission'}));
   const submissionToken=crypto.randomUUID();const started=await transition(j,'running',{submissionToken});if(started.state!=='running'||started.submission_token!==submissionToken)return snapshot(started);j=started;
   let response;
   try{
@@ -81,7 +83,7 @@ export function generationApplication({store,provider,verifier,mode='live',now=D
  }
  async function reconcile(user,id){
   let j=await owned(user,id);
-  if(j.state==='running'&&Date.parse(j.deadline)<=now())j=await transition(j,'uncertain',{code:'provider-timeout-unknown'});
+  if(['running','uncertain'].includes(j.state)&&Date.parse(j.deadline)<=now())j=await transition(j,'failed',{code:'provider-timeout'});
   if(j.state==='uncertain'){
    // Receipt lookup only. The provider adapter must NEVER submit in reconcile.
    const response=await provider.reconcile(j.id);if(response.kind==='image'||response.kind==='failed')j=await acceptCandidate(j,response);

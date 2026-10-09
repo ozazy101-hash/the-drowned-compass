@@ -74,5 +74,15 @@ select lives_ok($$delete from storage.objects where name='66000000-0000-4000-800
 select lives_ok($$select public.ack_map_generation_orphans(array['66000000-0000-4000-8000-000000000002'::uuid])$$,'known cleanup acknowledgement records completion');
 select is(jsonb_array_length(public.release_map_generation_orphans()),0,'acknowledged cleanup is idempotent');
 select is((select count(*)from storage.objects where name='66000000-0000-4000-8000-000000000001/66000000-0000-4000-8000-000000000004'),2::bigint,'cleanup cannot remove referenced completed output/candidate');
+update public.party_map_generation_settings set quota=10 where party_id='66000000-0000-4000-8000-000000000001';
+select public.reserve_map_generation('66000000-0000-4000-8000-000000000011',pg_temp.intent('009')||'{"familyId":"66000000-0000-4000-8000-000000000006"}','fixture');
+select public.transition_map_generation('66000000-0000-4000-8000-000000000009',1,'running','{"submissionToken":"66000000-0000-4000-8000-000000000023"}');
+update public.party_map_generation_jobs set deadline=now()-interval '1 second' where id='66000000-0000-4000-8000-000000000009';
+select is(public.transition_map_generation('66000000-0000-4000-8000-000000000009',2,'awaiting-client-output',jsonb_build_object('candidate',jsonb_build_object('objectId','66000000-0000-4000-8000-000000000009','size',68,'digest',repeat('b',64))))->>'state','failed','SQL permanently rejects late receipt before preparation');
+select is((select code from public.party_map_generation_jobs where id='66000000-0000-4000-8000-000000000009'),'provider-timeout','original receipt deadline is not reset on reconciliation');
+select throws_ok($$select public.complete_map_generation('66000000-0000-4000-8000-000000000009',3,'{}','{}','{}')$$,'P0001','Job/proof/object binding rejected','atomic attach also rejects timed-out late job');
+select is((select count(*)from public.party_map_artwork_versions where family_id='66000000-0000-4000-8000-000000000006'),0::bigint,'timed-out candidate preserves saved map versions/display');
+update public.party_map_generation_jobs set deadline=provider_finished_at-interval '1 second' where id='66000000-0000-4000-8000-000000000004';
+select throws_ok($$select public.complete_map_generation('66000000-0000-4000-8000-000000000004',4,pg_temp.proof(),pg_temp.verified(),pg_temp.background())$$,'P0001','Job/proof/object binding rejected','receipt timestamp after deadline rejects even completed recovery');
 select * from finish();
 rollback;
