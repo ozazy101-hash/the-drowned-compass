@@ -13,7 +13,7 @@ Implementation, isolated integration and local verification authorized. Hosted m
 
 |Ticket|Task ID|State|Dependencies|Released base|Frozen source/evidence|Review/verification|
 |---|---|---|---|---|---|---|
-|03|pending|waiting-roster|none|—|—|—|
+|03|01a11fdf-620c-7632-8079-294535be5eb8|waiting-roster (ready)|none|—|—|—|
 |04|pending|waiting-roster|none|—|—|—|
 |05|pending|waiting-roster|04|—|—|—|
 |06|pending|waiting-roster|03,04|—|—|—|
@@ -44,3 +44,5 @@ No leases issued before roster. 03 initially owns its probe/report/evidence file
 ## Integration and evidence journal
 
 - 2026-10-09: Read repository instructions, accepted spec, architecture review, tickets03–12, CONTEXT, ADR0003/0004/0005, codebase-design skill and DEEPENING. Created managed integration checkout from pinned planning base. Await complete roster before03/04 release.
+
+- 2026-10-09: Ticket03 readiness received; pinned base/instructions confirmed. Readiness acknowledged with explicit continued hold pending complete roster. No implementation/verification lease issued.
