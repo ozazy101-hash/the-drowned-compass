@@ -47,23 +47,38 @@ export function generationApplication({store,provider,verifier,mode='live',now=D
  async function readBytes(j,kind){const ref=object(j,kind),bytes=await store.readObject(ref);if(bytes.length!==Number(ref.metadata.size)||await digest(bytes)!==ref.metadata.digest)throw Error('immutable-object-mismatch');return bytes;}
  function parentCurrent(j,current){return current&&JSON.stringify(current)===JSON.stringify(j.binding);}
  async function check(j){if(!parentCurrent(j,await store.currentBinding(j)))throw Error('stale-parent');}
+ const assemblyCeiling=j=>{const receipt=Date.parse(j.provider_finished_at);return receipt<=Date.parse(j.deadline)?receipt+86400000:NaN;};
  async function prepare(j){
   if(j.state!=='awaiting-client-output')return j;
+  if(!Number.isFinite(assemblyCeiling(j))||assemblyCeiling(j)<=now())throw Error('expired-output');
   await check(j);
-  if(j.proof){if(j.proof.expiresAt<=now())throw Error('expired-output');return j;}
+  if(j.proof){if(j.proof.expiresAt<=now())throw Error('expired-output');if(j.proof.expiresAt>assemblyCeiling(j))return transition(j,'awaiting-client-output',{proof:{...j.proof,expiresAt:assemblyCeiling(j)}});return j;}
   const binding=proofBinding(j),candidate=await readBytes(j,'candidate');
   const source=j.intent.kind==='revise'?await readBytes(j,'source'):candidate;
   const computed=await verifier.prepare(binding,j.id,source,candidate);
-  const proof={...computed,verifierVersion,jobId:j.id,origin:j.intent.kind==='revise'?'revised':'generated',partyId:j.party_id,familyId:j.intent.familyId,parentVersionId:j.binding.parent,expectedVersion:j.intent.expectedVersion,sourceObjectId:j.intent.kind==='revise'?j.binding.source.object_id:j.candidate.objectId,candidateObjectId:j.candidate.objectId,expiresAt:now()+86400000};
+  const proof={...computed,verifierVersion,jobId:j.id,origin:j.intent.kind==='revise'?'revised':'generated',partyId:j.party_id,familyId:j.intent.familyId,parentVersionId:j.binding.parent,expectedVersion:j.intent.expectedVersion,sourceObjectId:j.intent.kind==='revise'?j.binding.source.object_id:j.candidate.objectId,candidateObjectId:j.candidate.objectId,expiresAt:assemblyCeiling(j)};
+  if(assemblyCeiling(j)<=now())throw Error('expired-output');
   return transition(j,'awaiting-client-output',{proof});
+ }
+ async function recoverPreparation(user,j){
+  try{return await prepare(j);}catch(error){
+   // Async stage failure never grants ownership of a newer CAS revision. Re-read
+   // only to authorize/return newer state; any mutation uses the failing stage's
+   // original revision and cannot erase another proof or terminal result.
+   const current=await owned(user,j.id);
+   if(current.revision!==j.revision||current.state!=='awaiting-client-output')return current.state==='completed'?finalize(current):current;
+   if(error.message==='expired-output')throw error;
+   return transition(j,error.message==='verification-unavailable'?'awaiting-client-output':'failed',{code:error.message==='verification-unavailable'?'verification-unavailable':'output-unavailable'});
+  }
  }
  async function finalize(j){
   if(!['awaiting-client-output','completed'].includes(j.state)||!j.provisional||!j.proof)throw Error('output-not-ready');
-  if(j.proof.verifierVersion!==verifierVersion||j.proof.jobId!==j.id||j.proof.partyId!==j.party_id||j.proof.expectedVersion!==j.intent.expectedVersion||j.proof.candidateObjectId!==j.candidate.objectId||j.proof.sourceObjectId!==(j.intent.kind==='revise'?j.binding.source.object_id:j.candidate.objectId)||j.proof.origin!==(j.intent.kind==='revise'?'revised':'generated')||j.proof.expiresAt<=now())throw Error('expired-or-invalid-proof');
+  if(j.proof.verifierVersion!==verifierVersion||j.proof.jobId!==j.id||j.proof.partyId!==j.party_id||j.proof.expectedVersion!==j.intent.expectedVersion||j.proof.candidateObjectId!==j.candidate.objectId||j.proof.sourceObjectId!==(j.intent.kind==='revise'?j.binding.source.object_id:j.candidate.objectId)||j.proof.origin!==(j.intent.kind==='revise'?'revised':'generated')||j.proof.expiresAt<=now()||!Number.isFinite(assemblyCeiling(j))||assemblyCeiling(j)<=now())throw Error('expired-or-invalid-proof');
   await check(j);
   // Always re-read same provisional object on finalize AND recovery. Browser digest is never used.
   const bytes=await readBytes(j,'provisional');
   const verified=await verifier.finalize(proofBinding(j),j.id,j.proof,bytes,now());
+  if(j.proof.expiresAt<=now()||assemblyCeiling(j)<=now())throw Error('expired-output');
   if(verified.kind!=='verified'||verified.outputDigest!==j.provisional.digest)throw Error('output-pixels-mismatch');
   const doc=j.binding.document,placement=j.intent.kind==='revise'?j.binding.source:fit(doc);
   const background={...placement,object_id:j.id,digest:verified.outputDigest,mime:'image/png',size:bytes.length,pixelWidth:1024,pixelHeight:1024};
@@ -80,9 +95,7 @@ export function generationApplication({store,provider,verifier,mode='live',now=D
   await store.writeObject(ref,response.bytes);
   const candidate={objectId:ref.objectId,digest:await digest(response.bytes),size:response.bytes.length,mime:'image/png'};
   const accepted=await transition(j,'awaiting-client-output',{candidate});
-  if(accepted.state!=='awaiting-client-output')return accepted;
-  // Preparation is a distinct bounded physical stage, validates dimensions/encoding.
-  return prepare(accepted);
+  return accepted; // preparation is independently recoverable after durable receipt
  }
  async function submit(user,input){
   const intent=validateIntent(input);let j=await store.reserve(user,intent,mode);
@@ -107,7 +120,8 @@ export function generationApplication({store,provider,verifier,mode='live',now=D
    const abort=new AbortController(),wait=Math.min(120000,Date.parse(j.deadline)-now());
    let timer;try{response=await Promise.race([provider.generate({requestId:j.id,prompt:j.intent.instructions,source,region:j.binding.region,size:'1024x1024',signal:abort.signal}),new Promise(resolve=>{timer=setTimeout(()=>{abort.abort();resolve({kind:'uncertain'});},wait);})]);}finally{clearTimeout(timer);}
   }catch(error){if(String(error).includes('Unsupported')||String(error).includes('PNG')||String(error).includes('encoding'))return snapshot(await transition(j,'failed',{code:'unsupported-ai-format'}));response={kind:'uncertain'};}
-  try{return snapshot(await acceptCandidate(j,response));}catch{return snapshot(await transition(await owned(user,j.id),'failed',{code:'output-unavailable'}));}
+  let accepted;try{accepted=await acceptCandidate(j,response);}catch{const current=await owned(user,j.id);return snapshot(current.revision!==j.revision?(current.state==='completed'?await finalize(current):current):await transition(j,'failed',{code:'output-unavailable'}));}
+  return snapshot(await recoverPreparation(user,accepted));
  }
  async function reconcile(user,id){
   let j=await owned(user,id);
@@ -116,7 +130,7 @@ export function generationApplication({store,provider,verifier,mode='live',now=D
    // Receipt lookup only. The provider adapter must NEVER submit in reconcile.
    const response=await provider.reconcile(j.id);if(response.kind==='image'||response.kind==='failed')j=await acceptCandidate(j,response);
   }
-  if(j.state==='awaiting-client-output')j=await prepare(j);
+  if(j.state==='awaiting-client-output')j=await recoverPreparation(user,j);
   if(j.provisional&&['awaiting-client-output','completed'].includes(j.state))j=await finalize(j);
   return snapshot(j);
  }
@@ -127,7 +141,7 @@ export function generationApplication({store,provider,verifier,mode='live',now=D
    if(command.kind==='cancel')return {ok:true,job:snapshot(await transition(j,'cancelled',{code:'cancelled'}))};
    if(command.kind==='read')return {ok:true,job:await reconcile(user,j.id)};
    if(command.kind==='open-source'||command.kind==='open-candidate'){
-    if(j.state!=='awaiting-client-output'||!j.proof||j.proof.expiresAt<=now())throw Error('output-not-ready');
+    if(j.state!=='awaiting-client-output'||!j.proof||j.proof.expiresAt<=now()||!Number.isFinite(assemblyCeiling(j))||assemblyCeiling(j)<=now())throw Error('output-not-ready');
     await check(j);const kind=command.kind==='open-source'?'source':'candidate';if(kind==='source'&&j.intent.kind!=='revise')throw Error('source-not-required');
     return {ok:true,bytes:await readBytes(j,kind)};
    }
@@ -156,4 +170,4 @@ export function generationApplication({store,provider,verifier,mode='live',now=D
  }};
 }
 function fit(doc){const scale=Math.min(doc.columns/1024,doc.rows/1024);return {x:(doc.columns-1024*scale)/2,y:(doc.rows-1024*scale)/2,width:1024*scale,height:1024*scale};}
-function code(error){const message=String(error);const known=['invalid-intent','invalid-request','invalid-command','invalid-region','invalid-source','invalid-parent','saved-parent-required','stale-parent','expired-output','output-not-ready','expired-or-invalid-proof','output-pixels-mismatch','immutable-object-mismatch','source-not-required','invalid-output'];return known.find(c=>message.includes(c))??(message.includes('Dungeon Master')?'access-denied':message.includes('disabled')?'generation-disabled':message.includes('limit')?'usage-limit':message.includes('active')?'concurrency-limit':message.includes('identity')?'request-conflict':message.includes('revision')?'stale-parent':message.includes('format')?'unsupported-ai-format':'unavailable');}
+function code(error){const message=String(error);const known=['invalid-intent','invalid-request','invalid-command','invalid-region','invalid-source','invalid-parent','saved-parent-required','stale-parent','expired-output','output-not-ready','expired-or-invalid-proof','output-pixels-mismatch','immutable-object-mismatch','source-not-required','invalid-output','verification-unavailable'];return known.find(c=>message.includes(c))??(message.includes('Dungeon Master')?'access-denied':message.includes('disabled')?'generation-disabled':message.includes('limit')?'usage-limit':message.includes('active')?'concurrency-limit':message.includes('identity')?'request-conflict':message.includes('revision')?'stale-parent':message.includes('format')?'unsupported-ai-format':'unavailable');}
