@@ -10,7 +10,7 @@
 |02|Versions and display-reveal prototype|resolved|—|
 |03|[Verify live generation and masked editing](issues/03-verify-live-generation-and-masked-editing.md)|ready-for-agent|—|
 |04|[Persist private Map Artwork Versions](issues/04-persist-private-map-artwork-versions.md)|resolved|—|
-|05|[Restrict Grid Maps to the DM-controlled display](issues/05-restrict-maps-to-dm-controlled-display.md)|ready-for-agent|04|
+|05|[Restrict Grid Maps to the DM-controlled display](issues/05-restrict-maps-to-dm-controlled-display.md)|resolved|04|
 |06|[Run private AI generation jobs](issues/06-run-private-generation-jobs.md)|ready-for-agent|03, 04|
 |07|[Build the map creation workshop](issues/07-build-map-creation-workshop.md)|ready-for-agent|04, 06|
 |08|[Revise selected areas and build later stages](issues/08-revise-selected-map-areas.md)|ready-for-agent|07|
