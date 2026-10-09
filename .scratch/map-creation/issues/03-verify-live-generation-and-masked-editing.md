@@ -35,3 +35,7 @@ Small live corpus and deterministic invalid-output/mask cases; no full regressio
 2026-10-09: Created from user-accepted Prototype2 and module decisions. Implementation unstarted. Read the dependency status and module interface before claiming.
 
 2026-10-09: Architecture review refined ownership, small interfaces and seam-level verification before implementation. See [architecture review](../architecture-review.md) and [interface contract](../spec.md#module-placement-and-interface-contract).
+
+## Browser assembly prototype pointer —2026-10-09
+
+User authorized prototyping browser composition. Retained primary source/evidence in isolated branch `codex/browser-compositing-prototype`, commit `fe48909`, `.scratch/map-creation/browser-prototype/prototype.html` and README. Self-contained HTML, no AI calls/credentials/uploads/shared source. Four actual browser assembly/export cases independently verified by existing Node decoder:995776outside/52800inside pixels exact, including transparency/lowalpha/noise. Initial browser wall times252.8–359.9ms, phone-width desktop402.3ms (not real-phone/per-device guarantee). Tamper/invalidbounds/reset/stale-selection paths checked. Browser feasibility demonstrated for bounded1024RGB/RGBA scope only; server authority, production upload/recovery and formats/device limits unresolved. Client checks cannot satisfy existing server-trusted preservation contract; no production adoption,03acceptance or06release inferred.
