@@ -84,3 +84,25 @@ for(const boundary of ['deadline','cancel','membership'])test(`source inspection
  const result=await f.app.execute('dm',{kind:'submit',intent:i});assert.equal(f.calls,0);assert.equal(f.completions,0);assert.equal(f.jobs.get(i.requestId).proof,undefined);
  if(boundary==='deadline'){assert.equal(result.job.state,'failed');assert.equal(result.job.code,'provider-timeout');}else if(boundary==='cancel')assert.equal(result.job.state,'cancelled');else assert.equal(result.code,'access-denied');
 });
+
+test('authorized persisted original intent survives successful and failed reloads',async()=>{
+ for(const response of [{kind:'image',bytes:candidate},{kind:'failed'}]){const f=await fixture({response}),i=intent();const submitted=await f.app.execute('dm',{kind:'submit',intent:i});assert.deepEqual(submitted.job.originalIntent,i);const reload=await f.app.execute('dm',{kind:'read',requestId:i.requestId,intent:{...i,instructions:'caller substitution'}});assert.deepEqual(reload.job.originalIntent,i);assert.equal(f.calls,1);}
+});
+test('cancelled reload returns its selected persisted intent independent of other jobs',async()=>{
+ const f=await fixture(),a=intent(),b={...intent(),instructions:'Selected B'};await f.app.execute('dm',{kind:'submit',intent:a});await f.app.execute('dm',{kind:'submit',intent:b});const cancelled=await f.app.execute('dm',{kind:'cancel',requestId:b.requestId});assert.deepEqual(cancelled.job.originalIntent,b);assert.deepEqual((await f.app.execute('dm',{kind:'read',requestId:b.requestId})).job.originalIntent,b);assert.notDeepEqual(cancelled.job.originalIntent,a);
+});
+test('uncertain original intent keeps same request without another submission',async()=>{
+ const f=await fixture({response:{kind:'uncertain'}}),i=intent();await f.app.execute('dm',{kind:'submit',intent:i});const reload=await f.app.execute('dm',{kind:'read',requestId:i.requestId});assert.deepEqual(reload.job.originalIntent,i);assert.equal((await f.app.execute('dm',{kind:'submit',intent:reload.job.originalIntent})).job.state,'uncertain');assert.equal(f.calls,1);
+});
+test('intent projection denies membership loss, Player, anonymous and other party',async()=>{
+ const f=await fixture(),i=intent();await f.app.execute('dm',{kind:'submit',intent:i});for(const actor of ['player','anon','other-party-dm'])for(const kind of ['read','cancel'])assert.deepEqual(await f.app.execute(actor,{kind,requestId:i.requestId}),{ok:false,code:'access-denied'});f.store.read=async()=>{throw Error('Dungeon Master access required');};assert.deepEqual(await f.app.execute('dm',{kind:'read',requestId:i.requestId}),{ok:false,code:'access-denied'});
+});
+test('projection whitelists persisted intent and nested grid/region without leaking authority',async()=>{
+ const f=await fixture({response:{kind:'failed'}}),i={...intent(),document:{...doc,terrain:[{x:1,y:1,kind:'floor'}],edges:[{x:0,y:0,direction:'vertical',kind:'wall'}]}};await f.app.execute('dm',{kind:'submit',intent:i});const j=f.jobs.get(i.requestId);Object.assign(j.intent,{proof:'private',provider:'private',credentials:'private',objectId:'private',path:'private'});Object.assign(j.intent.document,{proof:'private'});j.intent.document.terrain[0].digest='private';j.intent.document.edges[0].path='private';const result=await f.app.execute('dm',{kind:'read',requestId:i.requestId});assert.deepEqual(result.job.originalIntent,i);assert.equal(JSON.stringify(result).includes('private'),false);result.job.originalIntent.document.terrain[0].kind='water';assert.equal(j.intent.document.terrain[0].kind,'floor');
+ const regionJob={...intent(),kind:'revise',parentVersionId:crypto.randomUUID(),expectedVersion:1,source:'artwork',region:{x:10,y:20,width:200,height:160}};delete regionJob.document;await f.app.execute('dm',{kind:'submit',intent:regionJob});const r=f.jobs.get(regionJob.requestId);r.intent.region.expectedRgba='private';assert.deepEqual((await f.app.execute('dm',{kind:'read',requestId:regionJob.requestId})).job.originalIntent,regionJob);r.intent.region.width=0;assert.deepEqual(await f.app.execute('dm',{kind:'read',requestId:regionJob.requestId}),{ok:false,code:'invalid-region'});
+ j.intent.document.terrain[0].x=900;assert.deepEqual(await f.app.execute('dm',{kind:'read',requestId:i.requestId}),{ok:false,code:'invalid-intent'});
+});
+
+test('persisted projection fails closed on substituted identity or invalid source',async()=>{
+ const f=await fixture({response:{kind:'failed'}}),i=intent();await f.app.execute('dm',{kind:'submit',intent:i});const j=f.jobs.get(i.requestId);j.intent.requestId=crypto.randomUUID();assert.deepEqual(await f.app.execute('dm',{kind:'read',requestId:i.requestId}),{ok:false,code:'invalid-intent'});j.intent.requestId=i.requestId;for(const source of ['artwork','provider-secret']){j.intent.source=source;assert.deepEqual(await f.app.execute('dm',{kind:'read',requestId:i.requestId}),{ok:false,code:'invalid-intent'});}
+});

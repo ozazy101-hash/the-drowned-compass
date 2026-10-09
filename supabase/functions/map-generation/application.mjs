@@ -12,7 +12,24 @@ export function validateIntent(input){
  }else if(input.region!==undefined)throw Error('invalid-region');
  return structuredClone(input);
 }
-const snapshot=j=>({id:j.id,familyId:j.intent.familyId,parentVersionId:j.intent.parentVersionId??null,state:j.state,revision:j.revision,mode:j.mode,createdAt:j.created_at,code:j.code??null,versionId:j.state==='completed'?j.id:null,...(j.state==='awaiting-client-output'?{assembly:{region:j.binding.region??fullRegion,pixelWidth:1024,pixelHeight:1024,requiresSource:j.intent.kind==='revise'}}:{})});
+// Project persisted intent only after the owned adapter authorizes the job. Never
+// spread privileged ledger data or unrecognized nested fields into the response.
+function originalIntent(value,id){
+ const fields=['requestId','familyId','parentVersionId','expectedVersion','kind','title','instructions','source'];
+ const projected=Object.fromEntries(fields.filter(k=>value[k]!==undefined).map(k=>[k,value[k]]));
+ if(value.region!==undefined){const {x,y,width,height}=value.region;projected.region={x,y,width,height};}
+ if(value.document!==undefined){
+  const {columns,rows,feetPerSquare,terrain,edges}=value.document;
+  if(!Number.isInteger(columns)||columns<2||columns>80||!Number.isInteger(rows)||rows<2||rows>80||!Number.isInteger(feetPerSquare)||feetPerSquare<1||feetPerSquare>100||!Array.isArray(terrain)||!Array.isArray(edges)||terrain.length>columns*rows||edges.length>2*columns*rows+columns+rows)throw Error('invalid-intent');
+  const cells=new Set(),segments=new Set();
+  const safeTerrain=terrain.map(({x,y,kind})=>{const key=`${x},${y}`;if(!Number.isInteger(x)||!Number.isInteger(y)||x<0||y<0||x>=columns||y>=rows||!['floor','water','difficult'].includes(kind)||cells.has(key))throw Error('invalid-intent');cells.add(key);return {x,y,kind};});
+  const safeEdges=edges.map(({x,y,direction,kind})=>{const key=`${x},${y},${direction}`;if(!Number.isInteger(x)||!Number.isInteger(y)||x<0||y<0||!['horizontal','vertical'].includes(direction)||!['wall','door'].includes(kind)||x>columns-(direction==='horizontal'?1:0)||y>rows-(direction==='vertical'?1:0)||segments.has(key))throw Error('invalid-intent');segments.add(key);return {x,y,direction,kind};});
+  projected.document={columns,rows,feetPerSquare,terrain:safeTerrain,edges:safeEdges};
+ }
+ if(projected.requestId!==id||(projected.source!==undefined&&(!['artwork','reference'].includes(projected.source)||projected.kind==='generate')))throw Error('invalid-intent');
+ return validateIntent(projected);
+}
+const snapshot=j=>({originalIntent:originalIntent(j.intent,j.id),id:j.id,familyId:j.intent.familyId,parentVersionId:j.intent.parentVersionId??null,state:j.state,revision:j.revision,mode:j.mode,createdAt:j.created_at,code:j.code??null,versionId:j.state==='completed'?j.id:null,...(j.state==='awaiting-client-output'?{assembly:{region:j.binding.region??fullRegion,pixelWidth:1024,pixelHeight:1024,requiresSource:j.intent.kind==='revise'}}:{})});
 function proofBinding(j){
  const source=j.intent.kind==='revise'?j.binding.source:j.candidate;
  return {requestId:j.id,parentId:j.binding.parent??j.intent.familyId,region:j.binding.region??fullRegion,files:{source:{bytes:source.size,sha256:source.digest},candidate:{bytes:j.candidate.size,sha256:j.candidate.digest}}};
