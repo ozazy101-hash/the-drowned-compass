@@ -15,11 +15,11 @@ Implementation, isolated integration and local verification authorized. Hosted m
 |---|---|---|---|---|---|---|
 |03|01a11fdf-620c-7632-8079-294535be5eb8|running (released)|none|0b596249f1598da1df102046c9e7823e66067983|—|—|
 |04|01a11fdf-769d-7270-a3fd-1f2999a4567f|accepted|none|0b596249f1598da1df102046c9e7823e66067983|source165650cd30fbeb91f658767aae78d05dde9cae07; evidencee14e221e9d31b6d5012149b101e78222fc42eeaf|Standards/depth PASS; Spec PASS; build/domain14/SQL62/browser26+affected6+frozen4; baseline intact|
-|05|01a11fdf-9f15-7300-8254-b08d117a00ca|running (privacy)|04|c6577fb3261213834d4741801541eefaec8ed706|—|—|
+|05|01a11fdf-9f15-7300-8254-b08d117a00ca|accepted|04|c6577fb3261213834d4741801541eefaec8ed706|sourcef960954f37eaa9adacebe8bdb7eb3c04fa640934; evidence6ec7670cb3763fbaa9debbad83020b20d9c386b0|Standards/depth PASS; Spec PASS; build/domain14/SQL186/browser28; baseline intact|
 |06|01a11fdf-cb3e-7b23-9116-fb0eb9325b44|waiting-dependencies|03,04|—|—|—|
 |07|01a11fdf-e43c-7c90-a124-0b1d6a1d5cd1|waiting-dependencies|04,06|—|—|—|
 |08|01a11fe0-1383-71d1-b874-227d154987c0|waiting-dependencies|07|—|—|—|
-|09|01a11fe0-5155-74c3-ac6e-b62130932d19|domain phase passed; persistence waiting05|04|c6577fb3261213834d4741801541eefaec8ed706|—|—|
+|09|01a11fe0-5155-74c3-ac6e-b62130932d19|running (full persistence released)|04|aca34d3166c4d4ae71101468fbeb97450a7c75b5 + retained reviewed domain phase|—|—|
 |10|01a11fe0-96ce-7fb0-8cd9-bb3b21b0c23f|waiting-dependencies|05,07,09|—|—|—|
 |11|01a11fe0-cf36-73b1-b44b-2b5fb8c67535|waiting-dependencies|08,10|—|—|—|
 |12|01a11fe1-112e-72f0-861a-839852197846|waiting-dependencies|03–11|—|—|—|
@@ -109,3 +109,7 @@ No leases issued before roster. 03 initially owns its probe/report/evidence file
 - 2026-10-09 heartbeat:03cursor `1de52d36-e686-4595-aa85-a699e16b9ecb:20` local worker validation/composition proof underway, no job state/selection.05cursor `3e8253f8-97f0-4a50-9bd5-bfeeceea4152:3`: laptop session-loss check passed after foregrounding controller; PDF rerun local Supabase auth timeout being isolated with genuine authority tokens. Cleanup restored all original hashes. No review closure/acceptance/lease change;09 persistence still waiting05, AWS preference pending user reply without repeat request.
 
 - 2026-10-09 heartbeat:03cursor `1de52d36-e686-4595-aa85-a699e16b9ecb:21` local proof measured, documenting Docker cgroup resource evidence (emulator placeholder billing/memory excluded), freeze/review pending.05cursor `3e8253f8-97f0-4a50-9bd5-bfeeceea4152:4`:24focused+4extraHandoutpresent passing on reviewed source; genuine Supabase phone rerunPASS; historical SQL/cleanup hashes and separate evidence commit pending. Requested exact frozen reviews/SHAs/counts/equality and lease release before immediate09 persistence handoff.
+
+- 2026-10-09:05 accepted sourcef960954f37eaa9adacebe8bdb7eb3c04fa640934/evidence6ec7670cb3763fbaa9debbad83020b20d9c386b0, distinct Standards/depth+SpecPASS/no findings. Build/domain14/SQL186/browser24focused+4Handoutpresent with honest reruns; baseline hashes identical, owned fixtures/process/4175 clean and leases released. Read05-delivery/source equality; integrated7f1c603/aca34d3, accepted04+05 baseaca34d3166c4d4ae71101468fbeb97450a7c75b5 production equality passes.
+-09 full persistence released from accepted base, merge retained reviewed domain branch. Exclusive domain/PartyContent/adapters/observation/mask migrations/policies/tests, SQL/storage/browser4179; display/workshop10. Newbaseline/unique fixtures/noreset/fullcleanup and distinct final frozen fullSpec+Standards review required.05 report retrieved centrally; no repeat approval request.
+-03cursor1de52d36-e686-4595-aa85-a699e16b9ecb:22: local Lambda source82f8a2db91a363ca1aaff187ba3d2e17ca6b6081/evidence706c0bf284fa0e8868819a2c2bf9e1ca188c3e4e independent localproofPASS27/27;995776outsidepixels exact fresh/warm/recovery,4.75s/1.43s/1.95s,cgroup198.8MBpeak under2GB. Lostuploadresponseuncertain until reverification; containersclean/4194released. Full03/06blocked hosted authority/storage/isolation/limits and AWSpreference pending.05cursor3e8253f8-97f0-4a50-9bd5-bfeeceea4152:8 complete.
