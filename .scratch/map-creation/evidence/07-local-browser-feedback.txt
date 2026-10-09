@@ -1,0 +1,19 @@
+[WebServer] (node:89491) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 6 tests using 1 worker
+
+(node:89492) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 e2e/map-workshop.spec.ts:256:1 › local adapter manual formats, maximum image/grid, failed input and alignment reload (2.1s)
+  ✓  2 e2e/map-workshop.spec.ts:298:1 › actual App retains drawing route and offers dedicated workshop navigation (971ms)
+  ✓  3 e2e/map-workshop.spec.ts:420:3 › local: conflicting alignment retains immutable originals and recoverable placement (470ms)
+  ✓  4 e2e/map-workshop.spec.ts:522:1 › selected artwork geometry does not override a new sketch draft or its retained PNG reference (2.0s)
+  ✓  5 e2e/map-workshop.spec.ts:651:3 › UI transport failure fixture: failed output never claims saved or replaces retained artwork (522ms)
+  ✓  6 e2e/map-workshop.spec.ts:651:3 › UI transport failure fixture: missing-version output never claims saved or replaces retained artwork (461ms)
+
+  6 passed (8.8s)

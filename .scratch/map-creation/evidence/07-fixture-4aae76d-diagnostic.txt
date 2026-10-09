@@ -1,0 +1,278 @@
+Starting explicitly labelled fixture application with fresh bounded Edge workers.
+[WebServer] (node:3626) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 17 tests using 1 worker
+
+(node:3627) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"602ae490-096d-4703-bce9-d478abc8efec","startedAt":1791582342381,"at":1791582342381,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"602ae490-096d-4703-bce9-d478abc8efec","startedAt":1791582345451,"at":1791582345451,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"602ae490-096d-4703-bce9-d478abc8efec","startedAt":1791582345451,"at":1791582348148,"phase":"response","status":200,"lifetimeMs":2697}
+MAP_HTTP_TIMING {"kind":"read","requestId":"602ae490-096d-4703-bce9-d478abc8efec","startedAt":1791582345451,"at":1791582348149,"phase":"end","status":200,"lifetimeMs":2698}
+MAP_HTTP_TIMING {"kind":"read","requestId":"602ae490-096d-4703-bce9-d478abc8efec","startedAt":1791582348258,"at":1791582348258,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"602ae490-096d-4703-bce9-d478abc8efec","startedAt":1791582348258,"at":1791582348428,"phase":"response","status":200,"lifetimeMs":170}
+MAP_HTTP_TIMING {"kind":"read","requestId":"602ae490-096d-4703-bce9-d478abc8efec","startedAt":1791582348258,"at":1791582348428,"phase":"end","status":200,"lifetimeMs":170}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"602ae490-096d-4703-bce9-d478abc8efec","startedAt":1791582348429,"at":1791582348429,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"602ae490-096d-4703-bce9-d478abc8efec","startedAt":1791582348429,"at":1791582348669,"phase":"response","status":200,"lifetimeMs":240}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"602ae490-096d-4703-bce9-d478abc8efec","startedAt":1791582348429,"at":1791582348714,"phase":"end","status":200,"lifetimeMs":285}
+MAP_HTTP_TIMING {"kind":"output","requestId":"602ae490-096d-4703-bce9-d478abc8efec","startedAt":1791582348714,"at":1791582348714,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"602ae490-096d-4703-bce9-d478abc8efec","startedAt":1791582348714,"at":1791582350766,"phase":"response","status":200,"lifetimeMs":2052}
+MAP_HTTP_TIMING {"kind":"output","requestId":"602ae490-096d-4703-bce9-d478abc8efec","startedAt":1791582348714,"at":1791582350767,"phase":"end","status":200,"lifetimeMs":2053}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"d2f67e26-e41e-4161-a190-b333e0e4e804","startedAt":1791582351209,"at":1791582351209,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"d2f67e26-e41e-4161-a190-b333e0e4e804","startedAt":1791582351209,"at":1791582352282,"phase":"response","status":200,"lifetimeMs":1073}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"d2f67e26-e41e-4161-a190-b333e0e4e804","startedAt":1791582351209,"at":1791582352284,"phase":"end","status":200,"lifetimeMs":1075}
+MAP_HTTP_TIMING {"kind":"read","requestId":"d2f67e26-e41e-4161-a190-b333e0e4e804","startedAt":1791582352630,"at":1791582352630,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"d2f67e26-e41e-4161-a190-b333e0e4e804","startedAt":1791582352630,"at":1791582352762,"phase":"response","status":200,"lifetimeMs":132}
+MAP_HTTP_TIMING {"kind":"read","requestId":"d2f67e26-e41e-4161-a190-b333e0e4e804","startedAt":1791582352630,"at":1791582352762,"phase":"end","status":200,"lifetimeMs":132}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"d2f67e26-e41e-4161-a190-b333e0e4e804","startedAt":1791582352762,"at":1791582352762,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"d2f67e26-e41e-4161-a190-b333e0e4e804","startedAt":1791582352762,"at":1791582352947,"phase":"response","status":200,"lifetimeMs":185}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"d2f67e26-e41e-4161-a190-b333e0e4e804","startedAt":1791582352762,"at":1791582352981,"phase":"end","status":200,"lifetimeMs":219}
+MAP_HTTP_TIMING {"kind":"output","requestId":"d2f67e26-e41e-4161-a190-b333e0e4e804","startedAt":1791582352981,"at":1791582352981,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"d2f67e26-e41e-4161-a190-b333e0e4e804","startedAt":1791582352981,"at":1791582354156,"phase":"response","status":200,"lifetimeMs":1175}
+MAP_HTTP_TIMING {"kind":"output","requestId":"d2f67e26-e41e-4161-a190-b333e0e4e804","startedAt":1791582352981,"at":1791582354157,"phase":"end","status":200,"lifetimeMs":1176}
+  ✓   1 e2e/map-workshop.spec.ts:110:3 › laptop: real fixture invent sibling comparison and upload alignment survive reload (14.6s)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"748e4336-be22-4523-9b0c-491bd174a2a4","startedAt":1791582359317,"at":1791582359318,"phase":"start","status":null,"lifetimeMs":1}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"748e4336-be22-4523-9b0c-491bd174a2a4","startedAt":1791582359317,"at":1791582362389,"phase":"response","status":200,"lifetimeMs":3072}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"748e4336-be22-4523-9b0c-491bd174a2a4","startedAt":1791582359317,"at":1791582362396,"phase":"end","status":200,"lifetimeMs":3079}
+MAP_HTTP_TIMING {"kind":"read","requestId":"748e4336-be22-4523-9b0c-491bd174a2a4","startedAt":1791582363040,"at":1791582363040,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"748e4336-be22-4523-9b0c-491bd174a2a4","startedAt":1791582363040,"at":1791582363174,"phase":"response","status":200,"lifetimeMs":134}
+MAP_HTTP_TIMING {"kind":"read","requestId":"748e4336-be22-4523-9b0c-491bd174a2a4","startedAt":1791582363040,"at":1791582363175,"phase":"end","status":200,"lifetimeMs":135}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"748e4336-be22-4523-9b0c-491bd174a2a4","startedAt":1791582363175,"at":1791582363175,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"748e4336-be22-4523-9b0c-491bd174a2a4","startedAt":1791582363175,"at":1791582363431,"phase":"response","status":200,"lifetimeMs":256}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"748e4336-be22-4523-9b0c-491bd174a2a4","startedAt":1791582363175,"at":1791582363456,"phase":"end","status":200,"lifetimeMs":281}
+MAP_HTTP_TIMING {"kind":"output","requestId":"748e4336-be22-4523-9b0c-491bd174a2a4","startedAt":1791582363456,"at":1791582363456,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"748e4336-be22-4523-9b0c-491bd174a2a4","startedAt":1791582363456,"at":1791582364757,"phase":"response","status":200,"lifetimeMs":1301}
+MAP_HTTP_TIMING {"kind":"output","requestId":"748e4336-be22-4523-9b0c-491bd174a2a4","startedAt":1791582363456,"at":1791582364758,"phase":"end","status":200,"lifetimeMs":1302}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"ca5470f7-6171-4127-8230-6490cf9bd283","startedAt":1791582365544,"at":1791582365544,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"ca5470f7-6171-4127-8230-6490cf9bd283","startedAt":1791582365544,"at":1791582367123,"phase":"response","status":200,"lifetimeMs":1579}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"ca5470f7-6171-4127-8230-6490cf9bd283","startedAt":1791582365544,"at":1791582367128,"phase":"end","status":200,"lifetimeMs":1584}
+MAP_HTTP_TIMING {"kind":"read","requestId":"ca5470f7-6171-4127-8230-6490cf9bd283","startedAt":1791582367397,"at":1791582367397,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"ca5470f7-6171-4127-8230-6490cf9bd283","startedAt":1791582367397,"at":1791582367851,"phase":"response","status":200,"lifetimeMs":454}
+MAP_HTTP_TIMING {"kind":"read","requestId":"ca5470f7-6171-4127-8230-6490cf9bd283","startedAt":1791582367397,"at":1791582367852,"phase":"end","status":200,"lifetimeMs":455}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"ca5470f7-6171-4127-8230-6490cf9bd283","startedAt":1791582368238,"at":1791582368238,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"ca5470f7-6171-4127-8230-6490cf9bd283","startedAt":1791582368238,"at":1791582368547,"phase":"response","status":200,"lifetimeMs":309}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"ca5470f7-6171-4127-8230-6490cf9bd283","startedAt":1791582368238,"at":1791582368548,"phase":"end","status":200,"lifetimeMs":310}
+MAP_HTTP_TIMING {"kind":"read","requestId":"ca5470f7-6171-4127-8230-6490cf9bd283","startedAt":1791582369098,"at":1791582369098,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"ca5470f7-6171-4127-8230-6490cf9bd283","startedAt":1791582369098,"at":1791582369270,"phase":"response","status":200,"lifetimeMs":172}
+MAP_HTTP_TIMING {"kind":"read","requestId":"ca5470f7-6171-4127-8230-6490cf9bd283","startedAt":1791582369098,"at":1791582369270,"phase":"end","status":200,"lifetimeMs":172}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"d6d4c6e5-b642-4ef5-8797-7d155cfc931b","startedAt":1791582369285,"at":1791582369285,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"d6d4c6e5-b642-4ef5-8797-7d155cfc931b","startedAt":1791582369285,"at":1791582371223,"phase":"response","status":200,"lifetimeMs":1938}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"d6d4c6e5-b642-4ef5-8797-7d155cfc931b","startedAt":1791582369285,"at":1791582371225,"phase":"end","status":200,"lifetimeMs":1940}
+MAP_HTTP_TIMING {"kind":"read","requestId":"d6d4c6e5-b642-4ef5-8797-7d155cfc931b","startedAt":1791582371466,"at":1791582371466,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"d6d4c6e5-b642-4ef5-8797-7d155cfc931b","startedAt":1791582371466,"at":1791582371593,"phase":"response","status":200,"lifetimeMs":127}
+MAP_HTTP_TIMING {"kind":"read","requestId":"d6d4c6e5-b642-4ef5-8797-7d155cfc931b","startedAt":1791582371466,"at":1791582371593,"phase":"end","status":200,"lifetimeMs":127}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"d6d4c6e5-b642-4ef5-8797-7d155cfc931b","startedAt":1791582371593,"at":1791582371593,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"d6d4c6e5-b642-4ef5-8797-7d155cfc931b","startedAt":1791582371593,"at":1791582371726,"phase":"response","status":200,"lifetimeMs":133}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"d6d4c6e5-b642-4ef5-8797-7d155cfc931b","startedAt":1791582371593,"at":1791582371755,"phase":"end","status":200,"lifetimeMs":162}
+MAP_HTTP_TIMING {"kind":"output","requestId":"d6d4c6e5-b642-4ef5-8797-7d155cfc931b","startedAt":1791582371755,"at":1791582371755,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"d6d4c6e5-b642-4ef5-8797-7d155cfc931b","startedAt":1791582371755,"at":1791582373395,"phase":"response","status":200,"lifetimeMs":1640}
+MAP_HTTP_TIMING {"kind":"output","requestId":"d6d4c6e5-b642-4ef5-8797-7d155cfc931b","startedAt":1791582371755,"at":1791582373398,"phase":"end","status":200,"lifetimeMs":1643}
+  ✓   2 e2e/map-workshop.spec.ts:202:3 › laptop: touch sketch clear undo reference creation, cancellation and retry preserve originals (17.9s)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"794a3a56-6674-46dc-a2ab-2528250b3e9c","startedAt":1791582375232,"at":1791582375232,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"794a3a56-6674-46dc-a2ab-2528250b3e9c","startedAt":1791582375232,"at":1791582376380,"phase":"response","status":200,"lifetimeMs":1148}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"794a3a56-6674-46dc-a2ab-2528250b3e9c","startedAt":1791582375232,"at":1791582376385,"phase":"end","status":200,"lifetimeMs":1153}
+MAP_HTTP_TIMING {"kind":"read","requestId":"794a3a56-6674-46dc-a2ab-2528250b3e9c","startedAt":1791582376858,"at":1791582376858,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"794a3a56-6674-46dc-a2ab-2528250b3e9c","startedAt":1791582376858,"at":1791582377102,"phase":"response","status":200,"lifetimeMs":244}
+MAP_HTTP_TIMING {"kind":"read","requestId":"794a3a56-6674-46dc-a2ab-2528250b3e9c","startedAt":1791582376858,"at":1791582377103,"phase":"end","status":200,"lifetimeMs":245}
+MAP_HTTP_TIMING {"kind":"read","requestId":"794a3a56-6674-46dc-a2ab-2528250b3e9c","startedAt":1791582377171,"at":1791582377171,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"794a3a56-6674-46dc-a2ab-2528250b3e9c","startedAt":1791582377171,"at":1791582377347,"phase":"response","status":200,"lifetimeMs":176}
+MAP_HTTP_TIMING {"kind":"read","requestId":"794a3a56-6674-46dc-a2ab-2528250b3e9c","startedAt":1791582377171,"at":1791582377347,"phase":"end","status":200,"lifetimeMs":176}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"794a3a56-6674-46dc-a2ab-2528250b3e9c","startedAt":1791582377347,"at":1791582377347,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"794a3a56-6674-46dc-a2ab-2528250b3e9c","startedAt":1791582377347,"at":1791582377737,"phase":"response","status":200,"lifetimeMs":390}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"794a3a56-6674-46dc-a2ab-2528250b3e9c","startedAt":1791582377347,"at":1791582377795,"phase":"end","status":200,"lifetimeMs":448}
+MAP_HTTP_TIMING {"kind":"output","requestId":"794a3a56-6674-46dc-a2ab-2528250b3e9c","startedAt":1791582377795,"at":1791582377795,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"794a3a56-6674-46dc-a2ab-2528250b3e9c","startedAt":1791582377795,"at":1791582380749,"phase":"response","status":200,"lifetimeMs":2954}
+MAP_HTTP_TIMING {"kind":"output","requestId":"794a3a56-6674-46dc-a2ab-2528250b3e9c","startedAt":1791582377795,"at":1791582380753,"phase":"end","status":200,"lifetimeMs":2958}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"c1c12d1d-be11-4b8b-97b9-de9f428eeaf3","startedAt":1791582381223,"at":1791582381223,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"c1c12d1d-be11-4b8b-97b9-de9f428eeaf3","startedAt":1791582381223,"at":1791582382831,"phase":"response","status":200,"lifetimeMs":1608}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"c1c12d1d-be11-4b8b-97b9-de9f428eeaf3","startedAt":1791582381223,"at":1791582382832,"phase":"end","status":200,"lifetimeMs":1609}
+MAP_HTTP_TIMING {"kind":"read","requestId":"c1c12d1d-be11-4b8b-97b9-de9f428eeaf3","startedAt":1791582383197,"at":1791582383197,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"c1c12d1d-be11-4b8b-97b9-de9f428eeaf3","startedAt":1791582383197,"at":1791582383415,"phase":"response","status":200,"lifetimeMs":218}
+MAP_HTTP_TIMING {"kind":"read","requestId":"c1c12d1d-be11-4b8b-97b9-de9f428eeaf3","startedAt":1791582383197,"at":1791582383415,"phase":"end","status":200,"lifetimeMs":218}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"c1c12d1d-be11-4b8b-97b9-de9f428eeaf3","startedAt":1791582383415,"at":1791582383415,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"c1c12d1d-be11-4b8b-97b9-de9f428eeaf3","startedAt":1791582383415,"at":1791582383810,"phase":"response","status":200,"lifetimeMs":395}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"c1c12d1d-be11-4b8b-97b9-de9f428eeaf3","startedAt":1791582383415,"at":1791582383866,"phase":"end","status":200,"lifetimeMs":451}
+MAP_HTTP_TIMING {"kind":"output","requestId":"c1c12d1d-be11-4b8b-97b9-de9f428eeaf3","startedAt":1791582383866,"at":1791582383866,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"c1c12d1d-be11-4b8b-97b9-de9f428eeaf3","startedAt":1791582383866,"at":1791582385167,"phase":"response","status":200,"lifetimeMs":1301}
+MAP_HTTP_TIMING {"kind":"output","requestId":"c1c12d1d-be11-4b8b-97b9-de9f428eeaf3","startedAt":1791582383866,"at":1791582385169,"phase":"end","status":200,"lifetimeMs":1303}
+  ✓   3 e2e/map-workshop.spec.ts:110:3 › phone: real fixture invent sibling comparison and upload alignment survive reload (13.2s)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"5e8bfdec-ecec-4397-83fc-b33dcc85dcc5","startedAt":1791582390800,"at":1791582390800,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"5e8bfdec-ecec-4397-83fc-b33dcc85dcc5","startedAt":1791582390800,"at":1791582392736,"phase":"response","status":200,"lifetimeMs":1936}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"5e8bfdec-ecec-4397-83fc-b33dcc85dcc5","startedAt":1791582390800,"at":1791582392737,"phase":"end","status":200,"lifetimeMs":1937}
+MAP_HTTP_TIMING {"kind":"read","requestId":"5e8bfdec-ecec-4397-83fc-b33dcc85dcc5","startedAt":1791582392845,"at":1791582392845,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"5e8bfdec-ecec-4397-83fc-b33dcc85dcc5","startedAt":1791582392845,"at":1791582392952,"phase":"response","status":200,"lifetimeMs":107}
+MAP_HTTP_TIMING {"kind":"read","requestId":"5e8bfdec-ecec-4397-83fc-b33dcc85dcc5","startedAt":1791582392845,"at":1791582392953,"phase":"end","status":200,"lifetimeMs":108}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"5e8bfdec-ecec-4397-83fc-b33dcc85dcc5","startedAt":1791582392953,"at":1791582392953,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"5e8bfdec-ecec-4397-83fc-b33dcc85dcc5","startedAt":1791582392953,"at":1791582393191,"phase":"response","status":200,"lifetimeMs":238}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"5e8bfdec-ecec-4397-83fc-b33dcc85dcc5","startedAt":1791582392953,"at":1791582393240,"phase":"end","status":200,"lifetimeMs":287}
+MAP_HTTP_TIMING {"kind":"output","requestId":"5e8bfdec-ecec-4397-83fc-b33dcc85dcc5","startedAt":1791582393240,"at":1791582393240,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"5e8bfdec-ecec-4397-83fc-b33dcc85dcc5","startedAt":1791582393240,"at":1791582394660,"phase":"response","status":200,"lifetimeMs":1420}
+MAP_HTTP_TIMING {"kind":"output","requestId":"5e8bfdec-ecec-4397-83fc-b33dcc85dcc5","startedAt":1791582393240,"at":1791582394661,"phase":"end","status":200,"lifetimeMs":1421}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"e58a3883-30cb-431b-afd9-218b356f1237","startedAt":1791582395740,"at":1791582395740,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"e58a3883-30cb-431b-afd9-218b356f1237","startedAt":1791582395740,"at":1791582398578,"phase":"response","status":200,"lifetimeMs":2838}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"e58a3883-30cb-431b-afd9-218b356f1237","startedAt":1791582395740,"at":1791582398580,"phase":"end","status":200,"lifetimeMs":2840}
+MAP_HTTP_TIMING {"kind":"read","requestId":"e58a3883-30cb-431b-afd9-218b356f1237","startedAt":1791582400122,"at":1791582400122,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"e58a3883-30cb-431b-afd9-218b356f1237","startedAt":1791582400122,"at":1791582401664,"phase":"response","status":200,"lifetimeMs":1542}
+MAP_HTTP_TIMING {"kind":"read","requestId":"e58a3883-30cb-431b-afd9-218b356f1237","startedAt":1791582400122,"at":1791582401665,"phase":"end","status":200,"lifetimeMs":1543}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"e58a3883-30cb-431b-afd9-218b356f1237","startedAt":1791582402143,"at":1791582402143,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"e58a3883-30cb-431b-afd9-218b356f1237","startedAt":1791582402143,"at":1791582402529,"phase":"response","status":200,"lifetimeMs":386}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"e58a3883-30cb-431b-afd9-218b356f1237","startedAt":1791582402143,"at":1791582402529,"phase":"end","status":200,"lifetimeMs":386}
+MAP_HTTP_TIMING {"kind":"read","requestId":"e58a3883-30cb-431b-afd9-218b356f1237","startedAt":1791582403110,"at":1791582403110,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"e58a3883-30cb-431b-afd9-218b356f1237","startedAt":1791582403110,"at":1791582403332,"phase":"response","status":200,"lifetimeMs":222}
+MAP_HTTP_TIMING {"kind":"read","requestId":"e58a3883-30cb-431b-afd9-218b356f1237","startedAt":1791582403110,"at":1791582403332,"phase":"end","status":200,"lifetimeMs":222}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"b0b7fdb2-bf21-452f-8047-350b3ec14f34","startedAt":1791582403356,"at":1791582403356,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"b0b7fdb2-bf21-452f-8047-350b3ec14f34","startedAt":1791582403356,"at":1791582405079,"phase":"response","status":200,"lifetimeMs":1723}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"b0b7fdb2-bf21-452f-8047-350b3ec14f34","startedAt":1791582403356,"at":1791582405081,"phase":"end","status":200,"lifetimeMs":1725}
+MAP_HTTP_TIMING {"kind":"read","requestId":"b0b7fdb2-bf21-452f-8047-350b3ec14f34","startedAt":1791582405567,"at":1791582405567,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"b0b7fdb2-bf21-452f-8047-350b3ec14f34","startedAt":1791582405567,"at":1791582405707,"phase":"response","status":200,"lifetimeMs":140}
+MAP_HTTP_TIMING {"kind":"read","requestId":"b0b7fdb2-bf21-452f-8047-350b3ec14f34","startedAt":1791582405567,"at":1791582405707,"phase":"end","status":200,"lifetimeMs":140}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"b0b7fdb2-bf21-452f-8047-350b3ec14f34","startedAt":1791582405707,"at":1791582405707,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"b0b7fdb2-bf21-452f-8047-350b3ec14f34","startedAt":1791582405707,"at":1791582405973,"phase":"response","status":200,"lifetimeMs":266}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"b0b7fdb2-bf21-452f-8047-350b3ec14f34","startedAt":1791582405707,"at":1791582406004,"phase":"end","status":200,"lifetimeMs":297}
+MAP_HTTP_TIMING {"kind":"output","requestId":"b0b7fdb2-bf21-452f-8047-350b3ec14f34","startedAt":1791582406005,"at":1791582406005,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"b0b7fdb2-bf21-452f-8047-350b3ec14f34","startedAt":1791582406005,"at":1791582407053,"phase":"response","status":200,"lifetimeMs":1048}
+MAP_HTTP_TIMING {"kind":"output","requestId":"b0b7fdb2-bf21-452f-8047-350b3ec14f34","startedAt":1791582406005,"at":1791582407054,"phase":"end","status":200,"lifetimeMs":1049}
+  ✓   4 e2e/map-workshop.spec.ts:202:3 › phone: touch sketch clear undo reference creation, cancellation and retry preserve originals (20.3s)
+  ✓   5 e2e/map-workshop.spec.ts:291:1 › local adapter manual formats, maximum image/grid, failed input and alignment reload (3.0s)
+  ✓   6 e2e/map-workshop.spec.ts:334:1 › actual App retains drawing route and offers dedicated workshop navigation (1.5s)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"5d844683-9ac0-4097-9235-5858090ca698","startedAt":1791582414213,"at":1791582414213,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"5d844683-9ac0-4097-9235-5858090ca698","startedAt":1791582414213,"at":1791582415764,"phase":"response","status":200,"lifetimeMs":1551}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"5d844683-9ac0-4097-9235-5858090ca698","startedAt":1791582414213,"at":1791582415765,"phase":"end","status":200,"lifetimeMs":1552}
+MAP_HTTP_TIMING {"kind":"read","requestId":"5d844683-9ac0-4097-9235-5858090ca698","startedAt":1791582416229,"at":1791582416229,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"5d844683-9ac0-4097-9235-5858090ca698","startedAt":1791582416229,"at":1791582416359,"phase":"response","status":200,"lifetimeMs":130}
+MAP_HTTP_TIMING {"kind":"read","requestId":"5d844683-9ac0-4097-9235-5858090ca698","startedAt":1791582416229,"at":1791582416359,"phase":"end","status":200,"lifetimeMs":130}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"5d844683-9ac0-4097-9235-5858090ca698","startedAt":1791582416359,"at":1791582416359,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"5d844683-9ac0-4097-9235-5858090ca698","startedAt":1791582416359,"at":1791582416591,"phase":"response","status":200,"lifetimeMs":232}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"5d844683-9ac0-4097-9235-5858090ca698","startedAt":1791582416359,"at":1791582416654,"phase":"end","status":200,"lifetimeMs":295}
+MAP_HTTP_TIMING {"kind":"output","requestId":"5d844683-9ac0-4097-9235-5858090ca698","startedAt":1791582416654,"at":1791582416654,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"5d844683-9ac0-4097-9235-5858090ca698","startedAt":1791582416654,"at":1791582424578,"phase":"response","status":200,"lifetimeMs":7924}
+MAP_HTTP_TIMING {"kind":"output","requestId":"5d844683-9ac0-4097-9235-5858090ca698","startedAt":1791582416654,"at":1791582424584,"phase":"end","status":200,"lifetimeMs":7930}
+  ✓   7 e2e/map-workshop.spec.ts:357:1 › reference-only saved drawing reaches creation through the existing keyboard editor (13.2s)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"8787fcc0-1a12-4c83-8755-2ee2a1f1cc1b","startedAt":1791582427216,"at":1791582427216,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"8787fcc0-1a12-4c83-8755-2ee2a1f1cc1b","startedAt":1791582427216,"at":1791582427698,"phase":"response","status":200,"lifetimeMs":482}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"8787fcc0-1a12-4c83-8755-2ee2a1f1cc1b","startedAt":1791582427216,"at":1791582427699,"phase":"end","status":200,"lifetimeMs":483}
+MAP_HTTP_TIMING {"kind":"read","requestId":"8787fcc0-1a12-4c83-8755-2ee2a1f1cc1b","startedAt":1791582428717,"at":1791582428717,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"8787fcc0-1a12-4c83-8755-2ee2a1f1cc1b","startedAt":1791582428717,"at":1791582428910,"phase":"response","status":200,"lifetimeMs":193}
+MAP_HTTP_TIMING {"kind":"read","requestId":"8787fcc0-1a12-4c83-8755-2ee2a1f1cc1b","startedAt":1791582428717,"at":1791582428910,"phase":"end","status":200,"lifetimeMs":193}
+MAP_HTTP_TIMING {"kind":"read","requestId":"8787fcc0-1a12-4c83-8755-2ee2a1f1cc1b","startedAt":1791582429060,"at":1791582429060,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"8787fcc0-1a12-4c83-8755-2ee2a1f1cc1b","startedAt":1791582429060,"at":1791582429150,"phase":"response","status":200,"lifetimeMs":90}
+MAP_HTTP_TIMING {"kind":"read","requestId":"8787fcc0-1a12-4c83-8755-2ee2a1f1cc1b","startedAt":1791582429060,"at":1791582429150,"phase":"end","status":200,"lifetimeMs":90}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"8b31d93a-a6ac-4808-bebf-c18073f479ab","startedAt":1791582429161,"at":1791582429161,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"8b31d93a-a6ac-4808-bebf-c18073f479ab","startedAt":1791582429161,"at":1791582429257,"phase":"response","status":200,"lifetimeMs":96}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"8b31d93a-a6ac-4808-bebf-c18073f479ab","startedAt":1791582429161,"at":1791582429257,"phase":"end","status":200,"lifetimeMs":96}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"8b31d93a-a6ac-4808-bebf-c18073f479ab","startedAt":1791582429385,"at":1791582429385,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"8b31d93a-a6ac-4808-bebf-c18073f479ab","startedAt":1791582429385,"at":1791582429457,"phase":"response","status":200,"lifetimeMs":72}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"8b31d93a-a6ac-4808-bebf-c18073f479ab","startedAt":1791582429385,"at":1791582429457,"phase":"end","status":200,"lifetimeMs":72}
+  ✓   8 e2e/map-workshop.spec.ts:406:1 › provider timeout has honest error and explicit retry/cancel with private work retained (4.3s)
+  ✓   9 e2e/map-workshop.spec.ts:456:3 › local: conflicting alignment retains immutable originals and recoverable placement (1.8s)
+  ✓  10 e2e/map-workshop.spec.ts:456:3 › Supabase: conflicting alignment retains immutable originals and recoverable placement (1.3s)
+  ✓  11 e2e/map-workshop.spec.ts:558:1 › selected artwork geometry does not override a new sketch draft or its retained PNG reference (2.2s)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"10e9c773-19f9-402e-ac84-fbd75a1a1aaf","startedAt":1791582435297,"at":1791582435297,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"10e9c773-19f9-402e-ac84-fbd75a1a1aaf","startedAt":1791582435297,"at":1791582437259,"phase":"response","status":200,"lifetimeMs":1962}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"10e9c773-19f9-402e-ac84-fbd75a1a1aaf","startedAt":1791582435297,"at":1791582437264,"phase":"end","status":200,"lifetimeMs":1967}
+MAP_HTTP_TIMING {"kind":"read","requestId":"10e9c773-19f9-402e-ac84-fbd75a1a1aaf","startedAt":1791582437719,"at":1791582437719,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"10e9c773-19f9-402e-ac84-fbd75a1a1aaf","startedAt":1791582437719,"at":1791582437861,"phase":"response","status":200,"lifetimeMs":142}
+MAP_HTTP_TIMING {"kind":"read","requestId":"10e9c773-19f9-402e-ac84-fbd75a1a1aaf","startedAt":1791582437719,"at":1791582437861,"phase":"end","status":200,"lifetimeMs":142}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"10e9c773-19f9-402e-ac84-fbd75a1a1aaf","startedAt":1791582437861,"at":1791582437861,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"10e9c773-19f9-402e-ac84-fbd75a1a1aaf","startedAt":1791582437861,"at":1791582438408,"phase":"response","status":200,"lifetimeMs":547}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"10e9c773-19f9-402e-ac84-fbd75a1a1aaf","startedAt":1791582437861,"at":1791582438508,"phase":"end","status":200,"lifetimeMs":647}
+MAP_HTTP_TIMING {"kind":"output","requestId":"10e9c773-19f9-402e-ac84-fbd75a1a1aaf","startedAt":1791582438508,"at":1791582438508,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"10e9c773-19f9-402e-ac84-fbd75a1a1aaf","startedAt":1791582438508,"at":1791582442177,"phase":"response","status":200,"lifetimeMs":3669}
+MAP_HTTP_TIMING {"kind":"output","requestId":"10e9c773-19f9-402e-ac84-fbd75a1a1aaf","startedAt":1791582438508,"at":1791582442180,"phase":"end","status":200,"lifetimeMs":3672}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"f59f82f1-7a1f-408a-b95a-8dc46e7fbb2d","startedAt":1791582442865,"at":1791582442865,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"f59f82f1-7a1f-408a-b95a-8dc46e7fbb2d","startedAt":1791582442865,"at":1791582444581,"phase":"response","status":200,"lifetimeMs":1716}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"f59f82f1-7a1f-408a-b95a-8dc46e7fbb2d","startedAt":1791582442865,"at":1791582444582,"phase":"end","status":200,"lifetimeMs":1717}
+MAP_HTTP_TIMING {"kind":"read","requestId":"f59f82f1-7a1f-408a-b95a-8dc46e7fbb2d","startedAt":1791582444746,"at":1791582444746,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"f59f82f1-7a1f-408a-b95a-8dc46e7fbb2d","startedAt":1791582444746,"at":1791582445300,"phase":"response","status":200,"lifetimeMs":554}
+MAP_HTTP_TIMING {"kind":"read","requestId":"f59f82f1-7a1f-408a-b95a-8dc46e7fbb2d","startedAt":1791582444746,"at":1791582445301,"phase":"end","status":200,"lifetimeMs":555}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"f59f82f1-7a1f-408a-b95a-8dc46e7fbb2d","startedAt":1791582445612,"at":1791582445612,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"f59f82f1-7a1f-408a-b95a-8dc46e7fbb2d","startedAt":1791582445612,"at":1791582445730,"phase":"response","status":200,"lifetimeMs":118}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"f59f82f1-7a1f-408a-b95a-8dc46e7fbb2d","startedAt":1791582445612,"at":1791582445730,"phase":"end","status":200,"lifetimeMs":118}
+MAP_HTTP_TIMING {"kind":"read","requestId":"f59f82f1-7a1f-408a-b95a-8dc46e7fbb2d","startedAt":1791582445895,"at":1791582445895,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"f59f82f1-7a1f-408a-b95a-8dc46e7fbb2d","startedAt":1791582445895,"at":1791582446052,"phase":"response","status":200,"lifetimeMs":157}
+MAP_HTTP_TIMING {"kind":"read","requestId":"f59f82f1-7a1f-408a-b95a-8dc46e7fbb2d","startedAt":1791582445895,"at":1791582446052,"phase":"end","status":200,"lifetimeMs":157}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"22ed2e67-112a-4a23-8046-58e793c39432","startedAt":1791582446064,"at":1791582446064,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"22ed2e67-112a-4a23-8046-58e793c39432","startedAt":1791582446064,"at":1791582447416,"phase":"response","status":200,"lifetimeMs":1352}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"22ed2e67-112a-4a23-8046-58e793c39432","startedAt":1791582446064,"at":1791582447417,"phase":"end","status":200,"lifetimeMs":1353}
+MAP_HTTP_TIMING {"kind":"read","requestId":"22ed2e67-112a-4a23-8046-58e793c39432","startedAt":1791582447764,"at":1791582447764,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"22ed2e67-112a-4a23-8046-58e793c39432","startedAt":1791582447764,"at":1791582447924,"phase":"response","status":200,"lifetimeMs":160}
+MAP_HTTP_TIMING {"kind":"read","requestId":"22ed2e67-112a-4a23-8046-58e793c39432","startedAt":1791582447764,"at":1791582447925,"phase":"end","status":200,"lifetimeMs":161}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"22ed2e67-112a-4a23-8046-58e793c39432","startedAt":1791582447925,"at":1791582447925,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"22ed2e67-112a-4a23-8046-58e793c39432","startedAt":1791582447925,"at":1791582448194,"phase":"response","status":200,"lifetimeMs":269}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"22ed2e67-112a-4a23-8046-58e793c39432","startedAt":1791582447925,"at":1791582448235,"phase":"end","status":200,"lifetimeMs":310}
+MAP_HTTP_TIMING {"kind":"output","requestId":"22ed2e67-112a-4a23-8046-58e793c39432","startedAt":1791582448235,"at":1791582448235,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"22ed2e67-112a-4a23-8046-58e793c39432","startedAt":1791582448235,"at":1791582451179,"phase":"response","status":200,"lifetimeMs":2944}
+MAP_HTTP_TIMING {"kind":"output","requestId":"22ed2e67-112a-4a23-8046-58e793c39432","startedAt":1791582448235,"at":1791582451180,"phase":"end","status":200,"lifetimeMs":2945}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"3648ef8c-90fe-4a0f-8fea-60b972150b69","startedAt":1791582451730,"at":1791582451730,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"3648ef8c-90fe-4a0f-8fea-60b972150b69","startedAt":1791582451730,"at":1791582453886,"phase":"response","status":200,"lifetimeMs":2156}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"3648ef8c-90fe-4a0f-8fea-60b972150b69","startedAt":1791582451730,"at":1791582453887,"phase":"end","status":200,"lifetimeMs":2157}
+MAP_HTTP_TIMING {"kind":"read","requestId":"3648ef8c-90fe-4a0f-8fea-60b972150b69","startedAt":1791582454168,"at":1791582454168,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"3648ef8c-90fe-4a0f-8fea-60b972150b69","startedAt":1791582454168,"at":1791582454731,"phase":"response","status":200,"lifetimeMs":563}
+MAP_HTTP_TIMING {"kind":"read","requestId":"3648ef8c-90fe-4a0f-8fea-60b972150b69","startedAt":1791582454168,"at":1791582454732,"phase":"end","status":200,"lifetimeMs":564}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"3648ef8c-90fe-4a0f-8fea-60b972150b69","startedAt":1791582455056,"at":1791582455056,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"3648ef8c-90fe-4a0f-8fea-60b972150b69","startedAt":1791582455056,"at":1791582455290,"phase":"response","status":200,"lifetimeMs":234}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"3648ef8c-90fe-4a0f-8fea-60b972150b69","startedAt":1791582455056,"at":1791582455291,"phase":"end","status":200,"lifetimeMs":235}
+MAP_HTTP_TIMING {"kind":"read","requestId":"3648ef8c-90fe-4a0f-8fea-60b972150b69","startedAt":1791582455684,"at":1791582455684,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"3648ef8c-90fe-4a0f-8fea-60b972150b69","startedAt":1791582455684,"at":1791582455857,"phase":"response","status":200,"lifetimeMs":173}
+MAP_HTTP_TIMING {"kind":"read","requestId":"3648ef8c-90fe-4a0f-8fea-60b972150b69","startedAt":1791582455684,"at":1791582455858,"phase":"end","status":200,"lifetimeMs":174}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"56f81f69-7297-48ff-8c6e-a97dd6e375c0","startedAt":1791582455881,"at":1791582455881,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"56f81f69-7297-48ff-8c6e-a97dd6e375c0","startedAt":1791582455881,"at":1791582458514,"phase":"response","status":200,"lifetimeMs":2633}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"56f81f69-7297-48ff-8c6e-a97dd6e375c0","startedAt":1791582455881,"at":1791582458515,"phase":"end","status":200,"lifetimeMs":2634}
+MAP_HTTP_TIMING {"kind":"read","requestId":"56f81f69-7297-48ff-8c6e-a97dd6e375c0","startedAt":1791582458971,"at":1791582458971,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"56f81f69-7297-48ff-8c6e-a97dd6e375c0","startedAt":1791582458971,"at":1791582459189,"phase":"response","status":200,"lifetimeMs":218}
+MAP_HTTP_TIMING {"kind":"read","requestId":"56f81f69-7297-48ff-8c6e-a97dd6e375c0","startedAt":1791582458971,"at":1791582459189,"phase":"end","status":200,"lifetimeMs":218}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"56f81f69-7297-48ff-8c6e-a97dd6e375c0","startedAt":1791582459189,"at":1791582459189,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"56f81f69-7297-48ff-8c6e-a97dd6e375c0","startedAt":1791582459189,"at":1791582459401,"phase":"response","status":200,"lifetimeMs":212}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"56f81f69-7297-48ff-8c6e-a97dd6e375c0","startedAt":1791582459189,"at":1791582459417,"phase":"end","status":200,"lifetimeMs":228}
+MAP_HTTP_TIMING {"kind":"output","requestId":"56f81f69-7297-48ff-8c6e-a97dd6e375c0","startedAt":1791582459417,"at":1791582459417,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"56f81f69-7297-48ff-8c6e-a97dd6e375c0","startedAt":1791582459417,"at":1791582460999,"phase":"response","status":200,"lifetimeMs":1582}
+MAP_HTTP_TIMING {"kind":"output","requestId":"56f81f69-7297-48ff-8c6e-a97dd6e375c0","startedAt":1791582459417,"at":1791582461000,"phase":"end","status":200,"lifetimeMs":1583}
+  ✓  12 e2e/map-workshop.spec.ts:629:1 › each failed job retries its own original brief despite saved selection and reload (26.4s)
+  ✓  13 e2e/map-workshop.spec.ts:680:3 › UI transport failure fixture: failed output never claims saved or replaces retained artwork (2.2s)
+  ✓  14 e2e/map-workshop.spec.ts:680:3 › UI transport failure fixture: missing-version output never claims saved or replaces retained artwork (621ms)
+  ✓  15 e2e/map-workshop.spec.ts:722:1 › UI read projection fixture: reload retry reads original request, preserves intent and refreshes CAS without uncertain resubmission (943ms)
+  ✓  16 e2e/map-workshop.spec.ts:799:1 › UI read projection fixture: authoritative original intent overrides the session draft copy (649ms)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"1f366b43-7846-4044-95fc-6b36cce2897d","startedAt":1791582467270,"at":1791582467270,"phase":"start","status":null,"lifetimeMs":0}
+MAP_JOB_RECOVERY {"phase":"before-controller-abort","id":"1f366b43-7846-4044-95fc-6b36cce2897d","status":200,"receivedState":"awaiting-client-output","receivedCode":null,"lifetimeMs":2447,"receipt":{"id":"1f366b43-7846-4044-95fc-6b36cce2897d","state":"awaiting-client-output","revision":4,"expires_at":1791668867691,"owned_jobs":1,"output_present":false,"candidate_present":true,"provider_finished_at":"2026-10-09T21:47:47.691217+00:00","provider_submission_present":true}}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"1f366b43-7846-4044-95fc-6b36cce2897d","startedAt":1791582467270,"at":1791582469750,"phase":"failure","status":null,"lifetimeMs":2480}
+  ✘  17 e2e/map-workshop.spec.ts:838:1 › controlled controller transport interruption: real Edge receipt resumes the same job after reload without another submit (2.0m)
+
+
+  1) e2e/map-workshop.spec.ts:838:1 › controlled controller transport interruption: real Edge receipt resumes the same job after reload without another submit 
+
+    Test timeout of 120000ms exceeded.
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected substring: "unavailable"
+    Received string:    "Failed to fetch Your inputs and saved versions are retained."
+
+    Call log:
+      - Expect "toContainText" getByRole('alert') with timeout 170000ms
+      - waiting for getByRole('alert')
+        228 × locator resolved to <p role="alert">Failed to fetch Your inputs and saved versions ar…</p>
+            - unexpected value "Failed to fetch Your inputs and saved versions are retained."
+      - Protocol error (Runtime.callFunctionOn): Internal server error, session closed.
+
+
+      904 |     );
+      905 |   await page.getByRole("button", { name: "Create map", exact: true }).click();
+    > 906 |   await expect(page.getByRole("alert")).toContainText("unavailable", {
+          |                                         ^
+      907 |     timeout: 170000,
+      908 |   });
+      909 |   await expect(
+        at /Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:906:41
+
+    Error Context: test-results/map-workshop-controlled-co-49dba-load-without-another-submit/error-context.md
+
+  1 failed
+    e2e/map-workshop.spec.ts:838:1 › controlled controller transport interruption: real Edge receipt resumes the same job after reload without another submit 
+  16 passed (4.1m)
+Exact baseline restored; 9 owned parties/DMs, one Player and 42 owned objects cleaned; container49177 removed.

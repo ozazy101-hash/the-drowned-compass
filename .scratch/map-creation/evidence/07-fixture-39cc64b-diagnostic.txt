@@ -1,0 +1,352 @@
+Starting explicitly labelled fixture application with fresh bounded Edge workers.
+[WebServer] (node:1501) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 17 tests using 1 worker
+
+(node:1508) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"0f311fdc-2275-4ee5-a6b8-5089f65d60f0","startedAt":1791582040582,"at":1791582040582,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"0f311fdc-2275-4ee5-a6b8-5089f65d60f0","startedAt":1791582044074,"at":1791582044074,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"0f311fdc-2275-4ee5-a6b8-5089f65d60f0","startedAt":1791582044074,"at":1791582045964,"phase":"response","status":200,"lifetimeMs":1890}
+MAP_HTTP_TIMING {"kind":"read","requestId":"0f311fdc-2275-4ee5-a6b8-5089f65d60f0","startedAt":1791582044074,"at":1791582045968,"phase":"end","status":200,"lifetimeMs":1894}
+MAP_HTTP_TIMING {"kind":"read","requestId":"0f311fdc-2275-4ee5-a6b8-5089f65d60f0","startedAt":1791582046122,"at":1791582046122,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"0f311fdc-2275-4ee5-a6b8-5089f65d60f0","startedAt":1791582046122,"at":1791582046247,"phase":"response","status":200,"lifetimeMs":125}
+MAP_HTTP_TIMING {"kind":"read","requestId":"0f311fdc-2275-4ee5-a6b8-5089f65d60f0","startedAt":1791582046122,"at":1791582046248,"phase":"end","status":200,"lifetimeMs":126}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"0f311fdc-2275-4ee5-a6b8-5089f65d60f0","startedAt":1791582046248,"at":1791582046248,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"0f311fdc-2275-4ee5-a6b8-5089f65d60f0","startedAt":1791582046248,"at":1791582046510,"phase":"response","status":200,"lifetimeMs":262}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"0f311fdc-2275-4ee5-a6b8-5089f65d60f0","startedAt":1791582046248,"at":1791582046554,"phase":"end","status":200,"lifetimeMs":306}
+MAP_HTTP_TIMING {"kind":"output","requestId":"0f311fdc-2275-4ee5-a6b8-5089f65d60f0","startedAt":1791582046555,"at":1791582046555,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"0f311fdc-2275-4ee5-a6b8-5089f65d60f0","startedAt":1791582046555,"at":1791582048914,"phase":"response","status":200,"lifetimeMs":2359}
+MAP_HTTP_TIMING {"kind":"output","requestId":"0f311fdc-2275-4ee5-a6b8-5089f65d60f0","startedAt":1791582046555,"at":1791582048916,"phase":"end","status":200,"lifetimeMs":2361}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"945e3f4c-3243-4170-8593-e03f49f73783","startedAt":1791582049604,"at":1791582049604,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"945e3f4c-3243-4170-8593-e03f49f73783","startedAt":1791582049604,"at":1791582052060,"phase":"response","status":200,"lifetimeMs":2456}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"945e3f4c-3243-4170-8593-e03f49f73783","startedAt":1791582049604,"at":1791582052061,"phase":"end","status":200,"lifetimeMs":2457}
+MAP_HTTP_TIMING {"kind":"read","requestId":"945e3f4c-3243-4170-8593-e03f49f73783","startedAt":1791582052374,"at":1791582052374,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"945e3f4c-3243-4170-8593-e03f49f73783","startedAt":1791582052374,"at":1791582052536,"phase":"response","status":200,"lifetimeMs":162}
+MAP_HTTP_TIMING {"kind":"read","requestId":"945e3f4c-3243-4170-8593-e03f49f73783","startedAt":1791582052374,"at":1791582052537,"phase":"end","status":200,"lifetimeMs":163}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"945e3f4c-3243-4170-8593-e03f49f73783","startedAt":1791582052537,"at":1791582052537,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"945e3f4c-3243-4170-8593-e03f49f73783","startedAt":1791582052537,"at":1791582052654,"phase":"response","status":200,"lifetimeMs":117}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"945e3f4c-3243-4170-8593-e03f49f73783","startedAt":1791582052537,"at":1791582052692,"phase":"end","status":200,"lifetimeMs":155}
+MAP_HTTP_TIMING {"kind":"output","requestId":"945e3f4c-3243-4170-8593-e03f49f73783","startedAt":1791582052692,"at":1791582052692,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"945e3f4c-3243-4170-8593-e03f49f73783","startedAt":1791582052692,"at":1791582054294,"phase":"response","status":200,"lifetimeMs":1602}
+MAP_HTTP_TIMING {"kind":"output","requestId":"945e3f4c-3243-4170-8593-e03f49f73783","startedAt":1791582052692,"at":1791582054295,"phase":"end","status":200,"lifetimeMs":1603}
+  ✓   1 e2e/map-workshop.spec.ts:77:3 › laptop: real fixture invent sibling comparison and upload alignment survive reload (16.1s)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"b9d2fa9f-712c-442c-9aeb-990d8b5e187e","startedAt":1791582061088,"at":1791582061088,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"b9d2fa9f-712c-442c-9aeb-990d8b5e187e","startedAt":1791582061088,"at":1791582064268,"phase":"response","status":200,"lifetimeMs":3180}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"b9d2fa9f-712c-442c-9aeb-990d8b5e187e","startedAt":1791582061088,"at":1791582064269,"phase":"end","status":200,"lifetimeMs":3181}
+MAP_HTTP_TIMING {"kind":"read","requestId":"b9d2fa9f-712c-442c-9aeb-990d8b5e187e","startedAt":1791582064802,"at":1791582064802,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"b9d2fa9f-712c-442c-9aeb-990d8b5e187e","startedAt":1791582064802,"at":1791582065060,"phase":"response","status":200,"lifetimeMs":258}
+MAP_HTTP_TIMING {"kind":"read","requestId":"b9d2fa9f-712c-442c-9aeb-990d8b5e187e","startedAt":1791582064802,"at":1791582065060,"phase":"end","status":200,"lifetimeMs":258}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"b9d2fa9f-712c-442c-9aeb-990d8b5e187e","startedAt":1791582065060,"at":1791582065060,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"b9d2fa9f-712c-442c-9aeb-990d8b5e187e","startedAt":1791582065060,"at":1791582065741,"phase":"response","status":200,"lifetimeMs":681}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"b9d2fa9f-712c-442c-9aeb-990d8b5e187e","startedAt":1791582065060,"at":1791582065850,"phase":"end","status":200,"lifetimeMs":791}
+MAP_HTTP_TIMING {"kind":"output","requestId":"b9d2fa9f-712c-442c-9aeb-990d8b5e187e","startedAt":1791582065851,"at":1791582065851,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"b9d2fa9f-712c-442c-9aeb-990d8b5e187e","startedAt":1791582065851,"at":1791582068453,"phase":"response","status":200,"lifetimeMs":2602}
+MAP_HTTP_TIMING {"kind":"output","requestId":"b9d2fa9f-712c-442c-9aeb-990d8b5e187e","startedAt":1791582065851,"at":1791582068460,"phase":"end","status":200,"lifetimeMs":2609}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"7a1b2d72-d19d-4fb5-9091-f0a41fad0df6","startedAt":1791582070752,"at":1791582070752,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"7a1b2d72-d19d-4fb5-9091-f0a41fad0df6","startedAt":1791582071178,"at":1791582071178,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"7a1b2d72-d19d-4fb5-9091-f0a41fad0df6","startedAt":1791582071178,"at":1791582071306,"phase":"response","status":200,"lifetimeMs":128}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"7a1b2d72-d19d-4fb5-9091-f0a41fad0df6","startedAt":1791582070752,"at":1791582071306,"phase":"response","status":200,"lifetimeMs":554}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"7a1b2d72-d19d-4fb5-9091-f0a41fad0df6","startedAt":1791582071178,"at":1791582071307,"phase":"end","status":200,"lifetimeMs":129}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"7a1b2d72-d19d-4fb5-9091-f0a41fad0df6","startedAt":1791582070752,"at":1791582071307,"phase":"end","status":200,"lifetimeMs":555}
+MAP_HTTP_TIMING {"kind":"read","requestId":"7a1b2d72-d19d-4fb5-9091-f0a41fad0df6","startedAt":1791582071377,"at":1791582071377,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"7a1b2d72-d19d-4fb5-9091-f0a41fad0df6","startedAt":1791582071377,"at":1791582071443,"phase":"response","status":200,"lifetimeMs":66}
+MAP_HTTP_TIMING {"kind":"read","requestId":"7a1b2d72-d19d-4fb5-9091-f0a41fad0df6","startedAt":1791582071377,"at":1791582071443,"phase":"end","status":200,"lifetimeMs":66}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"219ae601-5acc-45fb-a94b-6bec1ab6ca84","startedAt":1791582071454,"at":1791582071454,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"219ae601-5acc-45fb-a94b-6bec1ab6ca84","startedAt":1791582071454,"at":1791582071504,"phase":"response","status":422,"lifetimeMs":50}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"219ae601-5acc-45fb-a94b-6bec1ab6ca84","startedAt":1791582071454,"at":1791582071504,"phase":"end","status":422,"lifetimeMs":50}
+  ✘   2 e2e/map-workshop.spec.ts:168:3 › laptop: touch sketch clear undo reference creation, cancellation and retry preserve originals (20.4s)
+(node:1707) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"c8369729-d062-4fdd-816c-d07e11a60b6c","startedAt":1791582079620,"at":1791582079620,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"c8369729-d062-4fdd-816c-d07e11a60b6c","startedAt":1791582082349,"at":1791582082349,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"c8369729-d062-4fdd-816c-d07e11a60b6c","startedAt":1791582082349,"at":1791582083418,"phase":"response","status":200,"lifetimeMs":1069}
+MAP_HTTP_TIMING {"kind":"read","requestId":"c8369729-d062-4fdd-816c-d07e11a60b6c","startedAt":1791582082349,"at":1791582083435,"phase":"end","status":200,"lifetimeMs":1086}
+MAP_HTTP_TIMING {"kind":"read","requestId":"c8369729-d062-4fdd-816c-d07e11a60b6c","startedAt":1791582083827,"at":1791582083827,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"c8369729-d062-4fdd-816c-d07e11a60b6c","startedAt":1791582083827,"at":1791582084336,"phase":"response","status":200,"lifetimeMs":509}
+MAP_HTTP_TIMING {"kind":"read","requestId":"c8369729-d062-4fdd-816c-d07e11a60b6c","startedAt":1791582083827,"at":1791582084336,"phase":"end","status":200,"lifetimeMs":509}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"c8369729-d062-4fdd-816c-d07e11a60b6c","startedAt":1791582084336,"at":1791582084336,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"c8369729-d062-4fdd-816c-d07e11a60b6c","startedAt":1791582084336,"at":1791582085927,"phase":"response","status":200,"lifetimeMs":1591}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"c8369729-d062-4fdd-816c-d07e11a60b6c","startedAt":1791582084336,"at":1791582086042,"phase":"end","status":200,"lifetimeMs":1706}
+MAP_HTTP_TIMING {"kind":"output","requestId":"c8369729-d062-4fdd-816c-d07e11a60b6c","startedAt":1791582086043,"at":1791582086043,"phase":"start","status":null,"lifetimeMs":0}
+  ✘   3 e2e/map-workshop.spec.ts:77:3 › phone: real fixture invent sibling comparison and upload alignment survive reload (10.6s)
+(node:1745) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"2f3f096d-e323-4a6c-b147-a4606cff44bd","startedAt":1791582093525,"at":1791582093525,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"2f3f096d-e323-4a6c-b147-a4606cff44bd","startedAt":1791582093525,"at":1791582094842,"phase":"response","status":200,"lifetimeMs":1317}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"2f3f096d-e323-4a6c-b147-a4606cff44bd","startedAt":1791582093525,"at":1791582094843,"phase":"end","status":200,"lifetimeMs":1318}
+MAP_HTTP_TIMING {"kind":"read","requestId":"2f3f096d-e323-4a6c-b147-a4606cff44bd","startedAt":1791582094914,"at":1791582094914,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"2f3f096d-e323-4a6c-b147-a4606cff44bd","startedAt":1791582094914,"at":1791582095085,"phase":"response","status":200,"lifetimeMs":171}
+MAP_HTTP_TIMING {"kind":"read","requestId":"2f3f096d-e323-4a6c-b147-a4606cff44bd","startedAt":1791582094914,"at":1791582095085,"phase":"end","status":200,"lifetimeMs":171}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"2f3f096d-e323-4a6c-b147-a4606cff44bd","startedAt":1791582095086,"at":1791582095086,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"2f3f096d-e323-4a6c-b147-a4606cff44bd","startedAt":1791582095086,"at":1791582095349,"phase":"response","status":200,"lifetimeMs":263}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"2f3f096d-e323-4a6c-b147-a4606cff44bd","startedAt":1791582095086,"at":1791582095380,"phase":"end","status":200,"lifetimeMs":294}
+MAP_HTTP_TIMING {"kind":"output","requestId":"2f3f096d-e323-4a6c-b147-a4606cff44bd","startedAt":1791582095381,"at":1791582095381,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"2f3f096d-e323-4a6c-b147-a4606cff44bd","startedAt":1791582095381,"at":1791582097042,"phase":"response","status":200,"lifetimeMs":1661}
+MAP_HTTP_TIMING {"kind":"output","requestId":"2f3f096d-e323-4a6c-b147-a4606cff44bd","startedAt":1791582095381,"at":1791582097043,"phase":"end","status":200,"lifetimeMs":1662}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"01970131-e918-4ed4-b611-e5e3d58b6e5f","startedAt":1791582098804,"at":1791582098804,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"01970131-e918-4ed4-b611-e5e3d58b6e5f","startedAt":1791582099432,"at":1791582099432,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"01970131-e918-4ed4-b611-e5e3d58b6e5f","startedAt":1791582099432,"at":1791582099779,"phase":"response","status":200,"lifetimeMs":347}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"01970131-e918-4ed4-b611-e5e3d58b6e5f","startedAt":1791582099432,"at":1791582099780,"phase":"end","status":200,"lifetimeMs":348}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"01970131-e918-4ed4-b611-e5e3d58b6e5f","startedAt":1791582098804,"at":1791582100666,"phase":"response","status":200,"lifetimeMs":1862}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"01970131-e918-4ed4-b611-e5e3d58b6e5f","startedAt":1791582098804,"at":1791582100666,"phase":"end","status":200,"lifetimeMs":1862}
+MAP_HTTP_TIMING {"kind":"read","requestId":"01970131-e918-4ed4-b611-e5e3d58b6e5f","startedAt":1791582101152,"at":1791582101152,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"01970131-e918-4ed4-b611-e5e3d58b6e5f","startedAt":1791582101152,"at":1791582101725,"phase":"response","status":200,"lifetimeMs":573}
+MAP_HTTP_TIMING {"kind":"read","requestId":"01970131-e918-4ed4-b611-e5e3d58b6e5f","startedAt":1791582101152,"at":1791582101726,"phase":"end","status":200,"lifetimeMs":574}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"cc12f8cc-e9f9-4d0a-af19-8856bfe7a488","startedAt":1791582101795,"at":1791582101795,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"cc12f8cc-e9f9-4d0a-af19-8856bfe7a488","startedAt":1791582101795,"at":1791582106153,"phase":"response","status":200,"lifetimeMs":4358}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"cc12f8cc-e9f9-4d0a-af19-8856bfe7a488","startedAt":1791582101795,"at":1791582106158,"phase":"end","status":200,"lifetimeMs":4363}
+  ✘   4 e2e/map-workshop.spec.ts:168:3 › phone: touch sketch clear undo reference creation, cancellation and retry preserve originals (15.6s)
+(node:1774) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   5 e2e/map-workshop.spec.ts:256:1 › local adapter manual formats, maximum image/grid, failed input and alignment reload (2.7s)
+  ✓   6 e2e/map-workshop.spec.ts:298:1 › actual App retains drawing route and offers dedicated workshop navigation (1.4s)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"feab393e-1d52-4ccf-8d4b-df8dd8723666","startedAt":1791582114614,"at":1791582114614,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"feab393e-1d52-4ccf-8d4b-df8dd8723666","startedAt":1791582114614,"at":1791582114880,"phase":"response","status":422,"lifetimeMs":266}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"feab393e-1d52-4ccf-8d4b-df8dd8723666","startedAt":1791582114614,"at":1791582114880,"phase":"end","status":422,"lifetimeMs":266}
+  ✘   7 e2e/map-workshop.spec.ts:321:1 › reference-only saved drawing reaches creation through the existing keyboard editor (5.8s)
+(node:1792) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"095f2ac6-f5c7-4990-9ac1-89f7f740e21e","startedAt":1791582122916,"at":1791582122916,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"095f2ac6-f5c7-4990-9ac1-89f7f740e21e","startedAt":1791582122916,"at":1791582123308,"phase":"response","status":200,"lifetimeMs":392}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"095f2ac6-f5c7-4990-9ac1-89f7f740e21e","startedAt":1791582122916,"at":1791582123309,"phase":"end","status":200,"lifetimeMs":393}
+MAP_HTTP_TIMING {"kind":"read","requestId":"095f2ac6-f5c7-4990-9ac1-89f7f740e21e","startedAt":1791582124339,"at":1791582124339,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"095f2ac6-f5c7-4990-9ac1-89f7f740e21e","startedAt":1791582124339,"at":1791582124549,"phase":"response","status":200,"lifetimeMs":210}
+MAP_HTTP_TIMING {"kind":"read","requestId":"095f2ac6-f5c7-4990-9ac1-89f7f740e21e","startedAt":1791582124339,"at":1791582124550,"phase":"end","status":200,"lifetimeMs":211}
+MAP_HTTP_TIMING {"kind":"read","requestId":"095f2ac6-f5c7-4990-9ac1-89f7f740e21e","startedAt":1791582124674,"at":1791582124674,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"095f2ac6-f5c7-4990-9ac1-89f7f740e21e","startedAt":1791582124674,"at":1791582124799,"phase":"response","status":200,"lifetimeMs":125}
+MAP_HTTP_TIMING {"kind":"read","requestId":"095f2ac6-f5c7-4990-9ac1-89f7f740e21e","startedAt":1791582124674,"at":1791582124800,"phase":"end","status":200,"lifetimeMs":126}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"ed15ac46-b682-4abb-80bc-d400a17cf462","startedAt":1791582124829,"at":1791582124829,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"ed15ac46-b682-4abb-80bc-d400a17cf462","startedAt":1791582124829,"at":1791582124965,"phase":"response","status":200,"lifetimeMs":136}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"ed15ac46-b682-4abb-80bc-d400a17cf462","startedAt":1791582124829,"at":1791582124966,"phase":"end","status":200,"lifetimeMs":137}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"ed15ac46-b682-4abb-80bc-d400a17cf462","startedAt":1791582125489,"at":1791582125489,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"ed15ac46-b682-4abb-80bc-d400a17cf462","startedAt":1791582125489,"at":1791582125652,"phase":"response","status":200,"lifetimeMs":163}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"ed15ac46-b682-4abb-80bc-d400a17cf462","startedAt":1791582125489,"at":1791582125653,"phase":"end","status":200,"lifetimeMs":164}
+  ✓   8 e2e/map-workshop.spec.ts:370:1 › provider timeout has honest error and explicit retry/cancel with private work retained (5.2s)
+  ✓   9 e2e/map-workshop.spec.ts:420:3 › local: conflicting alignment retains immutable originals and recoverable placement (1.8s)
+  ✘  10 e2e/map-workshop.spec.ts:420:3 › Supabase: conflicting alignment retains immutable originals and recoverable placement (8.4s)
+(node:1815) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  11 e2e/map-workshop.spec.ts:522:1 › selected artwork geometry does not override a new sketch draft or its retained PNG reference (2.3s)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"0a43c49a-4e75-411d-bae5-ab61dc7eb0cb","startedAt":1791582139659,"at":1791582139659,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"0a43c49a-4e75-411d-bae5-ab61dc7eb0cb","startedAt":1791582139659,"at":1791582141707,"phase":"response","status":200,"lifetimeMs":2048}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"0a43c49a-4e75-411d-bae5-ab61dc7eb0cb","startedAt":1791582139659,"at":1791582141708,"phase":"end","status":200,"lifetimeMs":2049}
+MAP_HTTP_TIMING {"kind":"read","requestId":"0a43c49a-4e75-411d-bae5-ab61dc7eb0cb","startedAt":1791582142046,"at":1791582142046,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"0a43c49a-4e75-411d-bae5-ab61dc7eb0cb","startedAt":1791582142046,"at":1791582142241,"phase":"response","status":200,"lifetimeMs":195}
+MAP_HTTP_TIMING {"kind":"read","requestId":"0a43c49a-4e75-411d-bae5-ab61dc7eb0cb","startedAt":1791582142046,"at":1791582142242,"phase":"end","status":200,"lifetimeMs":196}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"0a43c49a-4e75-411d-bae5-ab61dc7eb0cb","startedAt":1791582142242,"at":1791582142242,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"0a43c49a-4e75-411d-bae5-ab61dc7eb0cb","startedAt":1791582142242,"at":1791582142457,"phase":"response","status":200,"lifetimeMs":215}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"0a43c49a-4e75-411d-bae5-ab61dc7eb0cb","startedAt":1791582142242,"at":1791582142484,"phase":"end","status":200,"lifetimeMs":242}
+MAP_HTTP_TIMING {"kind":"output","requestId":"0a43c49a-4e75-411d-bae5-ab61dc7eb0cb","startedAt":1791582142485,"at":1791582142485,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"0a43c49a-4e75-411d-bae5-ab61dc7eb0cb","startedAt":1791582142485,"at":1791582143856,"phase":"response","status":200,"lifetimeMs":1371}
+MAP_HTTP_TIMING {"kind":"output","requestId":"0a43c49a-4e75-411d-bae5-ab61dc7eb0cb","startedAt":1791582142485,"at":1791582143857,"phase":"end","status":200,"lifetimeMs":1372}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"d098b023-830d-4c0e-8394-b3c18286d4df","startedAt":1791582144425,"at":1791582144425,"phase":"start","status":null,"lifetimeMs":0}
+  ✘  12 e2e/map-workshop.spec.ts:593:1 › each failed job retries its own original brief despite saved selection and reload (5.2s)
+(node:1823) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  13 e2e/map-workshop.spec.ts:651:3 › UI transport failure fixture: failed output never claims saved or replaces retained artwork (1.0s)
+  ✓  14 e2e/map-workshop.spec.ts:651:3 › UI transport failure fixture: missing-version output never claims saved or replaces retained artwork (489ms)
+  ✓  15 e2e/map-workshop.spec.ts:690:1 › UI read projection fixture: reload retry reads original request, preserves intent and refreshes CAS without uncertain resubmission (713ms)
+  ✓  16 e2e/map-workshop.spec.ts:766:1 › UI read projection fixture: authoritative original intent overrides the session draft copy (551ms)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"c1772389-82be-450e-a7b9-6f5db2162c69","startedAt":1791582150624,"at":1791582150624,"phase":"start","status":null,"lifetimeMs":0}
+  ✘  17 e2e/map-workshop.spec.ts:805:1 › controlled controller transport interruption: real Edge receipt resumes the same job after reload without another submit (2.7s)
+
+
+  1) e2e/map-workshop.spec.ts:168:3 › laptop: touch sketch clear undo reference creation, cancellation and retry preserve originals 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: 'Save completed artwork' }).last()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('button', { name: 'Save completed artwork' }).last() with timeout 5000ms
+      - waiting for getByRole('button', { name: 'Save completed artwork' }).last()
+
+
+      64 |   await expect(
+      65 |     page.getByRole("button", { name: "Save completed artwork" }).last(),
+    > 66 |   ).toBeVisible();
+         |     ^
+      67 |   await page
+      68 |     .getByRole("button", { name: "Save completed artwork" })
+      69 |     .last()
+        at saveOutput (/Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:66:5)
+        at /Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:244:11
+
+    Error Context: test-results/map-workshop-laptop-touch--37d39-nd-retry-preserve-originals/error-context.md
+
+  2) e2e/map-workshop.spec.ts:77:3 › phone: real fixture invent sibling comparison and upload alignment survive reload 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('status')
+    Expected substring: "Saved privately"
+    Received string:    "Working…"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" getByRole('status') with timeout 5000ms
+      - waiting for getByRole('status')
+        14 × locator resolved to <p role="status">Working…</p>
+           - unexpected value "Working…"
+
+
+      69 |     .last()
+      70 |     .click();
+    > 71 |   await expect(page.getByRole("status")).toContainText("Saved privately");
+         |                                          ^
+      72 | }
+      73 | for (const [name, width, height, index] of [
+      74 |   ["laptop", 1440, 900, 0],
+        at saveOutput (/Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:71:42)
+        at /Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:100:5
+
+    Error Context: test-results/map-workshop-phone-real-fi-c5d13-ad-alignment-survive-reload/error-context.md
+
+  3) e2e/map-workshop.spec.ts:168:3 › phone: touch sketch clear undo reference creation, cancellation and retry preserve originals 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: 'Save completed artwork' }).last()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('button', { name: 'Save completed artwork' }).last() with timeout 5000ms
+      - waiting for getByRole('button', { name: 'Save completed artwork' }).last()
+
+
+      64 |   await expect(
+      65 |     page.getByRole("button", { name: "Save completed artwork" }).last(),
+    > 66 |   ).toBeVisible();
+         |     ^
+      67 |   await page
+      68 |     .getByRole("button", { name: "Save completed artwork" })
+      69 |     .last()
+        at saveOutput (/Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:66:5)
+        at /Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:244:11
+
+    Error Context: test-results/map-workshop-phone-touch-s-042af-nd-retry-preserve-originals/error-context.md
+
+  4) e2e/map-workshop.spec.ts:321:1 › reference-only saved drawing reaches creation through the existing keyboard editor 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: 'Save completed artwork' }).last()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('button', { name: 'Save completed artwork' }).last() with timeout 5000ms
+      - waiting for getByRole('button', { name: 'Save completed artwork' }).last()
+
+
+      64 |   await expect(
+      65 |     page.getByRole("button", { name: "Save completed artwork" }).last(),
+    > 66 |   ).toBeVisible();
+         |     ^
+      67 |   await page
+      68 |     .getByRole("button", { name: "Save completed artwork" })
+      69 |     .last()
+        at saveOutput (/Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:66:5)
+        at /Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:358:9
+
+    Error Context: test-results/map-workshop-reference-onl-f6178-he-existing-keyboard-editor/error-context.md
+
+  5) e2e/map-workshop.spec.ts:420:3 › Supabase: conflicting alignment retains immutable originals and recoverable placement 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected substring: "changed elsewhere"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByRole('alert') with timeout 5000ms
+      - waiting for getByRole('alert')
+
+
+      503 |       { source },
+      504 |     );
+    > 505 |     await expect(page.getByRole("alert")).toContainText("changed elsewhere");
+          |                                           ^
+      506 |     const after = await page.evaluate(() =>
+      507 |       (window as any).content.readMapWorkspace(),
+      508 |     );
+        at /Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:505:43
+
+    Error Context: test-results/map-workshop-Supabase-conf-009e8-s-and-recoverable-placement/error-context.md
+
+  6) e2e/map-workshop.spec.ts:593:1 › each failed job retries its own original brief despite saved selection and reload 
+
+    TypeError: Cannot read properties of undefined (reading 'id')
+
+      607 |     (j: any) => j.state === "awaiting-client-output",
+      608 |   );
+    > 609 |   const bCard = page.locator(`[data-job-id="${b.id}"]`);
+          |                                                 ^
+      610 |   await bCard.getByRole("button", { name: "Cancel creation" }).click();
+      611 |   await page.getByRole("button", { name: /Inspect version 1/ }).click();
+      612 |   await bCard.getByRole("button", { name: "Retry creation" }).click();
+        at /Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:609:49
+
+    Error Context: test-results/map-workshop-each-failed-j-80b0b--saved-selection-and-reload/error-context.md
+
+  7) e2e/map-workshop.spec.ts:805:1 › controlled controller transport interruption: real Edge receipt resumes the same job after reload without another submit 
+
+    Error: Invalid owned interruption fixture identity.
+
+      817 |   function readReceipt() {
+      818 |     if (!uuid.test(requestId) || !uuid.test(partyId))
+    > 819 |       throw new Error("Invalid owned interruption fixture identity.");
+          |             ^
+      820 |     return JSON.parse(
+      821 |       sql(
+      822 |         `select jsonb_build_object('id',id,'state',state,'revision',revision,'provider_finished_at',provider_finished_at,'expires_at',coalesce((proof->>'expiresAt')::numeric,floor(extract(epoch from provider_finished_at)*1000)+86400000),'candidate_present',candidate is not null,'output_present',provisional is not null,'provider_submission_present',submission_token is not null,'owned_jobs',(select count(*) from public.party_map_generation_jobs where party_id='${partyId}'::uuid)) from public.party_map_generation_jobs where id='${requestId}'::uuid and party_id='${partyId}'::uuid;`,
+        at readReceipt (/Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:819:13)
+        at intercept (/Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:851:22)
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected substring: "unavailable"
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByRole('alert') with timeout 170000ms
+      - waiting for getByRole('alert')
+      - Test ended.
+
+
+      871 |     );
+      872 |   await page.getByRole("button", { name: "Create map", exact: true }).click();
+    > 873 |   await expect(page.getByRole("alert")).toContainText("unavailable", {
+          |                                         ^
+      874 |     timeout: 170000,
+      875 |   });
+      876 |   await expect(
+        at /Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:873:41
+
+    Error Context: test-results/map-workshop-controlled-co-49dba-load-without-another-submit/error-context.md
+
+  7 failed
+    e2e/map-workshop.spec.ts:168:3 › laptop: touch sketch clear undo reference creation, cancellation and retry preserve originals 
+    e2e/map-workshop.spec.ts:77:3 › phone: real fixture invent sibling comparison and upload alignment survive reload 
+    e2e/map-workshop.spec.ts:168:3 › phone: touch sketch clear undo reference creation, cancellation and retry preserve originals 
+    e2e/map-workshop.spec.ts:321:1 › reference-only saved drawing reaches creation through the existing keyboard editor 
+    e2e/map-workshop.spec.ts:420:3 › Supabase: conflicting alignment retains immutable originals and recoverable placement 
+    e2e/map-workshop.spec.ts:593:1 › each failed job retries its own original brief despite saved selection and reload 
+    e2e/map-workshop.spec.ts:805:1 › controlled controller transport interruption: real Edge receipt resumes the same job after reload without another submit 
+  10 passed (1.9m)
+Exact baseline restored; 7 owned parties/DMs, one Player and 29 owned objects cleaned; container49177 removed.

@@ -1,0 +1,78 @@
+[WebServer] (node:82310) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 3 tests using 1 worker
+
+(node:82326) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 e2e/map-workshop.spec.ts:247:1 › local adapter manual formats, maximum image/grid, failed input and alignment reload (6.7s)
+(node:82390) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 e2e/map-workshop.spec.ts:289:1 › actual App retains drawing route and offers dedicated workshop navigation (2.4s)
+  ✘  3 e2e/map-workshop.spec.ts:399:3 › local: conflicting alignment retains immutable originals and recoverable placement (6.5s)
+
+
+  1) e2e/map-workshop.spec.ts:247:1 › local adapter manual formats, maximum image/grid, failed input and alignment reload 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('status')
+    Expected substring: "Artwork saved privately"
+    Received string:    ""
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" getByRole('status') with timeout 5000ms
+      - waiting for getByRole('status')
+        3 × locator resolved to <p role="status">Working…</p>
+          - unexpected value "Working…"
+        11 × locator resolved to <p role="status"></p>
+           - unexpected value ""
+
+
+      254 |   await page.getByLabel("Artwork scale", { exact: true }).fill("0.25");
+      255 |   await page.getByRole("button", { name: "Save alignment as version" }).click();
+    > 256 |   await expect(page.getByRole("status")).toContainText(
+          |                                          ^
+      257 |     "Artwork saved privately",
+      258 |   );
+      259 |   let saved = await page.evaluate(() =>
+        at /Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:256:42
+
+    Error Context: test-results/map-workshop-local-adapter-69d7b--input-and-alignment-reload/error-context.md
+
+  2) e2e/map-workshop.spec.ts:399:3 › local: conflicting alignment retains immutable originals and recoverable placement 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected substring: "changed elsewhere"
+    Received string:    "Invalid artwork placement fields. Your inputs and saved versions are retained."
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" getByRole('alert') with timeout 5000ms
+      - waiting for getByRole('alert')
+        14 × locator resolved to <p role="alert">Invalid artwork placement fields. Your inputs and…</p>
+           - unexpected value "Invalid artwork placement fields. Your inputs and saved versions are retained."
+
+
+      482 |       { source },
+      483 |     );
+    > 484 |     await expect(page.getByRole("alert")).toContainText("changed elsewhere");
+          |                                           ^
+      485 |     const after = await page.evaluate(() =>
+      486 |       (window as any).content.readMapWorkspace(),
+      487 |     );
+        at /Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:484:43
+
+    Error Context: test-results/map-workshop-local-conflic-87da9-s-and-recoverable-placement/error-context.md
+
+  2 failed
+    e2e/map-workshop.spec.ts:247:1 › local adapter manual formats, maximum image/grid, failed input and alignment reload 
+    e2e/map-workshop.spec.ts:399:3 › local: conflicting alignment retains immutable originals and recoverable placement 
+  1 passed (19.7s)

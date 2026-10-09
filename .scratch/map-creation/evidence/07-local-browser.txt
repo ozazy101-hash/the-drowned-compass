@@ -1,0 +1,16 @@
+[WebServer] (node:82577) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 3 tests using 1 worker
+
+(node:82578) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 e2e/map-workshop.spec.ts:247:1 › local adapter manual formats, maximum image/grid, failed input and alignment reload (1.9s)
+  ✓  2 e2e/map-workshop.spec.ts:289:1 › actual App retains drawing route and offers dedicated workshop navigation (949ms)
+  ✓  3 e2e/map-workshop.spec.ts:399:3 › local: conflicting alignment retains immutable originals and recoverable placement (509ms)
+
+  3 passed (5.3s)

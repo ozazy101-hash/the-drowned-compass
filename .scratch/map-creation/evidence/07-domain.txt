@@ -1,0 +1,23 @@
+$ playwright test --config=playwright.calculations.config.ts tests/map-workshop.test.ts tests/grid-map.test.ts tests/map-artwork.test.ts
+
+Running 15 tests using 1 worker
+
+(node:82667) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/grid-map.test.ts:3:1 › bounded dimensions/default distances and clear invalid inputs (9ms)
+  ✓   2 tests/grid-map.test.ts:10:1 › room walls and replacement door use canonical unit edges without corner spurs (1ms)
+  ✓   3 tests/grid-map.test.ts:18:1 › fast terrain strokes interpolate, repaint, deterministic edge/interior erase (1ms)
+  ✓   4 tests/grid-map.test.ts:27:1 › one gesture is one undo, previews have no history, noops preserve redo, new edits clear it (1ms)
+  ✓   5 tests/grid-map.test.ts:36:1 › invalid strokes reject atomically, maximum boundary cells/edges remain within grid (1ms)
+  ✓   6 tests/grid-map.test.ts:43:1 › zoom conversion consistent, rejects outside/invalid pixels and documents stay immutable (1ms)
+  ✓   7 tests/map-artwork.test.ts:6:1 › branching accepts retained source geometry and rejects unsaved drawing or foreign parents (3ms)
+  ✓   8 tests/map-artwork.test.ts:13:1 › registration compares canonical geometry separately from content digest (0ms)
+  ✓   9 tests/map-artwork.test.ts:21:1 › first explicit choice is fully hidden and incompatible choice retains accepted frame (1ms)
+  ✓  10 tests/map-artwork.test.ts:28:1 › compatible saved stages retain accepted mask while stale expected revision conflicts (1ms)
+  ✓  11 tests/map-artwork.test.ts:33:1 › untrusted presentation never exposes mismatched or invalid mask cells (1ms)
+  ✓  12 tests/map-artwork.test.ts:39:1 › workspace rejects missing/cross-family/self parents and missing presentation source (1ms)
+  ✓  13 tests/map-artwork.test.ts:44:1 › validated accepted records defensively copy and freeze mask and drawing (0ms)
+  ✓  14 tests/map-workshop.test.ts:9:1 › closed outline is immutable, bounded and rejects zero-area gestures without changing input (2ms)
+  ✓  15 tests/map-workshop.test.ts:38:1 › alignment clamps position, preserves proportional pixels and resets using fit at maximum supported grid (2ms)
+
+  15 passed (471ms)

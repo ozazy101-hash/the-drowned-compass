@@ -1,0 +1,167 @@
+Starting explicitly labelled fixture application with fresh bounded Edge workers.
+[WebServer] (node:86804) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 11 tests using 1 worker
+
+(node:86807) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   1 e2e/map-workshop.spec.ts:68:3 › laptop: real fixture invent sibling comparison and upload alignment survive reload (2.0m)
+(node:87306) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   2 e2e/map-workshop.spec.ts:159:3 › laptop: touch sketch clear undo reference creation, cancellation and retry preserve originals (22.2s)
+(node:87352) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   3 e2e/map-workshop.spec.ts:68:3 › phone: real fixture invent sibling comparison and upload alignment survive reload (2.0m)
+(node:87767) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   4 e2e/map-workshop.spec.ts:159:3 › phone: touch sketch clear undo reference creation, cancellation and retry preserve originals (18.2s)
+(node:87779) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   5 e2e/map-workshop.spec.ts:247:1 › local adapter manual formats, maximum image/grid, failed input and alignment reload (1.9s)
+  ✓   6 e2e/map-workshop.spec.ts:289:1 › actual App retains drawing route and offers dedicated workshop navigation (699ms)
+  ✓   7 e2e/map-workshop.spec.ts:312:1 › reference-only saved drawing reaches creation through the existing keyboard editor (4.8s)
+  ✘   8 e2e/map-workshop.spec.ts:361:1 › provider timeout has honest error and explicit retry/cancel with private work retained (806ms)
+(node:87789) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   9 e2e/map-workshop.spec.ts:399:3 › local: conflicting alignment retains immutable originals and recoverable placement (727ms)
+  ✓  10 e2e/map-workshop.spec.ts:399:3 › Supabase: conflicting alignment retains immutable originals and recoverable placement (1.1s)
+  ✓  11 e2e/map-workshop.spec.ts:501:1 › selected artwork geometry does not override a new sketch draft or its retained PNG reference (2.1s)
+
+
+  1) e2e/map-workshop.spec.ts:68:3 › laptop: real fixture invent sibling comparison and upload alignment survive reload 
+
+    Test timeout of 120000ms exceeded.
+
+    Error: locator.click: Test timeout of 120000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'Save completed artwork' }).last()
+        - locator resolved to <button disabled>Save completed artwork</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+          - waiting 100ms
+        21 × waiting for element to be visible, enabled and stable
+           - element is not enabled
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+      - element was detached from the DOM, retrying
+
+
+      59 |     .getByRole("button", { name: "Save completed artwork" })
+      60 |     .last()
+    > 61 |     .click();
+         |      ^
+      62 |   await expect(page.getByRole("status")).toContainText("Saved privately");
+      63 | }
+      64 | for (const [name, width, height, index] of [
+        at saveOutput (/Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:61:6)
+        at /Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:91:5
+
+    Error Context: test-results/map-workshop-laptop-real-f-f6ed2-ad-alignment-survive-reload/error-context.md
+
+  2) e2e/map-workshop.spec.ts:159:3 › laptop: touch sketch clear undo reference creation, cancellation and retry preserve originals 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: 'Save completed artwork' }).last()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('button', { name: 'Save completed artwork' }).last() with timeout 5000ms
+      - waiting for getByRole('button', { name: 'Save completed artwork' }).last()
+
+
+      55 |   await expect(
+      56 |     page.getByRole("button", { name: "Save completed artwork" }).last(),
+    > 57 |   ).toBeVisible();
+         |     ^
+      58 |   await page
+      59 |     .getByRole("button", { name: "Save completed artwork" })
+      60 |     .last()
+        at saveOutput (/Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:57:5)
+        at /Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:235:11
+
+    Error Context: test-results/map-workshop-laptop-touch--37d39-nd-retry-preserve-originals/error-context.md
+
+  3) e2e/map-workshop.spec.ts:68:3 › phone: real fixture invent sibling comparison and upload alignment survive reload 
+
+    Test timeout of 120000ms exceeded.
+
+    Error: locator.selectOption: Test timeout of 120000ms exceeded.
+    Call log:
+      - waiting for getByLabel('Compare versions', { exact: true })
+
+
+      109 |     await page
+      110 |       .getByLabel("Compare versions", { exact: true })
+    > 111 |       .selectOption(sibling.versions[0].id);
+          |        ^
+      112 |     await expect(
+      113 |       page.getByRole("img", { name: "Comparison map artwork" }),
+      114 |     ).toBeVisible();
+        at /Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:111:8
+
+    Error Context: test-results/map-workshop-phone-real-fi-c5d13-ad-alignment-survive-reload/error-context.md
+
+  4) e2e/map-workshop.spec.ts:159:3 › phone: touch sketch clear undo reference creation, cancellation and retry preserve originals 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: 'Save completed artwork' }).last()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('button', { name: 'Save completed artwork' }).last() with timeout 5000ms
+      - waiting for getByRole('button', { name: 'Save completed artwork' }).last()
+
+
+      55 |   await expect(
+      56 |     page.getByRole("button", { name: "Save completed artwork" }).last(),
+    > 57 |   ).toBeVisible();
+         |     ^
+      58 |   await page
+      59 |     .getByRole("button", { name: "Save completed artwork" })
+      60 |     .last()
+        at saveOutput (/Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:57:5)
+        at /Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:235:11
+
+    Error Context: test-results/map-workshop-phone-touch-s-042af-nd-retry-preserve-originals/error-context.md
+
+  5) e2e/map-workshop.spec.ts:361:1 › provider timeout has honest error and explicit retry/cancel with private work retained 
+
+    TypeError: Cannot read properties of undefined (reading 'createdAt')
+
+      375 |   await expect
+      376 |     .poll(() => Date.now(), { intervals: [100], timeout: 5000 })
+    > 377 |     .toBeGreaterThan(Date.parse(running.jobs[0].createdAt) + 1100);
+          |                                                 ^
+      378 |   await page.getByRole("button", { name: "Refresh progress" }).click();
+      379 |   await expect(page.getByLabel("Creation jobs")).toContainText(
+      380 |     "provider-timeout",
+        at /Users/oscarpauwels/.codex/worktrees/map-workshop-07/Dungeons&Dragons/e2e/map-workshop.spec.ts:377:49
+
+    Error Context: test-results/map-workshop-provider-time-fa782--with-private-work-retained/error-context.md
+
+  5 failed
+    e2e/map-workshop.spec.ts:68:3 › laptop: real fixture invent sibling comparison and upload alignment survive reload 
+    e2e/map-workshop.spec.ts:159:3 › laptop: touch sketch clear undo reference creation, cancellation and retry preserve originals 
+    e2e/map-workshop.spec.ts:68:3 › phone: real fixture invent sibling comparison and upload alignment survive reload 
+    e2e/map-workshop.spec.ts:159:3 › phone: touch sketch clear undo reference creation, cancellation and retry preserve originals 
+    e2e/map-workshop.spec.ts:361:1 › provider timeout has honest error and explicit retry/cancel with private work retained 
+  6 passed (5.1m)
+Exact baseline restored; 6 owned parties/DMs, one Player and 21 owned objects cleaned; container49177 removed.

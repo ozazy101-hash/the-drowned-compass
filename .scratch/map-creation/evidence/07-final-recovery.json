@@ -1,0 +1,35 @@
+[
+  {
+    "phase": "before-controller-abort",
+    "id": "2e3e5435-eafa-4ca9-8608-f82f580f45c2",
+    "status": 200,
+    "receivedState": "awaiting-client-output",
+    "receivedCode": null,
+    "lifetimeMs": 3349,
+    "receipt": {
+      "id": "2e3e5435-eafa-4ca9-8608-f82f580f45c2",
+      "state": "awaiting-client-output",
+      "revision": 4,
+      "expires_at": 1791669227845,
+      "owned_jobs": 1,
+      "output_present": false,
+      "candidate_present": true,
+      "provider_finished_at": "2026-10-09T21:53:47.845812+00:00",
+      "provider_submission_present": true
+    }
+  },
+  {
+    "phase": "after-explicit-resume",
+    "receipt": {
+      "id": "2e3e5435-eafa-4ca9-8608-f82f580f45c2",
+      "state": "completed",
+      "revision": 6,
+      "expires_at": 1791669227845,
+      "owned_jobs": 1,
+      "output_present": true,
+      "candidate_present": true,
+      "provider_finished_at": "2026-10-09T21:53:47.845812+00:00",
+      "provider_submission_present": true
+    }
+  }
+]
