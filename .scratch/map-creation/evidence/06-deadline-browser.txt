@@ -1,0 +1,22 @@
+Starting explicitly labelled fixture application with fresh bounded Edge workers.
+[WebServer] (node:69209) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 7 tests using 1 worker
+
+(node:69210) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 e2e/map-generation.spec.ts:6:2 › laptop: real DM fixture progress, output and reload/recovery through PartyContent (5.9s)
+  ✓  2 e2e/map-generation.spec.ts:16:2 › laptop: real DM cancellation retains existing saved versions (4.1s)
+  ✓  3 e2e/map-generation.spec.ts:6:2 › phone: real DM fixture progress, output and reload/recovery through PartyContent (6.0s)
+  ✓  4 e2e/map-generation.spec.ts:16:2 › phone: real DM cancellation retains existing saved versions (3.1s)
+  ✓  5 e2e/map-generation.spec.ts:22:1 › real Player and anonymous receive bounded denial and no private objects/jobs (802ms)
+  ✓  6 e2e/map-generation.spec.ts:26:1 › private fresh-stage ingress rejects client proof and forged nonce even with DM JWT (60ms)
+  ✓  7 e2e/map-generation.spec.ts:32:1 › late receipt: timed-out reconciliation cannot save retained valid PNG or switch display (2.0s)
+
+  7 passed (24.3s)
+Exact baseline restored; 5 owned parties/DMs, one Player and 6 owned objects cleaned; container49176 removed.

@@ -1,0 +1,96 @@
+{
+  "source": "52b7c3f6d5023fa01af3e2283fd2213453c0a1db",
+  "image": "sha256:c52405002a890ca9fcf77978671c57f3a988e03174afb277f84ac65bc917013c",
+  "constraints": {
+    "memoryLimitMb": 256,
+    "cpuSoftMs": 1900,
+    "cpuHardMs": 2000,
+    "wallMs": 150000,
+    "forceCreate": true,
+    "noModuleCache": true,
+    "oneshot": true
+  },
+  "workers": [
+    {
+      "executionId": "f7462382-d6c8-4f81-bf2d-cb10083a1c12",
+      "bootMs": 340,
+      "stage": "prepare",
+      "instance": "b26df9af-b9d5-41be-a162-527f7b6cd286",
+      "cpuMs": 727,
+      "reason": "EarlyDrop",
+      "memorySampleBytes": 28011429,
+      "exceeded": false
+    },
+    {
+      "executionId": "e3b8b8cc-c091-4c0f-9a40-46b4486b4d96",
+      "bootMs": 124,
+      "stage": "finalize",
+      "instance": "dbf3cc9c-b1d1-47b8-a75c-c04b6b22bb83",
+      "cpuMs": 259,
+      "reason": "EarlyDrop",
+      "memorySampleBytes": 41913329,
+      "exceeded": false
+    },
+    {
+      "executionId": "144eec20-9366-48c6-9232-59d01d13dfed",
+      "bootMs": 71,
+      "stage": "finalize",
+      "instance": "d3c403b4-5c45-4027-a841-011b8440d485",
+      "cpuMs": 299,
+      "reason": "EarlyDrop",
+      "memorySampleBytes": 42031337,
+      "exceeded": false
+    },
+    {
+      "executionId": "aabb4fcb-1728-4b78-96ca-ac7cdba86fe0",
+      "bootMs": 44,
+      "stage": "inspect",
+      "instance": "dd7853ee-20a9-46fb-9d5e-7370b1359154",
+      "cpuMs": 160,
+      "reason": "EarlyDrop",
+      "memorySampleBytes": 35629462,
+      "exceeded": false
+    },
+    {
+      "executionId": "bd9a4e2f-dd16-4068-af44-9d08239f43dc",
+      "bootMs": 30,
+      "stage": "prepare",
+      "instance": "3a9eb6af-5233-47a2-81c7-d8efc8d46448",
+      "cpuMs": 335,
+      "reason": "EarlyDrop",
+      "memorySampleBytes": 47191893,
+      "exceeded": false
+    },
+    {
+      "executionId": "380ee835-2953-485b-9cc5-e271a07248ca",
+      "bootMs": 36,
+      "stage": "finalize",
+      "instance": "35a73f21-b694-453b-9778-0c04130b0bfa",
+      "cpuMs": 108,
+      "reason": "EarlyDrop",
+      "memorySampleBytes": 41925713,
+      "exceeded": false
+    },
+    {
+      "executionId": "d367990c-86bb-45b6-a6ae-613b8eb8aeaa",
+      "bootMs": 28,
+      "stage": "finalize",
+      "instance": "7339c2cd-ffe2-4970-af5e-7ffd676fb80d",
+      "cpuMs": 183,
+      "reason": "EarlyDrop",
+      "memorySampleBytes": 41926409,
+      "exceeded": false
+    },
+    {
+      "executionId": "9e0e62ea-4d2b-4bd1-b1c8-19c87a902821",
+      "bootMs": 33,
+      "stage": "finalize",
+      "instance": "8895c8ec-a877-412f-b877-930e3036246b",
+      "cpuMs": 156,
+      "reason": "EarlyDrop",
+      "memorySampleBytes": 41923553,
+      "exceeded": false
+    }
+  ],
+  "memoryNote": "Shutdown samples are not worker peaks. Container/JIT/file caches may be warm; distinct worker instances are proven."
+}

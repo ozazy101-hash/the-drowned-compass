@@ -1,0 +1,24 @@
+✔ DM submission/reload/output/recovery preserves a single version and re-reads stored output (269.101125ms)
+✔ player and anonymous cannot submit/read/open/cancel/output (84.956417ms)
+✔ simultaneous duplicate submit has exactly one provider submission (87.574541ms)
+✔ uncertain submission is reconciled without paid resubmission (0.39025ms)
+✔ cancel while provider running rejects late candidate and any output (1.523042ms)
+✔ cancel between pixel verification and atomic attach rejects attachment (138.373125ms)
+✔ region branch accepts exact source/candidate pixels, retains registration, rejects tamper (345.136042ms)
+✔ parent revision conflict, proof expiry, bad PNG and failed write preserve saved work (100.583541ms)
+✔ provider region mask is transparent inside and opaque outside (62.06375ms)
+✔ server provider deadline permanently rejects late outcome, never automatic second submission (7.023125ms)
+✔ invalid client assembly can retry same candidate/request without another provider call (242.655416ms)
+✔ unknown receipt arriving after deadline cannot produce proof, output or version (0.904125ms)
+✔ timely provider receipt permits24hour assembly/reload after provider deadline (194.572583ms)
+✔ source inspection deadline prevents provider submission (6.22ms)
+✔ source inspection cancel prevents provider submission (7.706917ms)
+✔ source inspection membership prevents provider submission (6.556792ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1623.42325

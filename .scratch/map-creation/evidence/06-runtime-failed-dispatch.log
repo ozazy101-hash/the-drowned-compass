@@ -1,0 +1,1 @@
+{"timestamp":"2026-10-09T20:12:46.274Z","event_type":"Boot","event":{"boot_time":62},"metadata":{"service_path":"/generation/worker","execution_id":"8a9d4527-9767-4c77-9b4e-4643f4ab55c7","otel_attributes":{"edge_runtime.worker.kind":"user"}}}
