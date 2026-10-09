@@ -31,14 +31,15 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
   let loadingVersion: number | undefined;
   const emit = (next: Partial<DisplayState>) => { state = {...state,...next}; listeners.forEach(listener=>listener()); };
   const blank = () => { if(popup&&!popup.closed) popup.document.body.replaceChildren(); frame=undefined; };
-  function clear(message='Party Display cleared.') {
-    restoreAllowed=false;epoch++; renderEpoch++; ready=false; selected=undefined; map=undefined; accepted=undefined;draft=undefined;cachedArtwork=undefined; blob=undefined; retry=undefined; registrationReference=undefined; loadingVersion=undefined; task?.cancel(); void pdf?.dispose(); pdf=undefined; blank();
-    emit({selected:undefined,busy:false,page:1,pages:1,zoom:1,x:0,y:0,contentKind:undefined,presentation:undefined,reveal:undefined,artwork:undefined,testSquare:false,registrationChanged:false,message});
+  function clear(message='Party Display cleared.', preserveAcknowledgement=true) {
+    const acknowledgementPending=preserveAcknowledgement&&state.registrationChanged;
+    restoreAllowed=false;epoch++; renderEpoch++; ready=false; selected=undefined; map=undefined; accepted=undefined;draft=undefined;cachedArtwork=undefined; blob=undefined; retry=undefined; if(!acknowledgementPending)registrationReference=undefined; loadingVersion=undefined; task?.cancel(); void pdf?.dispose(); pdf=undefined; blank();
+    emit({selected:undefined,busy:false,page:1,pages:1,zoom:1,x:0,y:0,contentKind:undefined,presentation:undefined,reveal:undefined,artwork:undefined,testSquare:false,registrationChanged:acknowledgementPending,message});
   }
   async function authorized() {
     const session=await getSession();
     if(!active)return false;
-    if(session?.role!=='dungeon-master'){clear('Your session ended. Sign in again before presenting.');return false;}return true;
+    if(session?.role!=='dungeon-master'){clear('Your session ended. Sign in again before presenting.',false);return false;}return true;
   }
   function transform() { if(frame&&state.contentKind!=='map'&&!state.testSquare)frame.style.transform=`translate(${state.x}px, ${state.y}px) scale(${state.zoom})`; }
   async function render(token: number) {
@@ -260,7 +261,7 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
     if(selected||map||state.testSquare)void authorized().catch(()=>emit({message:'Connection interrupted. Existing display retained.'}));
   },1000);
   const onUnload=()=>dispose();window.addEventListener('pagehide',onUnload);window.addEventListener('online',reconcile);
-  function dispose(){if(!active)return;clear();active=false;stop();stopMaps();clearInterval(timer);window.removeEventListener('pagehide',onUnload);window.removeEventListener('online',reconcile);listeners.clear();}
+  function dispose(){if(!active)return;clear(undefined,false);active=false;stop();stopMaps();clearInterval(timer);window.removeEventListener('pagehide',onUnload);window.removeEventListener('online',reconcile);listeners.clear();}
   return {
     getState:()=>state, subscribe:(listener:()=>void)=>{listeners.add(listener);return()=>{listeners.delete(listener);};},
     openWindow,present,presentMap,reveal,saveReveal,calibration,clear,dispose,
