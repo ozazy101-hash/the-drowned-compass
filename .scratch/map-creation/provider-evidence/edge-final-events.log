@@ -1,0 +1,12 @@
+{"timestamp":"2026-10-09T09:32:41.354Z","event_type":"Boot","event":{"boot_time":2634},"metadata":{"service_path":"/probe/edge/worker","execution_id":"51e23dea-4e15-4bc2-afb1-8ddc1310d7b7","otel_attributes":{"edge_runtime.worker.kind":"user"}}}
+CPU time limit reached: isolate: 51e23dea-4e15-4bc2-afb1-8ddc1310d7b7
+failed to send request to user worker: request has been cancelled by supervisor
+user worker failed to respond: request has been cancelled by supervisor
+runtime has escaped from the event loop unexpectedly: event loop error: Uncaught null
+{"timestamp":"2026-10-09T09:32:44.588Z","event_type":"UncaughtException","event":{"exception":"event loop error: Uncaught null","cpu_time_used":2117},"metadata":{"service_path":"/probe/edge/worker","execution_id":"51e23dea-4e15-4bc2-afb1-8ddc1310d7b7","otel_attributes":{"edge_runtime.worker.kind":"user"}}}
+{"timestamp":"2026-10-09T09:32:45.907Z","event_type":"Boot","event":{"boot_time":1142},"metadata":{"service_path":"/probe/edge/worker","execution_id":"a1d7fd8f-7300-4499-9c83-511abb539d81","otel_attributes":{"edge_runtime.worker.kind":"user"}}}
+CPU time limit reached: isolate: a1d7fd8f-7300-4499-9c83-511abb539d81
+failed to send request to user worker: request has been cancelled by supervisor
+user worker failed to respond: request has been cancelled by supervisor
+runtime has escaped from the event loop unexpectedly: event loop error: Uncaught null
+{"timestamp":"2026-10-09T09:32:48.048Z","event_type":"UncaughtException","event":{"exception":"event loop error: Uncaught null","cpu_time_used":2061},"metadata":{"service_path":"/probe/edge/worker","execution_id":"a1d7fd8f-7300-4499-9c83-511abb539d81","otel_attributes":{"edge_runtime.worker.kind":"user"}}}
