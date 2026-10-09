@@ -39,3 +39,11 @@ test('late receipt: timed-out reconciliation cannot save retained valid PNG or s
  await page.getByRole('button',{name:'Save fixture output'}).click();await expect(page.locator('#status')).toContainText('unavailable');
  const workspace=await page.evaluate(()=>(window as any).content.readMapWorkspace());expect(workspace.versions).toHaveLength(0);expect(workspace.presentation.version).toBeNull();expect(workspace.jobs.find((j:any)=>j.id===c.requestId).state).toBe('failed');
 });
+
+test('laptop: saved artwork reference checks owned claim after fresh source inspection',async({page})=>{
+ const c=config(JSON.parse(process.env.MAP_LIVE_DM_JWTS!)[0]);await connect(page,c);await page.getByRole('button',{name:'Create fixture'}).click();await expect(page.locator('#status')).toContainText('awaiting-client-output');await page.getByRole('button',{name:'Save fixture output'}).click();await expect(page.locator('#status')).toContainText('completed');
+ const before=await page.evaluate(()=>(window as any).content.readMapWorkspace());const requestId=randomUUID();const reference={...c,requestId,intent:{requestId,familyId:c.familyId,parentVersionId:c.requestId,expectedVersion:1,kind:'reference',source:'artwork',title:'Saved reference fixture',instructions:'Sea cave'}};
+ await connect(page,reference);await page.getByRole('button',{name:'Create fixture'}).click();await expect(page.locator('#status')).toContainText('awaiting-client-output');await page.getByRole('button',{name:'Save fixture output'}).click();await expect(page.locator('#status')).toContainText('completed');
+ await page.reload();await page.waitForFunction(()=>typeof (window as any).configure==='function');await page.evaluate(c=>(window as any).configure(c),reference);await page.getByRole('button',{name:'Reconcile',exact:true}).click();await expect(page.locator('#status')).toContainText('completed');
+ const after=await page.evaluate(()=>(window as any).content.readMapWorkspace());expect(after.versions).toHaveLength(2);expect(after.versions.some((v:any)=>v.id===c.requestId)).toBe(true);expect(after.presentation).toEqual(before.presentation);
+});

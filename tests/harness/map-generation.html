@@ -1,12 +1,12 @@
 <!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{font:18px system-ui;background:#10242b;color:#edf4ee;max-width:700px;margin:24px auto;padding:16px}button,input{font:inherit;padding:12px;margin:6px}pre{white-space:pre-wrap;overflow-wrap:anywhere}</style></head><body><h1>Local generation fixture</h1><p>Deterministic provider fixture; no paid or live calls.</p><label>Scene <input id="scene" value="A sea cave"></label><div><button id="submit">Create fixture</button><button id="read">Reconcile</button><button id="output">Save fixture output</button><button id="cancel">Cancel job</button></div><pre id="status">Awaiting connection</pre><script type="module">
 import {createClient} from '@supabase/supabase-js';
 import {supabasePartyContent} from '../../src/data/supabase-party-content.ts';
-window.configure=({url,key,jwt,server,familyId,requestId})=>{
+window.configure=({url,key,jwt,server,familyId,requestId,intent:override})=>{
  const client=createClient(url,key,{global:{headers:{Authorization:'Bearer '+jwt}},auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
  const functions={async invoke(name,options){const response=await fetch(server,{method:'POST',headers:{apikey:key,Authorization:'Bearer '+jwt,'Content-Type':'application/json',...options.headers},body:options.body instanceof Blob?options.body:JSON.stringify(options.body)});if(!response.ok)return {data:null,error:{context:response}};return {data:response.headers.get('Content-Type')?.startsWith('image/')?await response.blob():await response.json(),error:null};}};
  const content=supabasePartyContent(new Proxy(client,{get(t,k){return k==='functions'?functions:Reflect.get(t,k);}}));
  const status=document.querySelector('#status'),show=value=>status.textContent=JSON.stringify(value,null,2);
- const intent={requestId,familyId,expectedVersion:0,kind:'generate',title:'Ticket06 browser fixture',instructions:'Sea cave',document:{columns:8,rows:6,feetPerSquare:5,terrain:[],edges:[]}};
+ const intent=override??{requestId,familyId,expectedVersion:0,kind:'generate',title:'Ticket06 browser fixture',instructions:'Sea cave',document:{columns:8,rows:6,feetPerSquare:5,terrain:[],edges:[]}};
  document.querySelector('#submit').onclick=async()=>show(await content.changeMapGeneration({kind:'submit',intent:{...intent,instructions:document.querySelector('#scene').value}}));
  document.querySelector('#read').onclick=async()=>show(await content.changeMapGeneration({kind:'read',requestId}));
  document.querySelector('#cancel').onclick=async()=>show(await content.changeMapGeneration({kind:'cancel',requestId}));

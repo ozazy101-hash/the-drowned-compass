@@ -72,11 +72,22 @@ export function generationApplication({store,provider,verifier,mode='live',now=D
   if(j.state!=='queued')return reconcile(user,j.id);
   if(Date.parse(j.deadline)<=now())return snapshot(await transition(j,'failed',{code:'expired-submission'}));
   const submissionToken=crypto.randomUUID();const started=await transition(j,'running',{submissionToken});if(started.state!=='running'||started.submission_token!==submissionToken)return snapshot(started);j=started;
+  let source;
+  try{
+   source=j.intent.kind==='generate'?undefined:await readBytes(j,'source');
+   if(source)await verifier.inspect(source); // fresh stage validates input BEFORE provider call
+  }catch{return snapshot(await transition(j,'failed',{code:'unsupported-ai-format'}));}
+  // Inspection can consume the receipt window or overlap cancellation/membership
+  // loss. Re-authorize and retain only THIS execution's unchanged durable claim.
+  const current=await owned(user,j.id);
+  if(current.state!=='running'||current.revision!==j.revision||current.submission_token!==submissionToken)return snapshot(current);
+  j=current;
+  if(Date.parse(j.deadline)<=now())return snapshot(await transition(j,'failed',{code:'provider-timeout'}));
+  await check(j);
+  if(Date.parse(j.deadline)<=now())return snapshot(await transition(j,'failed',{code:'provider-timeout'}));
   let response;
   try{
-   const source=j.intent.kind==='generate'?undefined:await readBytes(j,'source');
-   if(source)await verifier.inspect(source); // fresh stage validates input BEFORE provider call
-   const abort=new AbortController(),wait=Math.min(120000,Math.max(1,Date.parse(j.deadline)-now()));
+   const abort=new AbortController(),wait=Math.min(120000,Date.parse(j.deadline)-now());
    let timer;try{response=await Promise.race([provider.generate({requestId:j.id,prompt:j.intent.instructions,source,region:j.binding.region,size:'1024x1024',signal:abort.signal}),new Promise(resolve=>{timer=setTimeout(()=>{abort.abort();resolve({kind:'uncertain'});},wait);})]);}finally{clearTimeout(timer);}
   }catch(error){if(String(error).includes('Unsupported')||String(error).includes('PNG')||String(error).includes('encoding'))return snapshot(await transition(j,'failed',{code:'unsupported-ai-format'}));response={kind:'uncertain'};}
   try{return snapshot(await acceptCandidate(j,response));}catch{return snapshot(await transition(await owned(user,j.id),'failed',{code:'output-unavailable'}));}
