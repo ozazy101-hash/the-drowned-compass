@@ -10,7 +10,7 @@ export function MapRevealControls({display,state}:{display:PartyDisplay;state:Di
   const snapshot=state.presentation, draft=state.reveal;
   if(!snapshot?.version||!snapshot.mask||!draft)return null;
   const uncovered=new Set(draft.uncovered);
-  const document=snapshot.version.document, disabled=draft.status==='pending'||draft.status==='conflict';
+  const document=snapshot.version.document, disabled=state.registrationChanged||draft.status==='pending'||draft.status==='conflict';
   function sample(event:React.PointerEvent<SVGSVGElement>){
     const matrix=event.currentTarget.getScreenCTM();if(!matrix)return;
     const point=new DOMPoint(event.clientX,event.clientY).matrixTransform(matrix.inverse());
@@ -29,8 +29,8 @@ export function MapRevealControls({display,state}:{display:PartyDisplay;state:Di
       <MapDrawing document={document} background={url&&snapshot.version.background?{url,placement:snapshot.version.background}:undefined}/>
       {overlay&&Array.from({length:document.columns*document.rows},(_,cell)=>!uncovered.has(cell)&&<rect key={cell} x={cell%document.columns} y={Math.floor(cell/document.columns)} width="1" height="1" fill="#b787e8" opacity=".35" pointerEvents="none"/>)}
     </svg>
-    <button disabled={!draft.canUndo} onClick={()=>{display.reveal({type:'undo'});void display.saveReveal();}}>Undo uncover / hide</button>
-    <button disabled={!draft.canRedo} onClick={()=>{display.reveal({type:'redo'});void display.saveReveal();}}>Redo uncover / hide</button>
+    <button disabled={disabled||!draft.canUndo} onClick={()=>{display.reveal({type:'undo'});void display.saveReveal();}}>Undo uncover / hide</button>
+    <button disabled={disabled||!draft.canRedo} onClick={()=>{display.reveal({type:'redo'});void display.saveReveal();}}>Redo uncover / hide</button>
     <button disabled={disabled} onClick={()=>{if(window.confirm('Hide the whole map on the Party Display?')){display.reveal({type:'hide-all'});void display.saveReveal();}}}>Hide whole map</button>
     <button disabled={disabled} onClick={()=>{if(window.confirm('Uncover the whole map? This may reveal story spoilers.')){display.reveal({type:'uncover-all',confirmed:true});void display.saveReveal();}}}>Uncover whole map</button>
     {draft.error&&<p role="alert">{draft.error}</p>}

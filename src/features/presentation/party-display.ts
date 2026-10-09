@@ -180,7 +180,7 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
     snapshot=validateMapPresentation(snapshot);
     if(!snapshot.version||!snapshot.mask)throw new Error('Map presentation unavailable.');
     if(accepted&&snapshot.revision<accepted.revision)return;
-    if(registrationReference&&!matchingMapGeometry(registrationReference,snapshot.version))emit({x:0,y:0,setupChanged:true,registrationChanged:true});
+    if(registrationReference&&(registrationReference.familyId!==snapshot.version.familyId||!matchingMapGeometry(registrationReference,snapshot.version))){blank();emit({x:0,y:0,zoom:1,mode:'calibrating',setupChanged:true,registrationChanged:true});}
     if(accepted?.version?.id!==snapshot.version.id){cachedArtwork=undefined;emit({artwork:undefined});}
     registrationReference=snapshot.version;accepted=snapshot;map=snapshot.version;
     if(preserveDraft&&draft)draft.observe(snapshot);else draft=createMapRevealMaskDraft(snapshot);
@@ -212,17 +212,18 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
       if(!version)throw new Error('Choose a saved version.');
       const result=await content.chooseMapPresentation({versionId:version.id,expectedRevision:workspace.presentation.revision,requestId:crypto.randomUUID(),newMap});
       if(token!==epoch||!active)return;
-      if(!result.ok){if(result.reason==='incompatible'&&window.confirm('Set up this different map? It starts fully hidden. Recheck physical calibration before placing miniatures.')){choicePending=false;emit({busy:false});void presentMap(version,true);return;}emit({message:result.reason==='incompatible'?'Different map geometry. Confirm new map setup to start hidden.':'Presentation changed elsewhere. Retry your choice.'});return;}
+      if(!result.ok){if(result.reason==='incompatible'&&window.confirm('Set up this different map? It starts fully hidden. Recheck physical calibration before placing miniatures.')){choicePending=false;emit({busy:false});void presentMap(version,true);return;}emit({message:result.reason==='incompatible'?'Map family, grid or artwork registration differs. Current display retained. Choose again to confirm a fully hidden new map setup.':'Presentation changed elsewhere. Retry your choice.'});return;}
       accept(result.presentation);emit({testSquare:false});await render(token);
     }catch{if(token===epoch&&active)emit({message:'Map choice failed. Accepted display retained; retry.'});}
     finally{choicePending=false;if(token===epoch)emit({busy:false});}
   }
   function reveal(command:MapRevealMaskCommand) {
     if(!draft)return;
+    if(state.registrationChanged){emit({message:'Confirm measured square for this new map before uncovering.'});return;}
     try{draft.command(command);emit({reveal:draft.snapshot()});}catch(error){emit({message:error instanceof Error?error.message:'Reveal command unavailable.'});}
   }
   async function saveReveal() {
-    if(!draft||choicePending)return;
+    if(!draft||choicePending||state.registrationChanged)return;
     const current=draft,token=epoch,requestId=crypto.randomUUID();
     try {
       if(!await authorized()||token!==epoch)return;
@@ -239,7 +240,7 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
     if(!active||!popup||popup.closed)return;
     if(command.squarePixels!==undefined&&(!Number.isFinite(command.squarePixels)||command.squarePixels<8||command.squarePixels>512)){emit({message:'Choose a test square between 8 and 512 display pixels.'});return;}
     renderEpoch++;task?.cancel();
-    if(command.kind==='reset'){emit({mode:'ordinary',testSquare:false,setupChanged:false,registrationChanged:false,zoom:1,x:0,y:0,message:'Calibration reset. Ordinary viewing uses zoom and Fit to screen.'});blank();if(map&&!ready)void reconcileMap();else void render(epoch);return;}
+    if(command.kind==='reset'){emit({mode:'ordinary',testSquare:false,setupChanged:state.registrationChanged,registrationChanged:state.registrationChanged,zoom:1,x:0,y:0,message:'Calibration reset. Ordinary viewing uses zoom and Fit to screen.'});blank();if(map&&!ready)void reconcileMap();else void render(epoch);return;}
     if(command.kind==='confirm'){emit({mode:'calibrated',testSquare:!map&&!blob,setupChanged:false,registrationChanged:false,message:'Measured square confirmed for this physical setup. Scale is locked; pan remains available.'});if(map&&!ready)void reconcileMap();else void render(epoch);return;}
     emit({mode:'calibrating',testSquare:true,squarePixels:command.squarePixels??state.squarePixels,zoom:1,message:'Measure the square on the table. Adjust until it matches your desired miniature square, then confirm.'});
     const token=epoch;void authorized().then(ok=>{if(ok&&token===epoch&&state.testSquare)renderSquare();});

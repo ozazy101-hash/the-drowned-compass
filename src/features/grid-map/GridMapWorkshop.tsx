@@ -872,6 +872,12 @@ export function GridMapWorkshop({
         )}
         {selected && (
           <>
+            <dl aria-label="Saved stage identities">
+              <dt>Inspected version</dt><dd>{selected.id}</dd>
+              <dt>Saved parent</dt><dd>{selected.parentVersionId ?? "First version"}</dd>
+              <dt>Currently displayed version</dt><dd>{workspace.presentation.version?.id ?? "None"}</dd>
+            </dl>
+            <p>Inspect or branch from any saved version without changing the Party Display. Use this map explicitly switches the displayed stage. Aligned stages retain uncover progress and physical placement; different registration requires hidden new-map setup and calibration confirmation.</p>
             <p>{selected.instructions}</p>
             <p>
               {selected.document.columns} × {selected.document.rows} squares ·{" "}

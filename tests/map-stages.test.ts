@@ -8,3 +8,20 @@ test('registration ignores changed drawing but rejects different artwork, placem
  for(const changed of [{...map,background:null},{...map,background:{...map.background!,registration:'different-art'}},{...map,background:{...map.background!,x:1}},{...map,document:{...map.document,columns:9}},{...map,document:{...map.document,feetPerSquare:10}},{...map,background:{...map.background!,registration:undefined}}])expect(matchingMapRegistration(map,changed)).toBe(false);
  expect(matchingMapRegistration({...map,background:null},{...map,background:null})).toBe(true);
 });
+
+import {randomUUID} from 'node:crypto';
+import {chooseMapPresentation,type MapArtworkVersion} from '../src/domain/map-artwork';
+const version=():MapArtworkVersion=>({id:randomUUID(),familyId:randomUUID(),parentVersionId:null,createdAt:new Date().toISOString(),requestId:randomUUID(),title:'Aligned stage',document:map.document,background:{...map.background!,digest:'a'.repeat(64)},origin:'uploaded',instructions:'',reference:null,jobId:null});
+test('trusted constrained revision retains mask despite changed content digest, while fresh same-family generation rejects',()=>{
+ const source=version(),first=chooseMapPresentation({revision:0,version:null,mask:null},source,{versionId:source.id,expectedRevision:0,requestId:randomUUID()});if(!first.ok)throw Error('Initial choice failed');
+ const current={...first.presentation,mask:{...first.presentation.mask!,uncovered:[1,5]}};
+ const revision={...source,id:randomUUID(),parentVersionId:source.id,background:{...source.background!,digest:'b'.repeat(64)},origin:'revised' as const,jobId:randomUUID()};
+ const chosen=chooseMapPresentation(current,revision,{versionId:revision.id,expectedRevision:1,requestId:randomUUID()});expect(chosen.ok).toBe(true);if(chosen.ok)expect(chosen.presentation.mask).toEqual(current.mask);
+ const whole={...revision,id:randomUUID(),origin:'generated' as const,background:{...revision.background,registration:'fresh-generation'}};
+ const rejected=chooseMapPresentation(current,whole,{versionId:whole.id,expectedRevision:1,requestId:randomUUID()});expect(rejected).toEqual({ok:false,reason:'incompatible',presentation:current});
+ const setup=chooseMapPresentation(current,whole,{versionId:whole.id,expectedRevision:1,requestId:randomUUID(),newMap:true});expect(setup.ok).toBe(true);if(setup.ok)expect(setup.presentation.mask!.uncovered).toEqual([]);
+});
+test('same geometry without same family cannot reuse accepted reveal progress',()=>{
+ const source=version(),first=chooseMapPresentation({revision:0,version:null,mask:null},source,{versionId:source.id,expectedRevision:0,requestId:randomUUID()});if(!first.ok)throw Error('Initial choice failed');
+ const other={...source,id:randomUUID(),familyId:randomUUID()};expect(chooseMapPresentation(first.presentation,other,{versionId:other.id,expectedRevision:1,requestId:randomUUID()})).toEqual({ok:false,reason:'incompatible',presentation:first.presentation});
+});
