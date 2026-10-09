@@ -82,8 +82,16 @@ export function supabasePartyContent(client: SupabaseClient): PartyContent {
       const accepted=await reconcile();if(accepted)return accepted;
       const membership=await client.from('party_members').select('party_id,role').single();if(membership.error||membership.data.role!=='dungeon-master')throw new Error('Dungeon Master access is required.');
       const object={party_id:membership.data.party_id,object_id:input.requestId},referenceObject={...object,object_id:referenceId};
-      if(prepared.replacement)await stage(object,input.artwork!,prepared.replacement.digest);
-      if(reference?.replacement)await stage(referenceObject,input.reference!,reference.replacement.digest);
+      try {
+        if(prepared.replacement)await stage(object,input.artwork!,prepared.replacement.digest);
+        if(reference?.replacement)await stage(referenceObject,input.reference!,reference.replacement.digest);
+      } catch(error) {
+        // No accepting RPC was sent: compensate only these staged objects. SQL
+        // guards preserve any concurrent map/version/Handout reference.
+        if(prepared.replacement)await cleanup(object);
+        if(reference?.replacement)await cleanup(referenceObject);
+        throw error;
+      }
       const result=await client.rpc('attach_map_artwork_version',{p_family:input.familyId,p_parent:input.parentVersionId??null,p_expected_version:input.expectedVersion,p_request:input.requestId,p_title:prepared.title,p_document:input.parentVersionId?null:document,p_artwork:prepared.replacement?{...prepared.replacement,object_id:input.requestId}:null,p_reference:reference?.replacement?{...reference.replacement,registration:`reference:${referenceId}`,object_id:referenceId}:null,p_instructions:input.instructions??'',p_client_signature:signature});
       if(result.error){const committed=await reconcile();if(committed){changed();return committed;}throw failure();}
       const outcome=result.data as {ok:boolean;item:MapRow;version:VersionRow};

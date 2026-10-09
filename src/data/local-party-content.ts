@@ -53,7 +53,7 @@ export function localPartyContent(token: () => string | null): PartyContent {
     async chooseMapPresentation(input){
       const outcome=await localContentTransaction<Awaited<ReturnType<PartyContent['chooseMapPresentation']>>>(token(),true,(store,complete)=>{
         const request=store.getAll();request.onsuccess=()=>{try{
-          const records=request.result as (LocalMap|PresentationRecord)[];const saved=records.find((r):r is PresentationRecord=>r.kind==='map-presentation');const signature=JSON.stringify(input);const retry=saved?.requests[input.requestId];
+          const records=request.result as (LocalMap|PresentationRecord)[];const saved=records.find((r):r is PresentationRecord=>r.kind==='map-presentation');const signature=JSON.stringify({versionId:input.versionId,expectedRevision:input.expectedRevision,newMap:input.newMap??false});const retry=saved?.requests[input.requestId];
           if(retry){if(retry.signature!==signature)throw new Error('This presentation request was already used.');complete({ok:true,presentation:retry.presentation});return;}
           const version=records.filter((r):r is LocalMap=>r.kind==='grid-map').flatMap(retained).find(v=>v.version.id===input.versionId)?.version;if(!version)throw new Error('Choose a saved Map Artwork Version.');
           const result=chooseMapPresentation(saved?.presentation??emptyMapPresentation(),version,input);

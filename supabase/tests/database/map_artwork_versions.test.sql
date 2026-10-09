@@ -1,6 +1,6 @@
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(33);
+select plan(35);
 set local storage.allow_delete_query='true';
 insert into auth.users(id,email,raw_app_meta_data,raw_user_meta_data) values ('44000000-0000-4000-8000-000000000011','map04-dm@verification.test','{}','{}'),('44000000-0000-4000-8000-000000000012','map04-player@verification.test','{}','{}');
 insert into public.party_members(party_id,user_id,role) values ('00000000-0000-4000-8000-000000000001','44000000-0000-4000-8000-000000000011','dungeon-master'),('00000000-0000-4000-8000-000000000001','44000000-0000-4000-8000-000000000012','player');
@@ -20,6 +20,8 @@ with removed as(delete from storage.objects where name='00000000-0000-4000-8000-
 select lives_ok($$select public.attach_map_artwork_version('44000000-0000-4000-8000-000000000001','44000000-0000-4000-8000-000000000003',2,'44000000-0000-4000-8000-000000000008','Older branch',null,null,null,'Branch','branch')$$,'branch from an older retained parent succeeds');
 select is((select background->>'object_id' from public.party_map_artwork_versions where id='44000000-0000-4000-8000-000000000008'),'44000000-0000-4000-8000-000000000003','older branch uses immutable parent artwork');
 select is((select jsonb_array_length(document->'terrain') from public.party_map_artwork_versions where id='44000000-0000-4000-8000-000000000008'),0,'older branch excludes latest geometry');
+select throws_ok($$select public.attach_map_artwork_version('44000000-0000-4000-8000-000000000001','44000000-0000-4000-8000-000000000003',3,'44000000-0000-4000-8000-000000000020','Missing stored candidate',null,jsonb_build_object('x',1,'y',0,'width',6,'height',6,'pixelWidth',8,'pixelHeight',8,'size',68,'mime','image/png','digest',repeat('e',64),'object_id','44000000-0000-4000-8000-000000000020'),null,'Failure fixture','missing-object')$$,'P0001','Upload usable image content before saving the Grid Map','missing stored image aborts attachment rather than replacing accepted version');
+select is((select count(*) from public.party_map_artwork_versions where family_id='44000000-0000-4000-8000-000000000001'),3::bigint,'failed storage attachment leaves all accepted versions intact');
 select is(public.choose_map_presentation('44000000-0000-4000-8000-000000000003',0,'44000000-0000-4000-8000-000000000009',false)->'presentation'->'mask'->'uncovered','[]'::jsonb,'first presentation is hidden');
 select is(public.choose_map_presentation('44000000-0000-4000-8000-000000000004',1,'44000000-0000-4000-8000-00000000000a',false)->>'reason','incompatible','untrusted new registration cannot reuse mask');
 select is((public.read_map_workspace()->'presentation'->'version'->>'id'),'44000000-0000-4000-8000-000000000003','incompatible choice retains prior accepted version');
