@@ -1,5 +1,5 @@
 import { emptyMapPresentation, mapIdentity, matchingMapGeometry, validateMapPresentation, type MapArtworkVersion, type MapPresentation, type MapPresentationResult } from './map-artwork';
-import type { GridPoint } from './grid-map';
+import { validateGridMap, validateMapBackground, type GridPoint } from './grid-map';
 
 export type MapRevealMaskIntent = Readonly<{
   requestId: string; expectedRevision: number; familyId: string; maskId: string;
@@ -24,6 +24,27 @@ export function commitMapRevealMask(current: MapPresentation, intent: MapRevealM
   const next = validateMapPresentation({ ...current, revision: current.revision + 1, mask: { ...current.mask, uncovered: intent.uncovered } });
   return { ok: true, presentation: next };
 }
+
+/** Canonical persistence key. Artwork bytes, terrain details and calibration do
+ * not identify cell geography. Equality decisions still use matchingMapGeometry. */
+export function mapRevealGeometry(source: Pick<MapArtworkVersion, 'document' | 'background'>) {
+  const document = validateGridMap(source.document), background = source.background;
+  if (background) {
+    validateMapBackground(document, background);
+    if (typeof background.registration !== 'string' || !background.registration) throw new Error('Map registration is unavailable.');
+  }
+  return { columns: document.columns, rows: document.rows, feetPerSquare: document.feetPerSquare,
+    background: background ? { registration: background.registration!, x: background.x, y: background.y, width: background.width, height: background.height, pixelWidth: background.pixelWidth, pixelHeight: background.pixelHeight } : null };
+}
+export function prepareMapRevealMaskIntent(intent: MapRevealMaskIntent) {
+  mapIdentity(intent.requestId); mapIdentity(intent.familyId); mapIdentity(intent.maskId);
+  if (!Number.isSafeInteger(intent.expectedRevision) || intent.expectedRevision < 1) throw new Error('Reload the map presentation before saving reveal progress.');
+  const geometry = mapRevealGeometry(intent.geometry);
+  if (!Array.isArray(intent.uncovered) || intent.uncovered.some(cell => !Number.isInteger(cell) || cell < 0 || cell >= geometry.columns * geometry.rows) || new Set(intent.uncovered).size !== intent.uncovered.length) throw new Error('Map presentation is unavailable.');
+  const signature = { kind: 'mask', familyId: intent.familyId, maskId: intent.maskId, expectedRevision: intent.expectedRevision, geometry, uncovered: [...intent.uncovered].sort((a, b) => a - b) };
+  return { geometry, signature };
+}
+
 const cells = (values: readonly number[]) => Object.freeze([...values].sort((a, b) => a - b));
 const equal = (a: readonly number[], b: readonly number[]) => a.length === b.length && a.every((cell, index) => cell === b[index]);
 

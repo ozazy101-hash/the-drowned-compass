@@ -1,3 +1,4 @@
+import { prepareMapRevealMaskIntent } from '../domain/map-reveal-mask';
 import { attachmentDocument, validateMapVersion, validateMapPresentation, validateMapWorkspace, type MapArtworkVersion, type MapPresentation } from '../domain/map-artwork';
 import { validateGridMap, validateMapBackground } from '../domain/grid-map';
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -103,6 +104,21 @@ export function supabasePartyContent(client: SupabaseClient): PartyContent {
       if(result.error){const receipt=await client.from('party_map_presentation_requests').select('*').eq('request_id',input.requestId).maybeSingle();
         if(receipt.error||!receipt.data)throw failure();const saved=receipt.data as {signature:{version:string;expectedRevision:number;newMap:boolean};presentation:Parameters<typeof presentationMetadata>[0]};
         if(saved.signature.version!==input.versionId||saved.signature.expectedRevision!==input.expectedRevision||saved.signature.newMap!==(input.newMap??false))throw new Error('This presentation request was already used.');
+        changed();return {ok:true,presentation:presentationMetadata(saved.presentation)};
+      }
+      const outcome=result.data as {ok:boolean;reason:'conflict'|'incompatible';presentation:Parameters<typeof presentationMetadata>[0]};changed();
+      return outcome.ok?{ok:true,presentation:presentationMetadata(outcome.presentation)}:{ok:false,reason:outcome.reason,presentation:presentationMetadata(outcome.presentation)};
+    },
+    async commitMapRevealMask(input){
+      const prepared=prepareMapRevealMaskIntent(input);
+      const result=await client.rpc('commit_map_reveal_mask',{p_request:input.requestId,p_expected_revision:input.expectedRevision,p_family:input.familyId,p_mask:input.maskId,p_geometry:prepared.geometry,p_uncovered:prepared.signature.uncovered});
+      if(result.error){
+        const receipt=await client.from('party_map_presentation_requests').select('*').eq('request_id',input.requestId).maybeSingle();
+        if(receipt.error||!receipt.data)throw failure();
+        const saved=receipt.data as {signature:typeof prepared.signature;presentation:Parameters<typeof presentationMetadata>[0]};
+        // Canonical structured signatures have semantic equality independent of JSON field order.
+        const keys=['kind','familyId','maskId','expectedRevision','geometry','columns','rows','feetPerSquare','background','registration','x','y','width','height','pixelWidth','pixelHeight','uncovered'];
+        if(JSON.stringify(saved.signature,keys)!==JSON.stringify(prepared.signature,keys))throw new Error('This presentation request was already used.');
         changed();return {ok:true,presentation:presentationMetadata(saved.presentation)};
       }
       const outcome=result.data as {ok:boolean;reason:'conflict'|'incompatible';presentation:Parameters<typeof presentationMetadata>[0]};changed();

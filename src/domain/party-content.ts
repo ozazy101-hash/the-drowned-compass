@@ -13,6 +13,7 @@ export interface PartyContent {
   readMapVersion(id:string):Promise<import('./map-artwork').MapArtworkVersion>;
   openMapVersion(id:string,source?:'artwork'|'reference'):Promise<Blob>;
   attachMapVersion(input:import('./map-artwork').MapVersionAttachment):Promise<import('./map-artwork').MapVersionResult>;
+  commitMapRevealMask(input:import('./map-reveal-mask').MapRevealMaskIntent):Promise<import('./map-artwork').MapPresentationResult>;
   chooseMapPresentation(input:import('./map-artwork').MapPresentationChoice):Promise<import('./map-artwork').MapPresentationResult>;
   listMaps(query?: {search?:string}): Promise<SavedGridMap[]>;
   loadMap(id:string): Promise<SavedGridMap>;

@@ -5,6 +5,7 @@ import { spawnSync } from 'node:child_process';
 
 // Rehearse actual pending migrations inside rollback-only tests.
 const rehearsals = [
+  ['map_reveal', '20261009120000_manual_map_reveal_masks.sql', '__MAP_REVEAL_MIGRATION__'],
   ['map_privacy', '20261009110000_dm_private_grid_maps.sql', '__MAP_PRIVACY_MIGRATION__'],
   ['map_artwork', '20261009100000_private_map_artwork_versions.sql', '__MAP_ARTWORK_MIGRATION__'],
   ['map_stages', '20261007130000_prepared_map_stages.sql', '__MAP_STAGES_MIGRATION__'],
@@ -36,7 +37,7 @@ try {
     const output = new URL(`../supabase/tests/database/${name}_migration.generated.test.sql`, import.meta.url);
     const fixture=readFileSync(template,'utf8');
     if(!/^([\s]|--[^\n]*\n)*begin;/i.test(fixture)||!/\brollback;\s*$/i.test(fixture))throw new Error('Fixture must start BEGIN and end ROLLBACK: '+name);
-    let source = fixture.replace('begin;', () => 'begin;'+historicalCharacterState(name)).replace(`-- ${marker}`, () => readFileSync(migration, 'utf8'));
+    let source = fixture.replace('begin;', () => 'begin;'+(name==='map_reveal'?'':historicalCharacterState(name))).replace(`-- ${marker}`, () => readFileSync(migration, 'utf8'));
     if (name === 'map_privacy') source = source.replace('-- __LEGACY_MAP_COMMAND__', () => readFileSync(new URL('../supabase/migrations/20261007130000_prepared_map_stages.sql', import.meta.url), 'utf8').replace('create function public.change_party_grid_map', 'create or replace function public.change_party_grid_map'));
     if (name === 'handout_lifecycle') source = source.replace('-- __PRIVATE_HANDOUTS_MIGRATION__', () => readFileSync(new URL('../supabase/migrations/20261007100000_private_handouts.sql', import.meta.url), 'utf8'));
     if (name === 'backup') {

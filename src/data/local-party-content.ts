@@ -1,11 +1,13 @@
-import { attachmentDocument, chooseMapPresentation, emptyMapPresentation, validateMapVersion, validateMapWorkspace, type MapArtworkVersion, type MapPresentation } from '../domain/map-artwork';
+import { commitMapRevealMask, mapRevealGeometry, prepareMapRevealMaskIntent } from '../domain/map-reveal-mask';
+import { attachmentDocument, chooseMapPresentation, emptyMapPresentation, validateMapVersion, validateMapPresentation, validateMapWorkspace, type MapArtworkVersion, type MapPresentation } from '../domain/map-artwork';
 import { validateGridMap, validateMapBackground } from '../domain/grid-map';
 import { filterGridMaps, prepareGridMapSave, prepareGridMapChange, transitionGridMap, filterHandouts, prepareHandoutChange, transitionHandout, validateHandout, type Handout, type PartyContent, type SavedGridMap } from '../domain/party-content';
 import { localContentTransaction } from './local-party-store';
 import { contentSubscription, snapshotSubscription } from './content-subscription';
 type RetainedVersion={version:MapArtworkVersion;blob:Blob|null;referenceBlob:Blob|null};
 type LocalMap = SavedGridMap & {kind:'grid-map';blob:Blob|null;versions?:RetainedVersion[];requests:Record<string,{signature:string;item:SavedGridMap}>};
-type PresentationRecord={id:'map-presentation';kind:'map-presentation';presentation:MapPresentation;requests:Record<string,{signature:string;presentation:MapPresentation}>};
+type MaskProgress={familyId:string;geometry:ReturnType<typeof mapRevealGeometry>;mask:NonNullable<MapPresentation['mask']>};
+type PresentationRecord={masks?:MaskProgress[];id:'map-presentation';kind:'map-presentation';presentation:MapPresentation;requests:Record<string,{signature:string;presentation:MapPresentation}>};
 function retained(item:LocalMap):RetainedVersion[] {
  return item.versions??[{version:{id:`legacy:${item.id}:${item.version}`,familyId:item.id,parentVersionId:null,createdAt:item.createdAt,requestId:`legacy:${item.id}:${item.version}`,title:item.title,document:validateGridMap(item.document),background:item.background?{...item.background,registration:`legacy:${item.background.registration??item.id}`}:null,origin:'legacy',instructions:'',reference:null,jobId:null},blob:item.blob,referenceBlob:null}];
 }
@@ -57,7 +59,31 @@ export function localPartyContent(token: () => string | null): PartyContent {
           if(retry){if(retry.signature!==signature)throw new Error('This presentation request was already used.');complete({ok:true,presentation:retry.presentation});return;}
           const version=records.filter((r):r is LocalMap=>r.kind==='grid-map').flatMap(retained).find(v=>v.version.id===input.versionId)?.version;if(!version)throw new Error('Choose a saved Map Artwork Version.');
           const result=chooseMapPresentation(saved?.presentation??emptyMapPresentation(),version,input);
-          if(result.ok)store.put({id:'map-presentation',kind:'map-presentation',presentation:result.presentation,requests:{...saved?.requests,[input.requestId]:{signature,presentation:result.presentation}}});complete(result);
+          if(result.ok){
+            const masks=[...(saved?.masks??[])];
+            if(saved?.presentation.version&&saved.presentation.mask){const source=saved.presentation.version,geometry=mapRevealGeometry(source);const key=JSON.stringify(geometry);const index=masks.findIndex(m=>m.familyId===source.familyId&&JSON.stringify(m.geometry)===key);const entry={familyId:source.familyId,geometry,mask:saved.presentation.mask};if(index<0)masks.push(entry);else masks[index]=entry;}
+            const geometry=mapRevealGeometry(version),progress=masks.find(m=>m.familyId===version.familyId&&JSON.stringify(m.geometry)===JSON.stringify(geometry));
+            if(progress)result.presentation={...result.presentation,mask:progress.mask};
+            const presentation=validateMapPresentation(result.presentation);
+            store.put({id:'map-presentation',kind:'map-presentation',presentation,masks,requests:{...saved?.requests,[input.requestId]:{signature,presentation}}});complete({ok:true,presentation});
+          }else complete(result);
+        }catch{store.transaction.abort();}};
+      });changed();return outcome;
+    },
+    async commitMapRevealMask(input){
+      const prepared=prepareMapRevealMaskIntent(input),signature=JSON.stringify(prepared.signature);
+      const outcome=await localContentTransaction<Awaited<ReturnType<PartyContent['commitMapRevealMask']>>>(token(),true,(store,complete)=>{
+        const request=store.get('map-presentation');request.onsuccess=()=>{try{
+          const saved=request.result as PresentationRecord|undefined,retry=saved?.requests[input.requestId];
+          if(retry){if(retry.signature!==signature)throw new Error('This presentation request was already used.');complete({ok:true,presentation:validateMapPresentation(retry.presentation)});return;}
+          const result=commitMapRevealMask(saved?.presentation??emptyMapPresentation(),input);
+          if(result.ok){
+            const masks=[...(saved?.masks??[])],key=JSON.stringify(prepared.geometry);
+            const index=masks.findIndex(m=>m.familyId===input.familyId&&JSON.stringify(m.geometry)===key);
+            const progress={familyId:input.familyId,geometry:prepared.geometry,mask:result.presentation.mask!};
+            if(index<0)masks.push(progress);else masks[index]=progress;
+            store.put({id:'map-presentation',kind:'map-presentation',presentation:result.presentation,masks,requests:{...saved?.requests,[input.requestId]:{signature,presentation:result.presentation}}});
+          }complete(result);
         }catch{store.transaction.abort();}};
       });changed();return outcome;
     },

@@ -1,0 +1,31 @@
+begin;
+create extension if not exists pgtap with schema extensions;
+select plan(8);
+-- Rehearse only09 over the existing04/05 schema. No earlier migration replay.
+drop trigger guard_map_reveal_presentation on public.party_map_presentations;
+drop table public.party_map_reveal_masks;
+drop function public.guard_map_reveal_presentation();
+drop function public.commit_map_reveal_mask(uuid,integer,uuid,uuid,jsonb,jsonb);
+drop function public.valid_map_reveal_mask(jsonb,uuid,jsonb);
+drop function public.map_reveal_geometry(jsonb,jsonb);
+insert into public.parties(id,name) values('99000000-0000-4000-8000-000000000099','Ticket09 invalid-state fixture');
+insert into public.party_grid_maps(id,party_id,title,version,document) values('99000000-0000-4000-8000-000000000071','00000000-0000-4000-8000-000000000001','Ticket09 populated A',1,'{"columns":8,"rows":6,"feetPerSquare":5,"terrain":[],"edges":[]}'),('99000000-0000-4000-8000-000000000072','00000000-0000-4000-8000-000000000001','Ticket09 populated B',1,'{"columns":8,"rows":6,"feetPerSquare":5,"terrain":[],"edges":[]}'),('99000000-0000-4000-8000-000000000073','99000000-0000-4000-8000-000000000099','Ticket09 invalid A',1,'{"columns":8,"rows":6,"feetPerSquare":5,"terrain":[],"edges":[]}');
+insert into public.party_map_artwork_versions(id,party_id,family_id,request_id,map_revision,title,document,origin)
+select id::text,party_id,id,id,1,title,document,'drawing' from public.party_grid_maps where id in('99000000-0000-4000-8000-000000000071','99000000-0000-4000-8000-000000000072','99000000-0000-4000-8000-000000000073');
+insert into public.party_map_presentations values('00000000-0000-4000-8000-000000000001',3,'99000000-0000-4000-8000-000000000071','{"id":"99000000-0000-4000-8000-000000000075","registration":"drawing:99000000-0000-4000-8000-000000000071","columns":8,"rows":6,"uncovered":[1,9]}'),('99000000-0000-4000-8000-000000000099',3,'99000000-0000-4000-8000-000000000073','{"id":"99000000-0000-4000-8000-000000000076","registration":"unrelated","columns":8,"rows":6,"uncovered":[999]}');
+create temporary table prior_mask_fixture as select * from public.party_map_presentations;
+-- __MAP_REVEAL_MIGRATION__
+select is((select count(*) from public.party_map_reveal_masks),1::bigint,'migration retains only valid populated masks');
+select is((select mask->'uncovered' from public.party_map_reveal_masks where family_id='99000000-0000-4000-8000-000000000071'),'[1,9]'::jsonb,'accepted progress preserved exactly');
+select is((select count(*) from public.party_map_reveal_masks where family_id='99000000-0000-4000-8000-000000000073'),0::bigint,'invalid registration/bounds never retained');
+select is((select mask from public.party_map_presentations where party_id='99000000-0000-4000-8000-000000000099'),(select mask from prior_mask_fixture where party_id='99000000-0000-4000-8000-000000000099'),'invalid historical snapshot remains unavailable to validating clients');
+select is((select revision from public.party_map_presentations where party_id='00000000-0000-4000-8000-000000000001'),3,'migration does not advance accepted presentation');
+select throws_ok($$update public.party_map_presentations set mask=mask||'{"uncovered":[999]}' where party_id='00000000-0000-4000-8000-000000000001'$$,'P0001','Invalid accepted Reveal Mask','trigger validates privileged writes too');
+insert into auth.users(id,email,raw_app_meta_data,raw_user_meta_data) values('99000000-0000-4000-8000-000000000077','ticket09-rehearsal@verification.test','{}','{}');
+insert into public.party_members(party_id,user_id,role) values('00000000-0000-4000-8000-000000000001','99000000-0000-4000-8000-000000000077','dungeon-master');
+set local role authenticated;
+set local "request.jwt.claim.sub"='99000000-0000-4000-8000-000000000077';
+select is(public.choose_map_presentation('99000000-0000-4000-8000-000000000072',3,'99000000-0000-4000-8000-000000000078',true)->'presentation'->'mask'->'uncovered','[]'::jsonb,'new family after migration begins hidden');
+select is(public.choose_map_presentation('99000000-0000-4000-8000-000000000071',4,'99000000-0000-4000-8000-000000000079',true)->'presentation'->'mask'->'uncovered','[1,9]'::jsonb,'migrated accepted progress restores after leaving family');
+select * from finish();
+rollback;
