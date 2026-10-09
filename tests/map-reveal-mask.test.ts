@@ -141,3 +141,17 @@ test('largest supported grid has bounded cells through whole-map and edge stroke
   expect(draft.snapshot().uncovered).toHaveLength(6399);
   draft.command({ type: 'undo' }); expect(draft.snapshot().uncovered).toHaveLength(6400);
 });
+
+test('save response cannot move accepted visibility into an unrelated family', () => {
+  const initial = presentation(), draft = createMapRevealMaskDraft(initial);
+  stroke(draft);
+  const intent = draft.prepareCommit(request), result = commitMapRevealMask(initial, intent);
+  draft.receive(request, { ok: true, presentation: { ...result.presentation, version: { ...result.presentation.version!, familyId: request } } });
+  expect(draft.snapshot()).toMatchObject({ status: 'error', uncovered: [9], accepted: { revision: 1, version: { familyId: family }, mask: { uncovered: [] } } });
+  expect(draft.snapshot().canUndo).toBe(true);
+  const retry = draft.prepareCommit(request);
+  expect(retry.familyId).toBe(family);
+  expect(retry.expectedRevision).toBe(1);
+  draft.receive(request, commitMapRevealMask(initial, retry));
+  expect(draft.snapshot()).toMatchObject({ status: 'accepted', accepted: { revision: 2, version: { familyId: family }, mask: { uncovered: [9] } } });
+});

@@ -123,7 +123,7 @@ export function createMapRevealMaskDraft(input: MapPresentation | null) {
         if (observed.revision < accepted!.revision) throw new Error('Stale reveal save response.');
         if (result.ok) {
           const expected = commitMapRevealMask(baseline!, pending);
-          if (!expected.ok || observed.revision !== expected.presentation.revision || !observed.version || !baseline!.version || observed.version.id !== baseline!.version.id || observed.mask?.id !== pending.maskId || !matchingMapGeometry(observed.version, baseline!.version) || !equal(cells(observed.mask?.uncovered ?? []), pending.uncovered)) throw new Error('Invalid reveal save response.');
+          if (!expected.ok || observed.revision !== expected.presentation.revision || !observed.version || !baseline!.version || observed.version.id !== baseline!.version.id || observed.version.familyId !== pending.familyId || observed.mask?.id !== pending.maskId || !matchingMapGeometry(observed.version, baseline!.version) || !equal(cells(observed.mask?.uncovered ?? []), pending.uncovered)) throw new Error('Invalid reveal save response.');
         }
       } catch { pending = null; status = 'error'; error = 'Map reveal save response is unavailable. Retry the recoverable draft.'; return; }
       accepted = observed; pending = null;
