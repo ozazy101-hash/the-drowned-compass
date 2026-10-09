@@ -161,12 +161,12 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
   }
   async function renderMap(token:number) {
     if(!ready||!accepted?.version||!popup||popup.closed)return;
-    const snapshot=accepted,target=popup,drawing=++renderEpoch;
+    const snapshot=accepted,target=popup,drawing=++renderEpoch,acknowledgementPending=state.registrationChanged;
     const bytes=snapshot.version!.background?(cachedArtwork?.versionId===snapshot.version!.id?cachedArtwork.blob:await content.openMapVersion(snapshot.version!.id)):undefined;
-    const visible=await rasterVisibleMap(snapshot,bytes);
+    const visible=await rasterVisibleMap(acknowledgementPending?{...snapshot,mask:{...snapshot.mask!,uncovered:[]}}:snapshot,bytes);
     try {
     if(token!==epoch||drawing!==renderEpoch||!active||accepted?.revision!==snapshot.revision)return;
-    if(!await authorized()||token!==epoch||drawing!==renderEpoch||target.closed||state.testSquare||accepted?.revision!==snapshot.revision)return;
+    if(!await authorized()||token!==epoch||drawing!==renderEpoch||target.closed||state.testSquare||accepted?.revision!==snapshot.revision||acknowledgementPending!==state.registrationChanged)return;
     const geometry=mapViewport(snapshot.version!.document,{width:target.innerWidth,height:target.innerHeight},state);
     const canvas=target.document.createElement('canvas');canvas.width=visible.width;canvas.height=visible.height;
     canvas.getContext('2d')!.drawImage(visible,0,0);visible.width=visible.height=0;
@@ -264,7 +264,7 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
   function dispose(){if(!active)return;clear(undefined,false);active=false;stop();stopMaps();clearInterval(timer);window.removeEventListener('pagehide',onUnload);window.removeEventListener('online',reconcile);listeners.clear();}
   return {
     getState:()=>state, subscribe:(listener:()=>void)=>{listeners.add(listener);return()=>{listeners.delete(listener);};},
-    openWindow,present,presentMap,reveal,saveReveal,calibration,clear,dispose,
+    openWindow,present,presentMap,reveal,saveReveal,calibration,clear:(message?:string)=>clear(message),dispose,
     page:(page:number)=>{if(!blob||!Number.isInteger(page)||page<1||page>state.pages)return;emit({page});task?.cancel();void render(epoch);},
     viewport:(view:{zoom:number;x:number;y:number})=>{if(!Object.values(view).every(Number.isFinite))return;
       if(state.mode!=='ordinary'&&view.zoom!==state.zoom){emit({message:'Projection scale is locked. Reset calibration to use ordinary zoom.'});return;}emit({...view,zoom:Math.max(.25,Math.min(8,view.zoom))});if(map||state.testSquare)void render(epoch);else transform();},
