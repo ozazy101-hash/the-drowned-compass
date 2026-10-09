@@ -56,6 +56,10 @@ export function fixtureProvider(bytes) {return {generate:async()=>({kind:'image'
 export function openAIProvider({apiKey,fetchImpl=fetch,timeoutMs=settings.timeoutMs}={}) {
   return {generate:async input=>{
     if(!apiKey)return {kind:'failed',code:'missing-OPENAI_API_KEY'};
+    const sizeMatch=typeof input.size==='string'&&/^[0-9]{1,4}x[0-9]{1,4}$/.test(input.size);
+    const [width,height]=sizeMatch?input.size.split('x').map(Number):[0,0];
+    const pixels=width*height;
+    if(!width||!height||width%16||height%16||width>3840||height>3840||width/height<1/3||width/height>3||pixels<655360||pixels>8294400)return {kind:'failed',code:'unsupported-provider-dimensions'};
     const headers={Authorization:`Bearer ${apiKey}`,'X-Client-Request-Id':input.requestId};
     const fields={model:MODEL,prompt:input.prompt,n:1,size:input.size,quality:'low',output_format:'png'};
     let body,endpoint='generations';
@@ -73,8 +77,14 @@ export function openAIProvider({apiKey,fetchImpl=fetch,timeoutMs=settings.timeou
       const chunks=[];let length=0;const reader=response.body.getReader();
       while(true){const {done,value}=await reader.read();if(done)break;length+=value.byteLength;if(length>Math.ceil(limits.bytes*4/3)+65536){await reader.cancel();return {kind:'uncertain',code:'response-too-large',receipt};}chunks.push(value);}
       const payload=JSON.parse(Buffer.concat(chunks).toString('utf8')),b64=payload.data?.[0]?.b64_json;
-      if(payload.data?.length!==1||typeof b64!=='string'||!b64.length||b64.length%4||!/^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(b64))return {kind:'failed',code:'invalid-provider-output',receipt};
-      return {kind:'image',bytes:Buffer.from(b64,'base64'),receipt,usage:payload.usage??null};
+      if(payload.data?.length!==1||typeof b64!=='string'||!b64.length||b64.length%4)return {kind:'failed',code:'invalid-provider-output',receipt};
+      // A repeated-group regexp can exhaust the JS stack on legitimate multi-MiB images.
+      // Scan the alphabet once, isolate at most two padding characters, then verify canonical bits.
+      const padding=b64.endsWith('==')?2:b64.endsWith('=')?1:0;
+      if(/[^A-Za-z0-9+/]/.test(b64.slice(0,b64.length-padding)))return {kind:'failed',code:'invalid-provider-output',receipt};
+      const bytes=Buffer.from(b64,'base64');
+      if(bytes.length>limits.bytes||bytes.toString('base64')!==b64)return {kind:'failed',code:'invalid-provider-output',receipt};
+      return {kind:'image',bytes,receipt,usage:payload.usage??null};
     } catch {return {kind:'uncertain',code:'submission-or-response-unknown',receipt};}
   }};
 }

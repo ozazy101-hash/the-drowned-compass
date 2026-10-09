@@ -25,13 +25,32 @@ test('dimension drift rejected, no inherited registration',async()=>assert.equal
 for(const bytes of [Buffer.from('JPEG'),Buffer.alloc(0),source.subarray(0,source.length-5),Buffer.from(source).fill(0,20,24)])test(`invalid output ${bytes.length}/${bytes[20]}`,async()=>assert.equal((await runIntent(intent(),fixtureProvider(bytes))).code,'invalid-output'));
 test('invalid source rejected before provider',async()=>{const input=intent();input.source.bytes=Buffer.from('bad');assert.equal((await runIntent(input,{generate:()=>assert.fail('must not submit')})).code,'invalid-input');});
 test('missing source identity rejected',async()=>{const input=intent();delete input.source.identity;assert.equal((await runIntent(input,fixtureProvider(replacement))).code,'invalid-input');});
-test('missing credential never submits',async()=>assert.equal((await openAIProvider({fetchImpl:()=>assert.fail('must not submit')}).generate({})).code,'missing-OPENAI_API_KEY'));
+test('missing credential never submits',async()=>assert.equal((await openAIProvider({fetchImpl:()=>assert.fail('must not submit')}).generate({size:'1024x1024'})).code,'missing-OPENAI_API_KEY'));
 for(const [status,kind]of [[401,'failed'],[429,'failed'],[500,'uncertain'],[408,'uncertain']])test(`HTTP ${status} normalized without retry`,async()=>{let calls=0;const result=await openAIProvider({apiKey:'test-placeholder',fetchImpl:async()=>{calls++;return response(status,{});}}).generate({requestId:'r',prompt:'p',size:'1024x1024'});assert.equal(result.kind,kind);assert.equal(calls,1);});
-test('ambiguous disconnected submission never retries',async()=>{let calls=0;assert.equal((await openAIProvider({apiKey:'test-placeholder',fetchImpl:async()=>{calls++;throw Error('disconnect');}}).generate({})).kind,'uncertain');assert.equal(calls,1);});
-test('invalid provider base64 rejected',async()=>assert.equal((await openAIProvider({apiKey:'test-placeholder',fetchImpl:async()=>response(200,{data:[{b64_json:'not base64!'}]})}).generate({})).code,'invalid-provider-output'));
+test('ambiguous disconnected submission never retries',async()=>{let calls=0;assert.equal((await openAIProvider({apiKey:'test-placeholder',fetchImpl:async()=>{calls++;throw Error('disconnect');}}).generate({size:'1024x1024'})).kind,'uncertain');assert.equal(calls,1);});
+test('invalid provider base64 rejected',async()=>assert.equal((await openAIProvider({apiKey:'test-placeholder',fetchImpl:async()=>response(200,{data:[{b64_json:'not base64!'}]})}).generate({size:'1024x1024'})).code,'invalid-provider-output'));
 test('live adapter sends exact pinned model and normalized receipt/usage',async()=>{
  const provider=openAIProvider({apiKey:'test-placeholder',fetchImpl:async(url,options)=>{assert.equal(url,'https://api.openai.com/v1/images/edits');assert.equal(options.body.get('model'),MODEL);assert.ok(options.body.get('mask') instanceof Blob);assert.equal(options.headers['X-Client-Request-Id'],'job-1');return response(200,{data:[{b64_json:replacement.toString('base64')}],usage:{total_tokens:123}},{'x-request-id':'receipt-1'});}});
- const result=await runIntent(intent(),provider);assert.equal(result.kind,'accepted');assert.equal(result.receipt.providerRequestId,'receipt-1');assert.equal(result.usage.total_tokens,123);
+ const result=await provider.generate({requestId:'job-1',prompt:'Add chamber',size:'1024x1024',source,mask:source});assert.equal(result.kind,'image');assert.equal(result.receipt.providerRequestId,'receipt-1');assert.equal(result.usage.total_tokens,123);
 });
 test('16 million pixel existing maximum local PNG roundtrip',()=>{const image=pixels(4000,4000);const decoded=decodePng(encodePng(image));assert.deepEqual(decoded.rgba,image.rgba);});
 test('above existing dimension limit rejected',()=>assert.throws(()=>encodePng({width:4001,height:4000,rgba:Buffer.alloc(0)}),/dimensions/));
+
+test('multi-MiB canonical provider image succeeds without validator stack overflow',async()=>{
+ const rgba=Buffer.alloc(1024*1024*4);let state=0x12345678;
+ for(let i=0;i<rgba.length;i++){state^=state<<13;state^=state>>>17;state^=state<<5;rgba[i]=state&255;}
+ const png=encodePng({width:1024,height:1024,rgba});assert.ok(png.length>4*1024*1024);
+ const result=await openAIProvider({apiKey:'test-placeholder',fetchImpl:async()=>response(200,{data:[{b64_json:png.toString('base64')}]})}).generate({requestId:'large',prompt:'shrine',size:'1024x1024'});
+ assert.equal(result.kind,'image');assert.deepEqual(result.bytes,png);
+});
+for(const b64 of ['A===','AA=A','AB=='])test(`invalid padding or noncanonical bits ${b64}`,async()=>{
+ const result=await openAIProvider({apiKey:'test-placeholder',fetchImpl:async()=>response(200,{data:[{b64_json:b64}]})}).generate({size:'1024x1024'});
+ assert.equal(result.code,'invalid-provider-output');
+});
+
+for(const size of ['4000x4000','1025x1024','1024x512','3840x3840','3072x640','auto'])test(`unsupported live requested dimensions ${size} reject before fetch`,async()=>{
+ const result=await openAIProvider({apiKey:'test-placeholder',fetchImpl:()=>assert.fail('must not submit')}).generate({size});assert.equal(result.code,'unsupported-provider-dimensions');
+});
+for(const size of ['1024x640','3840x2160','3072x1024'])test(`supported live dimension boundary ${size}`,async()=>{
+ const result=await openAIProvider({apiKey:'test-placeholder',fetchImpl:async()=>response(200,{data:[{b64_json:replacement.toString('base64')}]})}).generate({size});assert.equal(result.kind,'image');
+});
