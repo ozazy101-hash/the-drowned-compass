@@ -1,0 +1,31 @@
+[WebServer] (node:26507) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 16 tests using 1 worker
+
+(node:26508) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [laptop] › e2e/map-display.spec.ts:2:1 › masked frame, private DOM, accepted strokes, failure draft, clear and reopen authority (3.0s)
+  ✓   2 [laptop] › e2e/map-display.spec.ts:24:1 › actual workshop Use intent and rapid pointer stroke controls remain private (1.8s)
+  ✓   3 [laptop] › e2e/map-display.spec.ts:37:1 › blocked popup and stale protected choice/render cannot restore cleared or revoked output (2.8s)
+  ✓   4 [laptop] › e2e/party-display.spec.ts:11:1 › extended display gesture, blocked popup, closed/reopen, navigation lifetime and safe sign-out (2.9s)
+  ✓   5 [laptop] › e2e/party-display.spec.ts:21:1 › DM deterministic PDF page, viewport, Fit, Clear and withdraw (6.3s)
+  ✓   6 [laptop] › e2e/party-display.spec.ts:31:1 › replacement refreshes active bytes, interruption retains frame, reconnect withdraw and opaque session loss clear (7.2s)
+  ✓   7 [laptop] › e2e/party-display.spec.ts:42:1 › presentation interface retains ambiguous reveal identity, rejects failed private reveal and cancels stale reads (2.5s)
+  ✓   8 [laptop] › e2e/party-display.spec.ts:66:1 › pending replacement survives Fit, page and popup resize while stale reads cannot overwrite selection (3.3s)
+(node:26565) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   9 [phone] › e2e/map-display.spec.ts:2:1 › masked frame, private DOM, accepted strokes, failure draft, clear and reopen authority (3.6s)
+  ✓  10 [phone] › e2e/map-display.spec.ts:24:1 › actual workshop Use intent and rapid pointer stroke controls remain private (1.9s)
+  ✓  11 [phone] › e2e/map-display.spec.ts:37:1 › blocked popup and stale protected choice/render cannot restore cleared or revoked output (2.3s)
+  ✓  12 [phone] › e2e/party-display.spec.ts:11:1 › extended display gesture, blocked popup, closed/reopen, navigation lifetime and safe sign-out (3.9s)
+  ✓  13 [phone] › e2e/party-display.spec.ts:21:1 › DM deterministic PDF page, viewport, Fit, Clear and withdraw (21.7s)
+  ✓  14 [phone] › e2e/party-display.spec.ts:31:1 › replacement refreshes active bytes, interruption retains frame, reconnect withdraw and opaque session loss clear (13.3s)
+  ✓  15 [phone] › e2e/party-display.spec.ts:42:1 › presentation interface retains ambiguous reveal identity, rejects failed private reveal and cancels stale reads (4.5s)
+  ✓  16 [phone] › e2e/party-display.spec.ts:66:1 › pending replacement survives Fit, page and popup resize while stale reads cannot overwrite selection (7.4s)
+
+  16 passed (1.6m)

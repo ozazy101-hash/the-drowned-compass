@@ -1,7 +1,7 @@
 # 10 — Render only uncovered areas on the extended display
 
 Type: task
-Status: ready-for-agent
+Status: resolved
 Blocked by: 05, 07, 09
 Spec: [Map artwork and display reveal](../spec.md)
 
@@ -19,12 +19,12 @@ Consume one authorized accepted presentation snapshot (version, registration/gri
 
 ## Acceptance
 
-- [ ] New map remains black until an authorized saved version and accepted mask are ready; no full-map flash during load/switch/reopen/reconnect.
-- [ ] Hidden output is opaque; popup contains no full-map image URLs, retained source buffers, prompt/reference, DM overlay or edit controls. Do not introduce a player delivery endpoint.
-- [ ] Accepted uncover/hide updates reach the display; inspecting/revising a candidate does not. Failed persistence retains the accepted mask/frame; stale async renders cannot restore hidden pixels.
-- [ ] Open/focus/blocked-popup/close/reopen/clear behaviours are explicit. Sign-out/session revocation blanks the popup and stops updates.
-- [ ] Grid/display calibration and pan remain independent of mask and image. Existing Handout/PDF display flows still work when switching content kinds.
-- [ ] DM overlay can be toggled without changing what the table sees. Reopen rechecks authority and restores accepted reveal progress safely.
+- [x] New map remains black until an authorized saved version and accepted mask are ready; no full-map flash during load/switch/reopen/reconnect.
+- [x] Hidden output is opaque; popup contains no full-map image URLs, retained source buffers, prompt/reference, DM overlay or edit controls. Do not introduce a player delivery endpoint.
+- [x] Accepted uncover/hide updates reach the display; inspecting/revising a candidate does not. Failed persistence retains the accepted mask/frame; stale async renders cannot restore hidden pixels.
+- [x] Open/focus/blocked-popup/close/reopen/clear behaviours are explicit. Sign-out/session revocation blanks the popup and stops updates.
+- [x] Grid/display calibration and pan remain independent of mask and image. Existing Handout/PDF display flows still work when switching content kinds.
+- [x] DM overlay can be toggled without changing what the table sees. Reopen rechecks authority and restores accepted reveal progress safely.
 
 ## Verification and review
 
@@ -35,3 +35,5 @@ Two-window laptop/phone journeys, hidden-pixel and DOM/source checks, blocked po
 2026-10-09: Created from user-accepted Prototype2 and module decisions. Implementation unstarted. Read the dependency status and module interface before claiming.
 
 2026-10-09: Architecture review refined ownership, small interfaces and seam-level verification before implementation. See [architecture review](../architecture-review.md) and [interface contract](../spec.md#module-placement-and-interface-contract).
+
+2026-10-10: Implemented on `codex/map-display-10`, frozen source `8964763df2d90c1d65cf34726053a14d13871499`. TWO distinct final independent Standards/depth and Spec PASS; build24domain/24focusedbrowser+6strengthened/2actual-local journeys PASS, exact original baseline and owned cleanup. Earlier two lifecycle P2 findings fixed/re-reviewed; local JWT future-iat diagnostics and bounded fixture allowance retained honestly. See [delivery](../evidence/10-delivery.md). No hosted migration, provider enablement, merge or deployment. Orchestrator owns acceptance/integration and dependent release.

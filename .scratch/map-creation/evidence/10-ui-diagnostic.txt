@@ -1,0 +1,16 @@
+[WebServer] (node:23495) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 4 tests using 1 worker
+
+(node:23496) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [laptop] › e2e/map-display.spec.ts:2:1 › masked frame, private DOM, accepted strokes, failure draft, clear and reopen authority (4.0s)
+(node:23521) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+undefined
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command was killed with SIGTERM (Termination): playwright test '--config=playwright.map-display.config.ts' --grep 'masked frame|actual workshop'

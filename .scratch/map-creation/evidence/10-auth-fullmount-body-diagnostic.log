@@ -1,0 +1,39 @@
+[WebServer] (node:34730) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 1 test using 1 worker
+
+(node:34731) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[DEBUG-auth10] {"path":"/rest/v1/rpc/read_map_workspace","status":401,"iat":1791587648,"browserNow":1791587654116,"date":"Fri, 09 Oct 2026 23:13:25 GMT","expectedFingerprint":"2c865b925011ab1b0c26a5cb080101f4fa4c2d371253281208b20810db7fd858","sentFingerprint":"2c865b925011ab1b0c26a5cb080101f4fa4c2d371253281208b20810db7fd858","body":{"code":"PGRST303","details":null,"hint":null,"message":"JWT issued at future"}}
+[DEBUG-auth10] {"path":"/rest/v1/rpc/read_map_generation_jobs","status":401,"iat":1791587648,"browserNow":1791587654116,"date":"Fri, 09 Oct 2026 23:14:14 GMT","expectedFingerprint":"2c865b925011ab1b0c26a5cb080101f4fa4c2d371253281208b20810db7fd858","sentFingerprint":"2c865b925011ab1b0c26a5cb080101f4fa4c2d371253281208b20810db7fd858","body":{"code":"PGRST303","details":null,"hint":null,"message":"JWT issued at future"}}
+[DEBUG-auth10] {"path":"/rest/v1/rpc/read_map_workspace","status":401,"iat":1791587648,"browserNow":1791587654116,"date":"Fri, 09 Oct 2026 23:13:25 GMT","expectedFingerprint":"2c865b925011ab1b0c26a5cb080101f4fa4c2d371253281208b20810db7fd858","sentFingerprint":"2c865b925011ab1b0c26a5cb080101f4fa4c2d371253281208b20810db7fd858","body":{"code":"PGRST303","details":null,"hint":null,"message":"JWT issued at future"}}
+{"event":"http-error","path":"/rest/v1/rpc/read_map_workspace","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/rest/v1/rpc/read_map_generation_jobs","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/rest/v1/rpc/read_map_workspace","status":401,"code":"PGRST303"}
+  ✘  1 [laptop] › e2e/map-display-live.spec.ts:29:1 › genuine authority: opaque output, touch controls, persistence/conflict/failure, reopen, PDF switching and revocation (1.8s)
+
+
+  1) [laptop] › e2e/map-display-live.spec.ts:29:1 › genuine authority: opaque output, touch controls, persistence/conflict/failure, reopen, PDF switching and revocation 
+
+    Error: page.evaluate: Error: The Library request could not finish. Your change is not confirmed. Please retry.
+        at failure (http://127.0.0.1:4180/the-drowned-compass/src/data/supabase-party-content.ts:77:9)
+        at Object.readMapWorkspace (http://127.0.0.1:4180/the-drowned-compass/src/data/supabase-party-content.ts:189:58)
+        at async eval (eval at evaluate (:311:30), <anonymous>:63:21)
+        at async <anonymous>:337:30
+        at failure (http://127.0.0.1:4180/the-drowned-compass/src/data/supabase-party-content.ts:77:9)
+        at Object.readMapWorkspace (http://127.0.0.1:4180/the-drowned-compass/src/data/supabase-party-content.ts:189:58)
+        at async eval (eval at evaluate (:311:30), <anonymous>:63:21)
+        at async <anonymous>:337:30
+        at mount (/Users/oscarpauwels/.codex/worktrees/map-display-10/Dungeons&Dragons/e2e/map-display-live.spec.ts:6:13)
+        at /Users/oscarpauwels/.codex/worktrees/map-display-10/Dungeons&Dragons/e2e/map-display-live.spec.ts:33:46
+
+    Error Context: ../../../../../../private/tmp/map-display-10-live/map-display-live-genuine-a-7b12c-DF-switching-and-revocation-laptop/error-context.md
+
+  1 failed
+    [laptop] › e2e/map-display-live.spec.ts:29:1 › genuine authority: opaque output, touch controls, persistence/conflict/failure, reopen, PDF switching and revocation 
+Ticket10 exact schema/data baseline restored; 2 owned parties,4 auth users,0 objects cleaned; no provider/backend runtime.

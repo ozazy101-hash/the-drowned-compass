@@ -1,0 +1,4 @@
+Listing tests:
+  [laptop] › map-display-live.spec.ts:26:1 › genuine authority: opaque output, touch controls, persistence/conflict/failure, reopen, PDF switching and revocation
+  [phone] › map-display-live.spec.ts:26:1 › genuine authority: opaque output, touch controls, persistence/conflict/failure, reopen, PDF switching and revocation
+Total: 2 tests in 1 file

@@ -1,0 +1,24 @@
+[WebServer] (node:36158) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 1 test using 1 worker
+
+(node:36159) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[DEBUG-auth10] {"probe":"original","path":"party_members","iat":1791587842,"exp":1791591442,"browserNow":1791587848651,"status":200,"error":null}
+[DEBUG-auth10] {"probe":"original","path":"read_map_workspace","iat":1791587842,"exp":1791591442,"browserNow":1791587848702,"status":200,"error":null}
+[DEBUG-auth10] {"probe":"backdated120","path":"party_members","iat":1791587722,"exp":1791591442,"browserNow":1791587848769,"status":200,"error":null}
+[DEBUG-auth10] {"probe":"backdated120","path":"read_map_workspace","iat":1791587722,"exp":1791591442,"browserNow":1791587848876,"status":200,"error":null}
+{"event":"http-error","path":"/rest/v1/rpc/commit_map_reveal_mask","status":503,"code":"OWNED_FAILURE"}
+[DEBUG-auth10] {"probe":"original","path":"party_members","iat":1791587842,"exp":1791591442,"browserNow":1791587854411,"status":200,"error":null}
+[DEBUG-auth10] {"probe":"original","path":"read_map_workspace","iat":1791587842,"exp":1791591442,"browserNow":1791587854439,"status":200,"error":null}
+[DEBUG-auth10] {"probe":"backdated120","path":"party_members","iat":1791587722,"exp":1791591442,"browserNow":1791587854453,"status":200,"error":null}
+[DEBUG-auth10] {"probe":"backdated120","path":"read_map_workspace","iat":1791587722,"exp":1791591442,"browserNow":1791587854464,"status":200,"error":null}
+  ✓  1 [laptop] › e2e/map-display-live.spec.ts:31:1 › genuine authority: opaque output, touch controls, persistence/conflict/failure, reopen, PDF switching and revocation (13.0s)
+
+  1 passed (16.9s)
+Ticket10 exact schema/data baseline restored; 2 owned parties,4 auth users,2 objects cleaned; no provider/backend runtime.

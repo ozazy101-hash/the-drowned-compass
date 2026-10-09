@@ -1,0 +1,26 @@
+[WebServer] (node:38622) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 2 tests using 1 worker
+
+(node:38623) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"event":"http-error","path":"/rest/v1/rpc/commit_map_reveal_mask","status":503,"code":"OWNED_FAILURE"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"42501"}
+{"event":"http-error","path":"/rest/v1/rpc/read_map_generation_jobs","status":403,"code":""}
+{"event":"http-error","path":"/rest/v1/rpc/read_map_workspace","status":403,"code":""}
+  ✓  1 [laptop] › e2e/map-display-live.spec.ts:26:1 › genuine authority: opaque output, touch controls, persistence/conflict/failure, reopen, PDF switching and revocation (12.7s)
+(node:38741) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"event":"http-error","path":"/rest/v1/rpc/commit_map_reveal_mask","status":503,"code":"OWNED_FAILURE"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"42501"}
+  ✓  2 [phone] › e2e/map-display-live.spec.ts:26:1 › genuine authority: opaque output, touch controls, persistence/conflict/failure, reopen, PDF switching and revocation (12.1s)
+
+  2 passed (32.6s)
+Ticket10 exact schema/data baseline restored; 2 owned parties,4 auth users,4 objects cleaned; no provider/backend runtime.

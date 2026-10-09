@@ -1,0 +1,1172 @@
+[
+  {
+    "index": 0,
+    "iat": 1791587514,
+    "browserNow": 1791587515121,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 1,
+    "iat": 1791587515,
+    "browserNow": 1791587515218,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 2,
+    "iat": 1791587515,
+    "browserNow": 1791587515299,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 3,
+    "iat": 1791587515,
+    "browserNow": 1791587515348,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 4,
+    "iat": 1791587515,
+    "browserNow": 1791587515391,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 5,
+    "iat": 1791587515,
+    "browserNow": 1791587515410,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 6,
+    "iat": 1791587515,
+    "browserNow": 1791587515426,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 7,
+    "iat": 1791587515,
+    "browserNow": 1791587515448,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 8,
+    "iat": 1791587515,
+    "browserNow": 1791587515675,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 9,
+    "iat": 1791587515,
+    "browserNow": 1791587515692,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 10,
+    "iat": 1791587515,
+    "browserNow": 1791587515710,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 11,
+    "iat": 1791587515,
+    "browserNow": 1791587515723,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 12,
+    "iat": 1791587515,
+    "browserNow": 1791587515737,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 13,
+    "iat": 1791587515,
+    "browserNow": 1791587515753,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 14,
+    "iat": 1791587515,
+    "browserNow": 1791587515766,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 15,
+    "iat": 1791587515,
+    "browserNow": 1791587515778,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 16,
+    "iat": 1791587515,
+    "browserNow": 1791587515802,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 17,
+    "iat": 1791587515,
+    "browserNow": 1791587515825,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 18,
+    "iat": 1791587515,
+    "browserNow": 1791587515848,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 19,
+    "iat": 1791587515,
+    "browserNow": 1791587515869,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 20,
+    "iat": 1791587515,
+    "browserNow": 1791587515883,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 21,
+    "iat": 1791587515,
+    "browserNow": 1791587515896,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 22,
+    "iat": 1791587515,
+    "browserNow": 1791587515907,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 23,
+    "iat": 1791587515,
+    "browserNow": 1791587515918,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 24,
+    "iat": 1791587515,
+    "browserNow": 1791587515940,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 25,
+    "iat": 1791587515,
+    "browserNow": 1791587515954,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 26,
+    "iat": 1791587515,
+    "browserNow": 1791587515964,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 27,
+    "iat": 1791587515,
+    "browserNow": 1791587515973,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 28,
+    "iat": 1791587515,
+    "browserNow": 1791587515984,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "index": 29,
+    "iat": 1791587515,
+    "browserNow": 1791587515995,
+    "membership": {
+      "status": 200,
+      "error": null
+    },
+    "workspace": {
+      "status": 200,
+      "error": null
+    },
+    "responses": [
+      {
+        "path": "/rest/v1/party_members",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": [
+          {
+            "role": "dungeon-master"
+          }
+        ]
+      },
+      {
+        "path": "/rest/v1/rpc/read_map_workspace",
+        "status": 200,
+        "date": "Fri, 09 Oct 2026 23:11:55 GMT",
+        "body": {
+          "families": [],
+          "versions": [],
+          "presentation": {
+            "mask": null,
+            "version": null,
+            "revision": 0
+          }
+        }
+      }
+    ]
+  }
+]

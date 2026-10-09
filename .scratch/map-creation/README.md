@@ -15,7 +15,7 @@
 |07|[Build the map creation workshop](issues/07-build-map-creation-workshop.md)|ready-for-agent|04, 06|
 |08|[Revise selected areas and build later stages](issues/08-revise-selected-map-areas.md)|ready-for-agent|07|
 |09|[Persist manual Reveal Masks](issues/09-persist-manual-map-reveal-masks.md)|resolved|04|
-|10|[Render only uncovered areas on the extended display](issues/10-render-masked-extended-map-display.md)|ready-for-agent|05, 07, 09|
+|10|[Render only uncovered areas on the extended display](issues/10-render-masked-extended-map-display.md)|resolved|05, 07, 09|
 |11|[Switch aligned Prepared Map Stages](issues/11-switch-aligned-prepared-map-stages.md)|ready-for-agent|08, 10|
 |12|[Verify integrated map workflows and prepare release evidence](issues/12-verify-integrated-map-workflows.md)|ready-for-agent|03, 04, 05, 06, 07, 08, 09, 10, 11|
 

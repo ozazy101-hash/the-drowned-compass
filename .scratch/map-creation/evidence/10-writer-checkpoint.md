@@ -1,0 +1,23 @@
+# Ticket10 writer checkpoint — 2026-10-10
+
+Base d8d43e6f0f789ccc7c3f2ace540fa6e87c664576; planning contract17632d5; frozen source7099da2be9ec0f5fabca88314201da17d81663ff on codex/map-display-10. No adapter/schema/server changes. Dedicated writer implemented approved module contract; coordinator owns real local fixture verification and two independent frozen reviews.
+
+BuildPASS. Public mask/artwork/viewport domain24PASS (four new observer tests). Existing Handout/PDF plus new display focused browser16PASS before last narrow family-id/overlay-set changes. Frozen-source affected8PASS (all new map cases including16Mpixel/80x80), two laptop/phone projects. No skipped cases in these selected runs. The genuine Supabase case from existing party-display.spec.ts was excluded by name because coordinator separately verifies real authority, masks and Handout/PDF switching with dedicated owned local fixtures.
+
+Commands: pnpm build; pnpm exec playwright test --config=playwright.calculations.config.ts tests/map-reveal-mask.test.ts tests/map-artwork.test.ts tests/map-viewport.test.ts; pnpm exec playwright test --config=playwright.map-display.config.ts --grep-invert 'genuine Supabase'; final affected pnpm exec playwright test --config=playwright.map-display.config.ts --grep 'masked frame|actual workshop|blocked popup and stale|largest supported'. Durable adjacent10-build/domain/browser-regression/browser-affected files contain exact outputs.
+
+Large-image smoke uses supported4000x4000 PNG with80x80 grid; initial masked canvas4080x4080, opaque hidden cell edge/far pixels,20samples cause0persistence calls, finishedstroke1save,0generationcalls. Observed initial frame708.8ms laptop and358.5ms phone emulator; these are bounded diagnostic measurements, not physical-device or universal latency guarantees. Canvas cell scale stays uniform and private source is disposed after flattening; popup receives copied visible pixels only.
+
+Diagnostic history retained: first broad browser run during active source/HMR edits yielded8PASS4FAIL2genuine-skipped. Failures: fixture omitted saveMap id/expectedVersion, window test binding became undefined during pending replacement, offline dynamic import fetch failed after source edits. Fixture corrected; stable16PASS covers every relevant Handout/PDF case and all new initial map cases. Later map diagnostic shadowed global document with map document; fixed harness. Privacy regex initially matched benign CSS image-rendering; corrected to source tags/URLs. Workshop exact label selector could not match label containing select options; corrected non-exact label matcher. Stable actual App Use/rapidpointer passes laptop+phone. Adjacent diagnostic files retain later raw failures/aborts; no failed run is counted as a pass.
+
+Writer ran no database/storage mutations, generation fixture backend, paid or hosted actions. Owned4180 listeners from interrupted local test runs were explicitly stopped; successful final affected run removed its own web server and4180 is free. Coordinator owns10-before/final snapshots, real fixture cleanup and actual auth logs;401/PGRST303 diagnostic remains an honest prior local runtime failure.
+
+Source frozen; independent reviews/final live verification and evidence closure remain coordinator gates. Do not mark ticket resolved or release dependents at this checkpoint.
+
+## Review corrections — frozen f024225
+
+Both original7099da2 reviews FAIL with oneP2 each; original reports retained. Fresh explicit Open now restores the persisted authorized atomic presentation black-first; same-controller Clear suppresses restoration. Closing a popup invalidates frame generation, keeping a still-current authorized pending mask request able to settle. Clear, session loss and disposal still invalidate request application.
+
+New source f0242258955e5ec08af329c1a93b0169b50a1bb8. BuildPASS/domain24PASS. Full focused browser24PASS with retained10Handout/PDF cases,8prior map cases and6new reload/save-close cases. Enhanced final source assertions rerun6PASS at frozenf024225: delayed auth black-first, stale restore workspace read cannot undo Clear, fresh-controller restoration of saved revision, pending save success afterclose yields accepted+editable draft, failure yields recoverableerror+Discard, one commit per save. Genuine runtime finalhead checks and both distinct re-reviews belong to coordinator.
+
+New durable10-build-reviewfix/domain-reviewfix/browser-reviewfix24/browser-reviewfix-final6 logs retained separately. No source changes afterf024225. No writer DB/storage/provider mutations or remaining writer-owned4180 processes. Final evidence/tracker closure remains deferred until independent reviews and coordinator final live gate pass.

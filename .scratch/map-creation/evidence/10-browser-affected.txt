@@ -1,0 +1,25 @@
+[WebServer] (node:26838) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 8 tests using 1 worker
+
+(node:26839) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [laptop] › e2e/map-display.spec.ts:2:1 › masked frame, private DOM, accepted strokes, failure draft, clear and reopen authority (4.9s)
+  ✓  2 [laptop] › e2e/map-display.spec.ts:24:1 › actual workshop Use intent and rapid pointer stroke controls remain private (1.8s)
+  ✓  3 [laptop] › e2e/map-display.spec.ts:37:1 › blocked popup and stale protected choice/render cannot restore cleared or revoked output (2.8s)
+Ticket10 laptop observed16Mpixel/80x80 initial frame milliseconds: 708.8000000119209
+  ✓  4 [laptop] › e2e/map-display.spec.ts:58:1 › largest supported artwork and grid render bounded opaque frames without per-sample persistence (3.5s)
+(node:26886) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  5 [phone] › e2e/map-display.spec.ts:2:1 › masked frame, private DOM, accepted strokes, failure draft, clear and reopen authority (2.9s)
+  ✓  6 [phone] › e2e/map-display.spec.ts:24:1 › actual workshop Use intent and rapid pointer stroke controls remain private (1.9s)
+  ✓  7 [phone] › e2e/map-display.spec.ts:37:1 › blocked popup and stale protected choice/render cannot restore cleared or revoked output (2.9s)
+Ticket10 phone observed16Mpixel/80x80 initial frame milliseconds: 358.5
+  ✓  8 [phone] › e2e/map-display.spec.ts:58:1 › largest supported artwork and grid render bounded opaque frames without per-sample persistence (2.8s)
+
+  8 passed (29.6s)
