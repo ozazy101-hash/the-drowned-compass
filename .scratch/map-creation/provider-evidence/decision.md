@@ -100,3 +100,12 @@ Constraints unchanged: officialpinnedNode24ARM64 image,actualcgroup2048MiB/1CPU,
 
 
 Final local-proof review at `82f8a2db91a363ca1aaff187ba3d2e17ca6b6081`: independent reviewer confirmed input bytes match originals and independently reconstructed canonical output SHA256 `886e40ddb7fe491fffbfcf524f44836effff3dc9ce1111b593fdf79d4e8b2d2f`,4,196,031bytes, matching all verified RIE receipts. Standards/depth PASS; local proof Spec/evidence PASS. Full ticket03 Spec remains BLOCKED on selected actual hosted runtime/authority/capability/durability/isolation proof and accepted deployment limits. Missing ticket06 production enforcement implementation alone is not a ticket03 feasibility blocker;06 retains that implementation ownership. No hosted/provider calls were made during local proof.
+
+
+## Bounded ImageMagick WASM comparison
+
+Userauthorized no-new-host comparison of officialSupabase-supported npm:@imagemagick/magick-wasm. Pinned0.0.44 inprobe-onlydependencydirectory with integrity/JS/WASM hashes. Reviewedsource `e5c9c8c1c44c44c76460b88dd82de05c7756ca37`; distinct Standards/depth PASS. [Executed comparison decision](magick-edge-1791562499380/decision.md). Independent9/9Node checks and historical Edge live/transparent outputs preserve exactcanonicalRGBA, including hiddenRGB/lowalpha; noisy1024Node case and invalid input/shape/bounds rejected separately.
+
+ActualEdgev1.74.3 under2sCPU/256MBworker: initialcoldCPUTime2407/nooutput; intermediatepixel-correctoutputs lack retained final resourceevents and warmterminated; final ONEtargetedlosslessPNGlevel0 rerunCPUTime3626/HTTP500/nooutput/warmskipped. WASM initelapsed6606.984ms; shutdownmemory61,813,680bytes sampled, wholecontainerpeak252,678,144bytes includes main/events/user and is not workerpeak. No reliable qualifiedcold/warm resource envelope established. Tests did not reduce1024resolution, colorconvert or flattentransparency. No universalImageMagick/WASMimpossibility claim.16Muploads remain separate.
+
+Frozen compositor execution head `a7b1f6d1a1f8f87aa56b4455efb0d3ccbe77ab41`; final reviewed head only fixes reproduciblefixturemkdir and asyncboundedDockerwatchdog/cleanup. Prior9independent tests/pixelchecks remain applicable; syntax/diffchecks pass. Ownedresourcescleaned/4195released,preexistingimages/containerspreserved. No credentials/newprovider/hosted/SQL/sharedsource changes. Full03Spec and06remainBLOCKED pending accepted runtime/real authority/transport/limits proof; user preference to avoid new hosting accounts is respected.

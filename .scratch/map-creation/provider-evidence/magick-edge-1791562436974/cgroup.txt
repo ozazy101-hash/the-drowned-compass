@@ -1,0 +1,2 @@
+Error: Command failed: docker exec map-magick-edge-03-33876-1791562436975 sh -c cat /sys/fs/cgroup/memory.peak /sys/fs/cgroup/memory.max /sys/fs/cgroup/cpu.max
+Error response from daemon: container 15c492f3e475a3b7e449787e7a92afba3c975b9606f4174e07ad3664017f5089 is not running
