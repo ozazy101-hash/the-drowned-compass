@@ -1,0 +1,72 @@
+Starting explicitly labelled fixture application with fresh bounded Edge workers.
+[WebServer] (node:11942) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 2 tests using 1 worker
+
+(node:11945) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 e2e/map-revision.spec.ts:44:107 › laptop: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching (14.5s)
+(node:11960) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 e2e/map-revision.spec.ts:44:107 › phone: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching (16.3s)
+
+
+  1) e2e/map-revision.spec.ts:44:107 › laptop: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching 
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator: getByLabel('Compare versions', { exact: true })
+    Expected: "4d0c4513-f1fe-431e-8e88-683017163b81"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Compare versions', { exact: true }) with timeout 5000ms
+      - waiting for getByLabel('Compare versions', { exact: true })
+
+
+      57 |   const after=await workspace(page), revised=after.versions.at(-1);
+      58 |   expect(after.versions).toHaveLength(3); expect(revised.parentVersionId).toBe(parent.id); expect(revised.origin).toBe('revised'); expect(revised.background.registration).toBe(parent.background.registration); expect(revised.background.pixelWidth).toBe(1024); expect(revised.background.x).toBe(parent.background.x); expect(after.presentation).toEqual(before.presentation);
+    > 59 |   await expect(page.getByLabel('Compare versions',{exact:true})).toHaveValue(parent.id);
+         |                                                                  ^
+      60 |   const output=await page.evaluate(async id=>[...new Uint8Array(await(await(window as any).content.openMapVersion(id)).arrayBuffer())],revised.id);
+      61 |   const original=await decode(new Uint8Array(artwork(channels))), replacement=await decode(new Uint8Array(candidate)), accepted=await decode(Uint8Array.from(output)),r=job.originalIntent.region;
+      62 |   let outside=0,inside=0,mismatch=0;
+        at /Users/oscarpauwels/.codex/worktrees/map-revision-08/Dungeons&Dragons/e2e/map-revision.spec.ts:59:66
+
+    Error Context: test-results/map-revision-laptop-aligne-4eb43-parison-and-older-branching/error-context.md
+
+  2) e2e/map-revision.spec.ts:44:107 › phone: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching 
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator: getByLabel('Compare versions', { exact: true })
+    Expected: "d1118981-fb1a-46fc-9b4a-a623db9ad780"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Compare versions', { exact: true }) with timeout 5000ms
+      - waiting for getByLabel('Compare versions', { exact: true })
+
+
+      57 |   const after=await workspace(page), revised=after.versions.at(-1);
+      58 |   expect(after.versions).toHaveLength(3); expect(revised.parentVersionId).toBe(parent.id); expect(revised.origin).toBe('revised'); expect(revised.background.registration).toBe(parent.background.registration); expect(revised.background.pixelWidth).toBe(1024); expect(revised.background.x).toBe(parent.background.x); expect(after.presentation).toEqual(before.presentation);
+    > 59 |   await expect(page.getByLabel('Compare versions',{exact:true})).toHaveValue(parent.id);
+         |                                                                  ^
+      60 |   const output=await page.evaluate(async id=>[...new Uint8Array(await(await(window as any).content.openMapVersion(id)).arrayBuffer())],revised.id);
+      61 |   const original=await decode(new Uint8Array(artwork(channels))), replacement=await decode(new Uint8Array(candidate)), accepted=await decode(Uint8Array.from(output)),r=job.originalIntent.region;
+      62 |   let outside=0,inside=0,mismatch=0;
+        at /Users/oscarpauwels/.codex/worktrees/map-revision-08/Dungeons&Dragons/e2e/map-revision.spec.ts:59:66
+
+    Error Context: test-results/map-revision-phone-aligned-7f2d3-parison-and-older-branching/error-context.md
+
+  2 failed
+    e2e/map-revision.spec.ts:44:107 › laptop: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching 
+    e2e/map-revision.spec.ts:44:107 › phone: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching 
+Exact baseline restored; 9 owned parties/DMs, one Player and 8 owned objects cleaned; container49178 removed.

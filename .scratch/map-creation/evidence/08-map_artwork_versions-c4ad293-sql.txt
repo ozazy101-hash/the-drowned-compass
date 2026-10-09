@@ -1,0 +1,57 @@
+BEGIN
+CREATE EXTENSION
+1..35
+SET
+INSERT 0 2
+INSERT 0 2
+INSERT 0 3
+SET
+SET
+ok 1 - uploaded version/reference attach atomically
+ok 2 - client forged registration ignored
+ok 3 - duplicate attachment reconciles same accepted version
+ok 4 - retry creates no duplicate version
+ok 5 - attachment never implicitly presents
+ok 6 - existing editor saves append immutable snapshot
+ok 7 - same digest arbitrary upload receives new registration
+ok 8 - replacement retains original saved drawing
+ok 9 - cleanup cannot remove retained historical background
+ok 10 - cleanup cannot remove retained private reference
+ok 11 - branch from an older retained parent succeeds
+ok 12 - older branch uses immutable parent artwork
+ok 13 - older branch excludes latest geometry
+ok 14 - missing stored image aborts attachment rather than replacing accepted version
+ok 15 - failed storage attachment leaves all accepted versions intact
+ok 16 - first presentation is hidden
+ok 17 - untrusted new registration cannot reuse mask
+ok 18 - incompatible choice retains prior accepted version
+ok 19 - compatible source branch atomically switches saved version
+ok 20 - stale presentation revision does not overwrite
+ok 21 - explicit new-map setup starts hidden
+ok 22 - client cannot mutate immutable saved versions
+ok 23 - clients cannot assert generated origin or constrained lineage
+SET
+ok 24 - Player cannot read versions or private prompts/references
+ok 25 - Player known-path historical background/reference denied
+ok 26 - Player workspace denied
+RESET
+INSERT 0 1
+SET
+SET
+ok 27 - independent revealed Handout grant survives same-object map retention
+SET
+ok 28 - expired/unrecognized membership denies known reference path
+RESET
+ok 29 - owned server has normalized attachment grant
+SET
+ok 30 - auth.role guard also denies forged direct invocation
+INSERT 0 1
+SET
+SET
+ok 31 - server normalized attachment validates saved-parent geometry (not a live pixel probe)
+ok 32 - server constrained attachment inherits trusted saved-parent registration
+ok 33 - server retry reconciles one immutable accepted version
+ok 34 - server constrained flag cannot bypass canonical geometry
+ok 35 - server result/retry never implicitly changes accepted presentation
+RESET
+ROLLBACK

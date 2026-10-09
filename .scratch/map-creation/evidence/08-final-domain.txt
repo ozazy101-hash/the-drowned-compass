@@ -1,0 +1,13 @@
+
+Running 6 tests using 1 worker
+
+(node:19990) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/map-revision.test.ts:10:1 › saved aligned selection maps reverse drags to enclosing immutable pixel bounds (4ms)
+  ✓  2 tests/map-revision.test.ts:16:1 › selection rejects empty, nonfinite and out-of-artwork gestures without clipping (6ms)
+  ✓  3 tests/map-revision.test.ts:38:41 › lossless browser assembly preserves all outside and candidate inside pixels for RGB (426ms)
+  ✓  4 tests/map-revision.test.ts:38:41 › lossless browser assembly preserves all outside and candidate inside pixels for transparent RGBA (494ms)
+  ✓  5 tests/map-revision.test.ts:52:1 › assembly rejects dimension mismatch, CRC damage, oversized files and invalid region (458ms)
+  ✓  6 tests/map-revision.test.ts:59:1 › fractional boundary selection quantizes to one source pixel and rejects lost far-edge precision (1ms)
+
+  6 passed (1.8s)

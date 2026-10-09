@@ -1,0 +1,27 @@
+Starting explicitly labelled fixture application with fresh bounded Edge workers.
+[WebServer] (node:15150) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 6 tests using 1 worker
+
+(node:15151) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"event":"http-error","path":"/","status":422,"code":"output-pixels-mismatch"}
+{"name":"laptop","outside":962140,"inside":86436,"mismatch":0,"region":{"x":292,"y":438,"width":294,"height":294},"registrationPreserved":true,"sourceId":"f91f297b-e4a6-4efd-b827-8005a8db19c1","acceptedId":"8696d05c-0807-4d62-9510-c3c3d7b352ef"}
+  ✓  1 e2e/map-revision.spec.ts:47:107 › laptop: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching (50.4s)
+{"event":"http-error","path":"/","status":422,"code":"output-pixels-mismatch"}
+{"name":"phone","outside":962140,"inside":86436,"mismatch":0,"region":{"x":292,"y":438,"width":294,"height":294},"registrationPreserved":true,"sourceId":"ffaa3706-5922-45b8-91bc-b4ef617a73a3","acceptedId":"5287f042-a0df-4f2d-82da-66c63a80564c"}
+  ✓  2 e2e/map-revision.spec.ts:47:107 › phone: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching (44.3s)
+  ✓  3 e2e/map-revision.spec.ts:88:1 › selected-area cancel terminates assembly; retry reconciles the original area with a new request (12.6s)
+{"event":"http-error","path":"/","status":422,"code":"expired-output"}
+  ✓  4 e2e/map-revision.spec.ts:102:1 › expired selected-area proof and stale parent never attach or replace presentation (10.8s)
+[WebServer] 11:28:01 PM [vite] (client) [console.warn] GoTrueClient@sb-127-auth-token:1 (2.116.0) 2026-10-09T22:28:31.227Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+  ✓  5 e2e/map-revision.spec.ts:112:1 › assembly timeout and controller replacement terminate workers without output or a new version (9.6s)
+  ✓  6 e2e/map-revision.spec.ts:120:1 › phone multi-touch cannot replace primary rectangle and cancelled gestures clear the draft (2.6s)
+
+  6 passed (2.2m)
+Exact baseline restored; 9 owned parties/DMs, one Player and 27 owned objects cleaned; container49178 removed.

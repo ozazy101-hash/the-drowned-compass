@@ -1,0 +1,73 @@
+{
+  "owned": [
+    {
+      "party": "3df933c6-17e5-4740-9742-152dd2ec101f",
+      "dm": "e9c3b4e1-4554-4932-9c82-0465cc3d6d86"
+    },
+    {
+      "party": "2a83b54e-bfec-4c07-b2d6-1bcae7308da7",
+      "dm": "c8b39401-558c-4267-9246-6bbfeca44da6"
+    },
+    {
+      "party": "010378ab-7e3e-47d4-b731-317de6f308a4",
+      "dm": "249bc022-d64f-491d-8184-2c86324cc1a8"
+    },
+    {
+      "party": "0e51ade6-11ee-4888-9365-45f1e466b8bc",
+      "dm": "1a9d71df-6647-4b30-a829-05364fe481ac"
+    },
+    {
+      "party": "49df8854-5eae-468a-af13-7e0f88e94345",
+      "dm": "8be71e92-ea3b-443b-aa6d-20d37672e0ec"
+    },
+    {
+      "party": "12bd25bf-3d52-4a98-8f67-4d98fbffe5dc",
+      "dm": "160ca90e-ba93-4ed2-8dd9-91a149815564"
+    },
+    {
+      "party": "c31970c2-72c0-46d1-99b1-7e9fd61339a2",
+      "dm": "13dc3a5c-437b-496e-9517-f1901ac0390b"
+    },
+    {
+      "party": "c72d59d5-65d0-40c2-89d9-829b7c28b9bf",
+      "dm": "c713e529-9f3a-472a-b935-6c855a2cd26a"
+    },
+    {
+      "party": "084c8009-cf49-40c5-a2ec-153ab0570a2a",
+      "dm": "2c33a8c2-a1d6-4654-bd94-8299acb06fc5"
+    }
+  ],
+  "player": "f4ab52e6-4638-4bd5-8707-005841286712",
+  "baseline": {
+    "schema": "ee3810b06c6316094d45b09c676372e18efd6694e1c8a97d98597a29dc4eec1d",
+    "data": "d179b9c136736dc896ad4896757e1c37119a181dd8098fc92152ffa14d7d4baf",
+    "tables": {
+      "auth.identities": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "auth.users": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.character_classes": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.character_combat_entries": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.character_conditions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.character_inventory_entries": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.character_magic": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.character_primary_attacks": "a8a1a0ed909c53ef7fc9805966bc1f0f7112fb1064ed8db5b587c34dd899c912",
+      "public.character_rest_receipts": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.character_slots": "c84df48512dd28fd9d0c357d71710c594f9f735262f5aba47993980e5559b1cc",
+      "public.character_survival": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.character_text_entries": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.limited_resources": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.parties": "b0f1a4f9718ddf9eba5b6fbcd0144e1c55de7327892c8c828ac22872c737039d",
+      "public.party_grid_map_requests": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.party_grid_maps": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.party_handouts": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.party_map_artwork_versions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.party_map_generation_jobs": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.party_map_generation_settings": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.party_map_presentation_requests": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.party_map_presentations": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.party_map_reveal_masks": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.party_members": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "storage.buckets": "186d89fea06cf52ef285ce9b60ce24fd2565d070d06f78c6ebdabd7d5e5720c8",
+      "storage.objects": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  }
+}

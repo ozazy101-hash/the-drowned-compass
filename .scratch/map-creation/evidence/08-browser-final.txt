@@ -1,0 +1,61 @@
+Starting explicitly labelled fixture application with fresh bounded Edge workers.
+[WebServer] (node:16642) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 7 tests using 1 worker
+
+(node:16643) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"event":"http-error","path":"/rest/v1/rpc/read_map_generation_jobs","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/","status":422,"code":"output-pixels-mismatch"}
+{"name":"laptop","outside":962140,"inside":86436,"mismatch":0,"region":{"x":292,"y":438,"width":294,"height":294},"registrationPreserved":true,"sourceId":"1da0a506-5d2c-4ddb-a600-77f5da90de41","acceptedId":"352fbffa-1531-4c76-aef0-dcbe4ed10fdf"}
+  ✓  1 e2e/map-revision.spec.ts:47:107 › laptop: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching (57.4s)
+{"event":"http-error","path":"/","status":422,"code":"output-pixels-mismatch"}
+{"name":"phone","outside":962140,"inside":86436,"mismatch":0,"region":{"x":292,"y":438,"width":294,"height":294},"registrationPreserved":true,"sourceId":"33308686-3544-45fa-b502-4ce014ac316f","acceptedId":"6dd33a42-973b-491c-ab55-f31134dd3b20"}
+{"event":"http-error","path":"/","status":403,"code":"access-denied"}
+  ✘  2 e2e/map-revision.spec.ts:47:107 › phone: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching (1.9m)
+(node:17226) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 e2e/map-revision.spec.ts:88:1 › selected-area cancel terminates assembly; retry reconciles the original area with a new request (1.3m)
+{"event":"http-error","path":"/","status":422,"code":"expired-output"}
+  ✓  4 e2e/map-revision.spec.ts:101:1 › expired selected-area proof and stale parent never attach or replace presentation (32.0s)
+[WebServer] 11:34:39 PM [vite] (client) [console.warn] GoTrueClient@sb-127-auth-token:1 (2.116.0) 2026-10-09T22:35:08.736Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+  ✓  5 e2e/map-revision.spec.ts:110:1 › assembly timeout and controller replacement terminate workers without output or a new version (19.2s)
+  ✓  6 e2e/map-revision.spec.ts:118:1 › phone multi-touch cannot replace primary rectangle and cancelled gestures clear the draft (3.2s)
+  ✓  7 e2e/map-revision.spec.ts:133:1 › whole-map original intent restores after inspection and recoverable read failure without changing its source (17.1s)
+
+
+  1) e2e/map-revision.spec.ts:47:107 › phone: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: 'Save completed artwork' }).last()
+    Expected: visible
+    Timeout: 30000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('button', { name: 'Save completed artwork' }).last() with timeout 30000ms
+      - waiting for getByRole('button', { name: 'Save completed artwork' }).last()
+
+
+      40 |   await page.getByLabel('Selected-area instructions').fill('Add a chamber inside this rectangle');
+      41 |   await page.getByRole('button', { name: 'Create selected-area revision' }).click();
+    > 42 |   await expect(page.getByRole('button', { name: 'Save completed artwork' }).last()).toBeVisible({timeout:30000});
+         |                                                                                     ^
+      43 |   const job = (await workspace(page)).jobs.find((j:any)=>j.state==='awaiting-client-output');
+      44 |   return await page.evaluate(async id => (await(window as any).content.changeMapGeneration({kind:'read',requestId:id})).job,job.id);
+      45 | }
+        at request (/Users/oscarpauwels/.codex/worktrees/map-revision-08/Dungeons&Dragons/e2e/map-revision.spec.ts:42:85)
+        at /Users/oscarpauwels/.codex/worktrees/map-revision-08/Dungeons&Dragons/e2e/map-revision.spec.ts:68:107
+
+    Error Context: test-results/map-revision-phone-aligned-7f2d3-parison-and-older-branching/error-context.md
+
+  1 failed
+    e2e/map-revision.spec.ts:47:107 › phone: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching 
+  6 passed (5.5m)
+Exact baseline restored; 9 owned parties/DMs, one Player and 28 owned objects cleaned; container49178 removed.

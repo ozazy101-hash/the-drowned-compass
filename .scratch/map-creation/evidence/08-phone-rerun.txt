@@ -1,0 +1,19 @@
+Starting explicitly labelled fixture application with fresh bounded Edge workers.
+[WebServer] (node:19329) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 1 test using 1 worker
+
+(node:19330) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"event":"http-error","path":"/rest/v1/rpc/read_map_generation_jobs","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/","status":422,"code":"output-pixels-mismatch"}
+{"name":"phone","outside":962140,"inside":86436,"mismatch":0,"region":{"x":292,"y":438,"width":294,"height":294},"registrationPreserved":true,"sourceId":"794fd6d4-c04f-42c4-8179-3617dc28fbc6","acceptedId":"7b6f0076-48e5-423a-a229-f0b3c4d53cae"}
+  ✓  1 e2e/map-revision.spec.ts:47:107 › phone: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching (1.2m)
+
+  1 passed (1.3m)
+Exact baseline restored; 9 owned parties/DMs, one Player and 8 owned objects cleaned; container49178 removed.

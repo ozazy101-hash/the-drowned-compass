@@ -1,0 +1,85 @@
+Starting explicitly labelled fixture application with fresh bounded Edge workers.
+[WebServer] (node:13354) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 5 tests using 1 worker
+
+(node:13355) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 e2e/map-revision.spec.ts:45:107 › laptop: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching (31.1s)
+(node:13382) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"name":"phone","outside":962140,"inside":86436,"mismatch":0,"region":{"x":292,"y":438,"width":294,"height":294},"registrationPreserved":true,"sourceId":"ce4377fd-2009-488c-aec0-612ac54f8036","acceptedId":"a6b9b245-f9c5-4dfe-b5f4-473de5882c9b"}
+  ✓  2 e2e/map-revision.spec.ts:45:107 › phone: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching (1.1m)
+  ✓  3 e2e/map-revision.spec.ts:81:1 › selected-area cancel terminates assembly; retry reconciles the original area with a new request (35.1s)
+  ✓  4 e2e/map-revision.spec.ts:95:1 › expired selected-area proof and stale parent never attach or replace presentation (11.0s)
+  ✘  5 e2e/map-revision.spec.ts:105:1 › assembly timeout and controller replacement terminate workers without output or a new version (7.9s)
+
+
+  1) e2e/map-revision.spec.ts:45:107 › laptop: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('status').first()
+    Expected substring: "Artwork saved privately"
+    Received string:    ""
+    Timeout: 30000ms
+
+    Call log:
+      - Expect "toContainText" getByRole('status').first() with timeout 30000ms
+      - waiting for getByRole('status').first()
+        3 × locator resolved to <p role="status">Working…</p>
+          - unexpected value "Working…"
+        60 × locator resolved to <p role="status"></p>
+           - unexpected value ""
+
+
+      21 | async function upload(page: Page, bytes: Buffer) {
+      22 |   await page.getByLabel('Upload finished artwork').setInputFiles({ name: 'source.png', mimeType: 'image/png', buffer: bytes });
+    > 23 |   await expect(page.getByRole('status').first()).toContainText('Artwork saved privately', { timeout: 30000 });
+         |                                                  ^
+      24 | }
+      25 | async function chooseArea(page: Page) {
+      26 |   const svg = page.getByRole('img', { name: 'Area selection surface' });
+        at upload (/Users/oscarpauwels/.codex/worktrees/map-revision-08/Dungeons&Dragons/e2e/map-revision.spec.ts:23:50)
+        at /Users/oscarpauwels/.codex/worktrees/map-revision-08/Dungeons&Dragons/e2e/map-revision.spec.ts:46:74
+
+    Error Context: test-results/map-revision-laptop-aligne-4eb43-parison-and-older-branching/error-context.md
+
+  2) e2e/map-revision.spec.ts:105:1 › assembly timeout and controller replacement terminate workers without output or a new version 
+
+    Error: expect(locator).toBeEnabled() failed
+
+    Locator:  getByRole('button', { name: 'Clear selected area' })
+    Expected: enabled
+    Received: disabled
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeEnabled" getByRole('button', { name: 'Clear selected area' }) with timeout 5000ms
+      - waiting for getByRole('button', { name: 'Clear selected area' })
+        14 × locator resolved to <button disabled>Clear selected area</button>
+           - unexpected value "disabled"
+
+
+      33 |     await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]}); await cdp.detach();
+      34 |   } else { await page.mouse.move(points[0].x, points[0].y); await page.mouse.down(); await page.mouse.move(points[1].x, points[1].y, {steps:5}); await page.mouse.up(); }
+    > 35 |   await expect(page.getByRole('button', { name: 'Clear selected area' })).toBeEnabled();
+         |                                                                           ^
+      36 | }
+      37 | async function request(page: Page) {
+      38 |   await page.getByLabel('Selected-area instructions').fill('Add a chamber inside this rectangle');
+        at chooseArea (/Users/oscarpauwels/.codex/worktrees/map-revision-08/Dungeons&Dragons/e2e/map-revision.spec.ts:35:75)
+        at /Users/oscarpauwels/.codex/worktrees/map-revision-08/Dungeons&Dragons/e2e/map-revision.spec.ts:106:57
+
+    Error Context: test-results/map-revision-assembly-time-ca1e7-out-output-or-a-new-version/error-context.md
+
+  2 failed
+    e2e/map-revision.spec.ts:45:107 › laptop: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching 
+    e2e/map-revision.spec.ts:105:1 › assembly timeout and controller replacement terminate workers without output or a new version 
+  3 passed (2.5m)
+Exact baseline restored; 9 owned parties/DMs, one Player and 15 owned objects cleaned; container49178 removed.

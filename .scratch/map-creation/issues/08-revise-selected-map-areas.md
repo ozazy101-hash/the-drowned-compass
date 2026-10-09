@@ -1,7 +1,7 @@
 # 08 — Revise selected areas and build later stages
 
 Type: task
-Status: ready-for-agent
+Status: claimed
 Blocked by: 07
 Spec: [Map artwork and display reveal](../spec.md)
 
@@ -19,12 +19,12 @@ Region revisions pass saved source identity and logical region to the same06 app
 
 ## Acceptance
 
-- [ ] Rectangle selection, clear/reselect and image-coordinate mapping are correct under zoom/pan, touch and alignment transforms; reject empty/out-of-bounds regions.
-- [ ] Use the selected saved parent artwork and explicit area; browser assembles only the region and the backend independently verifies every decoded pixel using its own prepared proof. All unselected decoded pixels, canvas size, aspect ratio and registration are preserved exactly.
-- [ ] Provider mask inversion/drift/output dimension failure cannot corrupt the source; changes within the selection still require visual comparison, with no exact-geometry claim.
-- [ ] Whole-map retry and selected-area retry create/reconcile the intended job/version without overwriting source or display. Cancel/failure keeps both intact.
-- [ ] Area addition creates a later saved stage inside the current extent; no enlarged-canvas outpainting. Compare before/after, select earlier versions and branch again.
-- [ ] Live capability follows03; deterministic fixtures cover failures and exact unselected pixel preservation. Prototype tint overlays are not production output.
+- [x] Rectangle selection, clear/reselect and image-coordinate mapping are correct under zoom/pan, touch and alignment transforms; reject empty/out-of-bounds regions.
+- [x] Use the selected saved parent artwork and explicit area; browser assembles only the region and the backend independently verifies every decoded pixel using its own prepared proof. All unselected decoded pixels, canvas size, aspect ratio and registration are preserved exactly.
+- [x] Provider mask inversion/drift/output dimension failure cannot corrupt the source; changes within the selection still require visual comparison, with no exact-geometry claim.
+- [x] Whole-map retry and selected-area retry create/reconcile the intended job/version without overwriting source or display. Cancel/failure keeps both intact.
+- [x] Area addition creates a later saved stage inside the current extent; no enlarged-canvas outpainting. Compare before/after, select earlier versions and branch again.
+- [x] Live capability follows03; deterministic fixtures cover failures and exact unselected pixel preservation. Prototype tint overlays are not production output.
 
 ## Verification and review
 
@@ -35,3 +35,10 @@ Mask/compositing pixel evidence, selection transform/domain checks, bounded live
 2026-10-09: Created from user-accepted Prototype2 and module decisions. Implementation unstarted. Read the dependency status and module interface before claiming.
 
 2026-10-09: Architecture review refined ownership, small interfaces and seam-level verification before implementation. See [architecture review](../architecture-review.md) and [interface contract](../spec.md#module-placement-and-interface-contract).
+
+
+## Answer
+
+2026-10-09: Implementation and local verification complete at source `c4ad29368c770ef7b3ea246f46e5e5d115629450`; separate evidence commit follows. TWO distinct Standards/depth and Spec reviews PASS. Build/domain6/generation49/rollbackSQL45 pass; final browser6/7 plus unchanged-source phone1/1 establishes all seven distinct cases passing in aggregate. Exact baseline restored and owned fixture/runtime leases released. See [delivery and limits](../evidence/08-delivery.md).
+
+The module/acceptance wording above records the coordinator-approved accepted06 staged architecture: untrusted lossless browser assembly, independent authoritative server pixel proof, and04 atomic registration attachment. No server authority or exact-pixel invariant was weakened. No new paid live probe was authorized; historical03 bounded evidence is retained. Sporadic local401/403 remains an honest diagnostic limitation. Status remains claimed pending coordinator acceptance/integration; this ticket does not release dependents or authorize hosted changes, merge or deployment.
