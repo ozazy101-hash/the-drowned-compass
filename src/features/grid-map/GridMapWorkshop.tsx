@@ -19,6 +19,9 @@ import {
   type MapBackgroundPlacement,
 } from "../../domain/grid-map";
 import { MapDrawing, rasterMapReference } from "./MapScene";
+import { RegionSelection } from "./RegionSelection";
+import { assembleMapGeneration } from "./map-region-assembly";
+import type { MapAreaSelection } from "../../domain/map-region";
 import { GridMapEditor } from "./GridMapEditor";
 import "./grid-map.css";
 const empty: MapWorkspace = {
@@ -54,7 +57,7 @@ function useImage(
       current = false;
       if (owned) URL.revokeObjectURL(owned);
     };
-  }, [content, version, source]);
+  }, [content, version?.id, source]);
   return { url, error };
 }
 /** Creation/inspection is private; presentation requires a separate explicit intent. */
@@ -88,12 +91,16 @@ export function GridMapWorkshop({
     [outlines, setOutlines] = useState<readonly (readonly GridPoint[])[]>([]),
     [reference, setReference] = useState<File>(),
     [referenceChoice, setReferenceChoice] = useState("");
+  const [selection, setSelection] = useState<MapAreaSelection>(), [areaInstructions, setAreaInstructions] = useState("");
+  const assemblyAbort = useRef<AbortController | undefined>(undefined), assemblyJobId = useRef<string | undefined>(undefined);
   const [family, setFamily] = useState<string>(),
     [selectedId, setSelectedId] = useState(""),
     [compareId, setCompareId] = useState(""),
     [overlay, setOverlay] = useState(false),
     [job, setJob] = useState<MapGenerationJob>(),
     [placement, setPlacement] = useState<MapBackgroundPlacement>();
+  const selectedIdRef = useRef(selectedId);
+  selectedIdRef.current = selectedId;
   const generation = useRef(0),
     gesture = useRef<GridPoint[]>([]),
     lastIntent = useRef<MapGenerationIntent | undefined>(undefined),
@@ -127,14 +134,17 @@ export function GridMapWorkshop({
       if (scope !== generation.current) return;
       if ("error" in snapshot) {
         setError(snapshot.error);
-        if (/access|sign in|Dungeon Master/i.test(snapshot.error))
+        if (/access|sign in|Dungeon Master/i.test(snapshot.error)) {
+          assemblyAbort.current?.abort();
           setWorkspace(empty);
+        }
       } else {
         setWorkspace(snapshot.workspace);
       }
     });
     return () => {
       generation.current++;
+      assemblyAbort.current?.abort();
       stop();
     };
   }, [content]);
@@ -150,34 +160,27 @@ export function GridMapWorkshop({
   }, [versions, selectedId]);
   useEffect(() => {
     setPlacement(selected?.background ?? undefined);
+    setSelection(undefined);
   }, [selected?.id]);
   useEffect(() => {
-    if (selected?.origin === "generated") {
-      const parent = workspace.versions.find(
-        (v) => v.id === selected.parentVersionId,
-      );
-      lastIntent.current = {
-        requestId: selected.requestId,
-        familyId: selected.familyId,
-        parentVersionId: selected.parentVersionId ?? undefined,
-        expectedVersion:
-          workspace.families.find((f) => f.id === selected.familyId)?.version ??
-          0,
-        kind: parent ? "reference" : "generate",
-        source: parent
-          ? parent.reference
-            ? "reference"
-            : "artwork"
-          : undefined,
-        title: selected.title,
-        instructions: selected.instructions,
-        document: parent ? undefined : selected.document,
-      };
-    }
-  }, [selected?.id]);
+    if(selected?.origin !== "generated" && selected?.origin !== "revised") return;
+    lastIntent.current = undefined;
+    let current = true;
+    const scope = generation.current;
+    const unavailable = () => {
+      if(current && scope === generation.current) setError("Original creation instructions could not be restored. Refresh progress on this saved version's creation job to retry.");
+    };
+    void content.changeMapGeneration({ kind: "read", requestId: selected.requestId }).then(response => {
+      if(!current || scope !== generation.current) return;
+      if(response.ok && rememberOriginal(response.job, selected.id)) setJob(response.job);
+      else unavailable();
+    }).catch(unavailable);
+    return () => { current = false; };
+  }, [selected?.id, content]);
   useEffect(
     () => () => {
       generation.current++;
+      assemblyAbort.current?.abort();
     },
     [],
   );
@@ -231,6 +234,13 @@ export function GridMapWorkshop({
     assertCurrent(scope);
     setWorkspace(next);
     return next;
+  }
+  function rememberOriginal(job: MapGenerationJob, inspectionId: string) {
+    const version = workspace.versions.find(v => v.id === inspectionId), intent = job.originalIntent;
+    if(inspectionId !== selectedIdRef.current || !version || job.id !== version.requestId || !intent || intent.requestId !== job.id || intent.familyId !== version.familyId || (intent.parentVersionId ?? null) !== version.parentVersionId) return false;
+    lastIntent.current = intent;
+    jobIntents.current.set(job.id, intent);
+    return true;
   }
   async function result(intent: MapGenerationIntent, scope: number) {
     assertCurrent(scope);
@@ -355,7 +365,16 @@ export function GridMapWorkshop({
       );
     });
   }
+  async function reviseArea() {
+    await perform(async scope => {
+      if(!selected?.background || !selection) throw new Error("Select an area on saved artwork first.");
+      if(!areaInstructions.trim()) throw new Error("Describe the selected-area change first.");
+      if(selected.background.mime !== "image/png" || selected.background.pixelWidth !== 1024 || selected.background.pixelHeight !== 1024) throw new Error("AI revisions require 1024 × 1024 RGB/RGBA8 non-interlaced PNG up to 20 MiB. Manual uploads remain available.");
+      await result({ requestId: crypto.randomUUID(), familyId: selected.familyId, parentVersionId: selected.id, expectedVersion: expected(selected.familyId), kind: "revise", source: "artwork", region: selection.pixels, title: selected.title, instructions: areaInstructions.trim() }, scope);
+    });
+  }
   async function reconcile(id: string, kind: "read" | "cancel" = "read") {
+    if(kind === "cancel" && assemblyJobId.current === id) assemblyAbort.current?.abort();
     await perform(async (scope) => {
       const response = await content.changeMapGeneration({
         kind,
@@ -364,6 +383,7 @@ export function GridMapWorkshop({
       assertCurrent(scope);
       if (!response.ok) throw new Error(response.code);
       setJob(response.job);
+      rememberOriginal(response.job, selectedId);
       await refresh(scope);
       if (response.job.state === "failed")
         throw new Error(
@@ -408,16 +428,18 @@ export function GridMapWorkshop({
   }
   async function accept(id: string) {
     await perform(async (scope) => {
+      assemblyAbort.current?.abort();
+      const controller = new AbortController();
+      assemblyAbort.current = controller;
+      assemblyJobId.current = id;
       const input = await content.openMapGenerationInput(id);
-      if (scope !== generation.current) return;
-      if (input.source)
-        throw new Error(
-          "Selected-area assembly belongs to the area revision workshop.",
-        );
+      assertCurrent(scope);
+      const output = await assembleMapGeneration(input, controller.signal);
+      assertCurrent(scope);
       const response = await content.changeMapGeneration({
         kind: "output",
         requestId: id,
-        file: input.candidate,
+        file: output,
       });
       if (scope !== generation.current) return;
       if (!response.ok) throw new Error(response.code);
@@ -436,6 +458,7 @@ export function GridMapWorkshop({
         );
       setFamily(version.familyId);
       setSelectedId(version.id);
+      if(version.origin === "revised" && version.parentVersionId) setCompareId(version.parentVersionId);
       setMessage("Saved privately. Compare alignment before use.");
     });
   }
@@ -1027,6 +1050,17 @@ export function GridMapWorkshop({
                 <button onClick={() => void upload(undefined, true)}>
                   Save alignment as version
                 </button>
+              </fieldset>
+            )}
+            {selected.background && image.url && (
+              <fieldset disabled={busy} className="map-region-controls">
+                <legend>Revise a selected area</legend>
+                <p>Choose saved artwork as the parent. Unsaved alignment does not affect this selection. Compare the saved result before use; features inside the selected area may move.</p>
+                {(selected.background.mime !== "image/png" || selected.background.pixelWidth !== 1024 || selected.background.pixelHeight !== 1024) && <p>AI revisions require 1024 × 1024 RGB/RGBA8 non-interlaced PNG up to 20 MiB. This saved artwork can still be inspected and used.</p>}
+                <RegionSelection key={selected.id} document={selected.document} background={{ url: image.url, placement: selected.background }} selection={selection} onSelect={setSelection} disabled={busy || selected.background.mime !== "image/png" || selected.background.pixelWidth !== 1024 || selected.background.pixelHeight !== 1024} />
+                <label>Selected-area instructions<textarea value={areaInstructions} maxLength={8000} onChange={e => setAreaInstructions(e.target.value)} /></label>
+                <button disabled={!selection || !areaInstructions.trim() || selected.background.mime !== "image/png" || selected.background.pixelWidth !== 1024 || selected.background.pixelHeight !== 1024} onClick={() => void reviseArea()}>Create selected-area revision</button>
+                <p>Add a chamber or change scenery within this map extent. Earlier versions and the Party Display stay intact.</p>
               </fieldset>
             )}
             <p>Check grid alignment and scale before use.</p>

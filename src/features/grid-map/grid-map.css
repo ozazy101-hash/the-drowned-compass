@@ -29,3 +29,5 @@
 .map-inspection { display: block; width: 100%; height: auto; max-height: 55vh; }
 .map-workshop .map-toggle { display: flex; align-items: center; gap: .5rem; }
 .map-workshop .map-toggle input { width: 20px; height: 20px; min-height: 20px; flex: 0 0 auto; padding: 0; }
+
+.map-region-controls { min-width: 0; max-width: 100%; box-sizing: border-box; }
