@@ -1,0 +1,21 @@
+{
+ "acceptedHosted": false,
+ "productionEnabled": false,
+ "runtime": "Node.js24 ARM64 official Lambda image; local RIE only",
+ "imageDigest": "sha256:9456eddcb52b414c777c7dfb4f9fb6871c103f63183871e74e505bdb3461104b",
+ "memoryMiB": 2048,
+ "localCPUQuota": 1,
+ "temporaryMiB": 512,
+ "outerTimeoutMs": 60000,
+ "intentDeadlineMs": 55000,
+ "descriptorMaxBytes": 16384,
+ "encodedMaxBytes": 20971520,
+ "canonicalWidth": 1024,
+ "canonicalHeight": 1024,
+ "concurrency": 1,
+ "dailySubmissionQuota": 0,
+ "dailySpendingCapUSD": 0,
+ "orphanRetentionHours": 24,
+ "format": "single-frame8-bit noninterlaced RGB/RGBA PNG; canonical lossless RGBA PNG output",
+ "requiredHostedProof": ["invocationIAM", "scoped-expiring-transport", "secret-source-isolation", "durable-provisional-storage", "deadline-late-receipt-recovery", "job-ledger-spend-and-authoritative-attachment-owned-by06"]
+}
