@@ -13,13 +13,13 @@ Implementation, isolated integration and local verification authorized. Hosted m
 
 |Ticket|Task ID|State|Dependencies|Released base|Frozen source/evidence|Review/verification|
 |---|---|---|---|---|---|---|
-|03|01a11fdf-620c-7632-8079-294535be5eb8|running (released)|none|0b596249f1598da1df102046c9e7823e66067983|—|—|
+|03|01a11fdf-620c-7632-8079-294535be5eb8|blocked: hosted runtime decision/proof|none|0b596249f1598da1df102046c9e7823e66067983|—|—|
 |04|01a11fdf-769d-7270-a3fd-1f2999a4567f|accepted|none|0b596249f1598da1df102046c9e7823e66067983|source165650cd30fbeb91f658767aae78d05dde9cae07; evidencee14e221e9d31b6d5012149b101e78222fc42eeaf|Standards/depth PASS; Spec PASS; build/domain14/SQL62/browser26+affected6+frozen4; baseline intact|
 |05|01a11fdf-9f15-7300-8254-b08d117a00ca|accepted|04|c6577fb3261213834d4741801541eefaec8ed706|sourcef960954f37eaa9adacebe8bdb7eb3c04fa640934; evidence6ec7670cb3763fbaa9debbad83020b20d9c386b0|Standards/depth PASS; Spec PASS; build/domain14/SQL186/browser28; baseline intact|
 |06|01a11fdf-cb3e-7b23-9116-fb0eb9325b44|waiting-dependencies|03,04|—|—|—|
 |07|01a11fdf-e43c-7c90-a124-0b1d6a1d5cd1|waiting-dependencies|04,06|—|—|—|
 |08|01a11fe0-1383-71d1-b874-227d154987c0|waiting-dependencies|07|—|—|—|
-|09|01a11fe0-5155-74c3-ac6e-b62130932d19|running (full persistence released)|04|aca34d3166c4d4ae71101468fbeb97450a7c75b5 + retained reviewed domain phase|—|—|
+|09|01a11fe0-5155-74c3-ac6e-b62130932d19|accepted|04|aca34d3166c4d4ae71101468fbeb97450a7c75b5 + retained reviewed domain phase|sourceaa3dd81d21f98eb8f95289854d7771942e7efcf0; evidence68b057d819cd864f1e9662d12b635fa8dd219162|Standards/depth PASS; full Spec PASS; build/domain17/SQL79/browser6; baseline intact|
 |10|01a11fe0-96ce-7fb0-8cd9-bb3b21b0c23f|waiting-dependencies|05,07,09|—|—|—|
 |11|01a11fe0-cf36-73b1-b44b-2b5fb8c67535|waiting-dependencies|08,10|—|—|—|
 |12|01a11fe1-112e-72f0-861a-839852197846|waiting-dependencies|03–11|—|—|—|
@@ -123,3 +123,6 @@ No leases issued before roster. 03 initially owns its probe/report/evidence file
 - 2026-10-09:09 baseline matched05final schema633e6521/data8a9e58b1 before local additive09migration; retained maskDM-only/atomic snapshot. InitialSQL61PASS; initialbrowser2/6authorityPASS,4harnessflows failed strict selector ambiguity; explicitlabel fixed/rerun pending (not countedpass). Owned4maps/2users cleanup hashesintact. ExpandedSQL79(36mask+8populated09migration+35artwork) running then6viewportflows; reordersemantic retry/crosscommandrequestID coverage added. Finalfreeze/distinctreview pending;leasesretained/nohostedprovidercontrols.
 
 - 2026-10-09:09 full frozen sourceaa3dd81d21f98eb8f95289854d7771942e7efcf0. Writerdomain/artwork17/17,SQL79/79(36mask+8populatedmigration+35artwork),browser6/6local+Supabaselaptop/phone+realplayeranon,tsc/VitePASS. Distinct exactheadStandards/depth+fullSpecreview underway. Schema633e6521->ba650b37, originaltablehashesunchanged/newmasktableempty; exactfixturecleanup,no4179listener/lock. Separateevidence/equality and explicitleasereleaseawaitreview. Noacceptance/10release/hostedproviderchanges.
+
+- 2026-10-09:09 accepted sourceaa3dd81d21f98eb8f95289854d7771942e7efcf0/evidence68b057d819cd864f1e9662d12b635fa8dd219162 after distinct Standards/depth+fullSpecPASS/no findings; independent17domain/build,writer79SQL6browser,baseline originalsunchanged/newmaskempty,ownedfixturesclean/leasesreleased. Read09-delivery and exactsourceequality. Integrated phase+full5commits as5d49c4d/2a14864/4af654f/a35d71b/4621a56; combined04+05+09 head4621a56a1da764d3986c8244046a860e0989ae7b production equality to09headPASS.
+-09cursor `b2e8d42e-68e0-4464-9852-c8c70bef7542:7` complete.10 remains gated07;07gated06;06gated03 hosteddecision/proof.08/11/12transitivelygated. No meaningful released work remains. User AWSaccount/hosting preference stillpending (asked once). Quiet monitor paused per its user-authorized stop condition until user input; not integratedfullbatchcompletion. All worktrees/history preserved, no hostedmigration/mainmerge/deploy.
