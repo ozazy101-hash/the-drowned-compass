@@ -1,7 +1,7 @@
 # 03 — Verify live generation and masked editing
 
 Type: research
-Status: ready-for-agent
+Status: needs-info
 Spec: [Map artwork and display reveal](../spec.md)
 
 ## What to build
@@ -35,3 +35,13 @@ Small live corpus and deterministic invalid-output/mask cases; no full regressio
 2026-10-09: Created from user-accepted Prototype2 and module decisions. Implementation unstarted. Read the dependency status and module interface before claiming.
 
 2026-10-09: Architecture review refined ownership, small interfaces and seam-level verification before implementation. See [architecture review](../architecture-review.md) and [interface contract](../spec.md#module-placement-and-interface-contract).
+
+2026-10-09: Released by coordinator at exact base `0b596249f1598da1df102046c9e7823e66067983`. Isolated branch `codex/map-artwork-provider-probe`. Exclusive ownership: this ticket, `provider-probe/**` and `provider-evidence/**`. No production/shared changes.
+
+Module placement before coding: throwaway server capability probe under `.scratch/map-creation/provider-probe/`. A small injected internal provider port accepts generation intent (prompt, optional reference/source, validated rectangular region) and returns normalized encoded image bytes, decoded dimensions and provider receipt/usage or structured failure/uncertain outcome. Provider payload and mask polarity remain private. Decode, validation and lossless source-region composition stay probe-internal. The caller must know input/output limits, cancellation billing limits and uncertain submission reconciliation; no blind paid retry. Arbitrary generation creates new registration; constrained revision can inherit only after authoritative dimensions and exact outside-region preservation. Ticket06 owns production orchestration.
+
+## Verification checkpoint —2026-10-09
+
+Bounded probe implemented in [provider-probe](../provider-probe/README.md); [decision and evidence](../provider-evidence/decision.md). Source head `1a384308f4f9354f99d3986077238ce19d480716`, branch `codex/map-artwork-provider-probe`. Dedicated implementation and distinct independent review performed. Standards/depth PASS with42/42 independent focused checks; Spec BLOCKED. No remaining actionable source findings.
+
+Missing actual live corpus proof: OPENAI_API_KEY absent at checked process boundaries,0provider calls. User intends secure configuration, but no saved-confirmation/live evidence yet. Supabase Edge decode/composite execution unverified; maximal16M Node composition exceeds documented CPU/memory limits and provider full-canvas output size. No production UI, shared fixtures, SQL, migrations, hosted actions or deployment changed. Ticket03 remains unresolved and dependent06 blocked until genuine provider/runtime proof and observed cost/latency/geometry permit acceptance.

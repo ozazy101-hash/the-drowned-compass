@@ -1,0 +1,19 @@
+{
+  "mode": "live",
+  "model": "gpt-image-2.5-sunburst",
+  "at": "2026-10-09T09:06:44.653Z",
+  "runtime": "v24.19.0",
+  "credentialPresent": false,
+  "calls": 0,
+  "settings": {
+    "concurrency": 1,
+    "maxSubmissions": 3,
+    "timeoutMs": 120000,
+    "orphanRetentionHours": 24,
+    "maxBytes": 20971520,
+    "maxPixels": 16000000
+  },
+  "journeys": [],
+  "billingCostUSD": null,
+  "blocker": "OPENAI_API_KEY absent from probe process environment"
+}

@@ -1,0 +1,30 @@
+{
+  "mode": "deterministic-fixture",
+  "kind": "accepted",
+  "mime": "image/png",
+  "size": 14227,
+  "digest": "13adaef03e8d916498ea5568c861e9cadc5a077d2af6a11aea8eab2d2c197249",
+  "width": 1024,
+  "height": 1024,
+  "requestId": "fixture-artifacts",
+  "origin": "revise",
+  "parentIdentity": "fixture-sea-cave",
+  "registration": "server-verification-required",
+  "composition": {
+    "sourceIdentity": "fixture-sea-cave",
+    "sourceDigest": "8e35df10c3e8b5e4ad9ebbc5204b2acbef9f6f6ebd31dcf100651b292de4b6de",
+    "region": {
+      "x": 650,
+      "y": 160,
+      "width": 220,
+      "height": 240
+    },
+    "outsidePixelCount": 995776,
+    "rawOutsideChanged": 995776,
+    "preserved": true
+  },
+  "receipt": {
+    "mode": "fixture"
+  },
+  "usage": null
+}

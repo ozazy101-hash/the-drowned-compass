@@ -1,0 +1,20 @@
+# Ticket03 evidence —2026-10-09
+
+Live acceptance: **blocked**. `OPENAI_API_KEY` absent in inherited process and again at live boundary. Zero actual provider calls; no live output, observed latency/geometry drift/token consumption or billed cost. Independent deterministic checks are not live capability proof.06 stays unresolved pending credential/model access and server-runtime acceptance.
+
+Local verification:42/42 Node tests pass,0 failed/0 skipped. Covers arbitrary generation/reference normalization, four region cases including full canvas/corner/right-bottom edges, alpha mask inversion, five invalid rectangles, dimensional drift, four corrupt output cases, invalid source/source identity, credential absence, HTTP401/429/500/408 classification, ambiguous disconnect without retries, invalid base64, request/receipt/usage contract,16million-pixel roundtrip and over-limit rejection. `deterministic-tests.txt` is executable output. Mock HTTP calls are fixtures, not provider submissions.
+
+`fixture-*` images retain local sketch, inverse-alpha mask, deliberately globally changed candidate and composed result. `fixture-composition.json` records exact decoded unselected pixel preservation; this fixture demonstrates arithmetic only. Prompt/model fidelity is unknown. Three real journeys and their prompts are reproducible in `provider-probe/corpus.mjs`; real outputs must be retained by `run.mjs --live` after secure credential configuration.
+
+Runtime: local Node24 darwin arm64, builtins only. `runtime-local.json` measures complete constrained revision (decode, mask, compose, encode and roundtrip) for1024square:328ms wall/375ms CPU/~100MB peak process RSS;4000square:4913ms wall/4870ms CPU/~466MB peak RSS. RSS is cumulative process peak, not isolated operation allocation. CPU/RSS are not Edge proof; maximum-size Node case exceeds documented Edge2s/256MB. Read-only container inventory found Supabase services but no Edge worker; Deno executable absent. No shared fixtures mutated and no runtime installed/hosted deployment performed.
+
+Selected port/04 handoff: normalized PNG MIME/encoded size/SHA256 digest/canonical decoded dimensions; request/origin/parent identity; constrained region composition source digest/outside count/raw drift evidence. `server-verification-required` never authorizes inherited registration.06 must resolve saved parent and canonical grid/proportional placement and attach atomically through04's trusted server-only path; arbitrary outputs establish new registration. Receipt/attachment does not select presentation. No SQL/browser/application changes.
+
+Initial deployment settings remain tentative and generation defaults disabled with quota/spend0. Proposed concurrency1/quota3/day/wait120s/orphan24h require live evidence, durable spend reservations and a measured image-runtime ceiling; full16million-pixel support remains a runtime blocker. Unknown paid submissions retain reservations and reconciliation metadata; no automatic paid retry or refund/cancellation promise.
+
+
+Source freeze: `1a384308f4f9354f99d3986077238ce19d480716`. Distinct independent reviewer: Standards/depth PASS, Spec BLOCKED on actual live corpus and accepted server runtime proof; no remaining actionable source findings. Independent42/42 checks passed,0failed/0skipped. Earlier source `4466b62120e7a940426f7d62e5d1b2394fddf9e9` failed review for large-response regex overflow and missing provider dimension checks; both fixed and re-reviewed. Added >4MiB response, canonical base64 rejection and pre-submission live-dimension cases.
+
+Provider output limits are separate from composition/upload limits: multiples of16, edges at most3840, aspect ratio1:3–3:1,655360–8294400pixels; larger than2560×1440 experimental. A4000-square source cannot receive a same-size live edit; no silent resize.04 handoff maps width/height to pixelWidth/pixelHeight and generate/reference to generated, revise to revised.
+
+No browser/SQL/migration/hosted/deployment checks: this ticket changed only probe-local source/evidence. No production integration or release is accepted.
