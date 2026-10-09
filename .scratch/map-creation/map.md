@@ -22,3 +22,7 @@ User accepted all Prototype2 features. [Spec](spec.md) and implementation prereq
 ## Architecture checkpoint — 2026-10-09
 
 [Pre-implementation review](architecture-review.md) found and corrected six ownership/interface gaps: server job ownership, digest versus registration, coherent presentation snapshots, map observation, display ticket overlap, and composition/test seams. Revised tickets keep deep modules behind small caller interfaces. No implementation started; final implemented depth must be reviewed again.
+
+## Decisions-so-far
+
+2026-10-09: [04 durable private Map Artwork Versions](issues/04-persist-private-map-artwork-versions.md#answer) resolved in isolated branch with immutable saved sources, trusted registration separate from digest, workspace observation and atomic hidden-default presentation. Independent final Standards/depth and Spec PASS. [Evidence and downstream interface](evidence/04-delivery.md); coordinator acceptance/release remains separate.
