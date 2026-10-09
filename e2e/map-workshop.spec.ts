@@ -904,7 +904,7 @@ test("controlled controller transport interruption: real Edge receipt resumes th
     );
   await page.getByRole("button", { name: "Create map", exact: true }).click();
   await expect(page.getByRole("alert")).toContainText("unavailable", {
-    timeout: 170000,
+    timeout: 30000,
   });
   await expect(
     page.getByRole("button", { name: "Create map", exact: true }),

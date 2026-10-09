@@ -120,7 +120,7 @@
                 return { data, error: null };
               } catch (error) {
                 record("failure");
-                throw error;
+                return { data: null, error };
               }
             },
           };
