@@ -3,7 +3,7 @@
 Coordinator initialized: 2026-10-09 (Europe/London)
 Planning/source base: `0b596249f1598da1df102046c9e7823e66067983`
 Integration checkout: `/Users/oscarpauwels/.codex/worktrees/map-artwork-integration/Dungeons&Dragons`
-Status: waiting for complete roster; no ticket released.
+Status: complete roster received;03/04 released; remaining tickets dependency-gated.
 
 ## Authorization and acceptance
 
@@ -13,16 +13,16 @@ Implementation, isolated integration and local verification authorized. Hosted m
 
 |Ticket|Task ID|State|Dependencies|Released base|Frozen source/evidence|Review/verification|
 |---|---|---|---|---|---|---|
-|03|01a11fdf-620c-7632-8079-294535be5eb8|waiting-roster (ready)|none|—|—|—|
-|04|01a11fdf-769d-7270-a3fd-1f2999a4567f|waiting-roster (ready)|none|—|—|—|
-|05|pending|waiting-roster|04|—|—|—|
-|06|pending|waiting-roster|03,04|—|—|—|
-|07|01a11fdf-e43c-7c90-a124-0b1d6a1d5cd1|waiting-roster (ready)|04,06|—|—|—|
-|08|01a11fe0-1383-71d1-b874-227d154987c0|waiting-roster (ready)|07|—|—|—|
-|09|01a11fe0-5155-74c3-ac6e-b62130932d19|waiting-roster (ready)|04|—|—|—|
-|10|pending|waiting-roster|05,07,09|—|—|—|
-|11|pending|waiting-roster|08,10|—|—|—|
-|12|pending|waiting-roster|03–11|—|—|—|
+|03|01a11fdf-620c-7632-8079-294535be5eb8|running (released)|none|0b596249f1598da1df102046c9e7823e66067983|—|—|
+|04|01a11fdf-769d-7270-a3fd-1f2999a4567f|running (released)|none|0b596249f1598da1df102046c9e7823e66067983|—|—|
+|05|01a11fdf-9f15-7300-8254-b08d117a00ca|waiting-dependencies|04|—|—|—|
+|06|01a11fdf-cb3e-7b23-9116-fb0eb9325b44|waiting-dependencies|03,04|—|—|—|
+|07|01a11fdf-e43c-7c90-a124-0b1d6a1d5cd1|waiting-dependencies|04,06|—|—|—|
+|08|01a11fe0-1383-71d1-b874-227d154987c0|waiting-dependencies|07|—|—|—|
+|09|01a11fe0-5155-74c3-ac6e-b62130932d19|waiting-dependencies|04|—|—|—|
+|10|01a11fe0-96ce-7fb0-8cd9-bb3b21b0c23f|waiting-dependencies|05,07,09|—|—|—|
+|11|01a11fe0-cf36-73b1-b44b-2b5fb8c67535|waiting-dependencies|08,10|—|—|—|
+|12|01a11fe1-112e-72f0-861a-839852197846|waiting-dependencies|03–11|—|—|—|
 
 ## Module and interface handoffs
 
@@ -50,3 +50,11 @@ No leases issued before roster. 03 initially owns its probe/report/evidence file
 - 2026-10-09: Ticket04 readiness received; pinned clean base and instructions confirmed. Continued hold acknowledged pending full roster. No leases issued.
 
 - 2026-10-09: Tickets07/08/09 readiness received, read-only pinned planning inspections confirmed. All remain waiting for explicit release; dependencies and shared-file/fixture handoffs remain gated.
+
+## Active leases — initial release
+
+-03 owns provider-probe/provider-evidence paths and ticket03; exclusive bounded live-provider corpus and probe-local runtime/image verification. No shared SQL/browser mutation rights. No production source edits.
+-04 owns Grid Map domain, PartyContent/local/Supabase/content observation foundation, migrations and focused tests; required existing editor upload/save only. Exclusive local SQL/storage authority fixtures and focused laptop/phone browser automation; unique fixtures/ports, baseline preservation, no resets or hosted changes. Release leases explicitly.
+- PartyDisplay/workshop files reserved for dependent owners; shared-file additions require coordinator handoff.
+
+- 2026-10-09: Full ten-task roster arrived. Explicit releases sent to03/04 with exact pinned SHA, scope, module/interface requirements, ownership and leases; all remaining tasks wait. Acceptance requires frozen committed source, separate passing independent Standards/depth and Spec review and source/evidence SHAs.
