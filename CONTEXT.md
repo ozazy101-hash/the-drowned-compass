@@ -9,7 +9,7 @@ The broader ongoing Dungeons & Dragons game in which the Party participates. The
 _Avoid_: Party data, workspace
 
 **Party Companion**:
-The shared aid for viewing and maintaining the Party's Character Records, current play state, revealed Handouts, and Grid Maps, with a private content collection for the Dungeon Master.
+The shared aid for maintaining the Party’s Character Records and play state, reading revealed Handouts, and preparing DM-private Grid Maps for the Party Display.
 _Avoid_: Campaign manager, virtual tabletop
 
 **Party**:
@@ -105,27 +105,27 @@ The Dungeon Master's collection of Handouts and Grid Maps, including unrevealed 
 _Avoid_: Secret database, private folder
 
 **Party Library**:
-The collection of revealed Handouts and Grid Maps that players can revisit on their own devices independently of what is being shown during play.
+The collection of revealed Handouts that players can revisit independently of the Party Display. DM-private Grid Maps are prepared and presented separately.
 _Avoid_: Revealed database, shared folder
 
 **Reveal**:
-The Dungeon Master's act of making a previously private Handout or Grid Map available to the Party.
-_Avoid_: Upload, display
+The Dungeon Master’s act of making a private Handout available in the Party Library. Uncover describes showing an area of a Grid Map on the Party Display.
+_Avoid_: Upload, map presentation
 
 **Party Display**:
 The shared view of a Handout or Grid Map selected by the Dungeon Master for everyone to see during play. It is distinct from the Party Dashboard and from each player's independent reading in the Party Library.
 _Avoid_: Party Dashboard, DM screen
 
 **Present**:
-The Dungeon Master's act of choosing the Handout or Grid Map and, for a PDF, the page shown on the Party Display. Presenting private content also reveals it to the Party Library.
+The Dungeon Master’s act of selecting a Handout or saved Grid Map version for the Party Display. Presenting a private Handout also reveals it; presenting a Grid Map does not distribute it to players.
 _Avoid_: Upload, share screen
 
 **Withdraw**:
-The Dungeon Master's act of removing a revealed Handout or Grid Map from Party access while retaining it privately. Withdrawal does not undo what players have already seen or copied.
-_Avoid_: Delete, erase
+The Dungeon Master’s act of removing a revealed Handout from Party access while retaining it privately. Withdrawal cannot undo material already seen or copied.
+_Avoid_: Delete, erase, hide map area
 
 **Grid Map**:
-A visual map on a square grid for use with physical miniatures, created by the Dungeon Master from drawn walls, doors and terrain, an uploaded background image, or both. It does not enforce movement, attacks, or visibility rules.
+A DM-private visual map on a square grid for physical miniatures, made from drawn details, uploaded or generated artwork, or both. Its uncovered areas can appear on the Party Display; it does not enforce movement, attacks or visibility rules.
 _Avoid_: Virtual tabletop, rules engine
 
 **Map Grid**:
@@ -133,9 +133,29 @@ The square cells defining a Grid Map's dimensions and game distances, with five 
 _Avoid_: Screen pixels, physical square size
 
 **Map Background**:
-An uploaded image forming the visual landscape beneath a Grid Map's grid and any drawn details.
-_Avoid_: Editable terrain, generated map geometry
+The image forming the landscape beneath a Grid Map’s grid and drawn details. It may be uploaded or generated artwork, rather than editable map geometry.
+_Avoid_: Editable terrain, generated wall geometry
 
 **Display Calibration**:
 The adjustment that makes a projected Map Grid square match the desired physical size on the table. It is distinct from the Grid Map's game distances and ordinary viewing zoom.
 _Avoid_: Map scale, fit to screen
+
+**Map Artwork Version**:
+An immutable illustrated result belonging to a Grid Map, retained for comparison or further revision. A version may be selected for presentation without replacing earlier versions.
+_Avoid_: Mutable history entry, candidate row
+
+**Prepared Map Stage**:
+A saved Map Artwork Version the Dungeon Master intends to use at a later story moment, such as a newly discovered chamber or changed scenery.
+_Avoid_: Reveal Mask, automatic timeline
+
+**Reveal Mask**:
+The map regions currently concealed or uncovered on the Party Display, independent of the underlying artwork and Display Calibration.
+_Avoid_: Player vision, artwork revision
+
+**Uncover**:
+The Dungeon Master’s act of making selected map regions visible on the Party Display without changing artwork or granting Party Library access.
+_Avoid_: Reveal Handout, regenerate
+
+**Hide**:
+The Dungeon Master’s act of concealing selected map regions on the Party Display without removing the DM’s artwork.
+_Avoid_: Withdraw Handout, delete map
