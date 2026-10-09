@@ -1,11 +1,14 @@
+import { rasterVisibleMap } from '../grid-map/MapScene';
+import { validateMapPresentation, matchingMapGeometry, type MapPresentation, type MapArtworkVersion } from '../../domain/map-artwork';
+import { createMapRevealMaskDraft, type MapRevealMaskCommand } from '../../domain/map-reveal-mask';
 import type { RenderTask } from 'pdfjs-dist';
 import { readHandoutPdf, type Handout, type HandoutChange, type PartyContent, type SavedGridMap } from '../../domain/party-content';
-import { mapViewport, matchingMapRegistration } from './map-viewport';
+import { mapViewport } from './map-viewport';
 import type { PartySession } from '../../domain/party';
 
-export type DisplayState = { window: 'closed' | 'open' | 'blocked'; message: string; busy: boolean; selected?: string; page: number; pages: number; zoom: number; x: number; y: number; mode:'ordinary'|'calibrating'|'calibrated'; squarePixels:number; setupChanged:boolean; registrationChanged:boolean; contentKind?:'handout'|'map'; testSquare:boolean };
+export type DisplayState = { window: 'closed' | 'open' | 'blocked'; message: string; busy: boolean; selected?: string; page: number; pages: number; zoom: number; x: number; y: number; mode:'ordinary'|'calibrating'|'calibrated'; squarePixels:number; setupChanged:boolean; registrationChanged:boolean; contentKind?:'handout'|'map'; testSquare:boolean; presentation?:MapPresentation; artwork?:Blob; reveal?:ReturnType<ReturnType<typeof createMapRevealMaskDraft>['snapshot']> };
 // This module owns authority, reveal retries, protected reads, deterministic rendering
-// and the same-origin extended-desktop window. Callers never handle media or messages.
+// and the same-origin extended-desktop window. Only DM controls read private inspection media; popup delivery remains internal.
 export function createPartyDisplay(content: PartyContent, getSession: () => Promise<PartySession | null>) {
   let state: DisplayState = { window:'closed', message:'Open Party Display, then choose a Handout.', busy:false, page:1, pages:1, zoom:1, x:0, y:0, mode:'ordinary',squarePixels:64,setupChanged:false,registrationChanged:false,testSquare:false };
   const listeners = new Set<() => void>();
@@ -13,11 +16,14 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
   let ready = false;
   let active = true, epoch = 0, renderEpoch = 0;
   let selected: Handout | undefined;
-  let map: SavedGridMap | undefined, mapImage:string|undefined;
-  let reconcilingMap=false, mapAgain=false, pendingMap=false;
+  let map: MapArtworkVersion | undefined;
+  let accepted:MapPresentation|undefined, draft:ReturnType<typeof createMapRevealMaskDraft>|undefined;
+  let choicePending=false;
+  let cachedArtwork: {versionId:string;blob:Blob}|undefined;
+
   let blob: Blob | undefined;
   let retry: HandoutChange | undefined;
-  let registrationReference:SavedGridMap|undefined;
+  let registrationReference:MapArtworkVersion|undefined;
   let task: RenderTask | undefined;
   let pdf: Awaited<ReturnType<typeof readHandoutPdf>> | undefined;
   let frame: HTMLCanvasElement | SVGSVGElement | undefined;
@@ -25,8 +31,8 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
   const emit = (next: Partial<DisplayState>) => { state = {...state,...next}; listeners.forEach(listener=>listener()); };
   const blank = () => { if(popup&&!popup.closed) popup.document.body.replaceChildren(); frame=undefined; };
   function clear(message='Party Display cleared.') {
-    epoch++; renderEpoch++; ready=false; selected=undefined; map=undefined; mapImage=undefined; blob=undefined; retry=undefined; registrationReference=undefined; loadingVersion=undefined; task?.cancel(); void pdf?.dispose(); pdf=undefined; blank();
-    emit({selected:undefined,busy:false,page:1,pages:1,zoom:1,x:0,y:0,contentKind:undefined,testSquare:false,registrationChanged:false,message});
+    epoch++; renderEpoch++; ready=false; selected=undefined; map=undefined; accepted=undefined;draft=undefined;cachedArtwork=undefined; blob=undefined; retry=undefined; registrationReference=undefined; loadingVersion=undefined; task?.cancel(); void pdf?.dispose(); pdf=undefined; blank();
+    emit({selected:undefined,busy:false,page:1,pages:1,zoom:1,x:0,y:0,contentKind:undefined,presentation:undefined,reveal:undefined,artwork:undefined,testSquare:false,registrationChanged:false,message});
   }
   async function authorized() {
     const session=await getSession();
@@ -97,11 +103,11 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
     popup=window.open('about:blank','_blank','popup,width=1280,height=800');
     if(!popup){emit({window:'blocked',message:'Popup blocked. Allow popups for this site, then Open Party Display again.'});return;}
     popup.document.title='Party Display';
-    const style=popup.document.createElement('style');style.textContent='html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080b10}body{display:flex;align-items:center;justify-content:center}canvas,svg{flex:none;transform-origin:center}';popup.document.head.append(style);
+    const style=popup.document.createElement('style');style.textContent='html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000}body{display:flex;align-items:center;justify-content:center}canvas,svg{flex:none;transform-origin:center}';popup.document.head.append(style);
     popup.addEventListener('resize',()=>{if(state.mode!=='ordinary')emit({setupChanged:true,message:'Display viewport changed. Measure the test square again and confirm or recalibrate; scale and pan are retained.'});if(blob||map||state.testSquare)void render(epoch);});
     emit({window:'open',message:'Party Display opened. Move this window to your extended screen.'});
     // Reopening never retransmits a retained frame before rechecking visibility.
-    if(state.testSquare)void authorized().then(ok=>{if(ok)renderSquare();});else void reconcile();
+    if(state.testSquare){const token=epoch;void authorized().then(ok=>{if(ok&&token===epoch&&state.testSquare)renderSquare();});}else void reconcile();
   }
   async function present(item: Handout) {
     if(!active||state.busy)return;
@@ -120,7 +126,7 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
       const current=(await content.list()).find(value=>value.id===item.id);
       if(token!==epoch)return;
       if(!current||current.visibility!=='revealed'){emit({message:'Reveal was not confirmed. Nothing private was presented.'});return;}
-      selected=current;map=undefined;registrationReference=undefined;mapImage=undefined;blob=undefined;blank();emit({selected:current.id,contentKind:'handout',testSquare:false,page:1,pages:1,...(state.mode==='ordinary'?{zoom:1,x:0,y:0}:{})});await load(current,token);
+      selected=current;map=undefined;registrationReference=undefined;accepted=undefined;draft=undefined;blob=undefined;blank();emit({selected:current.id,contentKind:'handout',testSquare:false,page:1,pages:1,...(state.mode==='ordinary'?{zoom:1,x:0,y:0}:{})});await load(current,token);
     } catch {if(token===epoch)emit({message:'Reveal or presentation failed. Nothing private was presented. Retry the same action when connected.'});}
     finally {if(token===epoch)emit({busy:false});}
   }
@@ -141,68 +147,80 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
     popup.document.body.replaceChildren(svg);frame=svg;
   }
   async function renderMap(token:number) {
-    if(!ready||!map||!popup||popup.closed)return;
-    const item=map,target=popup,drawing=++renderEpoch;
-    const geometry=mapViewport(item.document,{width:target.innerWidth,height:target.innerHeight},state);
-    const svg=svgFrame('Saved Grid Map on Party Display',geometry.width,geometry.height,item.document.columns,item.document.rows);
-    svg.setAttribute('data-square-pixels',String(geometry.squarePixels));svg.setAttribute('data-map-version',String(item.version));
-    if(item.background&&mapImage)shape(svg,'image',{href:mapImage,x:item.background.x,y:item.background.y,width:item.background.width,height:item.background.height});
-    for(const cell of item.document.terrain)shape(svg,'rect',{x:cell.x,y:cell.y,width:1,height:1,fill:cell.kind==='water'?'#3188ac':cell.kind==='difficult'?'#95704c':'#566b62','fill-opacity':.7,'data-terrain':cell.kind});
-    for(let x=0;x<=item.document.columns;x++)shape(svg,'path',{d:`M${x} 0V${item.document.rows}`,stroke:'#94a3b8','stroke-width':.015,fill:'none'});
-    for(let y=0;y<=item.document.rows;y++)shape(svg,'path',{d:`M0 ${y}H${item.document.columns}`,stroke:'#94a3b8','stroke-width':.015,fill:'none'});
-    for(const edge of item.document.edges)shape(svg,'path',{d:`M${edge.x} ${edge.y}${edge.direction==='horizontal'?'h1':'v1'}`,stroke:edge.kind==='door'?'#ffb54a':'#fff','stroke-width':.12,'data-edge':edge.kind});
-    const current=await content.loadMap(item.id);
-    if(token!==epoch||drawing!==renderEpoch||!active)return;
-    if(current.version!==item.version){void reconcileMap();return;}
-    if(!await authorized()||token!==epoch||drawing!==renderEpoch||target.closed||state.testSquare)return;
-    target.document.body.replaceChildren(svg);frame=svg;emit({message:state.registrationChanged?(state.mode==='ordinary'?'Map registration changed. Ordinary view refitted and position reset. Calibrate before placing miniatures.':'Map registration changed. Square size is retained and position reset. Reposition, measure the test square and confirm calibration before placing miniatures.'):state.setupChanged?'Display setup changed. Measure the test square and confirm calibration before placing miniatures.':'Presenting saved Grid Map. Projection settings retained.'});
+    if(!ready||!accepted?.version||!popup||popup.closed)return;
+    const snapshot=accepted,target=popup,drawing=++renderEpoch;
+    const bytes=snapshot.version!.background?(cachedArtwork?.versionId===snapshot.version!.id?cachedArtwork.blob:await content.openMapVersion(snapshot.version!.id)):undefined;
+    const visible=await rasterVisibleMap(snapshot,bytes);
+    try {
+    if(token!==epoch||drawing!==renderEpoch||!active||accepted?.revision!==snapshot.revision)return;
+    if(!await authorized()||token!==epoch||drawing!==renderEpoch||target.closed||state.testSquare||accepted?.revision!==snapshot.revision)return;
+    const geometry=mapViewport(snapshot.version!.document,{width:target.innerWidth,height:target.innerHeight},state);
+    const canvas=target.document.createElement('canvas');canvas.width=visible.width;canvas.height=visible.height;
+    canvas.getContext('2d')!.drawImage(visible,0,0);visible.width=visible.height=0;
+    canvas.setAttribute('aria-label','Uncovered Grid Map on Party Display');
+    canvas.dataset.squarePixels=String(geometry.squarePixels);canvas.dataset.presentationRevision=String(snapshot.revision);
+    canvas.style.imageRendering='pixelated';canvas.style.width=`${geometry.width}px`;canvas.style.height=`${geometry.height}px`;canvas.style.transform=`translate(${state.x}px, ${state.y}px)`;
+    cachedArtwork=bytes?{versionId:snapshot.version!.id,blob:bytes}:undefined;
+    target.document.body.replaceChildren(canvas);frame=canvas;emit({artwork:bytes,message:'Presenting accepted uncovered Grid Map.'});
+    } finally {visible.width=visible.height=0;}
   }
-  async function readMap(id:string,token:number,attempt=0) {
-    const item=await content.loadMap(id);
-    if(token!==epoch||!active)return;
-    const bytes=item.background?await content.openMapBackground(id,item.version):undefined;
-    const image=bytes?await new Promise<string>((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result));reader.onerror=()=>reject(reader.error);reader.readAsDataURL(bytes);}):undefined;
-    const current=await content.loadMap(id);
-    if(token!==epoch||!active)return;
-    if(current.version!==item.version){if(attempt>=2)throw new Error('Saved map is changing. Retry.');await readMap(id,token,attempt+1);return;}
-    if(!await authorized()||token!==epoch)return;
-    if(registrationReference&&!matchingMapRegistration(registrationReference,current))emit({x:0,y:0,setupChanged:true,registrationChanged:true});
-    selected=undefined;blob=undefined;task?.cancel();
-    registrationReference=current;map=current;mapImage=image;ready=true;emit({selected:id,contentKind:'map',page:1,pages:1});await render(token);
+  function accept(snapshot:MapPresentation, preserveDraft=false) {
+    snapshot=validateMapPresentation(snapshot);
+    if(!snapshot.version||!snapshot.mask)throw new Error('Map presentation unavailable.');
+    if(accepted&&snapshot.revision<accepted.revision)return;
+    if(registrationReference&&!matchingMapGeometry(registrationReference,snapshot.version))emit({x:0,y:0,setupChanged:true,registrationChanged:true});
+    if(accepted?.version?.id!==snapshot.version.id){cachedArtwork=undefined;emit({artwork:undefined});}
+    registrationReference=snapshot.version;accepted=snapshot;map=snapshot.version;
+    if(preserveDraft&&draft)draft.observe(snapshot);else draft=createMapRevealMaskDraft(snapshot);
+    selected=undefined;blob=undefined;ready=true;
+    emit({selected:map.familyId,contentKind:'map',presentation:snapshot,reveal:draft?.snapshot(),page:1,pages:1});
   }
   async function reconcileMap() {
-    if(pendingMap){
-      mapAgain=true;
-      // Recheck authority even while a different map read is pending.
-      await authorized();
-      return;
-    }
-    if(reconcilingMap){mapAgain=true;return;}
-    reconcilingMap=true;
-    try {
-      do {
-        mapAgain=false;const item=map;if(!item||!active)break;
-        const token=epoch;
-        if(!await authorized()||token!==epoch)break;
-        const items=await content.listMaps();if(token!==epoch||map?.id!==item.id)break;
-        const current=items.find(value=>value.id===item.id);
-        if(!current){clear('This Grid Map is unavailable. Party Display cleared.');break;}
-        if(!ready||current.version!==item.version)await readMap(item.id,token);
-      } while(mapAgain&&active&&map);
-    }catch{if(active)emit({message:'Connection interrupted or saved map unavailable. Existing display retained; retry when connected.'});}
-    finally{reconcilingMap=false;}
-  }
-  async function presentMap(value:string|SavedGridMap) {
-    if(!active||state.busy)return;
-    if(!popup||popup.closed){emit({message:'Open Party Display before presenting.'});return;}
-    const token=++epoch;pendingMap=true;emit({busy:true,message:'Checking saved Grid Map access…'});
+    if(choicePending||!map||!active)return;
+    const token=epoch;
     try {
       if(!await authorized()||token!==epoch)return;
-      const item=typeof value==='string'?await content.loadMap(value):value;
-      if(token!==epoch)return;
-      emit({testSquare:false});await readMap(item.id,token);
-    }catch{if(token===epoch)emit({message:'Saved Grid Map could not be confirmed. Existing display retained; retry the same action when connected.'});}
-    finally{pendingMap=false;if(token===epoch){emit({busy:false});if(mapAgain&&map)void reconcileMap();}}
+      const snapshot=validateMapPresentation((await content.readMapWorkspace()).presentation);
+      if(token!==epoch||!active||!map)return;
+      if(!snapshot.version){clear('Map presentation unavailable.');return;}
+      if(!ready||snapshot.revision!==accepted?.revision){accept(snapshot,!!draft&&(draft.snapshot().status!=='accepted'||draft.snapshot().strokeActive));await render(token);}
+    }catch{if(token===epoch&&active)emit({message:'Map access unavailable. Retry when connected.'});}
+  }
+  async function presentMap(value:string|SavedGridMap|MapArtworkVersion,newMap=false) {
+    if(!active||state.busy)return;
+    // This synchronous gesture opens the popup before any protected async work.
+    if(!popup||popup.closed)openWindow();
+    if(!popup||popup.closed)return;
+    const token=++epoch;choicePending=true;emit({busy:true,message:'Checking saved map presentation…'});
+    try {
+      if(!await authorized()||token!==epoch)return;
+      const workspace=await content.readMapWorkspace();
+      if(token!==epoch||!active)return;
+      const version=typeof value==='string'?(workspace.versions.find(v=>v.id===value)??workspace.versions.filter(v=>v.familyId===value).at(-1)):'familyId' in value?value:workspace.versions.filter(v=>v.familyId===value.id).at(-1);
+      if(!version)throw new Error('Choose a saved version.');
+      const result=await content.chooseMapPresentation({versionId:version.id,expectedRevision:workspace.presentation.revision,requestId:crypto.randomUUID(),newMap});
+      if(token!==epoch||!active)return;
+      if(!result.ok){if(result.reason==='incompatible'&&window.confirm('Set up this different map? It starts fully hidden. Recheck physical calibration before placing miniatures.')){choicePending=false;emit({busy:false});void presentMap(version,true);return;}emit({message:result.reason==='incompatible'?'Different map geometry. Confirm new map setup to start hidden.':'Presentation changed elsewhere. Retry your choice.'});return;}
+      accept(result.presentation);emit({testSquare:false});await render(token);
+    }catch{if(token===epoch&&active)emit({message:'Map choice failed. Accepted display retained; retry.'});}
+    finally{choicePending=false;if(token===epoch)emit({busy:false});}
+  }
+  function reveal(command:MapRevealMaskCommand) {
+    if(!draft)return;
+    try{draft.command(command);emit({reveal:draft.snapshot()});}catch(error){emit({message:error instanceof Error?error.message:'Reveal command unavailable.'});}
+  }
+  async function saveReveal() {
+    if(!draft||choicePending)return;
+    const current=draft,token=epoch,requestId=crypto.randomUUID();
+    try {
+      if(!await authorized()||token!==epoch)return;
+      const intent=current.prepareCommit(requestId);emit({reveal:current.snapshot()});
+      const result=await content.commitMapRevealMask(intent);
+      if(token!==epoch||draft!==current||!active)return;
+      current.receive(requestId,result);
+      if(current.snapshot().accepted.revision>=(accepted?.revision??0)){accept(current.snapshot().accepted,true);await render(token);}
+      emit({reveal:current.snapshot(),message:result.ok?'Reveal progress saved.':current.snapshot().error??'Reveal conflict. Retry or discard draft.'});
+    }catch(error){if(token!==epoch||draft!==current)return;current.receive(requestId,{ok:false,reason:'error',error:error instanceof Error?error.message:'Reveal save failed.'});emit({reveal:current.snapshot(),message:'Reveal save failed. Accepted display and draft retained.'});}
   }
   function calibration(command:{kind:'start'|'confirm'|'reset';squarePixels?:number}) {
     if(!active||!popup||popup.closed)return;
@@ -211,7 +229,7 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
     if(command.kind==='reset'){emit({mode:'ordinary',testSquare:false,setupChanged:false,registrationChanged:false,zoom:1,x:0,y:0,message:'Calibration reset. Ordinary viewing uses zoom and Fit to screen.'});blank();if(map&&!ready)void reconcileMap();else void render(epoch);return;}
     if(command.kind==='confirm'){emit({mode:'calibrated',testSquare:!map&&!blob,setupChanged:false,registrationChanged:false,message:'Measured square confirmed for this physical setup. Scale is locked; pan remains available.'});if(map&&!ready)void reconcileMap();else void render(epoch);return;}
     emit({mode:'calibrating',testSquare:true,squarePixels:command.squarePixels??state.squarePixels,zoom:1,message:'Measure the square on the table. Adjust until it matches your desired miniature square, then confirm.'});
-    void authorized().then(ok=>{if(ok&&state.testSquare)renderSquare();});
+    const token=epoch;void authorized().then(ok=>{if(ok&&token===epoch&&state.testSquare)renderSquare();});
   }
   const stop=content.subscribe(snapshot=>{
     if(!active)return;
@@ -231,7 +249,7 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
   function dispose(){if(!active)return;clear();active=false;stop();stopMaps();clearInterval(timer);window.removeEventListener('pagehide',onUnload);window.removeEventListener('online',reconcile);listeners.clear();}
   return {
     getState:()=>state, subscribe:(listener:()=>void)=>{listeners.add(listener);return()=>{listeners.delete(listener);};},
-    openWindow,present,presentMap,calibration,clear,dispose,
+    openWindow,present,presentMap,reveal,saveReveal,calibration,clear,dispose,
     page:(page:number)=>{if(!blob||!Number.isInteger(page)||page<1||page>state.pages)return;emit({page});task?.cancel();void render(epoch);},
     viewport:(view:{zoom:number;x:number;y:number})=>{if(!Object.values(view).every(Number.isFinite))return;
       if(state.mode!=='ordinary'&&view.zoom!==state.zoom){emit({message:'Projection scale is locked. Reset calibration to use ordinary zoom.'});return;}emit({...view,zoom:Math.max(.25,Math.min(8,view.zoom))});if(map||state.testSquare)void render(epoch);else transform();},

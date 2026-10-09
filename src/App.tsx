@@ -1,3 +1,4 @@
+import { DisplayControls } from './features/presentation/DisplayControls';
 import { createPartyDisplay, type PartyDisplay } from './features/presentation/party-display';
 import {GridMapEditor} from './features/grid-map/GridMapEditor';
 import { GridMapWorkshop } from './features/grid-map/GridMapWorkshop';
@@ -1137,7 +1138,8 @@ export function App({ partyData }: AppProps) {
       </header>
 
       {session?.role === "dungeon-master" && <GridMapEditor content={partyData.content} mapId={selectedMapId} loadRevision={mapLoadRevision} onLibrary={()=>{setMapOpen(false);setLibraryOpen(true);setLibraryRevision(value=>value+1);}} active={mapOpen&&!workshopOpen} onBack={() => { setMapOpen(false); setLibraryOpen(false); setSelectedSlotId(null); setSetupSlotId(null); }} />}
-      {session?.role === "dungeon-master" && <GridMapWorkshop content={partyData.content} mapId={selectedMapId} key={mapLoadRevision} onLibrary={()=>{setMapOpen(false);setLibraryOpen(true);setLibraryRevision(value=>value+1);}} active={mapOpen&&workshopOpen} onBack={() => { setMapOpen(false); setLibraryOpen(false); setSelectedSlotId(null); setSetupSlotId(null); }} />}
+      {session?.role === "dungeon-master" && <GridMapWorkshop content={partyData.content} mapId={selectedMapId} key={mapLoadRevision} onLibrary={()=>{setMapOpen(false);setLibraryOpen(true);setLibraryRevision(value=>value+1);}} active={mapOpen&&workshopOpen} onUseMap={display ? version=>{void display.presentMap(version);} : undefined} onBack={() => { setMapOpen(false); setLibraryOpen(false); setSelectedSlotId(null); setSetupSlotId(null); }} />}
+      {session?.role === "dungeon-master" && mapOpen && display && <DisplayControls display={display}/>}
       {session ? <div hidden={mapOpen && session.role === "dungeon-master"}>{authenticatedContent}</div> : (
         <LoginScreen partyData={partyData} onSignedIn={setSession} />
       )}

@@ -155,3 +155,27 @@ test('save response cannot move accepted visibility into an unrelated family', (
   draft.receive(request, commitMapRevealMask(initial, retry));
   expect(draft.snapshot()).toMatchObject({ status: 'accepted', accepted: { revision: 2, version: { familyId: family }, mask: { uncovered: [9] } } });
 });
+
+test('authoritative observation retains dirty draft and retry rebases latest revision',()=>{
+ const first=presentation(),draft=createMapRevealMaskDraft(first);stroke(draft);
+ const newer={...first,revision:2,mask:{...first.mask!,uncovered:[0]}};
+ draft.observe(newer);expect(draft.snapshot()).toMatchObject({status:'conflict',uncovered:[9],accepted:{revision:2}});
+ draft.command({type:'retry'});expect(draft.prepareCommit(request).expectedRevision).toBe(2);
+});
+test('observation of different mask geometry requires discard',()=>{
+ const draft=createMapRevealMaskDraft(presentation());stroke(draft);
+ draft.observe({...presentation(4,4),revision:2});expect(()=>draft.command({type:'retry'})).toThrow('unrelated');
+ draft.command({type:'discard'});expect(draft.snapshot()).toMatchObject({status:'accepted',uncovered:[],accepted:{revision:2}});
+});
+test('newer pending observation cannot regress after old successful save response',()=>{
+ const first=presentation(),draft=createMapRevealMaskDraft(first);stroke(draft);const intent=draft.prepareCommit(request);
+ draft.observe({...first,revision:3,mask:{...first.mask!,uncovered:[0,1]}});
+ draft.receive(request,commitMapRevealMask(first,intent));expect(draft.snapshot().accepted.revision).toBe(3);
+ expect(draft.snapshot().uncovered).toEqual([0,1]);
+});
+
+test('authoritative observation during active stroke retains sampled draft as conflict',()=>{
+ const first=presentation(),draft=createMapRevealMaskDraft(first);draft.command({type:'begin',mode:'uncover',brush:1});draft.command({type:'sample',point:{x:1,y:1}});
+ draft.observe({...first,revision:2,mask:{...first.mask!,uncovered:[0]}});
+ expect(draft.snapshot()).toMatchObject({status:'conflict',strokeActive:false,uncovered:[9]});draft.command({type:'retry'});expect(draft.prepareCommit(request).expectedRevision).toBe(2);
+});

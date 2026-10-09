@@ -63,6 +63,7 @@ export function createMapRevealMaskDraft(input: MapPresentation | null) {
   const past: (readonly number[])[] = [], future: (readonly number[])[] = [];
   let stroke: { mode: 'uncover' | 'hide'; brush: 1 | 2 | 4; before: readonly number[]; last: GridPoint | null } | null = null;
   let pending: MapRevealMaskIntent | null = null;
+  let deferred: MapPresentation | null = null;
   function compatible() {
     return !!accepted?.version && !!baseline?.version && accepted.version.familyId === baseline.version.familyId && accepted.mask?.id === baseline.mask?.id && matchingMapGeometry(accepted.version, baseline.version);
   }
@@ -92,7 +93,22 @@ export function createMapRevealMaskDraft(input: MapPresentation | null) {
     }
     draft = cells([...selected]); stroke.last = { ...point };
   }
+  function observe(input: MapPresentation) {
+    const next = validateMapPresentation(input);
+    if (next.revision <= (accepted?.revision ?? -1)) return;
+    if (pending) { if (!deferred || next.revision > deferred.revision) deferred = next; return; }
+    accepted = next;
+    if ((status === 'accepted' && !stroke) || status === 'unavailable') {
+      baseline = next; draft = cells(next.mask?.uncovered ?? []); past.length = future.length = 0;
+      status = next.mask ? 'accepted' : 'unavailable'; error = null;
+    } else {
+      stroke = null; status = 'conflict';
+      error = compatible() ? 'Reveal progress changed elsewhere. Retry or discard this draft.' : 'Map geometry changed. Discard this draft before editing.';
+    }
+  }
+  function flushObserved() { const next = deferred; deferred = null; if (next) observe(next); }
   return {
+    observe,
     snapshot() {
       return Object.freeze({ accepted: accepted ?? emptyMapPresentation(), uncovered: draft, status, error, strokeActive: !!stroke, canUndo: status !== 'pending' && status !== 'conflict' && !stroke && past.length > 0, canRedo: status !== 'pending' && status !== 'conflict' && !stroke && future.length > 0 });
     },
@@ -137,7 +153,7 @@ export function createMapRevealMaskDraft(input: MapPresentation | null) {
     },
     receive(requestId: string, result: MapRevealMaskSaveResult) {
       if (!pending || pending.requestId !== requestId) return;
-      if (!result.ok && result.reason === 'error') { pending = null; status = 'error'; error = result.error; return; }
+      if (!result.ok && result.reason === 'error') { pending = null; status = 'error'; error = result.error; flushObserved(); return; }
       let observed: MapPresentation;
       try {
         observed = validateMapPresentation(result.presentation);
@@ -146,10 +162,11 @@ export function createMapRevealMaskDraft(input: MapPresentation | null) {
           const expected = commitMapRevealMask(baseline!, pending);
           if (!expected.ok || observed.revision !== expected.presentation.revision || !observed.version || !baseline!.version || observed.version.id !== baseline!.version.id || observed.version.familyId !== pending.familyId || observed.mask?.id !== pending.maskId || !matchingMapGeometry(observed.version, baseline!.version) || !equal(cells(observed.mask?.uncovered ?? []), pending.uncovered)) throw new Error('Invalid reveal save response.');
         }
-      } catch { pending = null; status = 'error'; error = 'Map reveal save response is unavailable. Retry the recoverable draft.'; return; }
+      } catch { pending = null; status = 'error'; error = 'Map reveal save response is unavailable. Retry the recoverable draft.'; flushObserved(); return; }
       accepted = observed; pending = null;
       if (result.ok) { baseline = observed; status = 'accepted'; error = null; }
       else { status = 'conflict'; error = result.reason === 'incompatible' ? 'Map geometry changed. Discard this draft before editing.' : 'Reveal progress changed elsewhere. Retry or discard this draft.'; }
+      flushObserved();
     },
   };
 }

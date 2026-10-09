@@ -125,3 +125,44 @@ export async function rasterMapReference(
   );
   return new File([blob], "sketch.png", { type: "image/png" });
 }
+
+/** Private controller rendering. Only the returned opaque visible pixels may be
+ * copied to the Party Display; source SVG and artwork never leave this document. */
+export async function rasterVisibleMap(
+  presentation: import('../../domain/map-artwork').MapPresentation,
+  artwork?: Blob,
+): Promise<HTMLCanvasElement> {
+  const { validateMapPresentation } = await import('../../domain/map-artwork');
+  const accepted = validateMapPresentation(presentation);
+  if (!accepted.version || !accepted.mask) throw new Error('Map presentation unavailable.');
+  const source = accepted.version, map = source.document;
+  const { renderToStaticMarkup } = await import('react-dom/server');
+  const url = artwork ? await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader(); reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(new Error('Artwork read failed.')); reader.readAsDataURL(artwork);
+  }) : undefined;
+  const cellPixels = Math.max(1, Math.min(64, Math.floor(4096 / Math.max(map.columns, map.rows))));
+  const width = map.columns * cellPixels, height = map.rows * cellPixels;
+  const markup = renderToStaticMarkup(<svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox={`0 0 ${map.columns} ${map.rows}`}>
+    <MapDrawing document={map} background={url && source.background ? { url, placement: source.background } : undefined}/>
+  </svg>);
+  const object = URL.createObjectURL(new Blob([markup], { type:'image/svg+xml' }));
+  const canvas = window.document.createElement('canvas'); canvas.width = width; canvas.height = height;
+  const context = canvas.getContext('2d'); if (!context) throw new Error('Map rendering unavailable.');
+  try {
+    const image = new Image(); image.src = object; await image.decode();
+    context.fillStyle = '#000'; context.fillRect(0, 0, width, height); context.drawImage(image, 0, 0, width, height);
+    // Clip the visible scene by copying whole cells onto an independently black
+    // frame. Integer pixel partitions prevent antialiased hidden-cell leaks.
+    const visible = window.document.createElement('canvas'); visible.width = width; visible.height = height;
+    const output = visible.getContext('2d')!; output.fillStyle = '#000'; output.fillRect(0, 0, width, height);
+    for (const cell of accepted.mask.uncovered) {
+      const x = cell % map.columns, y = Math.floor(cell / map.columns);
+      const left = Math.floor(x * width / map.columns), top = Math.floor(y * height / map.rows);
+      const right = Math.floor((x + 1) * width / map.columns), bottom = Math.floor((y + 1) * height / map.rows);
+      output.drawImage(canvas, left, top, right-left, bottom-top, left, top, right-left, bottom-top);
+    }
+    canvas.width = canvas.height = 0;
+    return visible;
+  } finally { canvas.width = canvas.height = 0; URL.revokeObjectURL(object); }
+}

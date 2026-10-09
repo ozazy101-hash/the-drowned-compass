@@ -1,3 +1,4 @@
+import { MapRevealControls } from './MapRevealControls';
 import { useSyncExternalStore } from 'react';
 import type { Handout } from '../../domain/party-content';
 import type { PartyDisplay } from './party-display';
@@ -32,6 +33,7 @@ export function DisplayControls({display,item}:{display:PartyDisplay;item?:Hando
         <button disabled={state.mode!=='ordinary'} onClick={display.fit}>Fit to screen</button>
       </div>
     </>}
+    {state.contentKind==='map'&&<MapRevealControls display={display} state={state}/> }
     <button onClick={()=>display.clear()}>Clear display</button>
   </section>;
 }
