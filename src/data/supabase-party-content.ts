@@ -1,7 +1,8 @@
+import { attachmentDocument, validateMapVersion, validateMapPresentation, validateMapWorkspace, type MapArtworkVersion, type MapPresentation } from '../domain/map-artwork';
 import { validateGridMap, validateMapBackground } from '../domain/grid-map';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { filterGridMaps, prepareGridMapSave, prepareGridMapChange, filterHandouts, prepareHandoutChange, validateHandout, type Handout, type PartyContent, type SavedGridMap } from '../domain/party-content';
-import { contentSubscription } from './content-subscription';
+import { contentSubscription, snapshotSubscription } from './content-subscription';
 const bucket = 'party-handouts';
 const columns = 'id,party_id,title,visibility,mime,size,created_at,digest,object_id,version,content_version,last_request_id,last_signature';
 type Row = { id: string; party_id: string; title: string; visibility: 'private' | 'revealed'; mime: string; size: number; created_at: string; digest: string; object_id:string;version:number;content_version:number;last_request_id:string|null;last_signature:string|null };
@@ -9,8 +10,20 @@ type MapRow={id:string;party_id:string;title:string;visibility:'private'|'reveal
 function mapMetadata(row:MapRow):SavedGridMap {
   const document=validateGridMap(row.document);
   let background:SavedGridMap['background']=null;
-  if(row.background){const {object_id:_object,digest:_digest,...placement}=row.background;validateMapBackground(document,placement);background={...placement,registration:_digest};}
+  if(row.background){const {object_id:_object,digest:_digest,...placement}=row.background;validateMapBackground(document,placement);background={...placement,digest:_digest,registration:placement.registration??`legacy:${_object}`};}
   return {id:row.id,title:row.title,visibility:row.visibility,createdAt:row.created_at,version:row.version,document,background};
+}
+type VersionRow={id:string;family_id:string;parent_version_id:string|null;request_id:string|null;created_at:string;title:string;document:SavedGridMap['document'];background:MapRow['background'];reference:MapRow['background'];origin:MapArtworkVersion['origin'];instructions:string;job_id:string|null;party_id:string};
+function versionMetadata(row:VersionRow):MapArtworkVersion {
+  const image=(b:MapRow['background'])=>{if(!b)return null;const {object_id:_object,...image}=b;return image;};
+  return validateMapVersion({id:row.id,familyId:row.family_id,parentVersionId:row.parent_version_id,requestId:row.request_id??row.id,createdAt:row.created_at,title:row.title,document:row.document,background:image(row.background),reference:image(row.reference),origin:row.origin,instructions:row.instructions,jobId:row.job_id});
+}
+function presentationMetadata(value:{revision:number;version:VersionRow|null;mask:MapPresentation['mask']}):MapPresentation {
+ return validateMapPresentation({revision:value.revision,version:value.version?versionMetadata(value.version):null,mask:value.mask});
+}
+async function referenceIdentity(requestId:string) {
+ const hash=new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(`map-reference/${requestId}`)));hash[6]=(hash[6]&15)|64;hash[8]=(hash[8]&63)|128;
+ const hex=Array.from(hash.slice(0,16),b=>b.toString(16).padStart(2,'0')).join('');return `${hex.slice(0,8)}-${hex.slice(8,12)}-${hex.slice(12,16)}-${hex.slice(16,20)}-${hex.slice(20)}`;
 }
 const metadata = (row: Row): Handout => ({ id: row.id, title: row.title, visibility: row.visibility, mime: row.mime, size: row.size, createdAt: row.created_at,version:row.version,contentVersion:row.content_version });
 const path = (row: Pick<Row, 'party_id' | 'object_id'>) => `${row.party_id}/${row.object_id}`;
@@ -44,6 +57,55 @@ export function supabasePartyContent(client: SupabaseClient): PartyContent {
     changed();return {ok:true as const,item:mapMetadata(saved.item)};
   }
   const content: PartyContent={
+    async readMapWorkspace(){
+      const result=await client.rpc('read_map_workspace');if(result.error||!result.data)throw failure();
+      const data=result.data as {families:MapRow[];versions:VersionRow[];presentation:Parameters<typeof presentationMetadata>[0]};
+      return validateMapWorkspace({families:data.families.map(mapMetadata),versions:data.versions.map(versionMetadata),presentation:presentationMetadata(data.presentation)});
+    },
+    async readMapVersion(id){const result=await client.from('party_map_artwork_versions').select('*').eq('id',id).maybeSingle();if(result.error||!result.data)throw new Error('This saved Map Artwork Version is unavailable.');return versionMetadata(result.data);},
+    async openMapVersion(id,source='artwork'){
+      const read=()=>client.from('party_map_artwork_versions').select('*').eq('id',id).maybeSingle();
+      const before=await read();if(before.error||!before.data)throw new Error('This saved Map Artwork Version is unavailable.');
+      const row=before.data as VersionRow;versionMetadata(row);const image=source==='reference'?row.reference:row.background;
+      if(!image)throw new Error('This saved map source has no image.');
+      const blob=await usable({party_id:row.party_id,object_id:image.object_id});
+      const after=await read();if(after.error||!after.data)throw new Error('Dungeon Master access is required. Sign in again.');return blob;
+    },
+    async attachMapVersion(input){
+      const parent=input.parentVersionId?await content.readMapVersion(input.parentVersionId):undefined;
+      const document=attachmentDocument(input,parent);
+      const prepared=await prepareGridMapSave({id:input.familyId,requestId:input.requestId,expectedVersion:input.expectedVersion,title:input.title,document,background:input.artwork});
+      const reference=input.reference?await prepareGridMapSave({id:input.familyId,requestId:input.requestId,expectedVersion:input.expectedVersion,title:input.title,document,background:input.reference}):undefined;
+      const referenceId=await referenceIdentity(input.requestId);
+      const signature=JSON.stringify({save:prepared.signature,parent:input.parentVersionId??null,reference:reference?.replacement??null,instructions:input.instructions??''});
+      const reconcile=async()=>{const accepted=await receipt(input.requestId);if(!accepted)return null;if(accepted.client_signature!==signature)throw new Error('This attachment request was already used for different content.');return {ok:true as const,version:await content.readMapVersion(input.requestId)};};
+      const accepted=await reconcile();if(accepted)return accepted;
+      const membership=await client.from('party_members').select('party_id,role').single();if(membership.error||membership.data.role!=='dungeon-master')throw new Error('Dungeon Master access is required.');
+      const object={party_id:membership.data.party_id,object_id:input.requestId},referenceObject={...object,object_id:referenceId};
+      if(prepared.replacement)await stage(object,input.artwork!,prepared.replacement.digest);
+      if(reference?.replacement)await stage(referenceObject,input.reference!,reference.replacement.digest);
+      const result=await client.rpc('attach_map_artwork_version',{p_family:input.familyId,p_parent:input.parentVersionId??null,p_expected_version:input.expectedVersion,p_request:input.requestId,p_title:prepared.title,p_document:input.parentVersionId?null:document,p_artwork:prepared.replacement?{...prepared.replacement,object_id:input.requestId}:null,p_reference:reference?.replacement?{...reference.replacement,registration:`reference:${referenceId}`,object_id:referenceId}:null,p_instructions:input.instructions??'',p_client_signature:signature});
+      if(result.error){const committed=await reconcile();if(committed){changed();return committed;}throw failure();}
+      const outcome=result.data as {ok:boolean;item:MapRow;version:VersionRow};
+      if(!outcome.ok){if(prepared.replacement)await cleanup(object);if(reference?.replacement)await cleanup(referenceObject);return {ok:false,reason:'conflict',item:mapMetadata(outcome.item)};}
+      changed();return {ok:true,version:versionMetadata(outcome.version)};
+    },
+    async chooseMapPresentation(input){
+      const result=await client.rpc('choose_map_presentation',{p_version:input.versionId,p_expected_revision:input.expectedRevision,p_request:input.requestId,p_new_map:input.newMap??false});
+      if(result.error){const receipt=await client.from('party_map_presentation_requests').select('*').eq('request_id',input.requestId).maybeSingle();
+        if(receipt.error||!receipt.data)throw failure();const saved=receipt.data as {signature:{version:string;expectedRevision:number;newMap:boolean};presentation:Parameters<typeof presentationMetadata>[0]};
+        if(saved.signature.version!==input.versionId||saved.signature.expectedRevision!==input.expectedRevision||saved.signature.newMap!==(input.newMap??false))throw new Error('This presentation request was already used.');
+        changed();return {ok:true,presentation:presentationMetadata(saved.presentation)};
+      }
+      const outcome=result.data as {ok:boolean;reason:'conflict'|'incompatible';presentation:Parameters<typeof presentationMetadata>[0]};changed();
+      return outcome.ok?{ok:true,presentation:presentationMetadata(outcome.presentation)}:{ok:false,reason:outcome.reason,presentation:presentationMetadata(outcome.presentation)};
+    },
+    observeMapWorkspace:listener=>snapshotSubscription(async()=>({workspace:await content.readMapWorkspace()}),invalidate=>{
+      events.addEventListener('changed',invalidate);
+      const channel=client.channel(`map-workspace-${crypto.randomUUID()}`).on('postgres_changes',{event:'*',schema:'public',table:'party_grid_maps'},invalidate).on('postgres_changes',{event:'*',schema:'public',table:'party_map_artwork_versions'},invalidate).on('postgres_changes',{event:'*',schema:'public',table:'party_map_presentations'},invalidate).subscribe();
+      return ()=>{events.removeEventListener('changed',invalidate);void client.removeChannel(channel);};
+    },listener),
+
     async listMaps(query){const result=await client.from('party_grid_maps').select('*');if(result.error)throw failure();return filterGridMaps((result.data as MapRow[]).map(mapMetadata),query);},
     async loadMap(id){const row=await readMap(id);if(!row)throw new Error('This Grid Map is unavailable.');return mapMetadata(row);},
     async saveMap(input){
@@ -145,7 +207,7 @@ export function supabasePartyContent(client: SupabaseClient): PartyContent {
     },
     subscribe:listener=>contentSubscription(()=>content.list(),invalidate=>{
       events.addEventListener('changed',invalidate);
-      const channel=client.channel(`party-content-${crypto.randomUUID()}`).on('postgres_changes',{event:'*',schema:'public',table:'party_handouts'},invalidate).on('postgres_changes',{event:'*',schema:'public',table:'party_grid_maps'},invalidate).subscribe();
+      const channel=client.channel(`party-content-${crypto.randomUUID()}`).on('postgres_changes',{event:'*',schema:'public',table:'party_handouts'},invalidate).subscribe();
       return ()=>{events.removeEventListener('changed',invalidate);void client.removeChannel(channel);};
     },listener),
   };return content;

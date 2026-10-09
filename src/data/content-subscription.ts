@@ -1,7 +1,7 @@
 import type { ContentSnapshot, Handout } from '../domain/party-content';
 // One authoritative read at a time; invalidations cancel delivery, not transport.
 // RLS-hidden withdrawal events require polling of the complete visible library.
-export function contentSubscription(read: () => Promise<Handout[]>, attach: (changed: () => void) => () => void, onChanged: (snapshot: ContentSnapshot) => void): () => void {
+export function snapshotSubscription<T>(read: () => Promise<T>, attach: (changed: () => void) => () => void, onChanged: (snapshot: T | {error:string}) => void): () => void {
   let active=true, reading=false, epoch=0;
   let timer: ReturnType<typeof setTimeout> | undefined;
   async function refresh() {
@@ -11,8 +11,8 @@ export function contentSubscription(read: () => Promise<Handout[]>, attach: (cha
     reading=true;
     while (active) {
       const request=epoch;
-      let snapshot: ContentSnapshot;
-      try { snapshot={items:await read()}; } catch(error) { snapshot={error:error instanceof Error?error.message:'The Library could not be refreshed.'}; }
+      let snapshot: T | {error:string};
+      try { snapshot=await read(); } catch(error) { snapshot={error:error instanceof Error?error.message:'The Library could not be refreshed.'}; }
       if (!active) break;
       if (request!==epoch) continue;
       onChanged(snapshot);break;
@@ -22,4 +22,8 @@ export function contentSubscription(read: () => Promise<Handout[]>, attach: (cha
   }
   const detach=attach(() => void refresh());void refresh();
   return () => { active=false;epoch++;clearTimeout(timer);detach(); };
+}
+
+export function contentSubscription(read:()=>Promise<Handout[]>,attach:(changed:()=>void)=>()=>void,listener:(snapshot:ContentSnapshot)=>void) {
+ return snapshotSubscription(async()=>({items:await read()}),attach,listener);
 }

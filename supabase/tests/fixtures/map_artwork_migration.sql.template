@@ -1,0 +1,41 @@
+begin;
+create extension if not exists pgtap with schema extensions;
+select plan(10);
+-- Rehearse the fresh04 source against a genuine pre04 accepted-map shape.
+-- Historical schema/policies exist only in this rollback transaction; no reset.
+drop table if exists public.party_map_presentation_requests,public.party_map_presentations,public.party_map_artwork_versions cascade;
+drop function if exists public.register_map_background(),public.retain_map_artwork_version(),public.guard_immutable_map_version(),public.map_presentation_snapshot(uuid),public.read_map_workspace(),public.attach_map_artwork_version(uuid,text,integer,uuid,text,jsonb,jsonb,jsonb,text,text),public.choose_map_presentation(text,integer,uuid,boolean),public.attach_server_map_artwork_version(uuid,uuid,text,integer,uuid,uuid,text,text,jsonb,jsonb,jsonb,text,boolean) cascade;
+drop policy if exists "DM uploads private Handout objects" on storage.objects;
+drop policy if exists "DM cleans uncommitted Handout objects" on storage.objects;
+create policy "DM uploads private Handout objects" on storage.objects for insert to authenticated with check(bucket_id='party-handouts' and public.can_manage_handout_object(name) and not exists(select 1 from public.party_handouts where party_id::text||'/'||object_id::text=name) and not exists(select 1 from public.party_grid_maps where party_id::text||'/'||(background->>'object_id')=name));
+create policy "DM cleans uncommitted Handout objects" on storage.objects for delete to authenticated using(bucket_id='party-handouts' and public.can_manage_handout_object(name) and not exists(select 1 from public.party_handouts where party_id::text||'/'||object_id::text=name) and not exists(select 1 from public.party_grid_maps where party_id::text||'/'||(background->>'object_id')=name));
+insert into auth.users(id,email,raw_app_meta_data,raw_user_meta_data)values('45000000-0000-4000-8000-000000000011','map-migration-dm@verification.test','{}','{}'),('45000000-0000-4000-8000-000000000012','map-migration-player@verification.test','{}','{}');
+insert into public.party_members(party_id,user_id,role)values('00000000-0000-4000-8000-000000000001','45000000-0000-4000-8000-000000000011','dungeon-master'),('00000000-0000-4000-8000-000000000001','45000000-0000-4000-8000-000000000012','player');
+insert into storage.objects(bucket_id,name,metadata)select 'party-handouts','00000000-0000-4000-8000-000000000001/'||id,'{"size":68,"mimetype":"image/png"}'::jsonb from unnest(array['45000000-0000-4000-8000-000000000003','45000000-0000-4000-8000-000000000004'])id;
+set local role authenticated;
+set local "request.jwt.claim.sub"='45000000-0000-4000-8000-000000000011';
+do $$begin
+ perform public.save_party_grid_map('45000000-0000-4000-8000-000000000001',0,'45000000-0000-4000-8000-000000000003','Original','{"columns":8,"rows":6,"feetPerSquare":5,"terrain":[],"edges":[]}','replace',jsonb_build_object('x',1,'y',0,'width',6,'height',6,'pixelWidth',8,'pixelHeight',8,'size',68,'mime','image/png','digest',repeat('a',64),'object_id','45000000-0000-4000-8000-000000000003'),'legacy-create');
+ perform public.save_party_grid_map('45000000-0000-4000-8000-000000000001',1,'45000000-0000-4000-8000-000000000004','Current','{"columns":8,"rows":6,"feetPerSquare":5,"terrain":[{"x":1,"y":1,"kind":"water"}],"edges":[]}','replace',jsonb_build_object('x',1,'y',0,'width',6,'height',6,'pixelWidth',8,'pixelHeight',8,'size',68,'mime','image/png','digest',repeat('b',64),'object_id','45000000-0000-4000-8000-000000000004'),'legacy-replace');
+ perform public.change_party_grid_map('45000000-0000-4000-8000-000000000001',2,'45000000-0000-4000-8000-000000000005','copy','45000000-0000-4000-8000-000000000002','Independent copy','legacy-copy');
+end;$$;
+reset role;
+create temporary table old_maps as select (to_jsonb(m)-'background')||jsonb_build_object('background',background-'registration') data from public.party_grid_maps m order by id;
+create temporary table old_receipts as select to_jsonb(r)data from public.party_grid_map_requests r order by request_id;
+create temporary table old_objects as select to_jsonb(o)data from storage.objects o order by id;
+-- __MAP_ARTWORK_MIGRATION__
+select is((select jsonb_agg((to_jsonb(m)-'background')||jsonb_build_object('background',background-'registration') order by id) from public.party_grid_maps m),(select jsonb_agg(data) from old_maps),'documents, placement, current bytes, title, revision and independent map identities preserved');
+select is((select jsonb_agg(to_jsonb(r) order by request_id) from public.party_grid_map_requests r),(select jsonb_agg(data) from old_receipts),'accepted receipts remain byte-for-byte unchanged');
+select is((select jsonb_agg(to_jsonb(o) order by id) from storage.objects o),(select jsonb_agg(data) from old_objects),'all original object records preserved');
+select is((select count(*) from public.party_map_artwork_versions where family_id in('45000000-0000-4000-8000-000000000001','45000000-0000-4000-8000-000000000002')),3::bigint,'every accepted legacy source retained without merging independent copies');
+select is((select background->>'registration' from public.party_map_artwork_versions where id='45000000-0000-4000-8000-000000000004'),(select background->>'registration' from public.party_map_artwork_versions where id='45000000-0000-4000-8000-000000000005'),'identical legacy object/canonical geometry copies retain compatible registration');
+select isnt((select background->>'registration' from public.party_map_artwork_versions where id='45000000-0000-4000-8000-000000000003'),(select background->>'registration' from public.party_map_artwork_versions where id='45000000-0000-4000-8000-000000000004'),'unrelated legacy objects do not acquire shared registration');
+set local role authenticated;
+set local "request.jwt.claim.sub"='45000000-0000-4000-8000-000000000011';
+select is((public.save_party_grid_map('45000000-0000-4000-8000-000000000001',0,'45000000-0000-4000-8000-000000000003','Original','{"columns":8,"rows":6,"feetPerSquare":5,"terrain":[],"edges":[]}','replace',jsonb_build_object('x',1,'y',0,'width',6,'height',6,'pixelWidth',8,'pixelHeight',8,'size',68,'mime','image/png','digest',repeat('a',64),'object_id','45000000-0000-4000-8000-000000000003'),'legacy-create')->'item'->>'version')::integer,1,'old accepted save retry still replays original receipt');
+select is((public.change_party_grid_map('45000000-0000-4000-8000-000000000001',2,'45000000-0000-4000-8000-000000000005','copy','45000000-0000-4000-8000-000000000002','Independent copy','legacy-copy')->'item'->>'id'),'45000000-0000-4000-8000-000000000002','old independent copy retry still replays original identity');
+set local "request.jwt.claim.sub"='45000000-0000-4000-8000-000000000012';
+select is((select count(*) from public.party_map_artwork_versions where family_id in('45000000-0000-4000-8000-000000000001','45000000-0000-4000-8000-000000000002')),0::bigint,'migrated historical versions remain DM-private');
+select is((select count(*) from storage.objects where name like '00000000-0000-4000-8000-000000000001/45000000-%'),0::bigint,'migrated current/historical known paths remain private');
+select * from finish();
+rollback;

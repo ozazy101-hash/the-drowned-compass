@@ -8,6 +8,12 @@ export type HandoutChange = { id: string; expectedVersion: number; requestId: st
 export type HandoutChangeResult = { ok: true; item: Handout } | { ok: false; reason: 'conflict'; item: Handout };
 export type ContentSnapshot = { items: Handout[] } | { error: string };
 export interface PartyContent {
+  readMapWorkspace(): Promise<import('./map-artwork').MapWorkspace>;
+  observeMapWorkspace(listener:(snapshot:import('./map-artwork').MapWorkspaceSnapshot)=>void):()=>void;
+  readMapVersion(id:string):Promise<import('./map-artwork').MapArtworkVersion>;
+  openMapVersion(id:string,source?:'artwork'|'reference'):Promise<Blob>;
+  attachMapVersion(input:import('./map-artwork').MapVersionAttachment):Promise<import('./map-artwork').MapVersionResult>;
+  chooseMapPresentation(input:import('./map-artwork').MapPresentationChoice):Promise<import('./map-artwork').MapPresentationResult>;
   listMaps(query?: {search?:string; visibility?:'private'|'revealed'}): Promise<SavedGridMap[]>;
   loadMap(id:string): Promise<SavedGridMap>;
   changeMap(input:GridMapChange): Promise<GridMapSaveResult>;
@@ -96,7 +102,7 @@ export function transitionHandout(item: Handout & {lastRequestId?: string; lastS
   return {ok:true,item:next};
 }
 
-export type MapBackground = MapBackgroundPlacement & {mime:string;size:number;registration?:string};
+export type MapBackground = MapBackgroundPlacement & {mime:string;size:number;registration?:string;digest?:string};
 export type SavedGridMap = {id:string;title:string;visibility:'private'|'revealed';createdAt:string;version:number;document:GridMapDocument;background:MapBackground|null};
 export type GridMapSave = {id:string;expectedVersion:number;requestId:string;title:string;document:GridMapDocument;background?:File|null};
 export type GridMapSaveResult = {ok:true;item:SavedGridMap}|{ok:false;reason:'conflict';item:SavedGridMap};

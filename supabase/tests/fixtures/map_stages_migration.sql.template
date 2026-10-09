@@ -1,6 +1,10 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 select no_plan();
+-- This historical08 rehearsal deliberately restores its pre04 download policy
+-- inside the rollback transaction; current04 privacy is tested separately.
+drop policy if exists "Members download current revealed or DM private objects" on storage.objects;
+create policy "Members download current revealed or DM private objects" on storage.objects for select to authenticated using(bucket_id='party-handouts' and (public.can_manage_handout_object(name) or exists(select 1 from public.party_handouts where party_id::text||'/'||object_id::text=name and visibility='revealed' and public.is_party_member(party_id)) or exists(select 1 from public.party_grid_maps where party_id::text||'/'||(background->>'object_id')=name and visibility='revealed' and public.is_party_member(party_id))));
 -- Replay08 only within a rollback transaction;06 is the explicit prerequisite.
 select has_table('public','party_grid_maps','saved-map prerequisite exists');
 drop function if exists public.change_party_grid_map(uuid,integer,uuid,text,uuid,text,text);
