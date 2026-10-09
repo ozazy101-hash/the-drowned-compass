@@ -93,7 +93,7 @@ export function HandoutLibrary({ content, onBack,role='dungeon-master', display,
       </>}
       {blob?<><Download blob={blob} item={item}/><HandoutMedia key={`${item.id}:${item.contentVersion}`} blob={blob}/></>:<><p>Opening current Handout…</p><button onClick={()=>setOpenRetry(value=>value+1)}>Retry opening Handout</button></>}
     </section> : <>
-      {<SavedMapLibrary content={content} onOpen={dm?onOpenMap:undefined} display={dm?display:undefined} dm={dm}/>}
+      {dm&&<SavedMapLibrary content={content} onOpen={dm?onOpenMap:undefined} display={dm?display:undefined} dm={dm}/>}
       {dm&&<form onSubmit={upload} aria-label="Upload Handout"><h2>Upload a private Handout</h2>
         <p>{handoutLimits}</p><label>Title<input value={title} maxLength={160} required disabled={busy} onChange={event => { setTitle(event.target.value); setRequestId(crypto.randomUUID()); }} /></label>
         <label>File<input type="file" accept="image/png,image/jpeg,image/webp,application/pdf" disabled={busy} onChange={event => { setFile(event.target.files?.[0]); setRequestId(crypto.randomUUID()); }} required /></label>

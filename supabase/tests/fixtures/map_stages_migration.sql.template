@@ -1,4 +1,9 @@
 begin;
+-- Restore pre05 map sharing only inside this historical rollback rehearsal.
+alter table if exists public.party_grid_maps drop constraint if exists party_grid_maps_dm_private;
+drop policy if exists "DM reads private Grid Maps" on public.party_grid_maps;
+drop policy if exists "Members read revealed or DM private Grid Maps" on public.party_grid_maps;
+create policy "Members read revealed or DM private Grid Maps" on public.party_grid_maps for select to authenticated using(public.is_party_dm(party_id) or (visibility='revealed' and public.is_party_member(party_id)));
 create extension if not exists pgtap with schema extensions;
 select no_plan();
 -- This historical08 rehearsal deliberately restores its pre04 download policy

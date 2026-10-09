@@ -11,7 +11,7 @@ function mapMetadata(row:MapRow):SavedGridMap {
   const document=validateGridMap(row.document);
   let background:SavedGridMap['background']=null;
   if(row.background){const {object_id:_object,digest:_digest,...placement}=row.background;validateMapBackground(document,placement);background={...placement,digest:_digest,registration:placement.registration??`legacy:${_object}`};}
-  return {id:row.id,title:row.title,visibility:row.visibility,createdAt:row.created_at,version:row.version,document,background};
+  return {id:row.id,title:row.title,visibility:'private',createdAt:row.created_at,version:row.version,document,background};
 }
 type VersionRow={id:string;family_id:string;parent_version_id:string|null;request_id:string|null;created_at:string;title:string;document:SavedGridMap['document'];background:MapRow['background'];reference:MapRow['background'];origin:MapArtworkVersion['origin'];instructions:string;job_id:string|null;party_id:string};
 function versionMetadata(row:VersionRow):MapArtworkVersion {

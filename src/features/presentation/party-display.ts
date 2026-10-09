@@ -1,5 +1,5 @@
 import type { RenderTask } from 'pdfjs-dist';
-import { readHandoutPdf, type Handout, type HandoutChange, type PartyContent, type SavedGridMap, type GridMapChange } from '../../domain/party-content';
+import { readHandoutPdf, type Handout, type HandoutChange, type PartyContent, type SavedGridMap } from '../../domain/party-content';
 import { mapViewport, matchingMapRegistration } from './map-viewport';
 import type { PartySession } from '../../domain/party';
 
@@ -17,7 +17,6 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
   let reconcilingMap=false, mapAgain=false, pendingMap=false;
   let blob: Blob | undefined;
   let retry: HandoutChange | undefined;
-  let mapRetry:GridMapChange|undefined;
   let registrationReference:SavedGridMap|undefined;
   let task: RenderTask | undefined;
   let pdf: Awaited<ReturnType<typeof readHandoutPdf>> | undefined;
@@ -26,7 +25,7 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
   const emit = (next: Partial<DisplayState>) => { state = {...state,...next}; listeners.forEach(listener=>listener()); };
   const blank = () => { if(popup&&!popup.closed) popup.document.body.replaceChildren(); frame=undefined; };
   function clear(message='Party Display cleared.') {
-    epoch++; renderEpoch++; ready=false; selected=undefined; map=undefined; mapImage=undefined; blob=undefined; retry=undefined; mapRetry=undefined; registrationReference=undefined; loadingVersion=undefined; task?.cancel(); void pdf?.dispose(); pdf=undefined; blank();
+    epoch++; renderEpoch++; ready=false; selected=undefined; map=undefined; mapImage=undefined; blob=undefined; retry=undefined; registrationReference=undefined; loadingVersion=undefined; task?.cancel(); void pdf?.dispose(); pdf=undefined; blank();
     emit({selected:undefined,busy:false,page:1,pages:1,zoom:1,x:0,y:0,contentKind:undefined,testSquare:false,registrationChanged:false,message});
   }
   async function authorized() {
@@ -154,7 +153,6 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
     for(const edge of item.document.edges)shape(svg,'path',{d:`M${edge.x} ${edge.y}${edge.direction==='horizontal'?'h1':'v1'}`,stroke:edge.kind==='door'?'#ffb54a':'#fff','stroke-width':.12,'data-edge':edge.kind});
     const current=await content.loadMap(item.id);
     if(token!==epoch||drawing!==renderEpoch||!active)return;
-    if(current.visibility!=='revealed'){clear('This Grid Map was withdrawn. Party Display cleared.');return;}
     if(current.version!==item.version){void reconcileMap();return;}
     if(!await authorized()||token!==epoch||drawing!==renderEpoch||target.closed||state.testSquare)return;
     target.document.body.replaceChildren(svg);frame=svg;emit({message:state.registrationChanged?(state.mode==='ordinary'?'Map registration changed. Ordinary view refitted and position reset. Calibrate before placing miniatures.':'Map registration changed. Square size is retained and position reset. Reposition, measure the test square and confirm calibration before placing miniatures.'):state.setupChanged?'Display setup changed. Measure the test square and confirm calibration before placing miniatures.':'Presenting saved Grid Map. Projection settings retained.'});
@@ -162,12 +160,10 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
   async function readMap(id:string,token:number,attempt=0) {
     const item=await content.loadMap(id);
     if(token!==epoch||!active)return;
-    if(item.visibility!=='revealed'){clear('This Grid Map is private or withdrawn. Nothing private was presented.');return;}
     const bytes=item.background?await content.openMapBackground(id,item.version):undefined;
     const image=bytes?await new Promise<string>((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result));reader.onerror=()=>reject(reader.error);reader.readAsDataURL(bytes);}):undefined;
     const current=await content.loadMap(id);
     if(token!==epoch||!active)return;
-    if(current.visibility!=='revealed'){clear('This Grid Map was withdrawn. Nothing private was presented.');return;}
     if(current.version!==item.version){if(attempt>=2)throw new Error('Saved map is changing. Retry.');await readMap(id,token,attempt+1);return;}
     if(!await authorized()||token!==epoch)return;
     if(registrationReference&&!matchingMapRegistration(registrationReference,current))emit({x:0,y:0,setupChanged:true,registrationChanged:true});
@@ -176,9 +172,9 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
   }
   async function reconcileMap() {
     if(pendingMap){
-      mapAgain=true;const retained=map,token=epoch;
-      // A slow next-stage read must never delay withdrawal of the retained frame.
-      if(retained)try{const current=await content.loadMap(retained.id);if(token===epoch&&map?.id===retained.id&&current.visibility!=='revealed')clear('This Grid Map was withdrawn. Party Display cleared.');}catch{/* Uncertain reads retain the verified frame; authority is checked independently. */}
+      mapAgain=true;
+      // Recheck authority even while a different map read is pending.
+      await authorized();
       return;
     }
     if(reconcilingMap){mapAgain=true;return;}
@@ -190,7 +186,7 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
         if(!await authorized()||token!==epoch)break;
         const items=await content.listMaps();if(token!==epoch||map?.id!==item.id)break;
         const current=items.find(value=>value.id===item.id);
-        if(!current||current.visibility!=='revealed'){clear('This Grid Map is private or withdrawn. Party Display cleared.');break;}
+        if(!current){clear('This Grid Map is unavailable. Party Display cleared.');break;}
         if(!ready||current.version!==item.version)await readMap(item.id,token);
       } while(mapAgain&&active&&map);
     }catch{if(active)emit({message:'Connection interrupted or saved map unavailable. Existing display retained; retry when connected.'});}
@@ -202,15 +198,7 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
     const token=++epoch;pendingMap=true;emit({busy:true,message:'Checking saved Grid Map access…'});
     try {
       if(!await authorized()||token!==epoch)return;
-      let item=typeof value==='string'?await content.loadMap(value):value;
-      if(mapRetry&&mapRetry.id!==item.id)mapRetry=undefined;
-      if(item.visibility==='private'||mapRetry){
-        mapRetry??={id:item.id,expectedVersion:item.version,requestId:crypto.randomUUID(),command:{kind:'reveal'}};
-        const result=await content.changeMap(mapRetry);
-        if(token!==epoch)return;
-        if(!result.ok){mapRetry=undefined;emit({message:'This Grid Map changed elsewhere. Review the saved map and retry Reveal and present.'});return;}
-        mapRetry=undefined;item=result.item;
-      }
+      const item=typeof value==='string'?await content.loadMap(value):value;
       if(token!==epoch)return;
       emit({testSquare:false});await readMap(item.id,token);
     }catch{if(token===epoch)emit({message:'Saved Grid Map could not be confirmed. Existing display retained; retry the same action when connected.'});}
@@ -234,12 +222,13 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
     if(!item||item.visibility!=='revealed'){clear('This Handout was withdrawn. Choose another Handout.');return;}
     if((!ready||!blob||item.contentVersion!==selected.contentVersion)&&loadingVersion!==item.contentVersion)void load(item,++epoch);
   });
+  const stopMaps=content.observeMapWorkspace(()=>{if(map)void reconcileMap();});
   const timer=setInterval(()=>{
     if(popup?.closed&&state.window==='open'){epoch++;emit({window:'closed',busy:false,message:'Party Display closed. Open Party Display to reopen it.'});}
     if(selected||map||state.testSquare)void authorized().catch(()=>emit({message:'Connection interrupted. Existing display retained.'}));
   },1000);
   const onUnload=()=>dispose();window.addEventListener('pagehide',onUnload);window.addEventListener('online',reconcile);
-  function dispose(){if(!active)return;clear();active=false;stop();clearInterval(timer);window.removeEventListener('pagehide',onUnload);window.removeEventListener('online',reconcile);listeners.clear();}
+  function dispose(){if(!active)return;clear();active=false;stop();stopMaps();clearInterval(timer);window.removeEventListener('pagehide',onUnload);window.removeEventListener('online',reconcile);listeners.clear();}
   return {
     getState:()=>state, subscribe:(listener:()=>void)=>{listeners.add(listener);return()=>{listeners.delete(listener);};},
     openWindow,present,presentMap,calibration,clear,dispose,
