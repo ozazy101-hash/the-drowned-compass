@@ -1,0 +1,245 @@
+[
+    {
+        "Id": "20bb9defd7e2b24291e9c0fb40bac3ee38ef6061f182d7d3f6b6d6f944c95089",
+        "Created": "2026-10-09T16:14:59.446601216Z",
+        "Path": "edge-runtime",
+        "Args": [
+            "start",
+            "--main-service",
+            "/magick/main",
+            "--event-worker",
+            "/magick/events",
+            "--policy",
+            "per_worker",
+            "--max-parallelism",
+            "1",
+            "--user-worker-request-idle-timeout",
+            "150000"
+        ],
+        "State": {
+            "Status": "exited",
+            "Running": false,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 0,
+            "ExitCode": 15,
+            "Error": "",
+            "StartedAt": "2026-10-09T16:14:59.595664132Z",
+            "FinishedAt": "2026-10-09T16:15:09.896823221Z"
+        },
+        "Image": "sha256:c52405002a890ca9fcf77978671c57f3a988e03174afb277f84ac65bc917013c",
+        "ResolvConfPath": "/var/lib/docker/containers/20bb9defd7e2b24291e9c0fb40bac3ee38ef6061f182d7d3f6b6d6f944c95089/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/20bb9defd7e2b24291e9c0fb40bac3ee38ef6061f182d7d3f6b6d6f944c95089/hostname",
+        "HostsPath": "/var/lib/docker/containers/20bb9defd7e2b24291e9c0fb40bac3ee38ef6061f182d7d3f6b6d6f944c95089/hosts",
+        "LogPath": "/var/lib/docker/containers/20bb9defd7e2b24291e9c0fb40bac3ee38ef6061f182d7d3f6b6d6f944c95089/20bb9defd7e2b24291e9c0fb40bac3ee38ef6061f182d7d3f6b6d6f944c95089-json.log",
+        "Name": "/map-magick-edge-03-34004-1791562499381",
+        "RestartCount": 0,
+        "Driver": "overlayfs",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": null,
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "bridge",
+            "PortBindings": {
+                "9000/tcp": [
+                    {
+                        "HostIp": "127.0.0.1",
+                        "HostPort": "4195"
+                    }
+                ]
+            },
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "CapAdd": null,
+            "CapDrop": null,
+            "CgroupnsMode": "private",
+            "Dns": null,
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": true,
+            "SecurityOpt": null,
+            "Tmpfs": {
+                "/tmp": "rw,size=256m"
+            },
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 2147483648,
+            "NanoCpus": 1000000000,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": [],
+            "BlkioDeviceWriteBps": [],
+            "BlkioDeviceReadIOps": [],
+            "BlkioDeviceWriteIOps": [],
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 2147483648,
+            "MemorySwappiness": null,
+            "OomKillDisable": null,
+            "PidsLimit": null,
+            "Ulimits": null,
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "Mounts": [
+                {
+                    "Type": "bind",
+                    "Source": "/Users/oscarpauwels/.codex/worktrees/map-artwork-provider-probe/Dungeons\u0026Dragons/.scratch/map-creation/provider-probe/magick/",
+                    "Target": "/magick",
+                    "ReadOnly": true
+                }
+            ],
+            "MaskedPaths": [
+                "/proc/acpi",
+                "/proc/asound",
+                "/proc/interrupts",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/sys/devices/virtual/powercap",
+                "/sys/firmware"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ]
+        },
+        "Storage": {
+            "RootFS": {
+                "Snapshot": {
+                    "Name": "overlayfs"
+                }
+            }
+        },
+        "Mounts": [
+            {
+                "Type": "bind",
+                "Source": "/Users/oscarpauwels/.codex/worktrees/map-artwork-provider-probe/Dungeons\u0026Dragons/.scratch/map-creation/provider-probe/magick/",
+                "Destination": "/magick",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            }
+        ],
+        "Config": {
+            "Hostname": "20bb9defd7e2",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "9000/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "DENO_DIR=/tmp/deno",
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            ],
+            "Cmd": [
+                "start",
+                "--main-service",
+                "/magick/main",
+                "--event-worker",
+                "/magick/events",
+                "--policy",
+                "per_worker",
+                "--max-parallelism",
+                "1",
+                "--user-worker-request-idle-timeout",
+                "150000"
+            ],
+            "Image": "sha256:c52405002a890ca9fcf77978671c57f3a988e03174afb277f84ac65bc917013c",
+            "Volumes": null,
+            "WorkingDir": "",
+            "Entrypoint": [
+                "edge-runtime"
+            ],
+            "Labels": {}
+        },
+        "NetworkSettings": {
+            "SandboxID": "",
+            "SandboxKey": "",
+            "Ports": {},
+            "Networks": {
+                "bridge": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "DriverOpts": null,
+                    "GwPriority": 0,
+                    "NetworkID": "b0d9d9bdd63f58782825e89654c7d7dd5415cf66751906881697bb10f16ef9bc",
+                    "EndpointID": "",
+                    "Gateway": "",
+                    "IPAddress": "",
+                    "MacAddress": "",
+                    "IPPrefixLen": 0,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DNSNames": null
+                }
+            }
+        },
+        "ImageManifestDescriptor": {
+            "mediaType": "application/vnd.oci.image.manifest.v1+json",
+            "digest": "sha256:523316cc2bf776eab2144c56f0a1f58c1fbad5a2ffe3b35ce7fbeaf2a1be89cb",
+            "size": 1443,
+            "platform": {
+                "architecture": "arm64",
+                "os": "linux"
+            }
+        }
+    }
+]

@@ -1,0 +1,26 @@
+START RequestId: b91fe8bb-7592-4437-a684-1e41c47fd290 Version: $LATEST
+END RequestId: b91fe8bb-7592-4437-a684-1e41c47fd290
+REPORT RequestId: b91fe8bb-7592-4437-a684-1e41c47fd290	Init Duration: 0.56 ms	Duration: 7025.48 ms	Billed Duration: 7026 ms	Memory Size: 3008 MB	Max Memory Used: 3008 MB	
+START RequestId: 38d6ab97-a958-4044-8963-e6de228393c6 Version: $LATEST
+END RequestId: 38d6ab97-a958-4044-8963-e6de228393c6
+REPORT RequestId: 38d6ab97-a958-4044-8963-e6de228393c6	Duration: 1439.90 ms	Billed Duration: 1440 ms	Memory Size: 3008 MB	Max Memory Used: 3008 MB	
+START RequestId: 63d1acab-c400-4ecf-9e5e-779d4ba57d0a Version: $LATEST
+END RequestId: 63d1acab-c400-4ecf-9e5e-779d4ba57d0a
+REPORT RequestId: 63d1acab-c400-4ecf-9e5e-779d4ba57d0a	Duration: 812.30 ms	Billed Duration: 813 ms	Memory Size: 3008 MB	Max Memory Used: 3008 MB	
+START RequestId: cad18ba0-72e0-410a-8c86-488bd2a573e9 Version: $LATEST
+END RequestId: cad18ba0-72e0-410a-8c86-488bd2a573e9
+REPORT RequestId: cad18ba0-72e0-410a-8c86-488bd2a573e9	Duration: 1963.89 ms	Billed Duration: 1964 ms	Memory Size: 3008 MB	Max Memory Used: 3008 MB	
+09 Oct 2026 10:17:34,293 [INFO] (rapid) exec '/var/runtime/bootstrap' (cwd=/var/task, handler=)
+09 Oct 2026 10:17:34,463 [INFO] (rapid) INIT START(type: on-demand, phase: init)
+09 Oct 2026 10:17:34,463 [INFO] (rapid) The extension's directory "/opt/extensions" does not exist, assuming no extensions to be loaded.
+09 Oct 2026 10:17:34,464 [INFO] (rapid) Starting runtime without AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN , Expected?: false
+09 Oct 2026 10:17:36,720 [INFO] (rapid) INIT RTDONE(status: success)
+09 Oct 2026 10:17:36,720 [INFO] (rapid) INIT REPORT(durationMs: 2258.694000)
+09 Oct 2026 10:17:36,721 [INFO] (rapid) INVOKE START(requestId: b91fe8bb-7592-4437-a684-1e41c47fd290)
+09 Oct 2026 10:17:41,487 [INFO] (rapid) INVOKE RTDONE(status: success, produced bytes: 0, duration: 4766.183000ms)
+09 Oct 2026 10:17:41,544 [INFO] (rapid) INVOKE START(requestId: 38d6ab97-a958-4044-8963-e6de228393c6)
+09 Oct 2026 10:17:42,983 [INFO] (rapid) INVOKE RTDONE(status: success, produced bytes: 0, duration: 1438.041000ms)
+09 Oct 2026 10:17:43,008 [INFO] (rapid) INVOKE START(requestId: 63d1acab-c400-4ecf-9e5e-779d4ba57d0a)
+09 Oct 2026 10:17:43,818 [INFO] (rapid) INVOKE RTDONE(status: success, produced bytes: 0, duration: 809.798000ms)
+09 Oct 2026 10:17:43,826 [INFO] (rapid) INVOKE START(requestId: cad18ba0-72e0-410a-8c86-488bd2a573e9)
+09 Oct 2026 10:17:45,790 [INFO] (rapid) INVOKE RTDONE(status: success, produced bytes: 0, duration: 1963.246000ms)

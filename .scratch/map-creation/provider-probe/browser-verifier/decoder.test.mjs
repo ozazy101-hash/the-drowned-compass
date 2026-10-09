@@ -1,0 +1,18 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import {deflateSync} from 'node:zlib';
+import {decode,verifyBound,crc} from './decoder.mjs';import {decodePng,encodePng} from '../png.mjs';
+const root=new URL('./fixtures/',import.meta.url),manifest=JSON.parse(await readFile(new URL('manifest.json',root)));
+const data={};for(const mode of ['live','transparent','lowalpha','noise']){data[mode]={};for(const kind of ['source','candidate','output'])data[mode][kind]=await readFile(new URL(mode+'-'+kind+'.png',root));}
+for(const mode of Object.keys(data))test(mode+' independent canonical and bound verdict',async()=>{const d=data[mode];for(const bytes of Object.values(d))assert.deepEqual(await decode(bytes),new Uint8Array(decodePng(bytes).rgba));const result=await verifyBound(manifest[mode],mode,d.source,d.candidate,d.output);assert.equal(result.kind,'verified');});
+const d=data.live,b=manifest.live;
+for(const [name,offset]of [['outside tamper',0],['inside tamper',(160*1024+650)*4]])test(name,async()=>{const pixels=decodePng(d.output);pixels.rgba[offset]^=1;const result=await verifyBound(b,'live',d.source,d.candidate,encodePng(pixels));assert.equal(result.kind,'rejected');});
+for(const [name,binding,id,source,candidate]of [['same-size source substitution',manifest.transparent,'transparent',data.transparent.candidate,data.transparent.candidate],['same-size candidate substitution',manifest.transparent,'transparent',data.transparent.source,data.transparent.source],['request mismatch',b,'noise',d.source,d.candidate],['missing parent',{...b,parentId:''},'live',d.source,d.candidate]])test(name,()=>assert.rejects(()=>verifyBound(binding,id,source,candidate,d.output)));
+test('trusted region mismatch rejects output',async()=>assert.equal((await verifyBound({...b,region:{x:0,y:0,width:220,height:240}},'live',d.source,d.candidate,d.output)).kind,'rejected'));
+function chunk(type,body){const b=Buffer.alloc(body.length+12);b.writeUInt32BE(body.length);b.write(type,4);body.copy(b,8);b.writeUInt32BE(crc(b.subarray(4,-4)),b.length-4);return b;}
+const signature=d.output.subarray(0,8),header=Buffer.from(d.output.subarray(16,29)),png=(h,parts)=>Buffer.concat([signature,chunk('IHDR',h),...parts,chunk('IEND',Buffer.alloc(0))]);
+const scan=Buffer.alloc(1024*(1024*4+1));
+const valid=chunk('IDAT',deflateSync(scan));
+for(const [name,bytes]of [
+ ['CRC',(()=>{const v=Buffer.from(d.output);v[30]^=1;return v;})()],['truncated',d.output.subarray(0,-1)],['trailing',Buffer.concat([d.output,Buffer.from([0])])],['duplicate IHDR',png(header,[chunk('IHDR',header),valid])],['palette',png(header,[chunk('PLTE',Buffer.alloc(3)),valid])],['APNG',png(header,[chunk('acTL',Buffer.alloc(8)),valid])],['tRNS',png(header,[chunk('tRNS',Buffer.alloc(6)),valid])],['critical',png(header,[chunk('ABCD',Buffer.alloc(0)),valid])],['nonconsecutive IDAT',png(header,[valid,chunk('tEXt',Buffer.alloc(0)),valid])],['missing IDAT',png(header,[])],['missing IEND',png(header,[valid]).subarray(0,-12)],['interlace',png((()=>{const h=Buffer.from(header);h[12]=1;return h;})(),[valid])],['dimensions',png((()=>{const h=Buffer.from(header);h.writeUInt32BE(1000);return h;})(),[valid])],['inflation overflow',png(header,[chunk('IDAT',deflateSync(Buffer.alloc(scan.length+1)))])],['bad Adler',png(header,[chunk('IDAT',(()=>{const v=deflateSync(scan);v[v.length-1]^=1;return v;})())])]
+])test(name+' malformed rejected',()=>assert.rejects(()=>decode(bytes)));
+
+test('bounds rejected before decode',()=>assert.rejects(()=>verifyBound({...b,region:{x:1023,y:0,width:2,height:1}},'live',d.source,d.candidate,d.output)));

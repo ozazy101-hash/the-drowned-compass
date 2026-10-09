@@ -1,0 +1,52 @@
+{
+  "results": [
+    {
+      "mode": "live",
+      "status": 200,
+      "wallMs": 5972.318208000001,
+      "initMs": "1433.114959",
+      "composeWallMs": "3704.7393349999998",
+      "pixels": {
+        "outside": 995776,
+        "inside": 52800,
+        "outsideMismatch": 0,
+        "insideMismatch": 0,
+        "exact": true
+      }
+    },
+    {
+      "mode": "live-warm",
+      "error": "TypeError: terminated"
+    },
+    {
+      "mode": "transparent",
+      "status": 200,
+      "wallMs": 5619.225542,
+      "initMs": "1458.5723759999998",
+      "composeWallMs": "3576.5052509999996",
+      "pixels": {
+        "outside": 995776,
+        "inside": 52800,
+        "outsideMismatch": 0,
+        "insideMismatch": 0,
+        "exact": true
+      }
+    },
+    {
+      "mode": "lowalpha",
+      "error": "TypeError: fetch failed"
+    },
+    {
+      "mode": "noise",
+      "error": "TypeError: fetch failed"
+    }
+  ],
+  "configuration": {
+    "workerCPUHardMs": 2000,
+    "workerMemoryMb": 256,
+    "containerMemoryMb": 512,
+    "CPU": 1,
+    "policy": "per_worker",
+    "package": "@imagemagick/magick-wasm@0.0.44"
+  }
+}

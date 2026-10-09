@@ -1,0 +1,139 @@
+{
+  "mode": "live",
+  "model": "gpt-image-2.5-sunburst",
+  "at": "2026-10-09T09:18:18.360Z",
+  "runtime": "v24.19.0",
+  "credentialPresent": true,
+  "calls": 3,
+  "settings": {
+    "concurrency": 1,
+    "maxSubmissions": 3,
+    "timeoutMs": 120000,
+    "orphanRetentionHours": 24,
+    "maxBytes": 20971520,
+    "maxPixels": 16000000
+  },
+  "journeys": [
+    {
+      "id": "curved-shrine",
+      "latencyMs": 22691,
+      "kind": "accepted",
+      "mime": "image/png",
+      "size": 3153173,
+      "digest": "2539979bfbc5c359f31a0598c8485b81349466db2005ef961b513e5b5da4621a",
+      "width": 1024,
+      "height": 1024,
+      "requestId": "probe-curved-shrine-1791537498702",
+      "origin": "generate",
+      "parentIdentity": null,
+      "registration": "new",
+      "composition": null,
+      "receipt": {
+        "mode": "live",
+        "model": "gpt-image-2.5-sunburst",
+        "requestId": "probe-curved-shrine-1791537498702",
+        "httpStatus": 200,
+        "providerRequestId": "req_7fc9a702b6f04155a0a671393c17cef4"
+      },
+      "usage": {
+        "input_tokens": 56,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 56
+        },
+        "output_tokens": 196,
+        "output_tokens_details": {
+          "image_tokens": 196,
+          "text_tokens": 0
+        },
+        "total_tokens": 252
+      },
+      "geometryDriftObservation": "Pending human inspection of retained input/raw/accepted output"
+    },
+    {
+      "id": "sea-cave",
+      "latencyMs": 21286,
+      "kind": "accepted",
+      "mime": "image/png",
+      "size": 2542891,
+      "digest": "eea733e73c403ea2978916a56733facd6074cbecff19f868d1e54343ed8fad89",
+      "width": 1024,
+      "height": 1024,
+      "requestId": "probe-sea-cave-1791537521427",
+      "origin": "reference",
+      "parentIdentity": "fixed-sea-cave-sketch",
+      "registration": "new",
+      "composition": null,
+      "receipt": {
+        "mode": "live",
+        "model": "gpt-image-2.5-sunburst",
+        "requestId": "probe-sea-cave-1791537521427",
+        "httpStatus": 200,
+        "providerRequestId": "req_737cc63de05e4b139cef5bc90b581ca0"
+      },
+      "usage": {
+        "input_tokens": 1093,
+        "input_tokens_details": {
+          "image_tokens": 1024,
+          "text_tokens": 69
+        },
+        "output_tokens": 196,
+        "output_tokens_details": {
+          "image_tokens": 196,
+          "text_tokens": 0
+        },
+        "total_tokens": 1289
+      },
+      "geometryDriftObservation": "Pending human inspection of retained input/raw/accepted output"
+    },
+    {
+      "id": "added-chamber",
+      "latencyMs": 20150,
+      "kind": "accepted",
+      "mime": "image/png",
+      "size": 2540058,
+      "digest": "7a6e9e6520de0bc24d1eeb0e3aabe742dba1afb07eac7c7e9de87036f1350d54",
+      "width": 1024,
+      "height": 1024,
+      "requestId": "probe-added-chamber-1791537542888",
+      "origin": "revise",
+      "parentIdentity": "probe-sea-cave-1791537521427",
+      "registration": "server-verification-required",
+      "composition": {
+        "sourceIdentity": "probe-sea-cave-1791537521427",
+        "sourceDigest": "eea733e73c403ea2978916a56733facd6074cbecff19f868d1e54343ed8fad89",
+        "region": {
+          "x": 650,
+          "y": 160,
+          "width": 220,
+          "height": 240
+        },
+        "outsidePixelCount": 995776,
+        "rawOutsideChanged": 966233,
+        "preserved": true
+      },
+      "receipt": {
+        "mode": "live",
+        "model": "gpt-image-2.5-sunburst",
+        "requestId": "probe-added-chamber-1791537542888",
+        "httpStatus": 200,
+        "providerRequestId": "req_3f01cc2c17c546408c2567a922cad448"
+      },
+      "usage": {
+        "input_tokens": 1088,
+        "input_tokens_details": {
+          "image_tokens": 1024,
+          "text_tokens": 64
+        },
+        "output_tokens": 196,
+        "output_tokens_details": {
+          "image_tokens": 196,
+          "text_tokens": 0
+        },
+        "total_tokens": 1284
+      },
+      "geometryDriftObservation": "Pending human inspection of retained input/raw/accepted output"
+    }
+  ],
+  "billingCostUSD": null
+}

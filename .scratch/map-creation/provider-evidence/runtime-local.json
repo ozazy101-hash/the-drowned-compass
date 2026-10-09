@@ -1,0 +1,30 @@
+{
+  "mode": "deterministic-fixture",
+  "runtime": "v24.19.0",
+  "platform": "darwin",
+  "architecture": "arm64",
+  "nodeOnly": true,
+  "edgeVerified": false,
+  "cases": [
+    {
+      "width": 1024,
+      "height": 1024,
+      "pixels": 1048576,
+      "kind": "accepted",
+      "wallMs": 328,
+      "cpuMs": 375,
+      "outsidePreserved": true,
+      "peakProcessRSSBytes": 100024320
+    },
+    {
+      "width": 4000,
+      "height": 4000,
+      "pixels": 16000000,
+      "kind": "accepted",
+      "wallMs": 4913,
+      "cpuMs": 4870,
+      "outsidePreserved": true,
+      "peakProcessRSSBytes": 466403328
+    }
+  ]
+}

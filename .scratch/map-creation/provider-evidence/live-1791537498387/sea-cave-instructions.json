@@ -1,0 +1,9 @@
+{
+  "kind": "reference",
+  "prompt": "Turn this top-down layout sketch into an illustrated sea cave battle map. Preserve the ring cavern and southern entry. Wet rock, shallow blue water, grim nautical fantasy. No grid, text, perspective, labels or tokens. Canvas 1024 by 1024.",
+  "requestId": "probe-sea-cave-1791537521427",
+  "source": {
+    "identity": "fixed-sea-cave-sketch",
+    "file": "sea-cave-input.png"
+  }
+}

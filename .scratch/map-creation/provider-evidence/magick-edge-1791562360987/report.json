@@ -1,0 +1,15 @@
+{
+  "results": [
+    {
+      "transportError": "TypeError: terminated"
+    }
+  ],
+  "configuration": {
+    "workerCPUHardMs": 2000,
+    "workerMemoryMb": 256,
+    "containerMemoryMb": 512,
+    "CPU": 1,
+    "policy": "per_worker",
+    "package": "@imagemagick/magick-wasm@0.0.44"
+  }
+}

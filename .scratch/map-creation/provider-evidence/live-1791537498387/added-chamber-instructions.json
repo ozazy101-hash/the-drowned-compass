@@ -1,0 +1,15 @@
+{
+  "kind": "revise",
+  "prompt": "Add a small dry hidden chamber and a narrow doorway inside the transparent selected upper-right rectangle of this sea cave. Maintain top-down view and existing map style. Keep everything else unchanged. No text, grid or tokens. Do not enlarge canvas.",
+  "region": {
+    "x": 650,
+    "y": 160,
+    "width": 220,
+    "height": 240
+  },
+  "requestId": "probe-added-chamber-1791537542888",
+  "source": {
+    "identity": "probe-sea-cave-1791537521427",
+    "file": "sea-cave-output.png"
+  }
+}

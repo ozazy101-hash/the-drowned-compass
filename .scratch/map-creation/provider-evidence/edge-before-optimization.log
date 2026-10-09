@@ -1,0 +1,2 @@
+{"timestamp":"2026-10-09T09:27:30.423Z","event_type":"Boot","event":{"boot_time":1331},"metadata":{"service_path":"/probe/edge/worker","execution_id":"26d3255d-7217-40f9-bab6-69c80324052e","otel_attributes":{"edge_runtime.worker.kind":"user"}}}
+{"timestamp":"2026-10-09T09:27:32.873Z","event_type":"UncaughtException","event":{"exception":"event loop error: Uncaught null","cpu_time_used":2040},"metadata":{"service_path":"/probe/edge/worker","execution_id":"26d3255d-7217-40f9-bab6-69c80324052e","otel_attributes":{"edge_runtime.worker.kind":"user"}}}

@@ -1,0 +1,12 @@
+{
+  "package": "@imagemagick/magick-wasm",
+  "version": "0.0.44",
+  "registryTarball": "https://registry.npmjs.org/@imagemagick/magick-wasm/-/magick-wasm-0.0.44.tgz",
+  "bytes": 11250922,
+  "integrity": "sha512-J6oieSjlJzamANwtrNAlO+DKnRm49ILtSIWDhtkGn35f/5zS99AXta2gPsZuG9m2JvQbsu3h3CHe14ViXrFD/Q==",
+  "wasmDefault": "dist/x86/magick.wasm",
+  "wasmSha256": "b7d6710436b150dc5bd1ca04d80b6b7614c54854d7470f888f7e69a2a41b00e4",
+  "moduleSha256": "cf1db24f7e63f560118ef434fd581dc9ef66ad099dc417184765cd6076fb4a1b",
+  "license": "Apache-2.0",
+  "notice": "Retained in extracted deps/package/NOTICE; contains bundled third-party notices"
+}

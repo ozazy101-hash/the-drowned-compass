@@ -1,0 +1,17 @@
+{
+  "accepted": false,
+  "generationEnabled": false,
+  "dailySubmissionQuota": 0,
+  "dailySpendingCapUSD": 0,
+  "concurrency": 1,
+  "providerWaitTimeoutMs": 120000,
+  "orphanRetentionHours": 24,
+  "candidateGeneratedWidth": 1024,
+  "candidateGeneratedHeight": 1024,
+  "candidateGeneratedMaxPixels": 1048576,
+  "outerUploadMaxPixels": 16000000,
+  "encodedMaxBytes": 20971520,
+  "qualifyingWorker": {"memoryLimitMb": 256, "cpuTimeSoftLimitMs": 1900, "cpuTimeHardLimitMs": 2000, "workerTimeoutMs": 150000},
+  "runtimeBlocker": "Retained1024-square revision exceeded actual Edge2000msCPU. No generated-edit hosting size ceiling accepted.",
+  "owner": "Ticket06 must enforce durable quota/spend reservations and authoritative attachment; probe configuration is evidence only."
+}

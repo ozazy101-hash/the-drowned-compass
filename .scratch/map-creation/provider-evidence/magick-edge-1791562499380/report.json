@@ -1,0 +1,24 @@
+{
+  "results": [
+    {
+      "mode": "live",
+      "status": 500,
+      "wallMs": 7019.364292,
+      "initMs": null,
+      "composeWallMs": null,
+      "error": "{\"error\":\"WorkerRequestCancelled: request has been cancelled by supervisor\"}"
+    },
+    {
+      "mode": "live-warm",
+      "skipped": "Cold retained worker did not return an image; warm reuse unproven"
+    }
+  ],
+  "configuration": {
+    "workerCPUHardMs": 2000,
+    "workerMemoryMb": 256,
+    "containerMemoryMb": 2048,
+    "CPU": 1,
+    "policy": "per_worker",
+    "package": "@imagemagick/magick-wasm@0.0.44"
+  }
+}

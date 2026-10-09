@@ -1,0 +1,28 @@
+{
+  "sourceSHA": "1a384308f4f9354f99d3986077238ce19d480716",
+  "ratesUSDPerMillion": {
+    "inputText": 5,
+    "inputImage": 8,
+    "outputImage": 30
+  },
+  "pricingURL": "https://developers.openai.com/api/docs/pricing",
+  "modelURL": "https://developers.openai.com/api/docs/models/gpt-image-2.5-sunburst",
+  "fetchedOn": "2026-10-09",
+  "assumptions": "Standard uncached rates applied to returned usage; actual billing unknown",
+  "journeys": [
+    {
+      "journey": "curved-shrine",
+      "estimatedUSD": 0.00616
+    },
+    {
+      "journey": "sea-cave",
+      "estimatedUSD": 0.014417
+    },
+    {
+      "journey": "added-chamber",
+      "estimatedUSD": 0.014392
+    }
+  ],
+  "estimatedTotalUSD": 0.034969,
+  "actualBilledUSD": null
+}
