@@ -17,9 +17,9 @@ Implementation, isolated integration and local verification authorized. Hosted m
 |04|01a11fdf-769d-7270-a3fd-1f2999a4567f|waiting-roster (ready)|none|—|—|—|
 |05|pending|waiting-roster|04|—|—|—|
 |06|pending|waiting-roster|03,04|—|—|—|
-|07|pending|waiting-roster|04,06|—|—|—|
-|08|pending|waiting-roster|07|—|—|—|
-|09|pending|waiting-roster|04|—|—|—|
+|07|01a11fdf-e43c-7c90-a124-0b1d6a1d5cd1|waiting-roster (ready)|04,06|—|—|—|
+|08|01a11fe0-1383-71d1-b874-227d154987c0|waiting-roster (ready)|07|—|—|—|
+|09|01a11fe0-5155-74c3-ac6e-b62130932d19|waiting-roster (ready)|04|—|—|—|
 |10|pending|waiting-roster|05,07,09|—|—|—|
 |11|pending|waiting-roster|08,10|—|—|—|
 |12|pending|waiting-roster|03–11|—|—|—|
@@ -48,3 +48,5 @@ No leases issued before roster. 03 initially owns its probe/report/evidence file
 - 2026-10-09: Ticket03 readiness received; pinned base/instructions confirmed. Readiness acknowledged with explicit continued hold pending complete roster. No implementation/verification lease issued.
 
 - 2026-10-09: Ticket04 readiness received; pinned clean base and instructions confirmed. Continued hold acknowledged pending full roster. No leases issued.
+
+- 2026-10-09: Tickets07/08/09 readiness received, read-only pinned planning inspections confirmed. All remain waiting for explicit release; dependencies and shared-file/fixture handoffs remain gated.
