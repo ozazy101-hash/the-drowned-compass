@@ -3,7 +3,7 @@
 Coordinator initialized: 2026-10-09 (Europe/London)
 Planning/source base: `0b596249f1598da1df102046c9e7823e66067983`
 Integration checkout: `/Users/oscarpauwels/.codex/worktrees/map-artwork-integration/Dungeons&Dragons`
-Status: complete roster received;03/04 released; remaining tickets dependency-gated.
+Status:04 accepted/integrated;03 feasibility ongoing;05 released;09 domain phase released, persistence gated on shared ownership.
 
 ## Authorization and acceptance
 
@@ -14,12 +14,12 @@ Implementation, isolated integration and local verification authorized. Hosted m
 |Ticket|Task ID|State|Dependencies|Released base|Frozen source/evidence|Review/verification|
 |---|---|---|---|---|---|---|
 |03|01a11fdf-620c-7632-8079-294535be5eb8|running (released)|none|0b596249f1598da1df102046c9e7823e66067983|—|—|
-|04|01a11fdf-769d-7270-a3fd-1f2999a4567f|running (released)|none|0b596249f1598da1df102046c9e7823e66067983|—|—|
-|05|01a11fdf-9f15-7300-8254-b08d117a00ca|waiting-dependencies|04|—|—|—|
+|04|01a11fdf-769d-7270-a3fd-1f2999a4567f|accepted|none|0b596249f1598da1df102046c9e7823e66067983|source165650cd30fbeb91f658767aae78d05dde9cae07; evidencee14e221e9d31b6d5012149b101e78222fc42eeaf|Standards/depth PASS; Spec PASS; build/domain14/SQL62/browser26+affected6+frozen4; baseline intact|
+|05|01a11fdf-9f15-7300-8254-b08d117a00ca|running (privacy)|04|c6577fb3261213834d4741801541eefaec8ed706|—|—|
 |06|01a11fdf-cb3e-7b23-9116-fb0eb9325b44|waiting-dependencies|03,04|—|—|—|
 |07|01a11fdf-e43c-7c90-a124-0b1d6a1d5cd1|waiting-dependencies|04,06|—|—|—|
 |08|01a11fe0-1383-71d1-b874-227d154987c0|waiting-dependencies|07|—|—|—|
-|09|01a11fe0-5155-74c3-ac6e-b62130932d19|waiting-dependencies|04|—|—|—|
+|09|01a11fe0-5155-74c3-ac6e-b62130932d19|running (domain only; persistence hold05)|04|c6577fb3261213834d4741801541eefaec8ed706|—|—|
 |10|01a11fe0-96ce-7fb0-8cd9-bb3b21b0c23f|waiting-dependencies|05,07,09|—|—|—|
 |11|01a11fe0-cf36-73b1-b44b-2b5fb8c67535|waiting-dependencies|08,10|—|—|—|
 |12|01a11fe1-112e-72f0-861a-839852197846|waiting-dependencies|03–11|—|—|—|
@@ -86,3 +86,8 @@ No leases issued before roster. 03 initially owns its probe/report/evidence file
 - 2026-10-09:04 candidate source22142fd89581b2e62dc48aff877848c85948244b; build pass,14/14domain,26/26browser(13laptop+13phone),60/60SQL(10populated migration+33authority/server+17historical stage). Distinct independent reviewer started candidate Standards/depth+Spec; explicit503 staged attachment preservation check added with narrow rerun and new freeze/re-review required. Cleanup completed for candidate; full original-table hash comparison underway. Asked for final source/evidence equality and explicit SQL/browser/4174 lease release before acceptance/integration/05+09 release.
 
 - 2026-10-09 heartbeat:03 cursor `1de52d36-e686-4595-aa85-a699e16b9ecb:16`; relaxed Edge diagnostic zero outside-pixel changes,7.45seconds worker CPU;45.7MB shutdown memory sample is not peak. Final lossless encoding adjustment/real-limit rerun then source freeze planned; no acceptance.04 cursor `47806fea-6516-4af9-9f4f-e48d7879553b:13`; reviewer found local omitted-newMap vs explicit-false retry signature mismatch versus Supabase. Normalization/regression fix underway, final source/re-review required. All original database table hashes match after candidate cleanup. Ownership/leases unchanged, all dependents gated.
+
+- 2026-10-09:04 accepted after exact source/evidence closure. Final source165650cd30fbeb91f658767aae78d05dde9cae07, evidencee14e221e9d31b6d5012149b101e78222fc42eeaf; distinct reviewer Standards/depth and Spec PASS, no findings. Build/domain14/SQL62/browser26 corrected candidate +6 affected final +4 frozen upload pass. All original table hashes unchanged, new3tables empty, owned cleanup complete, no owned process. SQL/browser/4174 leases released.
+- Integrated04 commits22142fd,165650c,e14e221 as6f7eeb1,94f11c9,c6577fb. Accepted assembled base `c6577fb3261213834d4741801541eefaec8ed706`; production diff equality to accepted evidence head passes. No code conflict/source modification or duplicate full gate.
+-05 released from accepted base: exclusive PartyContent/adapters/legacy Library/privacy migration/policies/known-path/old-client tests and minimum display authorization changes; exclusive local SQL/storage and focused browser lease, port4175. Preserve retained history and independent revealedHandout grants. Source/evidence/final independent review and lease release required.
+-09 released from accepted base for NEW pure map-reveal-mask domain/test files ONLY. Existing shared domain/content/adapters/SQL/UI and fixtures/browser held until05 accepted integration handoff. Pure domain/build allowed; persistence then new exact base/full review. No parallel shared edits.03/04 canonical output/privileged attachment contract reconciled; provider runtime still gates06, not09.
