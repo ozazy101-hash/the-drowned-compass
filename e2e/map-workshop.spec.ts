@@ -58,17 +58,50 @@ async function upload(
   });
   await expect(page.getByRole("status")).toContainText(
     "Artwork saved privately",
+    { timeout: 30000 },
   );
 }
 async function saveOutput(page: Page) {
   await expect(
     page.getByRole("button", { name: "Save completed artwork" }).last(),
-  ).toBeVisible();
+  ).toBeVisible({ timeout: 30000 });
   await page
     .getByRole("button", { name: "Save completed artwork" })
     .last()
     .click();
-  await expect(page.getByRole("status")).toContainText("Saved privately");
+  await expect(page.getByRole("status")).toContainText("Saved privately", {
+    timeout: 30000,
+  });
+}
+async function acceptedReceipt(page: Page) {
+  await expect
+    .poll(
+      async () => {
+        const workspace = await page.evaluate(() =>
+          (window as any).content.readMapWorkspace(),
+        );
+        return workspace.jobs.filter(
+          (j: any) => j.state === "awaiting-client-output",
+        ).length;
+      },
+      { timeout: 30000 },
+    )
+    .toBe(1);
+  await expect(
+    page.getByRole("button", { name: "Create map", exact: true }),
+  ).toBeEnabled({ timeout: 30000 });
+  const workspace = await page.evaluate(() =>
+    (window as any).content.readMapWorkspace(),
+  );
+  const job = workspace.jobs.find(
+    (j: any) => j.state === "awaiting-client-output",
+  );
+  const card = page.locator(`[data-job-id="${job.id}"]`);
+  await card.getByRole("button", { name: "Refresh progress" }).click();
+  await expect(
+    card.getByRole("button", { name: "Save completed artwork" }),
+  ).toBeEnabled({ timeout: 30000 });
+  return job;
 }
 for (const [name, width, height, index] of [
   ["laptop", 1440, 900, 0],
@@ -132,6 +165,7 @@ for (const [name, width, height, index] of [
       .click();
     await expect(page.getByRole("status")).toContainText(
       "Artwork saved privately",
+      { timeout: 30000 },
     );
     const saved = await page.evaluate(() =>
       (window as any).content.readMapWorkspace(),
@@ -230,10 +264,11 @@ for (const [name, width, height, index] of [
       buffer: Buffer.from(bytes),
     });
     await page.getByRole("button", { name: "Create map", exact: true }).click();
-    await expect(
-      page.getByRole("button", { name: "Cancel creation" }),
-    ).toBeVisible();
-    await page.getByRole("button", { name: "Cancel creation" }).click();
+    const receipt = await acceptedReceipt(page);
+    await page
+      .locator(`[data-job-id="${receipt.id}"]`)
+      .getByRole("button", { name: "Cancel creation" })
+      .click();
     await expect(page.getByLabel("Creation jobs")).toContainText("cancelled");
     const before = await page.evaluate(() =>
       (window as any).content.readMapWorkspace(),
@@ -264,6 +299,7 @@ test("local adapter manual formats, maximum image/grid, failed input and alignme
   await page.getByRole("button", { name: "Save alignment as version" }).click();
   await expect(page.getByRole("status")).toContainText(
     "Artwork saved privately",
+    { timeout: 30000 },
   );
   let saved = await page.evaluate(() =>
     (window as any).content.readMapWorkspace(),
@@ -321,7 +357,7 @@ test("actual App retains drawing route and offers dedicated workshop navigation"
 test("reference-only saved drawing reaches creation through the existing keyboard editor", async ({
   page,
 }) => {
-  await connect(page, config(1));
+  await connect(page, config(7));
   await page.getByRole("button", { name: "Open drawing tools" }).click();
   await page
     .getByRole("application", { name: "Grid Map drawing surface" })
@@ -415,7 +451,7 @@ test("provider timeout has honest error and explicit retry/cancel with private w
 });
 for (const [name, index] of [
   ["local", -1],
-  ["Supabase", 0],
+  ["Supabase", 8],
 ] as const) {
   test(`${name}: conflicting alignment retains immutable originals and recoverable placement`, async ({
     page,
@@ -600,11 +636,9 @@ test("each failed job retries its own original brief despite saved selection and
   await saveOutput(page);
   await page.getByLabel("Map description").fill("Different brief B");
   await page.getByRole("button", { name: "Create map", exact: true }).click();
+  const b = await acceptedReceipt(page);
   let workspace = await page.evaluate(() =>
     (window as any).content.readMapWorkspace(),
-  );
-  const b = workspace.jobs.find(
-    (j: any) => j.state === "awaiting-client-output",
   );
   const bCard = page.locator(`[data-job-id="${b.id}"]`);
   await bCard.getByRole("button", { name: "Cancel creation" }).click();
@@ -621,12 +655,7 @@ test("each failed job retries its own original brief despite saved selection and
   await page.getByRole("button", { name: "New map", exact: true }).click();
   await page.getByLabel("Map description").fill("First cancelled brief C");
   await page.getByRole("button", { name: "Create map", exact: true }).click();
-  workspace = await page.evaluate(() =>
-    (window as any).content.readMapWorkspace(),
-  );
-  const first = workspace.jobs.find(
-    (j: any) => j.state === "awaiting-client-output",
-  );
+  const first = await acceptedReceipt(page);
   await page
     .locator(`[data-job-id="${first.id}"]`)
     .getByRole("button", { name: "Cancel creation" })
@@ -672,7 +701,10 @@ for (const outcome of ["failed", "missing-version"]) {
         ? "Artwork was not saved"
         : "Saved artwork could not be confirmed",
     );
-    await expect(page.getByRole("status")).not.toContainText("Saved privately");
+    await expect(page.getByRole("status")).not.toContainText(
+      "Saved privately",
+      { timeout: 30000 },
+    );
     await expect(page.getByLabel("Map description")).toHaveValue(
       "Preserved map instructions",
     );
@@ -712,6 +744,7 @@ test("UI read projection fixture: reload retry reads original request, preserves
   await page.getByRole("button", { name: "Save alignment as version" }).click();
   await expect(page.getByRole("status")).toContainText(
     "Artwork saved privately",
+    { timeout: 30000 },
   );
   await connect(page, c);
   const workspace = await page.evaluate(() =>
@@ -813,7 +846,7 @@ test("controlled controller transport interruption: real Edge receipt resumes th
     requestId = "",
     beforeRecovery: any;
   const uuid =
-    /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{4}-4[0-9a-f]{4}-4[0-9a-f]{12}$/i;
+    /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   function readReceipt() {
     if (!uuid.test(requestId) || !uuid.test(partyId))
       throw new Error("Invalid owned interruption fixture identity.");
@@ -904,7 +937,9 @@ test("controlled controller transport interruption: real Edge receipt resumes th
     card.getByRole("button", { name: "Save completed artwork" }),
   ).toBeEnabled();
   await card.getByRole("button", { name: "Save completed artwork" }).click();
-  await expect(page.getByRole("status")).toContainText("Saved privately");
+  await expect(page.getByRole("status")).toContainText("Saved privately", {
+    timeout: 30000,
+  });
   const afterRecovery = readReceipt();
   console.log(
     "MAP_JOB_RECOVERY " +

@@ -5,7 +5,7 @@ import {localSettings,sql,snapshot} from './local-verification.mjs';
 const lock='/private/tmp/ticket07-local-verification.lock';
 try{mkdirSync(lock);}catch{throw Error('Another Ticket07 fixture verification holds the lease');}
 process.once('exit',()=>rmSync(lock,{recursive:true}));
-const config=localSettings(),baseline=snapshot(),owned=Array.from({length:7},()=>({party:randomUUID(),dm:randomUUID()})),player=randomUUID();
+const config=localSettings(),baseline=snapshot(),owned=Array.from({length:9},()=>({party:randomUUID(),dm:randomUUID()})),player=randomUUID();
 const name='map-workshop-07-'+randomUUID().slice(0,8),temp=mkdtempSync('/private/tmp/map-workshop-07-');
 const image='sha256:c52405002a890ca9fcf77978671c57f3a988e03174afb277f84ac65bc917013c';
 function token(user){const encode=x=>Buffer.from(JSON.stringify(x)).toString('base64url'),unsigned=encode({alg:'HS256',typ:'JWT'})+'.'+encode({sub:user,role:'authenticated',aud:'authenticated',iss:config.API_URL+'/auth/v1',iat:Math.floor(Date.now()/1000),exp:Math.floor(Date.now()/1000)+3600});return unsigned+'.'+createHmac('sha256',config.JWT_SECRET).update(unsigned).digest('base64url');}
