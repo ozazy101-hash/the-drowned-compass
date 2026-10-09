@@ -61,7 +61,7 @@ export function generationApplication({store,provider,verifier,mode='live',now=D
   return transition(j,'awaiting-client-output',{proof});
  }
  async function recoverPreparation(user,j){
-  try{return await prepare(j);}catch(error){
+  try{const prepared=await prepare(j);return prepared.state==='completed'?await finalize(prepared):prepared;}catch(error){
    // Async stage failure never grants ownership of a newer CAS revision. Re-read
    // only to authorize/return newer state; any mutation uses the failing stage's
    // original revision and cannot erase another proof or terminal result.
@@ -130,7 +130,7 @@ export function generationApplication({store,provider,verifier,mode='live',now=D
    // Receipt lookup only. The provider adapter must NEVER submit in reconcile.
    const response=await provider.reconcile(j.id);if(response.kind==='image'||response.kind==='failed')j=await acceptCandidate(j,response);
   }
-  if(j.state==='awaiting-client-output')j=await recoverPreparation(user,j);
+  if(j.state==='awaiting-client-output'){j=await recoverPreparation(user,j);if(j.state==='completed')return snapshot(j);}
   if(j.provisional&&['awaiting-client-output','completed'].includes(j.state))j=await finalize(j);
   return snapshot(j);
  }
@@ -147,7 +147,7 @@ export function generationApplication({store,provider,verifier,mode='live',now=D
    }
    if(command.kind==='output'){
     if(j.state==='completed')return {ok:true,job:await reconcile(user,j.id)};
-    j=await prepare(j);if(j.state!=='awaiting-client-output')return {ok:true,job:snapshot(j)};
+    j=await prepare(j);if(j.state!=='awaiting-client-output')return {ok:true,job:snapshot(j.state==='completed'?await finalize(j):j)};
     const bytes=command.bytes;if(!(bytes instanceof Uint8Array)||!bytes.length||bytes.length>20*1024*1024)throw Error('invalid-output');
     // Reject a malformed assembly before consuming the canonical write-once name.
     // This bounded preflight is not attachment authority: finalize re-reads and
