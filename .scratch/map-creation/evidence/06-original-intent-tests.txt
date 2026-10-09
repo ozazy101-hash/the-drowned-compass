@@ -1,0 +1,30 @@
+✔ DM submission/reload/output/recovery preserves a single version and re-reads stored output (297.219667ms)
+✔ player and anonymous cannot submit/read/open/cancel/output (82.485875ms)
+✔ simultaneous duplicate submit has exactly one provider submission (92.286041ms)
+✔ uncertain submission is reconciled without paid resubmission (0.493709ms)
+✔ cancel while provider running rejects late candidate and any output (1.478083ms)
+✔ cancel between pixel verification and atomic attach rejects attachment (145.457667ms)
+✔ region branch accepts exact source/candidate pixels, retains registration, rejects tamper (351.27375ms)
+✔ parent revision conflict, proof expiry, bad PNG and failed write preserve saved work (111.020541ms)
+✔ provider region mask is transparent inside and opaque outside (55.442041ms)
+✔ server provider deadline permanently rejects late outcome, never automatic second submission (8.07675ms)
+✔ invalid client assembly can retry same candidate/request without another provider call (209.505ms)
+✔ unknown receipt arriving after deadline cannot produce proof, output or version (0.405791ms)
+✔ timely provider receipt permits24hour assembly/reload after provider deadline (204.030583ms)
+✔ source inspection deadline prevents provider submission (6.819875ms)
+✔ source inspection cancel prevents provider submission (7.754667ms)
+✔ source inspection membership prevents provider submission (7.706875ms)
+✔ authorized persisted original intent survives successful and failed reloads (104.391041ms)
+✔ cancelled reload returns its selected persisted intent independent of other jobs (178.366375ms)
+✔ uncertain original intent keeps same request without another submission (0.357333ms)
+✔ intent projection denies membership loss, Player, anonymous and other party (90.442541ms)
+✔ projection whitelists persisted intent and nested grid/region without leaking authority (6.396625ms)
+✔ persisted projection fails closed on substituted identity or invalid source (2.771833ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2040.351833
