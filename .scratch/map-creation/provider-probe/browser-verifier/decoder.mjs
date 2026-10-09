@@ -48,3 +48,19 @@ export async function verifyBound(binding,requestId,source,candidate,output){
  if(source.length!==binding.files.source.bytes||candidate.length!==binding.files.candidate.bytes||await digest(source)!==binding.files.source.sha256||await digest(candidate)!==binding.files.candidate.sha256)throw Error('Trusted source/candidate identity mismatch');
  return {...await verify(source,candidate,output,binding.region),requestId,parentId:binding.parentId,region:binding.region,sourceDigest:binding.files.source.sha256,candidateDigest:binding.files.candidate.sha256,outputDigest:await digest(output),pixelWidth:1024,pixelHeight:1024};
 }
+
+function regionValid(region){if(!region||!['x','y','width','height'].every(k=>Number.isInteger(region[k]))||region.x<0||region.y<0||region.width<1||region.height<1||region.x+region.width>1024||region.y+region.height>1024)throw Error('Invalid trusted region');}
+async function sourceIdentity(binding,id,source,candidate){
+ if(!binding||binding.requestId!==id||!binding.parentId||!binding.files)throw Error('Trusted binding mismatch');regionValid(binding.region);
+ if(source.length!==binding.files.source.bytes||candidate.length!==binding.files.candidate.bytes||await digest(source)!==binding.files.source.sha256||await digest(candidate)!==binding.files.candidate.sha256)throw Error('Trusted source/candidate identity mismatch');
+}
+export async function prepareExpected(binding,id,source,candidate,now=Date.now()){
+ await sourceIdentity(binding,id,source,candidate);const expected=await decode(source),replacement=await decode(candidate),r=binding.region;
+ for(let y=r.y;y<r.y+r.height;y++){const offset=(y*1024+r.x)*4;expected.set(replacement.subarray(offset,offset+r.width*4),offset);}
+ return {requestId:id,parentId:binding.parentId,region:{...r},sourceDigest:binding.files.source.sha256,candidateDigest:binding.files.candidate.sha256,pixelWidth:1024,pixelHeight:1024,expectedRgbaDigest:await digest(expected),expiresAt:now+300000};
+}
+export async function finalizeExpected(binding,id,proof,output,now=Date.now()){
+ if(!binding||binding.requestId!==id||!proof||proof.requestId!==id||proof.parentId!==binding.parentId||proof.sourceDigest!==binding.files.source.sha256||proof.candidateDigest!==binding.files.candidate.sha256||proof.pixelWidth!==1024||proof.pixelHeight!==1024||!Number.isFinite(proof.expiresAt)||proof.expiresAt<=now||!(/^[0-9a-f]{64}$/).test(proof.expectedRgbaDigest)||!['x','y','width','height'].every(k=>proof.region?.[k]===binding.region[k]))throw Error('Prepared binding mismatch or expired');
+ regionValid(binding.region);const rgba=await decode(output),actualRgbaDigest=await digest(rgba);
+ return {kind:actualRgbaDigest===proof.expectedRgbaDigest?'verified':'rejected',requestId:id,parentId:proof.parentId,region:proof.region,sourceDigest:proof.sourceDigest,candidateDigest:proof.candidateDigest,outputDigest:await digest(output),actualRgbaDigest,pixelWidth:1024,pixelHeight:1024,outside:1024*1024-proof.region.width*proof.region.height,inside:proof.region.width*proof.region.height};
+}
