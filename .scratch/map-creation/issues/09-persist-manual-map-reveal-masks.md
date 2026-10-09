@@ -1,7 +1,7 @@
 # 09 — Persist manual Reveal Masks
 
 Type: task
-Status: ready-for-agent
+Status: claimed
 Blocked by: 04
 Spec: [Map artwork and display reveal](../spec.md)
 
@@ -34,3 +34,7 @@ Pure stroke/history/bounds tests, local/Supabase equivalence and concurrent-poli
 2026-10-09: Created from user-accepted Prototype2 and module decisions. Implementation unstarted. Read the dependency status and module interface before claiming.
 
 2026-10-09: Architecture review refined ownership, small interfaces and seam-level verification before implementation. See [architecture review](../architecture-review.md) and [interface contract](../spec.md#module-placement-and-interface-contract).
+
+2026-10-09: Orchestrator released pure domain phase on accepted04 base c6577fb3261213834d4741801541eefaec8ed706. Ownership limited to new mask domain and pure tests; persistence/shared files and SQL/browser remain awaiting05 handoff. Dedicated writer and distinct independent reviewer coordinated in codex/map-reveal-masks-09.
+
+2026-10-09: Pure domain phase source 1453bed52ae45caf05d1b7b0d250f3165cce11e5 reviewed independently: Standards/depth PASS, pure-phase Spec PASS; 17/17 independently rerun focused tests. One P2 family-response guard fixed before final review. See ../evidence/09-domain-phase.md. Full ticket remains incomplete pending orchestrator05 shared-file/persistence handoff.
