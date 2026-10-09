@@ -11,7 +11,7 @@ Allow rectangle selection on a saved artwork version, text instructions and a ne
 
 ## Module and interface
 
-Grid Map domain owns selections and version branching; generation backend owns mask/output conventions and compositing; workshop owns instruction/compare flow.
+Grid Map domain owns selections and version branching; generation backend owns mask/output conventions and authoritative preservation verification; a browser worker owns lossless assembly; workshop owns instruction/compare flow.
 
 ## Architecture constraints
 
@@ -20,7 +20,7 @@ Region revisions pass saved source identity and logical region to the same06 app
 ## Acceptance
 
 - [ ] Rectangle selection, clear/reselect and image-coordinate mapping are correct under zoom/pan, touch and alignment transforms; reject empty/out-of-bounds regions.
-- [ ] Use the selected saved parent artwork and explicit area; backend composites only the region. All unselected decoded pixels, canvas size, aspect ratio and registration are preserved exactly.
+- [ ] Use the selected saved parent artwork and explicit area; browser assembles only the region and the backend independently verifies every decoded pixel using its own prepared proof. All unselected decoded pixels, canvas size, aspect ratio and registration are preserved exactly.
 - [ ] Provider mask inversion/drift/output dimension failure cannot corrupt the source; changes within the selection still require visual comparison, with no exact-geometry claim.
 - [ ] Whole-map retry and selected-area retry create/reconcile the intended job/version without overwriting source or display. Cancel/failure keeps both intact.
 - [ ] Area addition creates a later saved stage inside the current extent; no enlarged-canvas outpainting. Compare before/after, select earlier versions and branch again.

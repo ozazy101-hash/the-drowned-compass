@@ -1,7 +1,7 @@
 # 03 — Verify live generation and masked editing
 
 Type: research
-Status: needs-info
+Status: resolved
 Spec: [Map artwork and display reveal](../spec.md)
 
 ## What to build
@@ -81,3 +81,5 @@ ExecutedEdge resource verdict: unreliable/notaccepted. InitialcoldCPUTime2407noo
 ## Browser assembly prototype pointer —2026-10-09
 
 User authorized prototyping browser composition. Retained primary source/evidence in isolated branch `codex/browser-compositing-prototype`, commit `fe48909`, `.scratch/map-creation/browser-prototype/prototype.html` and README. Self-contained HTML, no AI calls/credentials/uploads/shared source. Four actual browser assembly/export cases independently verified by existing Node decoder:995776outside/52800inside pixels exact, including transparency/lowalpha/noise. Initial browser wall times252.8–359.9ms, phone-width desktop402.3ms (not real-phone/per-device guarantee). Tamper/invalidbounds/reset/stale-selection paths checked. Browser feasibility demonstrated for bounded1024RGB/RGBA scope only; server authority, production upload/recovery and formats/device limits unresolved. Client checks cannot satisfy existing server-trusted preservation contract; no production adoption,03acceptance or06release inferred.
+
+2026-10-09: Coordinator accepted bounded staged browser/Edge capability at frozen source8e679aede15bfaa106ab8e5f13dbd672c02f1583/evidence754354ac5509b39699a3715be07dbd875432af95 after distinct independent Standards/depth and Spec PASS, exact source/evidence equality, independent41/41 checks and integration build PASS. Actual browser accepted correct200/rejected altered422; all qualifying fresh stages stayed within2sCPU/256MB. Earlier monolithic and ImageMagick failures remain historical failures. Adoption is limited to the specified1024PNG profile, with paid generation disabled. 06 local implementation released; hosted/product readiness is not claimed. Preview4196 handed to coordinator.

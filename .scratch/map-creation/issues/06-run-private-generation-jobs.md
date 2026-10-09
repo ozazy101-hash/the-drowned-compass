@@ -34,3 +34,5 @@ Adapter/job-state and usage-control checks, genuine DM/player denial, duplicate/
 2026-10-09: Created from user-accepted Prototype2 and module decisions. Implementation unstarted. Read the dependency status and module interface before claiming.
 
 2026-10-09: Architecture review refined ownership, small interfaces and seam-level verification before implementation. See [architecture review](../architecture-review.md) and [interface contract](../spec.md#module-placement-and-interface-contract).
+
+2026-10-09: Released after accepted03 staged verification and accepted04/05/09 integration. Implement the accepted bounded verification decision in spec.md. Own the sole durable job/proof ledger, generation/provider/storage transport and PartyContent semantic job commands. Exclusive local SQL/storage fixture lease and focused browser port4176; preserve original baselines and clean only owned fixtures. Coordinator retains preview4186/4196. 07/08/10 remain dependency-gated. Defaults disabled/quota0/spend0, concurrency1, provider120s/orphan24h. No new paid calls, hosted migration/deployment or main merge. Independent frozen-head Standards/depth and Spec reviews required.
