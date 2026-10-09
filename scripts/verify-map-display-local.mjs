@@ -6,11 +6,17 @@ const lock='/private/tmp/ticket10-local-verification.lock';mkdirSync(lock);proce
 const config=localSettings(),baseline=snapshot(),owned=Array.from({length:2},()=>({party:randomUUID(),dm:randomUUID(),player:randomUUID()}));
 writeFileSync('.scratch/map-creation/evidence/10-baseline-before.json',JSON.stringify(baseline,null,2)+'\n');
 writeFileSync('.scratch/map-creation/evidence/10-owned-fixtures.json',JSON.stringify(owned,null,2)+'\n');
-function token(user){const encode=v=>Buffer.from(JSON.stringify(v)).toString('base64url'),unsigned=encode({alg:'HS256',typ:'JWT'})+'.'+encode({sub:user,role:'authenticated',aud:'authenticated',iss:config.API_URL+'/auth/v1',iat:Math.floor(Date.now()/1000),exp:Math.floor(Date.now()/1000)+3600});return unsigned+'.'+createHmac('sha256',config.JWT_SECRET).update(unsigned).digest('base64url');}
+function token(user,expired=false){
+ // Local fixture JWT validation has intermittently reported "issued at future".
+ // Allow a bounded 120-second clock margin without extending absolute expiry.
+ const issuedNow=Math.floor(Date.now()/1000),iat=issuedNow-(expired?7200:120),exp=issuedNow+(expired?-3600:3600);
+ const encode=v=>Buffer.from(JSON.stringify(v)).toString('base64url'),unsigned=encode({alg:'HS256',typ:'JWT'})+'.'+encode({sub:user,role:'authenticated',aud:'authenticated',iss:config.API_URL+'/auth/v1',iat,exp});
+ return unsigned+'.'+createHmac('sha256',config.JWT_SECRET).update(unsigned).digest('base64url');
+}
 let status=1;
 try{
  for(const {party,dm,player} of owned){sql(`begin;insert into public.parties(id,name)values('${party}','Ticket10 display fixture');insert into auth.users(id,instance_id,aud,role,email,email_confirmed_at,confirmation_token,recovery_token,email_change_token_new,email_change,created_at,updated_at,raw_app_meta_data,raw_user_meta_data)values('${dm}','00000000-0000-0000-0000-000000000000','authenticated','authenticated','${dm}@verification.test',now(),'','','','',now(),now(),'{}','{}'),('${player}','00000000-0000-0000-0000-000000000000','authenticated','authenticated','${player}@verification.test',now(),'','','','',now(),now(),'{}','{}');insert into public.party_members(party_id,user_id,role)values('${party}','${dm}','dungeon-master'),('${party}','${player}','player');commit;`);}
- const r=spawnSync(process.execPath,['node_modules/@playwright/test/cli.js','test','--config=playwright.map-display-live.config.ts',...process.argv.slice(2)],{stdio:'inherit',env:{...process.env,MAP_LIVE_URL:config.API_URL,MAP_LIVE_KEY:config.ANON_KEY,MAP_DISPLAY_OWNED:JSON.stringify(owned),MAP_DISPLAY_DM_JWTS:JSON.stringify(owned.map(x=>token(x.dm))),MAP_DISPLAY_PLAYER_JWTS:JSON.stringify(owned.map(x=>token(x.player)))}});status=r.status??1;
+ const r=spawnSync(process.execPath,['node_modules/@playwright/test/cli.js','test','--config=playwright.map-display-live.config.ts',...process.argv.slice(2)],{stdio:'inherit',env:{...process.env,MAP_LIVE_URL:config.API_URL,MAP_LIVE_KEY:config.ANON_KEY,MAP_DISPLAY_OWNED:JSON.stringify(owned),MAP_DISPLAY_DM_JWTS:JSON.stringify(owned.map(x=>token(x.dm))),MAP_DISPLAY_EXPIRED_DM_JWTS:JSON.stringify(owned.map(x=>token(x.dm,true))),MAP_DISPLAY_PLAYER_JWTS:JSON.stringify(owned.map(x=>token(x.player)))}});status=r.status??1;
 }finally{
  const parties=owned.map(x=>`'${x.party}'`).join(','),users=owned.flatMap(x=>[x.dm,x.player]).map(x=>`'${x}'`).join(',');
  const objects=JSON.parse(sql(`select coalesce(jsonb_agg(jsonb_build_object('bucket',bucket_id,'name',name)),'[]')from storage.objects where split_part(name,'/',1)in(${parties});`));

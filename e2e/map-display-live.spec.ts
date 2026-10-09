@@ -54,8 +54,18 @@ test('genuine authority: opaque output, touch controls, persistence/conflict/fai
  await popup.close();await page.reload();await mount(page,index,false);
  const fresh=page.waitForEvent('popup');await page.getByRole('button',{name:'Open Party Display',exact:true}).click();popup=await fresh;
  await expect(popup.getByLabel('Uncovered Grid Map on Party Display')).toBeVisible();expect(await pixel(popup,.1,.1)).not.toEqual([0,0,0,255]);expect(await pixel(popup,.5,.5)).toEqual([0,0,0,255]);
- // Genuine private-map known-version reads remain denied to the Player.
- const denied=await page.evaluate(async({url,key,jwt})=>{const sdk=await import('/the-drowned-compass/node_modules/.vite/deps/@supabase_supabase-js.js');const content=(await import('/the-drowned-compass/src/data/supabase-party-content.ts')).supabasePartyContent(sdk.createClient(url,key,{accessToken:async()=>jwt}));try{await content.openMapVersion((window as any).liveMap.version.id);return false;}catch{return true;}},{url:process.env.MAP_LIVE_URL!,key:process.env.MAP_LIVE_KEY!,jwt:JSON.parse(process.env.MAP_DISPLAY_PLAYER_JWTS!)[index]});expect(denied).toBe(true);
+ // Actual private-version requests deny Players, expired DM credentials, and anonymous clients.
+ const denials=await page.evaluate(async({url,key,playerJwt,expiredJwt})=>{
+  const sdk=await import('/the-drowned-compass/node_modules/.vite/deps/@supabase_supabase-js.js');
+  const contentFactory=(await import('/the-drowned-compass/src/data/supabase-party-content.ts')).supabasePartyContent;
+  const results=[];
+  for(const [label,jwt] of [['player',playerJwt],['expired DM',expiredJwt],['anonymous',null]]){
+   const content=contentFactory(sdk.createClient(url,key,{accessToken:async()=>jwt}));
+   try{await content.openMapVersion((window as any).liveMap.version.id);results.push({label,denied:false});}catch{results.push({label,denied:true});}
+  }
+  return results;
+ },{url:process.env.MAP_LIVE_URL!,key:process.env.MAP_LIVE_KEY!,playerJwt:JSON.parse(process.env.MAP_DISPLAY_PLAYER_JWTS!)[index],expiredJwt:JSON.parse(process.env.MAP_DISPLAY_EXPIRED_DM_JWTS!)[index]});
+ expect(denials).toEqual([{label:'player',denied:true},{label:'expired DM',denied:true},{label:'anonymous',denied:true}]);
  await page.evaluate(async({pdf})=>{const w=(window as any).liveMap;const item=await w.content.upload({requestId:crypto.randomUUID(),title:'Ticket10 PDF',file:new File([new Uint8Array(pdf)],'letter.pdf',{type:'application/pdf'})});await w.display.present(item);},{pdf:[...pdfFixture()]});
  await expect(popup.getByLabel('Party Display page 1')).toBeVisible();await page.getByRole('button',{name:'Display next page',exact:true}).click();await expect(popup.getByLabel('Party Display page 2')).toBeVisible();
  const revision=accepted.presentation.revision;await page.getByRole('button',{name:'Use saved live map'}).click();await expect(popup.getByLabel('Uncovered Grid Map on Party Display')).toBeVisible();expect(await pixel(popup,.5,.5)).toEqual([0,0,0,255]);
