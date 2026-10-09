@@ -23,7 +23,12 @@ export function encodePng({width,height,rgba}) {
   const header=Buffer.alloc(13); header.writeUInt32BE(width); header.writeUInt32BE(height,4); header[8]=8; header[9]=6;
   const raw=Buffer.alloc(height*(width*4+1));
   for(let y=0;y<height;y++) Buffer.from(rgba.buffer,rgba.byteOffset+y*width*4,width*4).copy(raw,y*(width*4+1)+1);
-  const bytes=Buffer.concat([signature,chunk('IHDR',header),chunk('IDAT',deflateSync(raw,{level:raw.length+100<=limits.bytes?0:1})),chunk('IEND',Buffer.alloc(0))]);
+  const encoded=data=>Buffer.concat([signature,chunk('IHDR',header),chunk('IDAT',data),chunk('IEND',Buffer.alloc(0))]);
+  const preferUncompressed=raw.length+100<=limits.bytes;
+  let bytes=encoded(deflateSync(raw,{level:preferUncompressed?0:1}));
+  // The zlib block/chunk overhead can exceed a fixed estimate near the byte limit.
+  // Check the actual encoded size, then try lossless compression before rejecting.
+  if(bytes.length>limits.bytes&&preferUncompressed)bytes=encoded(deflateSync(raw,{level:1}));
   if(bytes.length>limits.bytes) throw Error('Image too large'); return bytes;
 }
 const paeth=(a,b,c)=>{const p=a+b-c,pa=Math.abs(p-a),pb=Math.abs(p-b),pc=Math.abs(p-c);return pa<=pb&&pa<=pc?a:pb<=pc?b:c;};

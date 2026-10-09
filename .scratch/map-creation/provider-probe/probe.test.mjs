@@ -54,3 +54,9 @@ for(const size of ['4000x4000','1025x1024','1024x512','3840x3840','3072x640','au
 for(const size of ['1024x640','3840x2160','3072x1024'])test(`supported live dimension boundary ${size}`,async()=>{
  const result=await openAIProvider({apiKey:'test-placeholder',fetchImpl:async()=>response(200,{data:[{b64_json:replacement.toString('base64')}]})}).generate({size});assert.equal(result.kind,'image');
 });
+
+test('near20MiB raw image falls back to compressed PNG instead of overhead rejection',()=>{
+ const image={width:1456,height:3600,rgba:Buffer.alloc(1456*3600*4)};
+ const bytes=encodePng(image);assert.ok(bytes.length<20*1024*1024);
+ const decoded=decodePng(bytes);assert.equal(decoded.width,1456);assert.equal(decoded.height,3600);assert.deepEqual(decoded.rgba,image.rgba);
+});
