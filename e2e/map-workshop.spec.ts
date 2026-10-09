@@ -11,8 +11,8 @@ test.beforeEach(async ({ page }) => {
 const config = (index: number) => ({
   url: process.env.MAP_LIVE_URL!,
   key: process.env.MAP_LIVE_KEY!,
-  jwt: JSON.parse(process.env.MAP_LIVE_DM_JWTS!)[index],
-  server: "http://127.0.0.1:49177",
+  jwt: JSON.parse((process.env.MAP_WORKSHOP_DM_JWTS ?? process.env.MAP_LIVE_DM_JWTS)!)[index],
+  server: (process.env.MAP_FIXTURE_SERVER ?? "http://127.0.0.1:49177"),
 });
 async function connect(page: Page, c: object) {
   await page.goto("tests/harness/map-workshop.html");
@@ -682,7 +682,7 @@ for (const outcome of ["failed", "missing-version"]) {
   }) => {
     let providerRequests = 0;
     page.on("request", (request) => {
-      if (request.url().startsWith("http://127.0.0.1:49177"))
+      if (request.url().startsWith((process.env.MAP_FIXTURE_SERVER ?? "http://127.0.0.1:49177")))
         providerRequests++;
     });
     await connect(page, { local: true, feedbackFixture: outcome });
@@ -724,7 +724,7 @@ test("UI read projection fixture: reload retry reads original request, preserves
 }) => {
   let providerRequests = 0;
   page.on("request", (request) => {
-    if (request.url().startsWith("http://127.0.0.1:49177")) providerRequests++;
+    if (request.url().startsWith((process.env.MAP_FIXTURE_SERVER ?? "http://127.0.0.1:49177"))) providerRequests++;
   });
   const c = { local: true, projectionFixture: true };
   await connect(page, c);
@@ -839,7 +839,7 @@ test("controlled controller transport interruption: real Edge receipt resumes th
   page,
 }) => {
   const c = config(6),
-    partyId = JSON.parse(process.env.MAP_LIVE_PARTY_IDS!)[6];
+    partyId = JSON.parse((process.env.MAP_WORKSHOP_PARTY_IDS ?? process.env.MAP_LIVE_PARTY_IDS)!)[6];
   const { sql } = await import("../scripts/local-verification.mjs");
   let submits = 0,
     interrupted = false,
@@ -857,7 +857,7 @@ test("controlled controller transport interruption: real Edge receipt resumes th
     );
   }
   page.on("request", (request) => {
-    if (request.url().startsWith("http://127.0.0.1:49177")) {
+    if (request.url().startsWith((process.env.MAP_FIXTURE_SERVER ?? "http://127.0.0.1:49177"))) {
       try {
         if (request.postDataJSON()?.kind === "submit") submits++;
       } catch {
@@ -896,7 +896,7 @@ test("controlled controller transport interruption: real Edge receipt resumes th
     );
     await route.abort("failed");
   };
-  await page.route("http://127.0.0.1:49177/**", intercept);
+  await page.route((process.env.MAP_FIXTURE_SERVER ?? "http://127.0.0.1:49177") + "/**", intercept);
   await page
     .getByLabel("Map description")
     .fill(
@@ -928,7 +928,7 @@ test("controlled controller transport interruption: real Edge receipt resumes th
   );
   expect(preserved.versions).toEqual(originals.versions);
   expect(preserved.presentation).toEqual(originals.presentation);
-  await page.unroute("http://127.0.0.1:49177/**", intercept);
+  await page.unroute((process.env.MAP_FIXTURE_SERVER ?? "http://127.0.0.1:49177") + "/**", intercept);
   await connect(page, c);
   await page.getByLabel("Map family").selectOption(originals.families[0].id);
   const card = page.locator(`[data-job-id="${requestId}"]`);

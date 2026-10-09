@@ -5,7 +5,7 @@ import { deflateSync } from 'node:zlib';
 import { crc, decode } from '../supabase/functions/map-generation/verifier/png.mjs';
 test.beforeEach(async({page})=>{page.on('response',async response=>{if(response.status()>=400){let code='';try{const body=await response.json();code=body.code??body.message??'';}catch{}console.log(JSON.stringify({event:'http-error',path:new URL(response.url()).pathname,status:response.status(),code}));}});});
 const candidate = readFileSync('.scratch/map-creation/provider-evidence/live-1791537498387/sea-cave-raw.png');
-const config = (index: number) => ({ url: process.env.MAP_LIVE_URL!, key: process.env.MAP_LIVE_KEY!, jwt: JSON.parse(process.env.MAP_LIVE_DM_JWTS!)[index], server: 'http://127.0.0.1:49178' });
+const config = (index: number) => ({ url: process.env.MAP_LIVE_URL!, key: process.env.MAP_LIVE_KEY!, jwt: JSON.parse((process.env.MAP_REVISION_DM_JWTS ?? process.env.MAP_LIVE_DM_JWTS)!)[index], server: process.env.MAP_FIXTURE_SERVER ?? 'http://127.0.0.1:49178' });
 async function connect(page: Page, index: number) {
   await page.goto('tests/harness/map-workshop.html');
   await page.waitForFunction(() => typeof (window as any).configure === 'function');
