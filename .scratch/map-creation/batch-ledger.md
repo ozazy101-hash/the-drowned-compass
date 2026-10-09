@@ -19,7 +19,7 @@ Implementation, isolated integration and local verification authorized. Hosted m
 |06|01a11fdf-cb3e-7b23-9116-fb0eb9325b44|waiting-dependencies|03,04|—|—|—|
 |07|01a11fdf-e43c-7c90-a124-0b1d6a1d5cd1|waiting-dependencies|04,06|—|—|—|
 |08|01a11fe0-1383-71d1-b874-227d154987c0|waiting-dependencies|07|—|—|—|
-|09|01a11fe0-5155-74c3-ac6e-b62130932d19|running (domain only; persistence hold05)|04|c6577fb3261213834d4741801541eefaec8ed706|—|—|
+|09|01a11fe0-5155-74c3-ac6e-b62130932d19|domain phase passed; persistence waiting05|04|c6577fb3261213834d4741801541eefaec8ed706|—|—|
 |10|01a11fe0-96ce-7fb0-8cd9-bb3b21b0c23f|waiting-dependencies|05,07,09|—|—|—|
 |11|01a11fe0-cf36-73b1-b44b-2b5fb8c67535|waiting-dependencies|08,10|—|—|—|
 |12|01a11fe1-112e-72f0-861a-839852197846|waiting-dependencies|03–11|—|—|—|
@@ -100,3 +100,5 @@ No leases issued before roster. 03 initially owns its probe/report/evidence file
 - 2026-10-09:09 pure source frozena53bfcd5e63811b553e32b0f67197430821af225 againstc6577fb, managed `/Users/oscarpauwels/.codex/worktrees/map-reveal-masks-09/Dungeons&Dragons`, branchcodex/map-reveal-masks-09. Only newdomain/test files changed. Draft interface snapshot/command/prepareCommit/receive; pure commit accepted/conflict/incompatible uses expected revision/family/mask/geometry and existing matchingMapGeometry; confirmed whole uncover, pending locks/errors retain accepted+recoverable draft. Writer16/16mask/artwork tests+buildPASS; distinct exact-head Standards/depth+pure-phase Spec review underway. Full09 remains incomplete; no protected source/SQL/browser/fixture mutations; persistence hold05.
 
 - 2026-10-09:09 independent domain review foundP2 successful-response family guard omission ata53bfcd (Standards/depthPASS). Fixed with recovery regression; new source1453bed52ae45caf05d1b7b0d250f3165cce11e5, writer17/17focused+tscPASS. Distinct re-review on exact new head pending; ownership intact, no shared source/SQL/browser changes. No phase or full acceptance yet.
+
+- 2026-10-09:09 pure phase reviewed PASS Standards/depth and pure-phase Spec with17/17independent mask/artwork checks; source1453bed52ae45caf05d1b7b0d250f3165cce11e5/evidencee004fdef5c475485bf7439b6d54ac47a57789347. Coordinator read evidence/path scope/source equality. Worktree clean, only newdomain/test+owntracker/evidence. InitialbuildPASS, finaldelta tscPASS. No SQL/browser/storage leases or fixtures. Full09 NOT accepted; yielded awaiting05 exact assembled base and persistence ownership; phase commits retained for later assembly.
