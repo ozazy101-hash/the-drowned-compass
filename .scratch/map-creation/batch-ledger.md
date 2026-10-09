@@ -3,7 +3,7 @@
 Coordinator initialized: 2026-10-09 (Europe/London)
 Planning/source base: `0b596249f1598da1df102046c9e7823e66067983`
 Integration checkout: `/Users/oscarpauwels/.codex/worktrees/map-artwork-integration/Dungeons&Dragons`
-Status:04 accepted/integrated;03 feasibility ongoing;05 released;09 domain phase released, persistence gated on shared ownership.
+Status:03 bounded staged browser/server approach accepted;04/05/09 integrated;06 running; remaining tickets dependency-gated.
 
 ## Authorization and acceptance
 
@@ -13,10 +13,10 @@ Implementation, isolated integration and local verification authorized. Hosted m
 
 |Ticket|Task ID|State|Dependencies|Released base|Frozen source/evidence|Review/verification|
 |---|---|---|---|---|---|---|
-|03|01a11fdf-620c-7632-8079-294535be5eb8|blocked: hosted runtime decision/proof|none|0b596249f1598da1df102046c9e7823e66067983|—|—|
+|03|01a11fdf-620c-7632-8079-294535be5eb8|accepted (bounded staged browser/server profile)|none|0b596249f1598da1df102046c9e7823e66067983|source8e679aede15bfaa106ab8e5f13dbd672c02f1583; evidence754354ac5509b39699a3715be07dbd875432af95|Standards/depth PASS; Spec PASS; coordinator41Node/build;16actualEdgepositive stages|
 |04|01a11fdf-769d-7270-a3fd-1f2999a4567f|accepted|none|0b596249f1598da1df102046c9e7823e66067983|source165650cd30fbeb91f658767aae78d05dde9cae07; evidencee14e221e9d31b6d5012149b101e78222fc42eeaf|Standards/depth PASS; Spec PASS; build/domain14/SQL62/browser26+affected6+frozen4; baseline intact|
 |05|01a11fdf-9f15-7300-8254-b08d117a00ca|accepted|04|c6577fb3261213834d4741801541eefaec8ed706|sourcef960954f37eaa9adacebe8bdb7eb3c04fa640934; evidence6ec7670cb3763fbaa9debbad83020b20d9c386b0|Standards/depth PASS; Spec PASS; build/domain14/SQL186/browser28; baseline intact|
-|06|01a11fdf-cb3e-7b23-9116-fb0eb9325b44|waiting-dependencies|03,04|—|—|—|
+|06|01a11fdf-cb3e-7b23-9116-fb0eb9325b44|running (jobs + server proof)|03,04|5e87f5739777cb7090fa66bf5700c0fcc05a49c0|—|—|
 |07|01a11fdf-e43c-7c90-a124-0b1d6a1d5cd1|waiting-dependencies|04,06|—|—|—|
 |08|01a11fe0-1383-71d1-b874-227d154987c0|waiting-dependencies|07|—|—|—|
 |09|01a11fe0-5155-74c3-ac6e-b62130932d19|accepted|04|aca34d3166c4d4ae71101468fbeb97450a7c75b5 + retained reviewed domain phase|sourceaa3dd81d21f98eb8f95289854d7771942e7efcf0; evidence68b057d819cd864f1e9662d12b635fa8dd219162|Standards/depth PASS; full Spec PASS; build/domain17/SQL79/browser6; baseline intact|
@@ -135,3 +135,5 @@ No leases issued before roster. 03 initially owns its probe/report/evidence file
 - 06 released for local implementation from this committed adoption snapshot; sole durable generation/job/proof ledger, provider/PartyContent transport, immutable object finalization and04 atomic attachment. Exclusive local SQL/storage owned fixtures and browser4176. Coordinator owns retained4186browser/4196readonly verifier preview;03 runtime lease released. No paid-provider lease granted. 07/08/10/11/12 remain dependency-gated. Baselines retained; no DB reset/hosted migrations/main merge/deploy.03 final cursor1de52d36-e686-4595-aa85-a699e16b9ecb:86. Resume existing quiet coordination monitor.
 
 - 2026-10-09: Exact06 released dependency SHA5e87f5739777cb7090fa66bf5700c0fcc05a49c0 acknowledged by06; isolated map-artwork-06 preparation active with stated sole-ledger semantic contract and SQL/browser4176 lease.06 cursor6e20174a-cec2-4162-904d-3903bc46dd6e:1. Existing coordination automation ACTIVE; no additional paid calls or hosted changes.
+
+- 2026-10-09 21:05Europe/London heartbeat: read updated adoption/release journal, reconciled stale summary/table03accepted06running.06cursor `6e20174a-cec2-4162-904d-3903bc46dd6e:2`:9applicationtestsPASS retry/cancel/verification/recovery/regionpixels; real local authority/storage/browser4176 then frozen DISTINCTreviewpending. Sent invariant/disabledpaid/lease/evidence reminder. Coordinator4186/4196preserved; no acceptance/newrelease/hostedchanges.
