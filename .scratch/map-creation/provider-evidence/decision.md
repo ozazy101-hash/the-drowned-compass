@@ -59,3 +59,44 @@ No Edge hosting size ceiling accepted. [Disabled deployment proposal](../provide
 
 
 Current final reviewed source: `b2f5aa4f45ca91df7a802432688307f277ef90aa`. Evidence commit is separate and must leave provider-probe source equal to that freeze. Runtime feasibility work completed; measured Edge CPU incompatibility is a configuration/runtime blocker, distinct from ticket06 owning production enforcement implementation. No accepted enabled-hosting decision or nonzero spending ceiling is claimed.
+
+
+## Bounded local Lambda alternative checkpoint
+
+Initial synthetic-worker source freeze: `96968c0352abb7cf18bad6c122269ce682cc3f99`; current retained-live replay/cleanup-fix source freeze: `82f8a2db91a363ca1aaff187ba3d2e17ca6b6081`, based on evidenceHEAD `4e6c9b0695a661b6bed9dbdb5f9df1d819ea26dc`/reviewed codecsource `b2f5aa4f45ca91df7a802432688307f277ef90aa`. Distinct independent review pending. No additional image-provider, AWS hosted or Supabase calls; no credential access. InitialRIE proof used preexisting deterministic1024-square source/candidate images in probe-owned lambda/corpus. Subsequent coordinator authorization explicitly added/replayed the exact retainedlive sea-cave-output and added-chamber-raw images, without another provider request or unrelated campaign-data mount.
+
+Official image public.ecr.aws/lambda/nodejs:24 ARM64 pulled under explicit coordinator authorization and pinned tosha256:9456eddcb52b414c777c7dfb4f9fb6871c103f63183871e74e505bdb3461104b. No preexisting image removed. Actual image Nodev24.21.0linuxARM64. LocalRIE harness enforces cgroup memory2048MiB/no additionalswap,1CPU quota,512MiBtmp,readonlyroot/probe-only mount,exclusive127.0.0.1:4194,60s outer watchdog that kills owned container; finally stops it on any success/failure. Containers removed and4194 released. Private synthetic HTTPstorage stub on internal127.0.0.1:8081 uses no account secrets and no external transport.
+
+`lambda-unit-tests.txt`:27/27focused checks pass,0fail/0skip. Observable verify/reverify outcomes include exact995776outside0mismatch, fullrectangle outsidecount0, forged-but-self-consistent output digest rejection, independent selected-candidate comparison, same-operation read-only recovery after lost write response, null/malformed commands, provenance/region binding, foreignoperation, partial provisional upload, hostile host/redirect, bytes both with/withoutContentLength, actualPNG header pixelceiling, APNG framechunksbeforedecode, expired/deadline/late receipt, unauthorizedread and immutable writecollision.
+
+Actual localRIE evidence: `lambda-rie-1791540743573/summary.json` and per-call files/container.log. Fourplanned synthetic-corpus calls completed with expected outcomes; a separately authorized four-call retained-live replay is recorded below. No paid provider request or second job ledger exists.
+
+|RIEcase|Outcome|Handlerwall|ProcessCPU|Cgroupmemory.peak atread|
+|---|---|---:|---:|---:|
+|Fresh verify|verified|3617ms|3602ms|196280320bytes|
+|Warm same-operation reverify|verified|1240ms|1275ms|211746816bytes|
+|Lost write response|uncertain|762ms|777ms|234283008bytes|
+|Same-operation recovery|verified|446ms|460ms|234283008bytes|
+
+All three verified cases independently decoded stored output and exact retainedsource/rawcandidate:995776outsidepixels0mismatch, insidecandidateexact. Source/candidate/output SHA256/region/sourceIdentity/operation identity are retained; reverify never writes or invokes provider. Digest-only self-consistency is insufficient; current proof requires canonical encoded identity as well as decoded equality. Kernelcgroup `memory.max=2147483648`, `cpu.max=100000 100000` confirm localconstraints. memory.peak is cumulativecontainerhighwater at handler read includingemulator/runtime/localstub, not per-invocationincrement or hostedpeak. RSS is sampled separately. Runtimeinitialization~5186ms is separate from handlerwall. EmulatedREPORT MemorySize/MaxMemoryUsed3008MB/BilledDuration are defaults; they are not used as memory/billingproof. Initialstartup-onlysocketclose `lambda-rie-1791540676649` yielded nohandleroutcomes and was superseded by HTTPreadiness detection; it is retained honestly.
+
+[OfficialAWSNodeimage docs](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-image.html), [hostedmemory/CPU docs](https://docs.aws.amazon.com/lambda/latest/dg/configuration-memory.html) and [RIE scope](https://github.com/aws/aws-lambda-runtime-interface-emulator), inspected2026-10-09, distinguish localruntime emulation from hostedorchestration/security. Local1CPU cap is not assumed equivalent to hosted2048MiB CPUallocation. Image-local feasibility passes; actualhosted IAM, scopedexpiringinput/outputtransport, durableprovisionalstorage, secret/sourceisolation, deadline/cancellation/recovery and acceptedattachmentremainunproved. The fixture rejects URLqueries and therefore is not SupabasesignedURLtransport evidence. Exact1024×1024/16KiBdescriptor/20MiBencoded/deadline≤60s are explicitprobeceilings, not arbitrary<=1024 or32KiB acceptance. Runtimecandidateconfiguration is documented inlambda/deployment-proposal.json with productiondisabled/quota0/spend0.06solelyownsreal authority,ledger,provider,usage/cancel,storage reconciliation and atomicattachment. Full03/06remainblockeduntilhostedproofandindependentreview acceptance; no merge/deploy is authorized.
+
+
+### Retained-live corpus Lambda replay
+
+Exact current source freeze `82f8a2db91a363ca1aaff187ba3d2e17ca6b6081` contains the same measured handler/verifier, explicit --live fixture selection, two separately named retained-live inputfiles and the independent-review cleanup fix. Runner marks launch attempted before awaiting DockerCLI, always stops/kills exact uniquely owned PID+timestampname even on uncertain CLI response;60s outer watchdog remains. No additional runtime optimization/provider call. Source equality after evidence edits is required before evidence closure.
+
+Actual retained-live RIE directory `lambda-rie-1791541052952/summary.json`; all4planned local outcomes correct. Eachverifiedoutcome independently decoded provisionalPNG and compared every pixel against exact source/rawcandidate:995776outsidepixels0mismatch; selectedpixels matchcandidate. Inputsource copied byte-for-byte fromlive-1791537498387/sea-cave-output.png SHA256eea733e73c403ea2978916a56733facd6074cbecff19f868d1e54343ed8fad89. Candidate copied byte-for-byte fromadded-chamber-raw.png SHA25617719d4c861923e3103e0edb8944d0bb2a3622576722cacbdeae44c55db034b4; the earlier composedcandidate was never substituted. Worker returns new canonical lossless encoded identity with exactpixel proof; does not trust the prior provider's registration/guarantees.
+
+|Retained-live RIEcase|Outcome|Handlerwall|ProcessCPU|Cgroupmemory.peak atread|
+|---|---|---:|---:|---:|
+|Fresh verify|verified|4746ms|4697ms|161595392bytes|
+|Warm same-operation reverify|verified|1426ms|1427ms|198823936bytes|
+|Lost write response|uncertain|806ms|819ms|198823936bytes|
+|Same-operation recovery|verified|1949ms|1960ms|198823936bytes|
+
+Constraints unchanged: officialpinnedNode24ARM64 image,actualcgroup2048MiB/1CPU,tmp512MiB,readonlyroot/mount,60souterwatchdog,exact1024square,20MiBencoded,16KiBcommand. Current27/27focusedchecks pass0fail0skip. Memoryhighwaters are cumulativekernelcgroup atread, not RSS or hosted peaks; logs/RIE billingplaceholder metrics are not hosting/billingproof. Historicalsyntheticrun and failedstartup evidence are retained separately; neither stands in for the actual retained-live replay. All ownedcontainersremoved/port4194released. Distinct independent re-review on82f8 completed: Standards/depth PASS, local feasibility/evidence PASS,27/27worker checks with0failed/0skipped; no remaining actionable source findings;03/06fullhosted IAM/privateexpiringtransport/durablestorage/deadline/prodledgerattachment proof remainsblocked.
+
+
+Final local-proof review at `82f8a2db91a363ca1aaff187ba3d2e17ca6b6081`: independent reviewer confirmed input bytes match originals and independently reconstructed canonical output SHA256 `886e40ddb7fe491fffbfcf524f44836effff3dc9ce1111b593fdf79d4e8b2d2f`,4,196,031bytes, matching all verified RIE receipts. Standards/depth PASS; local proof Spec/evidence PASS. Full ticket03 Spec remains BLOCKED on selected actual hosted runtime/authority/capability/durability/isolation proof and accepted deployment limits. Missing ticket06 production enforcement implementation alone is not a ticket03 feasibility blocker;06 retains that implementation ownership. No hosted/provider calls were made during local proof.

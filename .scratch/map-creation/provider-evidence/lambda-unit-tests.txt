@@ -1,0 +1,35 @@
+✔ verify stores immutable provisional and proves all995776 outside pixels (407.369084ms)
+✔ same-operation reverify checks exact retained inputs/output and never writes (554.90025ms)
+✔ matching forged output digest is insufficient when decoded pixels disagree (204.86425ms)
+✔ lost store response leaves uncertain, same-operation recovery requires no repeat write (427.567ms)
+✔ badhost (0.235667ms)
+✔ forgeddigest (0.247333ms)
+✔ expired (0.087583ms)
+✔ unauthorized (0.06975ms)
+✔ oversizeddescriptor (0.102958ms)
+✔ oversizedpixels (0.1395ms)
+✔ expireddeadline (0.086417ms)
+✔ foreignoperationreceipt (0.087792ms)
+✔ redirect is rejected without following host (0.142666ms)
+✔ oversize content-length rejected before body buffering (0.211458ms)
+✔ oversize withoutContentLength stream is bounded and cancelled (0.895042ms)
+✔ storage denies unauthorized read (0.163125ms)
+✔ late store receipt cannot become accepted (205.461708ms)
+✔ APNG chunks rejected before baseline PNG decode (0.4865ms)
+✔ stored output cannot overwrite a previously created operation (495.120458ms)
+✔ malformed invocation null (0.142958ms)
+✔ malformed invocation undefined (0.032958ms)
+✔ malformed invocation [] (0.028167ms)
+✔ malformed invocation false (0.024875ms)
+✔ receipt must bind exact sourceIdentity and region (238.833375ms)
+✔ partial uploaded provisional cannot pass same-operation recovery (182.859584ms)
+✔ full rectangle explicitly reports zero outside pixels and exact candidate (164.173209ms)
+✔ actualPNG header dimension over ceiling rejects before decoder allocation (0.383292ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2989.793875

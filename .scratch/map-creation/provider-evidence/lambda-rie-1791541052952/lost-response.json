@@ -1,0 +1,26 @@
+{
+  "kind": "uncertain",
+  "code": "storage-response-unknown",
+  "operationId": "op-rie-two",
+  "stats": {
+    "node": "v24.21.0",
+    "architecture": "arm64",
+    "corpus": "retained-live",
+    "invocation": 3,
+    "wallMs": 806,
+    "cpuMs": 819,
+    "processMemory": {
+      "rss": 212062208,
+      "heapTotal": 19075072,
+      "heapUsed": 8156792,
+      "external": 97440187,
+      "arrayBuffers": 30317798
+    },
+    "cgroup": {
+      "memory.peak": "198823936",
+      "memory.current": "185810944",
+      "memory.max": "2147483648",
+      "cpu.max": "100000 100000"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "kind": "verified",
+  "operationId": "op-rie-two",
+  "mode": "reverify",
+  "sourceIdentity": "synthetic-retained-sea-cave",
+  "sourceDigest": "8e35df10c3e8b5e4ad9ebbc5204b2acbef9f6f6ebd31dcf100651b292de4b6de",
+  "candidateDigest": "0898405f83f49758ed84c1f4502c7b9d67a0467588699d7b6e49b681de1b3e7c",
+  "region": {
+    "x": 650,
+    "y": 160,
+    "width": 220,
+    "height": 240
+  },
+  "output": {
+    "operationId": "op-rie-two",
+    "sourceIdentity": "synthetic-retained-sea-cave",
+    "sourceDigest": "8e35df10c3e8b5e4ad9ebbc5204b2acbef9f6f6ebd31dcf100651b292de4b6de",
+    "candidateDigest": "0898405f83f49758ed84c1f4502c7b9d67a0467588699d7b6e49b681de1b3e7c",
+    "region": {
+      "x": 650,
+      "y": 160,
+      "width": 220,
+      "height": 240
+    },
+    "url": "http://127.0.0.1:8081/provisional/op-rie-two.png",
+    "mime": "image/png",
+    "size": 4196031,
+    "digest": "c42e03c053870a9eeb3f756c3b61f3bed5bee94280357735c55ae9fb37cf2fe0",
+    "width": 1024,
+    "height": 1024
+  },
+  "outsidePixelCount": 995776,
+  "changedOutsidePixels": 0,
+  "insideMatchesCandidate": true,
+  "registration": "server-verification-required",
+  "stats": {
+    "node": "v24.21.0",
+    "architecture": "arm64",
+    "invocation": 4,
+    "wallMs": 446,
+    "cpuMs": 460,
+    "processMemory": {
+      "rss": 209817600,
+      "heapTotal": 19337216,
+      "heapUsed": 8683552,
+      "external": 72029857,
+      "arrayBuffers": 67960624
+    },
+    "cgroup": {
+      "memory.peak": "234283008",
+      "memory.current": "231481344",
+      "memory.max": "2147483648",
+      "cpu.max": "100000 100000"
+    }
+  }
+}

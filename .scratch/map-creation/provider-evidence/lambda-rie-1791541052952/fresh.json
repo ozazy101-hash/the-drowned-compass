@@ -1,0 +1,57 @@
+{
+  "kind": "verified",
+  "operationId": "op-rie-one",
+  "mode": "verify",
+  "sourceIdentity": "retained-live-sea-cave",
+  "sourceDigest": "eea733e73c403ea2978916a56733facd6074cbecff19f868d1e54343ed8fad89",
+  "candidateDigest": "17719d4c861923e3103e0edb8944d0bb2a3622576722cacbdeae44c55db034b4",
+  "region": {
+    "x": 650,
+    "y": 160,
+    "width": 220,
+    "height": 240
+  },
+  "output": {
+    "operationId": "op-rie-one",
+    "sourceIdentity": "retained-live-sea-cave",
+    "sourceDigest": "eea733e73c403ea2978916a56733facd6074cbecff19f868d1e54343ed8fad89",
+    "candidateDigest": "17719d4c861923e3103e0edb8944d0bb2a3622576722cacbdeae44c55db034b4",
+    "region": {
+      "x": 650,
+      "y": 160,
+      "width": 220,
+      "height": 240
+    },
+    "url": "http://127.0.0.1:8081/provisional/op-rie-one.png",
+    "mime": "image/png",
+    "size": 4196031,
+    "digest": "886e40ddb7fe491fffbfcf524f44836effff3dc9ce1111b593fdf79d4e8b2d2f",
+    "width": 1024,
+    "height": 1024
+  },
+  "outsidePixelCount": 995776,
+  "changedOutsidePixels": 0,
+  "insideMatchesCandidate": true,
+  "registration": "server-verification-required",
+  "stats": {
+    "node": "v24.21.0",
+    "architecture": "arm64",
+    "corpus": "retained-live",
+    "invocation": 1,
+    "wallMs": 4746,
+    "cpuMs": 4697,
+    "processMemory": {
+      "rss": 184213504,
+      "heapTotal": 14213120,
+      "heapUsed": 7348944,
+      "external": 90630001,
+      "arrayBuffers": 42904781
+    },
+    "cgroup": {
+      "memory.peak": "161595392",
+      "memory.current": "159825920",
+      "memory.max": "2147483648",
+      "cpu.max": "100000 100000"
+    }
+  }
+}
