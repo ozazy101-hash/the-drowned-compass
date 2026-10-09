@@ -1,3 +1,4 @@
+import { Buffer } from 'node:buffer';
 // Throwaway Node capability probe, not a production decoder or Edge-runtime proof.
 import { deflateSync, inflateSync } from 'node:zlib';
 export const limits = Object.freeze({ bytes: 20 * 1024 * 1024, pixels: 16_000_000 });
@@ -5,9 +6,10 @@ const signature = Buffer.from([137,80,78,71,13,10,26,10]);
 function dimensions(width,height) {
   if (![width,height].every(v=>Number.isInteger(v)&&v>0) || width*height>limits.pixels) throw Error('Invalid dimensions');
 }
+const crcTable=Uint32Array.from({length:256},(_,index)=>{let value=index;for(let bit=0;bit<8;bit++)value=(value>>>1)^((value&1)?0xedb88320:0);return value>>>0;});
 function crc(bytes) {
   let value=0xffffffff;
-  for(const byte of bytes) { value^=byte; for(let bit=0;bit<8;bit++) value=(value>>>1)^((value&1)?0xedb88320:0); }
+  for(const byte of bytes)value=(value>>>8)^crcTable[(value^byte)&255];
   return (value^0xffffffff)>>>0;
 }
 function chunk(type,data) {
@@ -21,7 +23,7 @@ export function encodePng({width,height,rgba}) {
   const header=Buffer.alloc(13); header.writeUInt32BE(width); header.writeUInt32BE(height,4); header[8]=8; header[9]=6;
   const raw=Buffer.alloc(height*(width*4+1));
   for(let y=0;y<height;y++) Buffer.from(rgba.buffer,rgba.byteOffset+y*width*4,width*4).copy(raw,y*(width*4+1)+1);
-  const bytes=Buffer.concat([signature,chunk('IHDR',header),chunk('IDAT',deflateSync(raw)),chunk('IEND',Buffer.alloc(0))]);
+  const bytes=Buffer.concat([signature,chunk('IHDR',header),chunk('IDAT',deflateSync(raw,{level:raw.length+100<=limits.bytes?0:1})),chunk('IEND',Buffer.alloc(0))]);
   if(bytes.length>limits.bytes) throw Error('Image too large'); return bytes;
 }
 const paeth=(a,b,c)=>{const p=a+b-c,pa=Math.abs(p-a),pb=Math.abs(p-b),pc=Math.abs(p-c);return pa<=pb&&pa<=pc?a:pb<=pc?b:c;};
@@ -56,14 +58,18 @@ export function decodePng(input) {
   const stride=width*channels, expected=(stride+1)*height;
   const raw=inflateSync(Buffer.concat(compressed),{maxOutputLength:expected});
   if(raw.length!==expected) throw Error('Invalid PNG scanline length');
-  const scan=Buffer.alloc(stride*height), rgba=Buffer.alloc(width*height*4);
+  const scan=Buffer.alloc(stride*height);
   for(let y=0;y<height;y++) {
     const filter=raw[y*(stride+1)]; if(filter>4) throw Error('Invalid PNG filter');
+    if(filter===0){raw.copy(scan,y*stride,y*(stride+1)+1,(y+1)*(stride+1));continue;}
     for(let x=0;x<stride;x++) {
-      const i=y*stride+x,a=x>=channels?scan[i-channels]:0,b=y?scan[i-stride]:0,c=y&&x>=channels?scan[i-stride-channels]:0;
-      scan[i]=(raw[y*(stride+1)+1+x]+[0,a,b,Math.floor((a+b)/2),paeth(a,b,c)][filter])&255;
+      const i=y*stride+x,a=x>=channels?scan[i-channels]:0,b=y?scan[i-stride]:0;
+      const predictor=filter===1?a:filter===2?b:filter===3?Math.floor((a+b)/2):paeth(a,b,y&&x>=channels?scan[i-stride-channels]:0);
+      scan[i]=(raw[y*(stride+1)+1+x]+predictor)&255;
     }
   }
-  for(let i=0;i<width*height;i++) { scan.copy(rgba,i*4,i*channels,i*channels+channels); if(channels===3)rgba[i*4+3]=255; }
+  if(channels===4)return {width,height,rgba:scan};
+  const rgba=Buffer.alloc(width*height*4);
+  for(let i=0;i<width*height;i++){rgba[i*4]=scan[i*3];rgba[i*4+1]=scan[i*3+1];rgba[i*4+2]=scan[i*3+2];rgba[i*4+3]=255;}
   return {width,height,rgba};
 }

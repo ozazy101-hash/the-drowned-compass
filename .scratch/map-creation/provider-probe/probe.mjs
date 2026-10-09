@@ -1,3 +1,4 @@
+import { Buffer } from 'node:buffer';
 import { createHash } from 'node:crypto';
 import { decodePng,encodePng,limits } from './png.mjs';
 export const MODEL='gpt-image-2.5-sunburst';
