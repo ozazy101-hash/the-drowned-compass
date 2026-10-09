@@ -1,9 +1,9 @@
 import {test,expect,type Page} from '@playwright/test';
 import {png,pdfFixture} from './handout-fixtures';
 import {sql} from '../scripts/local-verification.mjs';
-async function mount(page:Page,index:number){
+async function mount(page:Page,index:number,create=true){
  await page.goto('./');
- await page.evaluate(async({url,key,jwt,image})=>{
+ await page.evaluate(async({url,key,jwt,image,create})=>{
   const sdk=await import('/the-drowned-compass/node_modules/.vite/deps/@supabase_supabase-js.js');
   const client=sdk.createClient(url,key,{accessToken:async()=>jwt});
   const content=(await import('/the-drowned-compass/src/data/supabase-party-content.ts')).supabasePartyContent(client);
@@ -11,7 +11,7 @@ async function mount(page:Page,index:number){
   const {createPartyDisplay}=await import('/the-drowned-compass/src/features/presentation/party-display.ts');
   const display=createPartyDisplay(content,session);
   const mapDocument={columns:4,rows:4,feetPerSquare:5,terrain:[{x:0,y:0,kind:'water'}],edges:[]};
-  const versionId=crypto.randomUUID();const result=await content.attachMapVersion({familyId:crypto.randomUUID(),expectedVersion:0,requestId:versionId,title:'Ticket10 private map secret',document:mapDocument,artwork:new File([new Uint8Array(image)],'source.png',{type:'image/png'}),instructions:'Never send secret prompt'});
+  const versionId=crypto.randomUUID();const current=await content.readMapWorkspace();const result=create?await content.attachMapVersion({familyId:crypto.randomUUID(),expectedVersion:0,requestId:versionId,title:'Ticket10 private map secret',document:mapDocument,artwork:new File([new Uint8Array(image)],'source.png',{type:'image/png'}),instructions:'Never send secret prompt'}):{ok:true,version:current.presentation.version};
   if(!result.ok)throw Error('Owned fixture conflict');
   const React=await import('/the-drowned-compass/node_modules/.vite/deps/react.js');const renderer=await import('/the-drowned-compass/node_modules/.vite/deps/react-dom_client.js');
   const {DisplayControls}=await import('/the-drowned-compass/src/features/presentation/DisplayControls.tsx');
@@ -20,7 +20,7 @@ async function mount(page:Page,index:number){
   (renderer.createRoot??renderer.default.createRoot)(root).render((React.createElement??React.default.createElement)(DisplayControls,{display}));
   const button=window.document.createElement('button');button.textContent='Use saved live map';button.onclick=()=>display.presentMap(result.version);window.document.body.append(button);
   Object.assign(window,{liveMap:{content,client,display,version:result.version,originalCommit:content.commitMapRevealMask}});
- },{url:process.env.MAP_LIVE_URL!,key:process.env.MAP_LIVE_KEY!,jwt:JSON.parse(process.env.MAP_DISPLAY_DM_JWTS!)[index],image:[...png]});
+ },{url:process.env.MAP_LIVE_URL!,key:process.env.MAP_LIVE_KEY!,jwt:JSON.parse(process.env.MAP_DISPLAY_DM_JWTS!)[index],image:[...png],create});
 }
 async function pixel(popup:Page,x:number,y:number){return popup.locator('canvas').evaluate((c:HTMLCanvasElement,{x,y})=>[...c.getContext('2d')!.getImageData(Math.floor(c.width*x),Math.floor(c.height*y),1,1).data],{x,y});}
 test('genuine authority: opaque output, touch controls, persistence/conflict/failure, reopen, PDF switching and revocation',async({page,isMobile},info)=>{
@@ -49,6 +49,11 @@ test('genuine authority: opaque output, touch controls, persistence/conflict/fai
  await page.unroute('**/rest/v1/rpc/commit_map_reveal_mask');await page.getByRole('button',{name:'Discard reveal draft'}).click();
  await popup.close();await expect(page.getByRole('button',{name:'Open Party Display',exact:true})).toBeVisible();
  const reopen=page.waitForEvent('popup');await page.getByRole('button',{name:'Open Party Display',exact:true}).click();popup=await reopen;await expect(popup.locator('canvas')).toBeVisible();expect(await pixel(popup,.5,.5)).toEqual([0,0,0,255]);
+ // A browser reload creates a fresh controller: Open restores the saved
+ // accepted version/mask after authority without another Use selection.
+ await popup.close();await page.reload();await mount(page,index,false);
+ const fresh=page.waitForEvent('popup');await page.getByRole('button',{name:'Open Party Display',exact:true}).click();popup=await fresh;
+ await expect(popup.getByLabel('Uncovered Grid Map on Party Display')).toBeVisible();expect(await pixel(popup,.1,.1)).not.toEqual([0,0,0,255]);expect(await pixel(popup,.5,.5)).toEqual([0,0,0,255]);
  // Genuine private-map known-version reads remain denied to the Player.
  const denied=await page.evaluate(async({url,key,jwt})=>{const sdk=await import('/the-drowned-compass/node_modules/.vite/deps/@supabase_supabase-js.js');const content=(await import('/the-drowned-compass/src/data/supabase-party-content.ts')).supabasePartyContent(sdk.createClient(url,key,{accessToken:async()=>jwt}));try{await content.openMapVersion((window as any).liveMap.version.id);return false;}catch{return true;}},{url:process.env.MAP_LIVE_URL!,key:process.env.MAP_LIVE_KEY!,jwt:JSON.parse(process.env.MAP_DISPLAY_PLAYER_JWTS!)[index]});expect(denied).toBe(true);
  await page.evaluate(async({pdf})=>{const w=(window as any).liveMap;const item=await w.content.upload({requestId:crypto.randomUUID(),title:'Ticket10 PDF',file:new File([new Uint8Array(pdf)],'letter.pdf',{type:'application/pdf'})});await w.display.present(item);},{pdf:[...pdfFixture()]});

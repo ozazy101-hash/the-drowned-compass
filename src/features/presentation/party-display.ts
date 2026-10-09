@@ -19,6 +19,7 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
   let map: MapArtworkVersion | undefined;
   let accepted:MapPresentation|undefined, draft:ReturnType<typeof createMapRevealMaskDraft>|undefined;
   let choicePending=false;
+  let restoreAllowed=true;
   let cachedArtwork: {versionId:string;blob:Blob}|undefined;
 
   let blob: Blob | undefined;
@@ -31,7 +32,7 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
   const emit = (next: Partial<DisplayState>) => { state = {...state,...next}; listeners.forEach(listener=>listener()); };
   const blank = () => { if(popup&&!popup.closed) popup.document.body.replaceChildren(); frame=undefined; };
   function clear(message='Party Display cleared.') {
-    epoch++; renderEpoch++; ready=false; selected=undefined; map=undefined; accepted=undefined;draft=undefined;cachedArtwork=undefined; blob=undefined; retry=undefined; registrationReference=undefined; loadingVersion=undefined; task?.cancel(); void pdf?.dispose(); pdf=undefined; blank();
+    restoreAllowed=false;epoch++; renderEpoch++; ready=false; selected=undefined; map=undefined; accepted=undefined;draft=undefined;cachedArtwork=undefined; blob=undefined; retry=undefined; registrationReference=undefined; loadingVersion=undefined; task?.cancel(); void pdf?.dispose(); pdf=undefined; blank();
     emit({selected:undefined,busy:false,page:1,pages:1,zoom:1,x:0,y:0,contentKind:undefined,presentation:undefined,reveal:undefined,artwork:undefined,testSquare:false,registrationChanged:false,message});
   }
   async function authorized() {
@@ -87,7 +88,7 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
   async function reconcile() {
     if(!active)return;
     if(map){await reconcileMap();return;}
-    if(!selected)return;
+    if(!selected){if(restoreAllowed)await restoreMap();return;}
     try {
       if(!await authorized())return;
       const id=selected.id;const items=await content.list();if(!active||selected?.id!==id)return;
@@ -96,10 +97,21 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
       await load(item,++epoch);
     } catch {emit({message:'Connection interrupted. Existing display retained; reconnect to reconcile Library access.'});}
   }
+  async function restoreMap() {
+    if(!active||!restoreAllowed||choicePending||!popup||popup.closed)return;
+    const token=epoch;
+    try {
+      if(!await authorized()||token!==epoch)return;
+      const snapshot=validateMapPresentation((await content.readMapWorkspace()).presentation);
+      if(token!==epoch||!active||!restoreAllowed||choicePending||map||selected)return;
+      if(!snapshot.version)return;
+      accept(snapshot);await render(token);
+    }catch{if(token===epoch&&active)emit({message:'Saved presentation unavailable. Display stays blank; reopen or choose a saved map to retry.'});}
+  }
   function openWindow() {
     if(!active)return;
     if(popup&&!popup.closed){popup.focus();return;}
-    ready=false;
+    ready=false;renderEpoch++;task?.cancel();
     popup=window.open('about:blank','_blank','popup,width=1280,height=800');
     if(!popup){emit({window:'blocked',message:'Popup blocked. Allow popups for this site, then Open Party Display again.'});return;}
     popup.document.title='Party Display';
@@ -112,7 +124,7 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
   async function present(item: Handout) {
     if(!active||state.busy)return;
     if(!popup||popup.closed){emit({message:'Open Party Display before presenting.'});return;}
-    const token=++epoch;emit({busy:true,message:'Checking Library access…'});
+    restoreAllowed=false;const token=++epoch;emit({busy:true,message:'Checking Library access…'});
     try {
       if(!await authorized()||token!==epoch)return;
       if(retry&&retry.id!==item.id)retry=undefined;
@@ -217,6 +229,7 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
       const intent=current.prepareCommit(requestId);emit({reveal:current.snapshot()});
       const result=await content.commitMapRevealMask(intent);
       if(token!==epoch||draft!==current||!active)return;
+      if(!await authorized()||token!==epoch||draft!==current||!active)return;
       current.receive(requestId,result);
       if(current.snapshot().accepted.revision>=(accepted?.revision??0)){accept(current.snapshot().accepted,true);await render(token);}
       emit({reveal:current.snapshot(),message:result.ok?'Reveal progress saved.':current.snapshot().error??'Reveal conflict. Retry or discard draft.'});
@@ -242,7 +255,7 @@ export function createPartyDisplay(content: PartyContent, getSession: () => Prom
   });
   const stopMaps=content.observeMapWorkspace(()=>{if(map)void reconcileMap();});
   const timer=setInterval(()=>{
-    if(popup?.closed&&state.window==='open'){epoch++;emit({window:'closed',busy:false,message:'Party Display closed. Open Party Display to reopen it.'});}
+    if(popup?.closed&&state.window==='open'){renderEpoch++;ready=false;task?.cancel();emit({window:'closed',busy:false,message:'Party Display closed. Open Party Display to reopen it.'});}
     if(selected||map||state.testSquare)void authorized().catch(()=>emit({message:'Connection interrupted. Existing display retained.'}));
   },1000);
   const onUnload=()=>dispose();window.addEventListener('pagehide',onUnload);window.addEventListener('online',reconcile);

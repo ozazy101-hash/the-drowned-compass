@@ -73,3 +73,46 @@ test('largest supported artwork and grid render bounded opaque frames without pe
  await page.evaluate(()=>{const w=window as any;w.md.viewport({zoom:1.25,x:37,y:-19});});await expect(popup.locator('canvas')).toHaveCSS('image-rendering','pixelated');
  await page.evaluate(()=>(window as any).md.dispose());
 });
+
+test('fresh controller after reload restores accepted progress black-first while Clear suppresses restore',async({page})=>{
+ await page.goto('./');await page.evaluate(async()=>{
+  const module='/the-drowned-compass/src/data/in-memory-party-data.ts';const data=(await import(module)).createInMemoryPartyData();await data.signIn('dungeon-master','dm-password');
+  const result=await data.content.attachMapVersion({familyId:crypto.randomUUID(),expectedVersion:0,requestId:crypto.randomUUID(),title:'Reload map',document:{columns:4,rows:4,feetPerSquare:5,terrain:[],edges:[]}});
+  const chosen=await data.content.chooseMapPresentation({versionId:result.version.id,expectedRevision:0,requestId:crypto.randomUUID()});
+  const moduleMask='/the-drowned-compass/src/domain/map-reveal-mask.ts';const draft=(await import(moduleMask)).createMapRevealMaskDraft(chosen.presentation);draft.command({type:'uncover-all',confirmed:true});await data.content.commitMapRevealMask(draft.prepareCommit(crypto.randomUUID()));
+ });
+ await page.reload();await page.evaluate(async()=>{
+  const module='/the-drowned-compass/src/data/in-memory-party-data.ts';const data=(await import(module)).createInMemoryPartyData();const displayModule='/the-drowned-compass/src/features/presentation/party-display.ts';const w=window as any;w.delayAuth=true;
+  w.md=(await import(displayModule)).createPartyDisplay(data.content,async()=>{if(w.delayAuth){w.authStarted=true;await new Promise(resolve=>w.releaseAuth=resolve);w.delayAuth=false;}return data.getSession();});
+  const button=document.createElement('button');button.textContent='Restore accepted map';button.onclick=w.md.openWindow;document.body.append(button);
+ });
+ const created=page.waitForEvent('popup');await page.getByRole('button',{name:'Restore accepted map'}).click();let popup=await created;await expect.poll(()=>page.evaluate(()=>(window as any).authStarted)).toBe(true);await expect(popup.locator('canvas')).toHaveCount(0);expect(await popup.locator('body').evaluate(node=>getComputedStyle(node).backgroundColor)).toBe('rgb(0, 0, 0)');
+ await page.evaluate(()=>(window as any).releaseAuth());await expect(popup.locator('canvas')).toBeVisible();expect(await popup.locator('canvas').getAttribute('data-presentation-revision')).toBe('2');
+ await page.evaluate(()=>(window as any).md.clear());await popup.close();const reopened=page.waitForEvent('popup');await page.getByRole('button',{name:'Restore accepted map'}).click();popup=await reopened;await page.waitForTimeout(1100);await expect(popup.locator('canvas')).toHaveCount(0);
+ await page.evaluate(()=>(window as any).md.dispose());await popup.close();
+ await page.evaluate(async()=>{
+  const module='/the-drowned-compass/src/data/in-memory-party-data.ts';const data=(await import(module)).createInMemoryPartyData();const displayModule='/the-drowned-compass/src/features/presentation/party-display.ts';const w=window as any;
+  const content={...data.content,readMapWorkspace:async()=>{w.restoreReadStarted=true;await new Promise(resolve=>w.releaseRestoreRead=resolve);return data.content.readMapWorkspace();}};
+  w.md=(await import(displayModule)).createPartyDisplay(content,()=>data.getSession());const button=[...document.querySelectorAll('button')].find(b=>b.textContent==='Restore accepted map')!;button.textContent='Restore held map';button.onclick=w.md.openWindow;
+ });
+ const held=page.waitForEvent('popup');await page.getByRole('button',{name:'Restore held map'}).click();popup=await held;await expect.poll(()=>page.evaluate(()=>(window as any).restoreReadStarted)).toBe(true);await expect(popup.locator('canvas')).toHaveCount(0);
+ await page.evaluate(()=>{const w=window as any;w.md.clear();w.releaseRestoreRead();});await page.waitForTimeout(200);await expect(popup.locator('canvas')).toHaveCount(0);await page.evaluate(()=>(window as any).md.dispose());
+});
+
+for(const success of [true,false])test(`pending reveal ${success?'success':'failure'} settles after popup close and safely reopens`,async({page})=>{
+ await page.goto('./');await page.evaluate(async({success})=>{
+  const module='/the-drowned-compass/src/data/in-memory-party-data.ts';const data=(await import(module)).createInMemoryPartyData();await data.signIn('dungeon-master','dm-password');
+  const created=await data.content.attachMapVersion({familyId:crypto.randomUUID(),expectedVersion:0,requestId:crypto.randomUUID(),title:'Pending close map',document:{columns:4,rows:4,feetPerSquare:5,terrain:[],edges:[]}});
+  const w=window as any;w.saves=0;const content={...data.content,commitMapRevealMask:async(intent:any)=>{w.saves++;w.saveStarted=true;await new Promise(resolve=>w.releaseSave=resolve);if(!success)throw Error('Owned failure');return data.content.commitMapRevealMask(intent);}};
+  const displayModule='/the-drowned-compass/src/features/presentation/party-display.ts';w.md=(await import(displayModule)).createPartyDisplay(content,()=>data.getSession());w.pendingVersion=created.version;
+  const button=document.createElement('button');button.textContent='Open pending map';button.onclick=w.md.openWindow;document.body.append(button);
+ },{success});
+ const opening=page.waitForEvent('popup');await page.getByRole('button',{name:'Open pending map'}).click();let popup=await opening;
+ await page.evaluate(async()=>{const w=window as any;await w.md.presentMap(w.pendingVersion);w.md.reveal({type:'uncover-all',confirmed:true});w.pending=w.md.saveReveal();});await expect.poll(()=>page.evaluate(()=>(window as any).saveStarted)).toBe(true);
+ await popup.close();await expect.poll(()=>page.evaluate(()=>(window as any).md.getState().window)).toBe('closed');
+ await page.evaluate(async()=>{const w=window as any;w.releaseSave();await w.pending;});expect(await page.evaluate(()=>(window as any).md.getState().reveal.status)).toBe(success?'accepted':'error');expect(await page.evaluate(()=>(window as any).saves)).toBe(1);
+ const reopened=page.waitForEvent('popup');await page.getByRole('button',{name:'Open pending map'}).click();popup=await reopened;await expect(popup.locator('canvas')).toBeVisible();expect(await page.evaluate(()=>(window as any).md.getState().reveal.status)).toBe(success?'accepted':'error');
+ if(success){await page.evaluate(()=>{const w=window as any;w.md.reveal({type:'hide-all'});});expect(await page.evaluate(()=>(window as any).md.getState().reveal.status)).toBe('draft');}
+ if(!success){await page.evaluate(()=>(window as any).md.reveal({type:'discard'}));expect(await page.evaluate(()=>(window as any).md.getState().reveal.status)).toBe('accepted');}
+ await page.evaluate(()=>(window as any).md.dispose());
+});
