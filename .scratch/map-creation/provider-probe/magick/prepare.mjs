@@ -1,6 +1,7 @@
-import {readFile,writeFile,copyFile} from 'node:fs/promises';
+import {writeFile,copyFile,mkdir} from 'node:fs/promises';
 import {encodePng} from '../png.mjs';
 const dir=new URL('./fixtures/',import.meta.url);
+await mkdir(dir,{recursive:true});
 for(const [target,source] of [['source','live-source'],['candidate','live-candidate']])await copyFile(new URL('../lambda/corpus/'+source+'.png',import.meta.url),new URL('live-'+target+'.png',dir));
 for(const mode of ['transparent','lowalpha','noise'])for(const kind of ['source','candidate']){
  const rgba=new Uint8Array(1024*1024*4);let seed=kind==='source'?1234:5678;
