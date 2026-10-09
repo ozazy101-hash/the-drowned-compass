@@ -61,15 +61,20 @@ export function generationApplication({store,provider,verifier,mode='live',now=D
   return transition(j,'awaiting-client-output',{proof});
  }
  async function recoverPreparation(user,j){
-  try{const prepared=await prepare(j);return prepared.state==='completed'?await finalize(prepared):prepared;}catch(error){
-   // Async stage failure never grants ownership of a newer CAS revision. Re-read
-   // only to authorize/return newer state; any mutation uses the failing stage's
-   // original revision and cannot erase another proof or terminal result.
+  let result;
+  try{result=await prepare(j);}catch(error){
+   // A stale stage may neither erase newer state nor claim an unverified receipt.
+   // Every mutation uses its original revision, even after authorized re-read.
    const current=await owned(user,j.id);
-   if(current.revision!==j.revision||current.state!=='awaiting-client-output')return current.state==='completed'?finalize(current):current;
-   if(error.message==='expired-output')throw error;
-   return transition(j,error.message==='verification-unavailable'?'awaiting-client-output':'failed',{code:error.message==='verification-unavailable'?'verification-unavailable':'output-unavailable'});
+   if(current.revision!==j.revision||current.state!=='awaiting-client-output')result=current;
+   else{
+    if(error.message==='expired-output')throw error;
+    result=await transition(j,error.message==='verification-unavailable'?'awaiting-client-output':'failed',{code:error.message==='verification-unavailable'?'verification-unavailable':'output-unavailable'});
+   }
   }
+  // Normalize successful preparation AND any recovery CAS result. This stage is
+  // outside the preparation catch: a transient FINALIZE is never retried here.
+  return result.state==='completed'?finalize(result):result;
  }
  async function finalize(j){
   if(!['awaiting-client-output','completed'].includes(j.state)||!j.provisional||!j.proof)throw Error('output-not-ready');
