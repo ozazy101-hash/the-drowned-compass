@@ -1,0 +1,98 @@
+{
+  "live": {
+    "requestId": "live",
+    "parentId": "saved-parent-live",
+    "region": {
+      "x": 650,
+      "y": 160,
+      "width": 220,
+      "height": 240
+    },
+    "files": {
+      "source": {
+        "sha256": "eea733e73c403ea2978916a56733facd6074cbecff19f868d1e54343ed8fad89",
+        "bytes": 2542891
+      },
+      "candidate": {
+        "sha256": "17719d4c861923e3103e0edb8944d0bb2a3622576722cacbdeae44c55db034b4",
+        "bytes": 1959492
+      },
+      "output": {
+        "sha256": "7a6e9e6520de0bc24d1eeb0e3aabe742dba1afb07eac7c7e9de87036f1350d54",
+        "bytes": 2540058
+      }
+    }
+  },
+  "transparent": {
+    "requestId": "transparent",
+    "parentId": "saved-parent-transparent",
+    "region": {
+      "x": 650,
+      "y": 160,
+      "width": 220,
+      "height": 240
+    },
+    "files": {
+      "source": {
+        "sha256": "885c65567169f24f1a2909a257d0b54fd74977e2c8d3f9003d671fadd2f9cee5",
+        "bytes": 4196031
+      },
+      "candidate": {
+        "sha256": "ea262eafcdeac431078a926936de173e2104b3d359368335e2b51b7c0912c4ae",
+        "bytes": 4196031
+      },
+      "output": {
+        "sha256": "e00c95add5b2ed484681d9970e268d0b84f7663a49acf3918dbcc1738fe3a490",
+        "bytes": 3587545
+      }
+    }
+  },
+  "lowalpha": {
+    "requestId": "lowalpha",
+    "parentId": "saved-parent-lowalpha",
+    "region": {
+      "x": 650,
+      "y": 160,
+      "width": 220,
+      "height": 240
+    },
+    "files": {
+      "source": {
+        "sha256": "e7a0d2a72ffa90417eaa607191503a5afd647cb5afd1a6724533c97c01aa139c",
+        "bytes": 4196031
+      },
+      "candidate": {
+        "sha256": "bf05c5f32090e5ce2bb5c4e4b205d617fb481defb5a5f44da87eb2b985897e04",
+        "bytes": 4196031
+      },
+      "output": {
+        "sha256": "961954c57f9abd5f2921c5155680bf3533304be4ff17862f8db71d56ffd37b1b",
+        "bytes": 3786822
+      }
+    }
+  },
+  "noise": {
+    "requestId": "noise",
+    "parentId": "saved-parent-noise",
+    "region": {
+      "x": 650,
+      "y": 160,
+      "width": 220,
+      "height": 240
+    },
+    "files": {
+      "source": {
+        "sha256": "536b11b9971f8c08d226cf31ff1fca2ea9ceed39ea1d5ef2ff16f6f1110dc68c",
+        "bytes": 4196031
+      },
+      "candidate": {
+        "sha256": "a2f2bf79af1385fdff994db4f9f5e531e9d95eec52dc98273bbfef3698424dfd",
+        "bytes": 4196031
+      },
+      "output": {
+        "sha256": "526940178eec054abd4b6714a3c28090e413b172f1e7ac0577cacd0bf215947b",
+        "bytes": 3588325
+      }
+    }
+  }
+}
