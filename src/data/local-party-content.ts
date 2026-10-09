@@ -19,6 +19,8 @@ const event='drowned-compass-content-changed';
 function changed() { window.dispatchEvent(new Event(event));const channel=new BroadcastChannel(event);channel.postMessage(null);channel.close(); }
 export function localPartyContent(token: () => string | null): PartyContent {
   const content: PartyContent={
+    async changeMapGeneration(){return {ok:false,code:'generation-disabled'};},
+    async openMapGenerationInput(){throw new Error('Generation is disabled in the local browser store. Use an explicitly labelled server fixture preview.');},
     readMapWorkspace:()=>localContentTransaction(token(),false,(store,complete,role)=>{
       if(role!=='dungeon-master'){store.transaction.abort();return;}
       const request=store.getAll();request.onsuccess=()=>{const records=request.result as (LocalMap|PresentationRecord)[];const maps=records.filter((r):r is LocalMap=>r.kind==='grid-map');try{complete(validateMapWorkspace({families:maps.map(mapMetadata),versions:maps.flatMap(r=>retained(r).map(v=>validateMapVersion(v.version))),presentation:records.find((r):r is PresentationRecord=>r.kind==='map-presentation')?.presentation??emptyMapPresentation()}));}catch{store.transaction.abort();}};

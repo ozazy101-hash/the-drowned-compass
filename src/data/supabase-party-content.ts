@@ -58,10 +58,23 @@ export function supabasePartyContent(client: SupabaseClient): PartyContent {
     changed();return {ok:true as const,item:mapMetadata(saved.item)};
   }
   const content: PartyContent={
+    async changeMapGeneration(command){
+      const result=await client.functions.invoke('map-generation',command.kind==='output'?{body:command.file,headers:{'Content-Type':'image/png','X-Map-Command':'output','X-Map-Request':command.requestId}}:{body:command});
+      if(result.error){try{const body=await result.error.context.json();if(body.ok===false&&typeof body.code==='string')return {ok:false,code:body.code};}catch{/* transport unknown: reconcile by request identity */}return {ok:false,code:'unavailable'};}
+      if(!result.data)return {ok:false,code:'unavailable'};
+      changed();return result.data as import('../domain/map-generation').MapGenerationResult;
+    },
+    async openMapGenerationInput(requestId){
+      const result=await content.changeMapGeneration({kind:'read',requestId});
+      if(!result.ok||result.job.state!=='awaiting-client-output'||!result.job.assembly)throw new Error('This generation output is unavailable. Reconcile the job and retry.');
+      const open=async(kind:'open-source'|'open-candidate')=>{const r=await client.functions.invoke('map-generation',{body:{kind,requestId}});if(r.error||!(r.data instanceof Blob))throw new Error('This generation output is unavailable.');return r.data;};
+      const candidate=await open('open-candidate'),source=result.job.assembly.requiresSource?await open('open-source'):null;
+      return {job:result.job,candidate,source};
+    },
     async readMapWorkspace(){
-      const result=await client.rpc('read_map_workspace');if(result.error||!result.data)throw failure();
+      const [result,jobs]=await Promise.all([client.rpc('read_map_workspace'),client.rpc('read_map_generation_jobs')]);if(result.error||!result.data||jobs.error)throw failure();
       const data=result.data as {families:MapRow[];versions:VersionRow[];presentation:Parameters<typeof presentationMetadata>[0]};
-      return validateMapWorkspace({families:data.families.map(mapMetadata),versions:data.versions.map(versionMetadata),presentation:presentationMetadata(data.presentation)});
+      return validateMapWorkspace({families:data.families.map(mapMetadata),versions:data.versions.map(versionMetadata),presentation:presentationMetadata(data.presentation),jobs:jobs.data});
     },
     async readMapVersion(id){const result=await client.from('party_map_artwork_versions').select('*').eq('id',id).maybeSingle();if(result.error||!result.data)throw new Error('This saved Map Artwork Version is unavailable.');return versionMetadata(result.data);},
     async openMapVersion(id,source='artwork'){

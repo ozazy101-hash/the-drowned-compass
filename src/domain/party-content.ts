@@ -8,6 +8,8 @@ export type HandoutChange = { id: string; expectedVersion: number; requestId: st
 export type HandoutChangeResult = { ok: true; item: Handout } | { ok: false; reason: 'conflict'; item: Handout };
 export type ContentSnapshot = { items: Handout[] } | { error: string };
 export interface PartyContent {
+  changeMapGeneration(command:import('./map-generation').MapGenerationCommand):Promise<import('./map-generation').MapGenerationResult>;
+  openMapGenerationInput(requestId:string):Promise<import('./map-generation').MapGenerationInput>;
   readMapWorkspace(): Promise<import('./map-artwork').MapWorkspace>;
   observeMapWorkspace(listener:(snapshot:import('./map-artwork').MapWorkspaceSnapshot)=>void):()=>void;
   readMapVersion(id:string):Promise<import('./map-artwork').MapArtworkVersion>;

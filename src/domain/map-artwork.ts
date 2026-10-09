@@ -11,7 +11,7 @@ export type MapPresentation = Readonly<{
   revision:number; version:MapArtworkVersion|null;
   mask:Readonly<{id:string;registration:string;columns:number;rows:number;uncovered:readonly number[]}>|null;
 }>;
-export type MapWorkspace = {families:import('./party-content').SavedGridMap[];versions:MapArtworkVersion[];presentation:MapPresentation};
+export type MapWorkspace = {families:import('./party-content').SavedGridMap[];versions:MapArtworkVersion[];presentation:MapPresentation;jobs?:import('./map-generation').MapGenerationJob[]};
 export type MapWorkspaceSnapshot = {workspace:MapWorkspace}|{error:string};
 /** Branching reads the retained parent, never a mutable editor draft. Generated
  * attachments belong to the authoritative server, not this browser upload intent. */
