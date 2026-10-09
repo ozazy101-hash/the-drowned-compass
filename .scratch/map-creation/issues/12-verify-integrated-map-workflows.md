@@ -13,6 +13,10 @@ Combine reviewed heads in an isolated worktree. Run one combined regression and 
 
 Integration gate across Grid Map, PartyContent, generation and Party Display; review existing modules as a whole rather than adding a new orchestration facade.
 
+## Architecture constraints
+
+Require a server/client import-graph check, deletion-test evidence for each deep module and interface-level outcome tests. Verify no job/authorization/coordinate/mask-compatibility rule is duplicated in App/workshop/display/adapters. Verify registration digest separation, coherent snapshot races and lossless decoded pixel preservation. Replace superseded helper tests with preserved behaviour coverage rather than duplicate suites. Architecture review of the final implementation is required; this planning review is not proof of implemented depth.
+
 ## Acceptance
 
 - [ ] End-to-end Invent and sketch illustration, upload, retained variants, partial revisions, branching, fixed-extent later stages, manual mask/persistence/conflict and extended display all have passing evidence.
@@ -25,8 +29,10 @@ Integration gate across Grid Map, PartyContent, generation and Party Display; re
 
 ## Verification and review
 
-One combined gate and independently recorded exact-head reviews. Do not run another whole gate for evidence-only commits; release source equality must be checked when later authorized. Follow the shared [verification and delivery gate](../spec.md#verification-and-delivery-gate). Record source heads, evidence and outstanding blockers; no simulated output may stand in for live provider proof.
+One combined gate and independently recorded exact-head reviews. Do not run another whole gate for evidence-only commits; release source equality must be checked when later authorized. Follow the shared [verification and delivery gate](../spec.md#verification-and-delivery-gate). Record source heads, evidence and outstanding blockers; where a ticket claims live AI capability, no simulated output may stand in for that proof.
 
 ## Comments
 
 2026-10-09: Created from user-accepted Prototype2 and module decisions. Implementation unstarted. Read the dependency status and module interface before claiming.
+
+2026-10-09: Architecture review refined ownership, small interfaces and seam-level verification before implementation. See [architecture review](../architecture-review.md) and [interface contract](../spec.md#module-placement-and-interface-contract).

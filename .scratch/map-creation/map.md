@@ -17,3 +17,8 @@ Existing published map sharing remains unchanged until a separately implemented 
 ## Implementation plan captured — 2026-10-09
 
 User accepted all Prototype2 features. [Spec](spec.md) and implementation prerequisites/tickets03–12 are committed on codex/map-artwork-planning, based on released main823e00a. Prototype01/02 are resolved.03/04 are the initial frontier; later dependencies are listed in [README](README.md). No implementation or deployment started.
+
+
+## Architecture checkpoint — 2026-10-09
+
+[Pre-implementation review](architecture-review.md) found and corrected six ownership/interface gaps: server job ownership, digest versus registration, coherent presentation snapshots, map observation, display ticket overlap, and composition/test seams. Revised tickets keep deep modules behind small caller interfaces. No implementation started; final implemented depth must be reviewed again.

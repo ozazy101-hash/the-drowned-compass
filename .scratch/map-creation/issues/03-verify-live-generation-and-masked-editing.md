@@ -14,6 +14,10 @@ Deliver a reproducible bounded capability probe and decision report, rather than
 
 Generation module with a live provider adapter and deterministic fixture adapter; prototype assets are evidence only, not the production adapter.
 
+## Architecture constraints
+
+The provider dependency is a true external dependency: prove a small injected internal port, including server-side decoding, lossless masked composition within existing size limits, hosting/runtime support, and ambiguous submission reconciliation. Do not invent a multi-provider framework or expose provider payloads to workshop callers. The probe is throwaway evidence;06 owns the sole production job application. Coordinate the normalized output/registration contract with04 without making the persistence foundation depend on a particular vendor.
+
 ## Acceptance
 
 - [ ] Follow current official provider documentation and cite exact endpoints/model/mask conventions. Confirm the backend runtime supports generation, references and editing; record decode formats, size limits, waiting/polling and cancellation semantics.
@@ -24,8 +28,10 @@ Generation module with a live provider adapter and deterministic fixture adapter
 
 ## Verification and review
 
-Small live corpus and deterministic invalid-output/mask cases; no full regression. Record the selected interface and failure behaviours for06/08. Follow the shared [verification and delivery gate](../spec.md#verification-and-delivery-gate). Record source heads, evidence and outstanding blockers; no simulated output may stand in for live provider proof.
+Small live corpus and deterministic invalid-output/mask cases; no full regression. Record the selected interface and failure behaviours for06/08. Follow the shared [verification and delivery gate](../spec.md#verification-and-delivery-gate). Record source heads, evidence and outstanding blockers; where a ticket claims live AI capability, no simulated output may stand in for that proof.
 
 ## Comments
 
 2026-10-09: Created from user-accepted Prototype2 and module decisions. Implementation unstarted. Read the dependency status and module interface before claiming.
+
+2026-10-09: Architecture review refined ownership, small interfaces and seam-level verification before implementation. See [architecture review](../architecture-review.md) and [interface contract](../spec.md#module-placement-and-interface-contract).

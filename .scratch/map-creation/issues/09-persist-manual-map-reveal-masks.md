@@ -13,6 +13,10 @@ Implement cell-based Uncover/Hide,1/2/4-square brushes, whole-map actions, strok
 
 Grid Map domain owns cell-mask validation and stroke history; PartyContent/local/Supabase adapters own accepted mask revisions and conflicts.
 
+## Architecture constraints
+
+Persist accepted Reveal Masks against the validated registration/dimension key defined in04. Commit stroke/undo intents with expected presentation revision, keeping artwork choice and mask coherent; return the accepted snapshot or conflict. Do not reinterpret a mask on unrelated geometry. Stroke history is controlled in the domain; listeners consume authoritative accepted observations. The in-process brush arithmetic needs no port/factory abstraction;10 composes the actual controls with the renderer.
+
 ## Acceptance
 
 - [ ] First presentation/new family starts fully hidden; coordinates and bounds match the Map Grid. Mask shape is validated client/server; invalid/missing state fails closed.
@@ -23,8 +27,10 @@ Grid Map domain owns cell-mask validation and stroke history; PartyContent/local
 
 ## Verification and review
 
-Pure stroke/history/bounds tests, local/Supabase equivalence and concurrent-policy SQL; focused pointer/touch/undo/reload/conflict journey with owned fixture cleanup. Follow the shared [verification and delivery gate](../spec.md#verification-and-delivery-gate). Record source heads, evidence and outstanding blockers; no simulated output may stand in for live provider proof.
+Pure stroke/history/bounds tests, local/Supabase equivalence and concurrent-policy SQL; focused pointer/touch/undo/reload/conflict journey with owned fixture cleanup. Follow the shared [verification and delivery gate](../spec.md#verification-and-delivery-gate). Record source heads, evidence and outstanding blockers; where a ticket claims live AI capability, no simulated output may stand in for that proof.
 
 ## Comments
 
 2026-10-09: Created from user-accepted Prototype2 and module decisions. Implementation unstarted. Read the dependency status and module interface before claiming.
+
+2026-10-09: Architecture review refined ownership, small interfaces and seam-level verification before implementation. See [architecture review](../architecture-review.md) and [interface contract](../spec.md#module-placement-and-interface-contract).

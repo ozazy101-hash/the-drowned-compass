@@ -13,6 +13,10 @@ Let the DM build on any saved candidate and explicitly use a later stage without
 
 Party Display and map-viewport registration checks own compatibility; Grid Map family/version relationships and PartyContent own saved stage selection.
 
+## Architecture constraints
+
+Use the single domain compatibility predicate backed by04 registration lineage; content persistence decides compatible mask retention atomically, Party Display retains session-local pan/calibration. Different image checksum does not automatically invalidate a proven constrained revision; equal size/family does not automatically validate a whole generated image. Do not add another stage capability, generation pipeline, snapshot assembler or viewport algorithm.
+
 ## Acceptance
 
 - [ ] Same-family stage switch checks grid dimensions/distances and complete image registration; family identity alone does not prove alignment.
@@ -24,8 +28,10 @@ Party Display and map-viewport registration checks own compatibility; Grid Map f
 
 ## Verification and review
 
-Registration/domain checks, image pixel/transform assertions and two-window calibrated stage/uncover/older-branch journey on laptop/phone. Actual physical projector measurement remains manual. Follow the shared [verification and delivery gate](../spec.md#verification-and-delivery-gate). Record source heads, evidence and outstanding blockers; no simulated output may stand in for live provider proof.
+Registration/domain checks, image pixel/transform assertions and two-window calibrated stage/uncover/older-branch journey on laptop/phone. Actual physical projector measurement remains manual. Follow the shared [verification and delivery gate](../spec.md#verification-and-delivery-gate). Record source heads, evidence and outstanding blockers; where a ticket claims live AI capability, no simulated output may stand in for that proof.
 
 ## Comments
 
 2026-10-09: Created from user-accepted Prototype2 and module decisions. Implementation unstarted. Read the dependency status and module interface before claiming.
+
+2026-10-09: Architecture review refined ownership, small interfaces and seam-level verification before implementation. See [architecture review](../architecture-review.md) and [interface contract](../spec.md#module-placement-and-interface-contract).

@@ -38,7 +38,7 @@ Starting labels: Invent a map, Use my sketch, Create map, Try another version, S
 ## Selected-area changes and later stages
 
 - DM highlights a rectangular area on the map; initial scope is rectangle selection with clear/reselect, precise coordinate mapping under zoom/pan and a text instruction. Selection cannot be empty or outside bounds. Freeform edit masks are deferred.
-- Send selected saved artwork, region and instruction to the generation module. Keep canvas size, aspect ratio, registration, grid and unselected source pixels fixed. Composite the revised region into the immutable source on the authoritative backend so provider drift outside the region cannot leak into the accepted output. Validate decoded dimensions and mask conventions; optional edge blending stays wholly inside the selected area.
+- Send selected saved artwork, region and instruction to the generation module. Keep canvas size, aspect ratio, registration, grid and unselected source pixels fixed. Composite the revised region into the immutable source on the authoritative backend so provider drift outside the region cannot leak into the accepted output. Encode the result losslessly (for example PNG); exact preservation refers to decoded source pixels, not compressed file bytes. A source JPEG may therefore yield PNG; do not use lossy re-encoding that changes unselected pixels. Validate decoded dimensions and mask conventions; optional edge blending stays wholly inside the selected area.
 - The model can still move features inside the selected region; comparison/review is required. No claim that a prompt guarantees door or wall preservation. Keep layout aligned by default; first release does not offer unrestricted rescaling or full-scene reframing through an area edit.
 - Add a chamber or change scenery for a later stage within the existing map extent, creating another private version. Existing geography outside the selection stays fixed. Enlarge-canvas/outpainting across new grid extents is deferred.
 - Compatible stages within the same map family preserve image registration, calibrated square size, pan and Reveal Mask. Family identity alone is insufficient: compare dimensions, placement/registration and grid settings. If incompatible, keep the current display intact, show why, and require explicit new-map setup; the new map begins hidden and requires calibration acknowledgement.
@@ -46,7 +46,7 @@ Starting labels: Invent a map, Use my sketch, Create map, Try another version, S
 ## Manual conceal and reveal
 
 - Provide Uncover areas/Hide areas, brush sizes1/2/4 grid squares, Hide whole map, Uncover whole map, undo/redo, and DM-only hidden-region overlay. First scope is cell-based manual reveal as in the accepted demo; no automated vision, named sections or freeform reveal masks.
-- A first presentation starts fully hidden. Uncovering does not regenerate art. Same-family compatible stages inherit the current mask; entirely new maps start hidden. Changes are live on the extended display, reversible, and durably saved as reveal progress per map family with accepted revision/conflict semantics.
+- A first presentation starts fully hidden. Uncovering does not regenerate art. Same-family compatible stages inherit the current mask; entirely new maps start hidden. Changes are live on the extended display, reversible, and durably saved as reveal progress keyed by map family and validated registration/dimensions, with accepted revision/conflict semantics.
 - Reopening/reloading must restore accepted mask progress and safe selected version after DM authorization. Physical calibration remains session-specific under existing rules. If mask state is missing, invalid or unavailable, remain black until reconciled; no unmasked flash while image/mask loading.
 - Two DM controllers editing the same mask must not overwrite each other silently. Define expected revision/conflict feedback at the existing content seam. A brush stroke is one undo action; failed persistence retains the last accepted displayed mask and a recoverable draft. Warn/confirm destructive whole-map uncovering so it is not an accidental story spoiler.
 
@@ -57,19 +57,54 @@ Starting labels: Invent a map, Use my sketch, Create map, Try another version, S
 - Existing private/revealed Grid Maps become DM-private without deleting map documents, receipts, artwork or independent copies. Players who already saved material cannot be made to forget it. Remove old map actions from clients and revoke obsolete server grants/routes so stale clients cannot republish maps. Reuse protected immutable files safely; shared Handout grants require explicit policy tests.
 - Session loss/sign-out clears the display and stops updates. Closing/reopening rechecks access. No stale async job/render/mask result may restore an old image. Clear display removes the current presentation without deleting private content or saved mask progress.
 
-## Module placement
+## Module placement and interface contract
 
-Extend existing modules rather than rewriting App.tsx or adding a generic campaign/VTT system:
+[Architecture review](architecture-review.md) applies the codebase-design skill to planning head `afefbdf` and the released source. The following ownership resolves its findings; implementation must verify it at the checkpoint, not treat illustrative operation names as a frozen SDK.
 
-| Owner | Responsibility |
-| --- | --- |
-| Grid Map domain | Drawing/reference state, selections, artwork registration, immutable version relationships and Reveal Mask transitions |
-| PartyContent and its local/Supabase adapters | DM authority, saved versions/files, accepted revisions/conflicts, jobs and reference lifecycle |
-| Generation module with live/local adapters | Provider request/output conventions, job reconciliation, configured usage controls and authoritative masked compositing |
-| Party Display | Safe flattened render, session lifecycle, explicit version switching, mask application and calibration/pan |
-| Grid Map workshop views | Creation inputs, version comparison, feedback and composition of meaningful module commands |
+| Owner | Hidden behaviour | Callers need to know |
+| --- | --- | --- |
+| Grid Map domain | Validated map/version relationships, coordinate conversions, registration compatibility, region bounds and stroke/undo transitions | Saved source identity; game-space region/gesture; resulting valid state or invalid selection |
+| PartyContent, implemented by existing local/Supabase adapters | Authorized map workspace reads/changes, immutable files, accepted revision/conflict results and authoritative invalidation delivery | Party-authorized identities; intent command; request ID/expected revision; accepted result, conflict or unavailable state |
+| Server generation application module | Submission/usage reservations, durable job reconciliation/cancellation, output normalization, masked compositing and atomic private-version attachment | Generation intent and job identity/status, independent of provider/storage steps |
+| Party Display | Authorized snapshot coordination, explicit selection, stale-work cancellation, safe flattened output and popup/calibration lifecycle | One accepted presentation snapshot and local display settings; no image/provider job orchestration |
+| Shared map-scene drawing implementation | Artwork placement, drawing/grid composition and masked frame drawing | Validated scene and view transform; editor/comparison/display do not reinvent coordinate conversion |
+| Workshop views | Draft text/gesture capture, private inspection selection, comparison and feedback | Meaningful command/read results; no SQL rows, provider mask polarity or external request scheduling |
 
-The generation seam is real because live provider and deterministic local behaviour vary. Callers should not learn provider-specific masks, job steps or storage row shapes. Do not duplicate authorization or append per-button orchestration to App. Identify interface/invariants before each source change and apply the deletion test.
+### Keep the existing seam small
+
+Extend `PartyData.content`/PartyContent directly where callers already get content; do not add another forwarding facade or a parallel map auth/client factory. Keep related map types/domain functions in cohesive files as needed; moving code into files is not itself a module or interface. App.tsx composes the existing session/content capability and workshop/display views only.
+
+Organize the map capability around workspace read/observe, immutable version/source read, and intent-based changes (attach result/upload, request/cancel generation, choose presentation version, commit reveal stroke), with typed accepted/conflict/error outcomes. These are conceptual interface responsibilities, not a requirement for one giant union or one method per UI button. IDs and revision guards are visible because they express concurrency; object paths, receipt tables, upload/cleanup order, SQL policies and provider payloads stay hidden.
+
+`PartyContent.subscribe` currently supplies Handout snapshots, so map work needs its own authoritative workspace observation within this existing capability. Do not reuse Character subscriptions or make React views own polling timers. Notify accepted job/version/mask/presentation changes and structured read errors; stale deliveries and detach/disposal are handled behind the seam. Jobs finishing produce new private versions, never an implicit presentation command.
+
+### Separate the owned transport from the provider seam
+
+The client reaches our owned generation application through PartyContent's transport adapter. The server application owns the job ledger, quota reservation, storage attachment and cleanup; PartyContent transports its results rather than implementing a second job state machine. Its provider port is internal and injected: real image provider in production, deterministic response/failure adapter in tests. UI callers never choose provider adapters or import secret-bearing/server image code. Distinguish fixture mode in previews, not as a second production user flow.
+
+The application module may use owned storage/SQL adapters internally and ordinary private image utilities. Avoid a public provider registry, generic task engine, generic image-processing framework, one repository per table, or adapters around in-process mask arithmetic.03 proves this port and server decode/composition/runtime feasibility;06 owns the durable orchestration.03's throwaway probe does not become a second production implementation.
+
+### Registration is not an image checksum
+
+Current `supabase-party-content.ts` sets background registration from the file digest and `matchingMapRegistration` compares it. That identity must remain a content-integrity check, not the only geometry identity.04 introduces a trusted registration identity plus canonical pixel dimensions, grid dimensions/distances and image placement. Arbitrary upload and whole-image generation establish a new registration. A constrained region revision inherits registration only after authoritative dimension/placement checks and lossless compositing preserve all decoded pixels outside its region. Family/parent identity or model assurances alone cannot inherit it.
+
+Use one domain compatibility predicate in the workshop and Party Display; `map-viewport.ts` delegates rather than reimplementing it. Local adapters model the same decisions; the server verifies registration lineage rather than trusting a caller-supplied token. Mask progress belongs to a map family with a validated registration/dimension key, so incompatible geometry cannot reinterpret old cells. Legacy digest-derived registration must be migrated conservatively, preserving compatible identical copies without asserting that unrelated images align.
+
+### Accept a presentation snapshot atomically
+
+A saved last-used version and Reveal Mask must be read/committed as a coherent presentation state: version identity, registration/grid, accepted mask and monotonic revision. Choosing a saved version or committing a stroke applies expected-revision checks at the content seam. Atomic compatibility/mask-retention decisions belong with accepted persistence; popup lifecycle and physical calibration remain session-local in Party Display. Private inspection selection remains separate from accepted presentation selection.
+
+Do not read a latest version and latest mask independently and compose a frame in React. The display consumes one authorized snapshot; each render carries snapshot revision and session epoch, and stale renders cannot publish. An unknown/invalid initial snapshot stays black. A failed new choice/stroke retains the previous accepted frame and recoverable draft. New incompatible registration initializes a hidden mask only through the explicit new-map choice.
+
+07 delivers workshop input/inspection and the selection intent, not a second popup implementation.09 owns mask domain/persistence, not provider/render orchestration.10 wires actual Use this map and mask controls to the accepted snapshot and display.11 completes revised-stage compatibility/pan retention through the same path; it must not add a stage manager or duplicate compositor.04 sets structural/atomic contracts,09 adds mask transitions,10 consumes them.
+
+### Test depth through the interface
+
+Classify pure map transitions/composition as in-process, database/storage as local-substitutable/owned transport, and the image provider as true external. Exercise public commands/results with the local/Supabase adapters and injected provider responses; verify real SQL/storage permissions separately. Test server generation/compositing through its intent/outcome interface, including exact decoded pixel preservation with lossless output. Keep provider-specific mask fixtures inside adapter tests.
+
+Assert accepted versions/masks, conflicts, no duplicate known submissions, cancellation, no implicit display switches, registration compatibility and safe frames. Do not spy on helper calls or expose private hooks purely for tests. If responsibility moves, replace obsolete tests with equivalent seam-level behaviour coverage instead of accumulating duplicate suites. Independently review the deletion test: removing each module would spread its rules into callers. An extra layer whose removal changes no rule locality is rejected.
+
+Before implementing each ticket, record the owning module, a small interface sketch, visible ordering/error invariants and dependency injection. Review03/04 interfaces together before06/09 integration without making04 wait for vendor selection. Keep server/client import graphs separate. Related tickets touching PartyContent/Grid Map/display are coordinated; the dependency graph does not authorize concurrent writes to shared files.
 
 ## Verification and delivery gate
 

@@ -12,6 +12,10 @@ Introduce durable map families with immutable saved artwork versions, uploaded/g
 
 Grid Map domain owns family/parent/registration relationships; PartyContent owns persistence, immutable files and accepted revision checks. Extend existing local/Supabase adapters.
 
+## Architecture constraints
+
+Define workspace read/observe and accepted map intent results within the existing PartyContent capability; no parallel auth factory, table repositories or forwarding map facade. Establish the atomic presentation record shape (saved selected version, registration, mask identity and revision), with a hidden default that09 extends. Separate image digest from trusted geometry registration. Arbitrary artwork gets new registration; constrained server-validated revisions may inherit it. Keep canonical pixel/grid/placement dimensions; legacy migration is conservative. Specify authoritative map observation separate from Handout and Character subscriptions. UI loading/error states are consumed in07, rather than a new workshop implementation here.
+
 ## Acceptance
 
 - [ ] New and old saved Grid Maps remain readable; preserve geometry, backgrounds, independent copies and accepted receipt semantics. Define migration/rehearsal and rollback plan without reset or deletion.
@@ -22,8 +26,10 @@ Grid Map domain owns family/parent/registration relationships; PartyContent owns
 
 ## Verification and review
 
-Domain family/parent invariants, local/Supabase equivalent outcomes, SQL policies/version/idempotency and laptop/phone upload/save/reload flow; retain original data baseline. Follow the shared [verification and delivery gate](../spec.md#verification-and-delivery-gate). Record source heads, evidence and outstanding blockers; no simulated output may stand in for live provider proof.
+Domain family/parent invariants, local/Supabase equivalent outcomes, SQL policies/version/idempotency and laptop/phone upload/save/reload flow; retain original data baseline. Follow the shared [verification and delivery gate](../spec.md#verification-and-delivery-gate). Record source heads, evidence and outstanding blockers; where a ticket claims live AI capability, no simulated output may stand in for that proof.
 
 ## Comments
 
 2026-10-09: Created from user-accepted Prototype2 and module decisions. Implementation unstarted. Read the dependency status and module interface before claiming.
+
+2026-10-09: Architecture review refined ownership, small interfaces and seam-level verification before implementation. See [architecture review](../architecture-review.md) and [interface contract](../spec.md#module-placement-and-interface-contract).
