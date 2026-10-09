@@ -2,17 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { createGridMapEditor, gridMapLimits, viewPointToGrid, type GridMapDocument, type GridPoint, type GridTool } from '../../domain/grid-map';
 import { prepareGridMapSave, type PartyContent, type SavedGridMap, type GridMapSave, type MapBackground, type GridMapChange } from '../../domain/party-content';
 import './grid-map.css';
+import {MapDrawing} from './MapScene';
+export {MapDrawing} from './MapScene';
 const tools: GridTool[] = ['wall', 'door', 'floor', 'water', 'difficult', 'erase'];
-export function MapDrawing({ document, background }: { document: GridMapDocument; background?:{url:string;placement:MapBackground} }) {
-  return <>
-    <defs><pattern id="map-grid" width="1" height="1" patternUnits="userSpaceOnUse"><path d="M 1 0 L 0 0 0 1" fill="none" stroke="#788b91" strokeWidth="0.025" /></pattern></defs>
-    <rect width={document.columns} height={document.rows} fill="#142630" />
-    {background&&<image aria-label="Map Background artwork" href={background.url} x={background.placement.x} y={background.placement.y} width={background.placement.width} height={background.placement.height} preserveAspectRatio="xMidYMid meet" />}
-    {document.terrain.map(cell => <rect key={`${cell.x},${cell.y}`} data-terrain={cell.kind} x={cell.x} y={cell.y} width="1" height="1" fill={{ floor: '#82725a', water: '#246880', difficult: '#865646' }[cell.kind]} />)}
-    <rect width={document.columns} height={document.rows} fill="url(#map-grid)" />
-    {document.edges.map(edge => <line key={`${edge.x},${edge.y},${edge.direction}`} data-edge={edge.kind} x1={edge.x} y1={edge.y} x2={edge.x + (edge.direction === 'horizontal' ? 1 : 0)} y2={edge.y + (edge.direction === 'vertical' ? 1 : 0)} stroke={edge.kind === 'door' ? '#e9b871' : '#eef0dd'} strokeWidth={edge.kind === 'door' ? '.16' : '.11'} strokeDasharray={edge.kind === 'door' ? '.3 .12' : undefined} />)}
-  </>;
-}
 export function GridMapEditor({ active, onBack, content, mapId, loadRevision, onLibrary }: { active: boolean; onBack: () => void; content:PartyContent;mapId?:string;loadRevision:number;onLibrary:()=>void }) {
   const [saved,setSaved]=useState<SavedGridMap>();
   const [title,setTitle]=useState('Untitled Grid Map');

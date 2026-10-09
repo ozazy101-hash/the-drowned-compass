@@ -1,5 +1,6 @@
 import { createPartyDisplay, type PartyDisplay } from './features/presentation/party-display';
-import { GridMapEditor } from './features/grid-map/GridMapEditor';
+import {GridMapEditor} from './features/grid-map/GridMapEditor';
+import { GridMapWorkshop } from './features/grid-map/GridMapWorkshop';
 import { HandoutLibrary } from './features/handouts/HandoutLibrary';
 import { reconcileParty, reconcilePartySlot } from './domain/party-state';
 import { PartyBackupDownload } from './features/backup/PartyBackupDownload';
@@ -975,6 +976,7 @@ export function App({ partyData }: AppProps) {
   const [setupSlotId, setSetupSlotId] = useState<string | null>(null);
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
+  const [workshopOpen,setWorkshopOpen]=useState(false);
   const [selectedMapId,setSelectedMapId]=useState<string>();
   const [mapLoadRevision,setMapLoadRevision]=useState(0);
   const [libraryRevision,setLibraryRevision]=useState(0);
@@ -1049,7 +1051,7 @@ export function App({ partyData }: AppProps) {
 
   let authenticatedContent;
   if (libraryOpen && session) {
-    authenticatedContent = <HandoutLibrary key={libraryRevision} onOpenMap={id=>{setSelectedMapId(id);setMapLoadRevision(value=>value+1);setMapOpen(true);}} content={partyData.content} display={display} role={session.role} onBack={() => setLibraryOpen(false)} />;
+    authenticatedContent = <HandoutLibrary key={libraryRevision} onOpenMap={id=>{setSelectedMapId(id);setMapLoadRevision(value=>value+1);setWorkshopOpen(false);setMapOpen(true);}} content={partyData.content} display={display} role={session.role} onBack={() => setLibraryOpen(false)} />;
   } else if (setupSlot) {
     authenticatedContent = (
       <CharacterSetup
@@ -1125,7 +1127,7 @@ export function App({ partyData }: AppProps) {
         {session ? (
           <div className="session-controls">
             <span>{session.role === "dungeon-master" ? "Dungeon Master" : "Player"}</span>
-            {session.role === "dungeon-master" && <button onClick={() => setMapOpen(true)}>Grid Map editor</button>}
+            {session.role === "dungeon-master" && <><button onClick={() => {setWorkshopOpen(false);setMapOpen(true);}}>Grid Map editor</button><button onClick={()=>{setSelectedMapId(undefined);setWorkshopOpen(true);setMapOpen(true);}}>Map creation workshop</button></>}
             <button type="button" onClick={() => { setMapOpen(false); setLibraryOpen(true);setLibraryRevision(value=>value+1); }}>{session.role==='dungeon-master'?'Dungeon Master Library':'Party Library'}</button>
             <button type="button" onClick={handleSignOut}>Sign out</button>
           </div>
@@ -1134,7 +1136,8 @@ export function App({ partyData }: AppProps) {
         )}
       </header>
 
-      {session?.role === "dungeon-master" && <GridMapEditor content={partyData.content} mapId={selectedMapId} loadRevision={mapLoadRevision} onLibrary={()=>{setMapOpen(false);setLibraryOpen(true);setLibraryRevision(value=>value+1);}} active={mapOpen} onBack={() => { setMapOpen(false); setLibraryOpen(false); setSelectedSlotId(null); setSetupSlotId(null); }} />}
+      {session?.role === "dungeon-master" && <GridMapEditor content={partyData.content} mapId={selectedMapId} loadRevision={mapLoadRevision} onLibrary={()=>{setMapOpen(false);setLibraryOpen(true);setLibraryRevision(value=>value+1);}} active={mapOpen&&!workshopOpen} onBack={() => { setMapOpen(false); setLibraryOpen(false); setSelectedSlotId(null); setSetupSlotId(null); }} />}
+      {session?.role === "dungeon-master" && <GridMapWorkshop content={partyData.content} mapId={selectedMapId} key={mapLoadRevision} onLibrary={()=>{setMapOpen(false);setLibraryOpen(true);setLibraryRevision(value=>value+1);}} active={mapOpen&&workshopOpen} onBack={() => { setMapOpen(false); setLibraryOpen(false); setSelectedSlotId(null); setSetupSlotId(null); }} />}
       {session ? <div hidden={mapOpen && session.role === "dungeon-master"}>{authenticatedContent}</div> : (
         <LoginScreen partyData={partyData} onSignedIn={setSession} />
       )}

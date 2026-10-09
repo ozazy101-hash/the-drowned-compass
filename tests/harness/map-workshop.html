@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+      body {
+        margin: 0;
+        font: 16px system-ui;
+        background: #10242b;
+        color: #edf4ee;
+      }
+      input,
+      select,
+      textarea {
+        background: #edf4ee;
+        color: #10242b;
+      }
+      button {
+        margin: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module">
+      import React from "react";
+      import { createRoot } from "react-dom/client";
+      import { createClient } from "@supabase/supabase-js";
+      import { supabasePartyContent } from "../../src/data/supabase-party-content.ts";
+      import { localPartyContent } from "../../src/data/local-party-content.ts";
+      import { writeLocalSession } from "../../src/data/local-party-store.ts";
+      import { GridMapWorkshop } from "../../src/features/grid-map/GridMapWorkshop.tsx";
+      const root = createRoot(document.getElementById("root"));
+      window.configure = async ({ url, key, jwt, server, local = false }) => {
+        let content;
+        if (local) {
+          const token = "ticket07-local-session";
+          await writeLocalSession(token, "dungeon-master");
+          content = localPartyContent(() => token);
+        } else {
+          const client = createClient(url, key, {
+            global: { headers: { Authorization: "Bearer " + jwt } },
+            auth: {
+              persistSession: false,
+              autoRefreshToken: false,
+              detectSessionInUrl: false,
+            },
+          });
+          const functions = {
+            async invoke(name, options) {
+              const response = await fetch(server, {
+                method: "POST",
+                headers: {
+                  apikey: key,
+                  Authorization: "Bearer " + jwt,
+                  "Content-Type": "application/json",
+                  ...options.headers,
+                },
+                body:
+                  options.body instanceof Blob
+                    ? options.body
+                    : JSON.stringify(options.body),
+              });
+              if (!response.ok)
+                return { data: null, error: { context: response } };
+              return {
+                data: response.headers.get("Content-Type")?.startsWith("image/")
+                  ? await response.blob()
+                  : await response.json(),
+                error: null,
+              };
+            },
+          };
+          content = supabasePartyContent(
+            new Proxy(client, {
+              get(t, k) {
+                return k === "functions" ? functions : Reflect.get(t, k);
+              },
+            }),
+          );
+        }
+        window.originalAttach = content.attachMapVersion.bind(content);
+        const originalAttach = window.originalAttach;
+        content.attachMapVersion = async (input) => {
+          if (window.holdNextAttachment) {
+            window.holdNextAttachment = false;
+            await new Promise((resolve) => {
+              window.releaseAttachment = resolve;
+            });
+          }
+          return originalAttach(input);
+        };
+        window.content = content;
+        root.render(
+          React.createElement(GridMapWorkshop, {
+            content,
+            active: true,
+            onBack: () => {},
+            onLibrary: () => {},
+          }),
+        );
+      };
+    </script>
+  </body>
+</html>

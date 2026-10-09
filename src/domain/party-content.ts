@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
-import { validateGridMap, fitMapBackground, type GridMapDocument, type MapBackgroundPlacement } from './grid-map';
+import { validateGridMap, validateMapBackground, fitMapBackground, type GridMapDocument, type MapBackgroundPlacement } from './grid-map';
 
 export type Handout = { id: string; title: string; visibility: 'private' | 'revealed'; mime: string; size: number; createdAt: string; version: number; contentVersion: number };
 export type HandoutUpload = { requestId: string; title: string; file: File };
@@ -142,4 +142,18 @@ export function prepareGridMapChange(input:GridMapChange) {
 export function transitionGridMap(item:SavedGridMap,input:GridMapChange,prepared:ReturnType<typeof prepareGridMapChange>,createdAt:string):GridMapSaveResult {
   if(item.version!==input.expectedVersion)return {ok:false,reason:'conflict',item};
   return {ok:true,item:{...item,id:prepared.command.id,title:prepared.command.title,visibility:'private',version:1,createdAt,document:validateGridMap(item.document),background:item.background?{...item.background}:null}};
+}
+/** Uploaded placement may change geometry, never decoded metadata or identity. */
+export async function prepareMapArtworkAttachment(input:import('./map-artwork').MapVersionAttachment, document:GridMapDocument) {
+  const prepared=await prepareGridMapSave({id:input.familyId,requestId:input.requestId,expectedVersion:input.expectedVersion,title:input.title,document,background:input.artwork});
+  if(input.placement){
+    if(!prepared.replacement)throw new Error('Choose artwork before saving placement.');
+    const keys=Object.keys(input.placement);
+    if(keys.length!==4||keys.some(key=>!['x','y','width','height'].includes(key)))throw new Error('Invalid artwork placement fields.');
+    const {x,y,width,height}=input.placement,placement={x,y,width,height};
+    prepared.replacement={...prepared.replacement,...placement};
+    validateMapBackground(document,prepared.replacement);
+    prepared.signature=JSON.stringify({save:prepared.signature,placement});
+  }
+  return prepared;
 }

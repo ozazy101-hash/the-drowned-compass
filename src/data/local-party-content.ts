@@ -1,7 +1,7 @@
 import { commitMapRevealMask, mapRevealGeometry, prepareMapRevealMaskIntent } from '../domain/map-reveal-mask';
 import { attachmentDocument, chooseMapPresentation, emptyMapPresentation, validateMapVersion, validateMapPresentation, validateMapWorkspace, type MapArtworkVersion, type MapPresentation } from '../domain/map-artwork';
 import { validateGridMap, validateMapBackground } from '../domain/grid-map';
-import { filterGridMaps, prepareGridMapSave, prepareGridMapChange, transitionGridMap, filterHandouts, prepareHandoutChange, transitionHandout, validateHandout, type Handout, type PartyContent, type SavedGridMap } from '../domain/party-content';
+import { filterGridMaps, prepareMapArtworkAttachment, prepareGridMapSave, prepareGridMapChange, transitionGridMap, filterHandouts, prepareHandoutChange, transitionHandout, validateHandout, type Handout, type PartyContent, type SavedGridMap } from '../domain/party-content';
 import { localContentTransaction } from './local-party-store';
 import { contentSubscription, snapshotSubscription } from './content-subscription';
 type RetainedVersion={version:MapArtworkVersion;blob:Blob|null;referenceBlob:Blob|null};
@@ -33,7 +33,7 @@ export function localPartyContent(token: () => string | null): PartyContent {
     async attachMapVersion(input){
       const parent=input.parentVersionId?await content.readMapVersion(input.parentVersionId):undefined;
       const document=attachmentDocument(input,parent);
-      const prepared=await prepareGridMapSave({id:input.familyId,requestId:input.requestId,expectedVersion:input.expectedVersion,title:input.title,document,background:input.artwork});
+      const prepared=await prepareMapArtworkAttachment(input,document);
       const reference=input.reference?await prepareGridMapSave({id:input.familyId,requestId:input.requestId,expectedVersion:input.expectedVersion,title:input.title,document,background:input.reference}):undefined;
       const signature=JSON.stringify({save:prepared.signature,parent:input.parentVersionId??null,reference:reference?.replacement??null,instructions:input.instructions??''});
       const outcome=await localContentTransaction<Awaited<ReturnType<PartyContent['attachMapVersion']>>>(token(),true,(store,complete)=>{

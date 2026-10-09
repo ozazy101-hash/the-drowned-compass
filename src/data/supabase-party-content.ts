@@ -2,7 +2,7 @@ import { prepareMapRevealMaskIntent } from '../domain/map-reveal-mask';
 import { attachmentDocument, validateMapVersion, validateMapPresentation, validateMapWorkspace, type MapArtworkVersion, type MapPresentation } from '../domain/map-artwork';
 import { validateGridMap, validateMapBackground } from '../domain/grid-map';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { filterGridMaps, prepareGridMapSave, prepareGridMapChange, filterHandouts, prepareHandoutChange, validateHandout, type Handout, type PartyContent, type SavedGridMap } from '../domain/party-content';
+import { filterGridMaps, prepareMapArtworkAttachment, prepareGridMapSave, prepareGridMapChange, filterHandouts, prepareHandoutChange, validateHandout, type Handout, type PartyContent, type SavedGridMap } from '../domain/party-content';
 import { contentSubscription, snapshotSubscription } from './content-subscription';
 const bucket = 'party-handouts';
 const columns = 'id,party_id,title,visibility,mime,size,created_at,digest,object_id,version,content_version,last_request_id,last_signature';
@@ -88,7 +88,7 @@ export function supabasePartyContent(client: SupabaseClient): PartyContent {
     async attachMapVersion(input){
       const parent=input.parentVersionId?await content.readMapVersion(input.parentVersionId):undefined;
       const document=attachmentDocument(input,parent);
-      const prepared=await prepareGridMapSave({id:input.familyId,requestId:input.requestId,expectedVersion:input.expectedVersion,title:input.title,document,background:input.artwork});
+      const prepared=await prepareMapArtworkAttachment(input,document);
       const reference=input.reference?await prepareGridMapSave({id:input.familyId,requestId:input.requestId,expectedVersion:input.expectedVersion,title:input.title,document,background:input.reference}):undefined;
       const referenceId=await referenceIdentity(input.requestId);
       const signature=JSON.stringify({save:prepared.signature,parent:input.parentVersionId??null,reference:reference?.replacement??null,instructions:input.instructions??''});

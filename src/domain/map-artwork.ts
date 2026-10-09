@@ -17,7 +17,7 @@ export type MapWorkspaceSnapshot = {workspace:MapWorkspace}|{error:string};
  * attachments belong to the authoritative server, not this browser upload intent. */
 export type MapVersionAttachment = {
   familyId:string; parentVersionId?:string; expectedVersion:number;requestId:string;
-  title:string;document?:GridMapDocument;artwork?:File;reference?:File;instructions?:string;
+  title:string;document?:GridMapDocument;artwork?:File;reference?:File;instructions?:string;placement?:{x:number;y:number;width:number;height:number};
 };
 export type MapVersionResult = {ok:true;version:MapArtworkVersion}|{ok:false;reason:'conflict';item:import('./party-content').SavedGridMap};
 export type MapPresentationChoice = {versionId:string;expectedRevision:number;requestId:string;newMap?:boolean};
@@ -98,3 +98,4 @@ export function chooseMapPresentation(current:MapPresentation,version:MapArtwork
   const registration=version.background?.registration??`drawing:${version.familyId}`;
   return {ok:true,presentation:{revision:current.revision+1,version,mask:compatible?current.mask:{id:input.requestId,registration,columns:version.document.columns,rows:version.document.rows,uncovered:[]}}};
 }
+

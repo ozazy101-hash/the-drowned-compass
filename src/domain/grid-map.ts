@@ -97,3 +97,18 @@ export function validateMapBackground(document: GridMapDocument, background: Map
   fitMapBackground(document,pixelWidth,pixelHeight);
   if (![x,y,width,height].every(Number.isFinite) || x<0 || y<0 || width<=0 || height<=0 || x+width>document.columns+1e-8 || y+height>document.rows+1e-8 || Math.abs(width/height-pixelWidth/pixelHeight)>1e-8) throw new Error('The background placement does not fit this Map Grid.');
 }
+
+/** A room gesture closes atomically; invalid or tiny gestures retain the draft. */
+export function closeMapOutline(document: GridMapDocument, points: readonly GridPoint[]): readonly GridPoint[] {
+  if (points.length < 3 || points.some(point => !validPoint(document, point))) throw new Error('Draw an outline inside the Map Grid.');
+  const area = points.reduce((sum, point, index) => { const next=points[(index+1)%points.length]; return sum+point.x*next.y-next.x*point.y; },0);
+  if(Math.abs(area)<.1)throw new Error('Draw a closed room with some area.');
+  return Object.freeze([...points.map(point=>Object.freeze({...point})),Object.freeze({...points[0]})]);
+}
+/** Inspection placement remains proportional and entirely inside the grid. */
+export function placeMapBackground(document:GridMapDocument, image:MapBackgroundPlacement, scale:number, x:number, y:number):MapBackgroundPlacement {
+  const fit=fitMapBackground(document,image.pixelWidth,image.pixelHeight);
+  if(!Number.isFinite(scale)||scale<=0||scale>1||!Number.isFinite(x)||!Number.isFinite(y))throw new Error('Choose a scale from 1% to 100% of fit.');
+  const width=fit.width*scale,height=fit.height*scale;
+  return {...fit,width,height,x:Math.max(0,Math.min(document.columns-width,x)),y:Math.max(0,Math.min(document.rows-height,y))};
+}
