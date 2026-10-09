@@ -31,7 +31,15 @@
       import { writeLocalSession } from "../../src/data/local-party-store.ts";
       import { GridMapWorkshop } from "../../src/features/grid-map/GridMapWorkshop.tsx";
       const root = createRoot(document.getElementById("root"));
-      window.configure = async ({ url, key, jwt, server, local = false }) => {
+      window.configure = async ({
+        url,
+        key,
+        jwt,
+        server,
+        local = false,
+        feedbackFixture,
+        projectionFixture,
+      }) => {
         let content;
         if (local) {
           const token = "ticket07-local-session";
@@ -48,27 +56,72 @@
           });
           const functions = {
             async invoke(name, options) {
-              const response = await fetch(server, {
-                method: "POST",
-                headers: {
-                  apikey: key,
-                  Authorization: "Bearer " + jwt,
-                  "Content-Type": "application/json",
-                  ...options.headers,
-                },
-                body:
-                  options.body instanceof Blob
-                    ? options.body
-                    : JSON.stringify(options.body),
-              });
-              if (!response.ok)
-                return { data: null, error: { context: response } };
-              return {
-                data: response.headers.get("Content-Type")?.startsWith("image/")
-                  ? await response.blob()
-                  : await response.json(),
-                error: null,
+              const allowed = [
+                "submit",
+                "read",
+                "cancel",
+                "output",
+                "open-source",
+                "open-candidate",
+              ];
+              const proposed =
+                options.body instanceof Blob ? "output" : options.body?.kind;
+              const kind = allowed.includes(proposed) ? proposed : "unknown";
+              const candidateId =
+                options.body instanceof Blob
+                  ? options.headers?.["X-Map-Request"]
+                  : (options.body?.requestId ??
+                    options.body?.intent?.requestId);
+              const requestId = /^[0-9a-f-]{36}$/i.test(candidateId ?? "")
+                ? candidateId
+                : null;
+              const startedAt = Date.now();
+              let status = null;
+              const record = (phase) => {
+                const entry = {
+                  kind,
+                  requestId,
+                  startedAt,
+                  at: Date.now(),
+                  phase,
+                  status,
+                  lifetimeMs: Date.now() - startedAt,
+                };
+                (window.mapHttpTiming ??= []).push(entry);
+                console.info("MAP_HTTP_TIMING " + JSON.stringify(entry));
               };
+              record("start");
+              try {
+                const response = await fetch(server, {
+                  method: "POST",
+                  headers: {
+                    apikey: key,
+                    Authorization: "Bearer " + jwt,
+                    "Content-Type": "application/json",
+                    ...options.headers,
+                  },
+                  body:
+                    options.body instanceof Blob
+                      ? options.body
+                      : JSON.stringify(options.body),
+                });
+                status = response.status;
+                record("response");
+                if (!response.ok) {
+                  record("end");
+                  return { data: null, error: { context: response } };
+                }
+                const data = response.headers
+                  .get("Content-Type")
+                  ?.startsWith("image/")
+                  ? await response.blob()
+                  : await response.json();
+                record("end");
+                return { data, error: null };
+              } catch (error) {
+                record("failure");
+                throw error;
+              }
             },
           };
           content = supabasePartyContent(
@@ -78,6 +131,120 @@
               },
             }),
           );
+        }
+        if (projectionFixture) {
+          const label = document.createElement("p");
+          label.id = "projection-label";
+          label.textContent =
+            "UI read projection fixture — no provider operations.";
+          document.body.prepend(label);
+          const storageKey = "ticket07-ui-projection";
+          const load = () =>
+            JSON.parse(localStorage.getItem(storageKey) ?? "[]");
+          const save = (jobs) =>
+            localStorage.setItem(storageKey, JSON.stringify(jobs));
+          const readWorkspace = content.readMapWorkspace.bind(content),
+            observe = content.observeMapWorkspace.bind(content);
+          const summaries = () =>
+            load().map(({ originalIntent, ...job }) => job);
+          content.readMapWorkspace = async () => ({
+            ...(await readWorkspace()),
+            jobs: summaries(),
+          });
+          content.observeMapWorkspace = (listener) =>
+            observe((snapshot) =>
+              listener(
+                "workspace" in snapshot
+                  ? { workspace: { ...snapshot.workspace, jobs: summaries() } }
+                  : snapshot,
+              ),
+            );
+          window.projectionCommands = [];
+          content.changeMapGeneration = async (command) => {
+            window.projectionCommands.push({
+              kind: command.kind,
+              requestId:
+                command.kind === "submit"
+                  ? command.intent.requestId
+                  : command.requestId,
+            });
+            if (command.kind === "submit") {
+              const job = {
+                id: command.intent.requestId,
+                familyId: command.intent.familyId,
+                parentVersionId: command.intent.parentVersionId ?? null,
+                state: "failed",
+                revision: 1,
+                mode: "fixture",
+                createdAt: new Date().toISOString(),
+                code: "fixture-failure",
+                versionId: null,
+                originalIntent: window.projectionCanonicalInstructions
+                  ? {
+                      ...command.intent,
+                      instructions: window.projectionCanonicalInstructions,
+                    }
+                  : command.intent,
+              };
+              save([...load(), job]);
+              return { ok: true, job };
+            }
+            const job = load().find((job) => job.id === command.requestId);
+            if (!job) return { ok: false, code: "unknown-job" };
+            return {
+              ok: true,
+              job: window.projectionReadState
+                ? { ...job, state: window.projectionReadState }
+                : job,
+            };
+          };
+          window.projectionIntents = () =>
+            load().map((job) => job.originalIntent);
+        }
+        if (feedbackFixture) {
+          const label = document.createElement("p");
+          label.id = "fixture-label";
+          label.textContent =
+            "UI transport failure fixture — no provider operations.";
+          document.body.prepend(label);
+          window.feedbackCommands = [];
+          let fixtureJob;
+          content.changeMapGeneration = async (command) => {
+            window.feedbackCommands.push(command.kind);
+            if (command.kind === "submit")
+              fixtureJob = {
+                id: command.intent.requestId,
+                familyId: command.intent.familyId,
+                parentVersionId: null,
+                state: "awaiting-client-output",
+                revision: 1,
+                mode: "fixture",
+                createdAt: new Date().toISOString(),
+                code: null,
+                versionId: null,
+              };
+            if (command.kind === "output")
+              fixtureJob = {
+                ...fixtureJob,
+                state:
+                  feedbackFixture === "missing-version"
+                    ? "completed"
+                    : "failed",
+                revision: 2,
+                code:
+                  feedbackFixture === "missing-version"
+                    ? null
+                    : "output-unavailable",
+                versionId:
+                  feedbackFixture === "missing-version" ? fixtureJob.id : null,
+              };
+            return { ok: true, job: fixtureJob };
+          };
+          content.openMapGenerationInput = async () => ({
+            job: fixtureJob,
+            candidate: new Blob(["fixture-input"], { type: "image/png" }),
+            source: null,
+          });
         }
         window.originalAttach = content.attachMapVersion.bind(content);
         const originalAttach = window.originalAttach;

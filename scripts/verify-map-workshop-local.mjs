@@ -5,7 +5,7 @@ import {localSettings,sql,snapshot} from './local-verification.mjs';
 const lock='/private/tmp/ticket07-local-verification.lock';
 try{mkdirSync(lock);}catch{throw Error('Another Ticket07 fixture verification holds the lease');}
 process.once('exit',()=>rmSync(lock,{recursive:true}));
-const config=localSettings(),baseline=snapshot(),owned=Array.from({length:5},()=>({party:randomUUID(),dm:randomUUID()})),player=randomUUID();
+const config=localSettings(),baseline=snapshot(),owned=Array.from({length:7},()=>({party:randomUUID(),dm:randomUUID()})),player=randomUUID();
 const name='map-workshop-07-'+randomUUID().slice(0,8),temp=mkdtempSync('/private/tmp/map-workshop-07-');
 const image='sha256:c52405002a890ca9fcf77978671c57f3a988e03174afb277f84ac65bc917013c';
 function token(user){const encode=x=>Buffer.from(JSON.stringify(x)).toString('base64url'),unsigned=encode({alg:'HS256',typ:'JWT'})+'.'+encode({sub:user,role:'authenticated',aud:'authenticated',iss:config.API_URL+'/auth/v1',iat:Math.floor(Date.now()/1000),exp:Math.floor(Date.now()/1000)+3600});return unsigned+'.'+createHmac('sha256',config.JWT_SECRET).update(unsigned).digest('base64url');}
@@ -21,7 +21,7 @@ try{
  console.log('Starting explicitly labelled fixture application with fresh bounded Edge workers.');
  started=true;run('docker',['run','--detach','--name',name,'--read-only','--memory','2048m','--memory-swap','2048m','--cpus','1','--tmpfs','/tmp:rw,size=256m','--env-file',temp+'/env','--publish','127.0.0.1:49177:9000','--mount',`type=bind,src=${process.cwd()}/supabase/functions/map-generation,dst=/generation,readonly`,'--mount',`type=bind,src=${temp}/fixture.png,dst=/fixture.png,readonly`,image,'start','--main-service','/generation','--event-worker','/generation/events','--policy','oneshot','--max-parallelism','1','--user-worker-request-idle-timeout','150000']);started=true;
  let ready=false;for(let n=0;n<30;n++){try{const r=await fetch('http://127.0.0.1:49177');if(r.status===405){ready=true;break;}}catch{}await new Promise(r=>setTimeout(r,300));}if(!ready)throw Error('Owned fixture runtime did not become ready');
- const r=spawnSync(process.execPath,['node_modules/@playwright/test/cli.js','test','--config=playwright.map-workshop.config.ts',...process.argv.slice(2)],{stdio:'inherit',env:{...process.env,MAP_LIVE_URL:config.API_URL,MAP_LIVE_KEY:config.ANON_KEY,MAP_LIVE_DM_JWTS:JSON.stringify(owned.map(x=>token(x.dm))),MAP_LIVE_PLAYER_JWT:token(player),MAP_LIVE_LATE_JWT:token(owned[4].dm)}});status=r.status??1;
+ const r=spawnSync(process.execPath,['node_modules/@playwright/test/cli.js','test','--config=playwright.map-workshop.config.ts',...process.argv.slice(2)],{stdio:'inherit',env:{...process.env,MAP_LIVE_URL:config.API_URL,MAP_LIVE_KEY:config.ANON_KEY,MAP_LIVE_PARTY_IDS:JSON.stringify(owned.map(x=>x.party)),MAP_LIVE_DM_JWTS:JSON.stringify(owned.map(x=>token(x.dm))),MAP_LIVE_PLAYER_JWT:token(player),MAP_LIVE_LATE_JWT:token(owned[4].dm)}});status=r.status??1;
  }finally{
  const failures=[];const attempt=async(label,action)=>{try{return await action();}catch{failures.push(label);return undefined;}};
  if(started){await attempt('owned runtime logs',()=>writeFileSync('.scratch/map-creation/evidence/07-runtime.log',(()=>{const r=spawnSync('docker',['logs',name],{encoding:'utf8'});if(r.status!==0)throw Error('Owned runtime logs unavailable');return r.stdout+r.stderr;})()));await attempt('owned runtime removal',()=>run('docker',['rm','--force',name]));}

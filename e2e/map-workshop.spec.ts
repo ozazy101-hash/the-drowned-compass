@@ -1,4 +1,13 @@
 import { test, expect, type Page } from "@playwright/test";
+test.beforeEach(async ({ page }) => {
+  page.on("console", (message) => {
+    if (
+      message.type() === "info" &&
+      message.text().startsWith("MAP_HTTP_TIMING ")
+    )
+      console.log(message.text());
+  });
+});
 const config = (index: number) => ({
   url: process.env.MAP_LIVE_URL!,
   key: process.env.MAP_LIVE_KEY!,
@@ -107,7 +116,7 @@ for (const [name, width, height, index] of [
       sibling.versions[1].instructions,
     );
     await page
-      .getByLabel("Compare versions", { exact: true })
+      .getByRole("combobox", { name: "Compare versions", exact: true })
       .selectOption(sibling.versions[0].id);
     await expect(
       page.getByRole("img", { name: "Comparison map artwork" }),
@@ -368,7 +377,17 @@ test("provider timeout has honest error and explicit retry/cancel with private w
   );
   await page.getByLabel("Map description").fill("A recoverable cave");
   await page.getByRole("button", { name: "Create map", exact: true }).click();
-  await expect(page.getByLabel("Creation jobs")).toContainText("uncertain");
+  await expect(
+    page.locator("[data-job-id]").filter({ hasText: " · uncertain" }),
+  ).toHaveCount(1);
+  await expect
+    .poll(
+      async () =>
+        (
+          await page.evaluate(() => (window as any).content.readMapWorkspace())
+        ).jobs.filter((j: any) => j.state === "uncertain").length,
+    )
+    .toBe(1);
   const running = await page.evaluate(() =>
     (window as any).content.readMapWorkspace(),
   );
@@ -382,7 +401,9 @@ test("provider timeout has honest error and explicit retry/cancel with private w
   await page
     .getByRole("button", { name: "Retry creation", exact: true })
     .click();
-  await expect(page.getByLabel("Creation jobs")).toContainText("uncertain");
+  await expect(
+    page.locator("[data-job-id]").filter({ hasText: " · uncertain" }),
+  ).toHaveCount(1);
   await page.getByRole("button", { name: "Cancel creation" }).last().click();
   await expect(page.getByLabel("Creation jobs")).toContainText("cancelled");
   const after = await page.evaluate(() =>
@@ -498,3 +519,424 @@ for (const [name, index] of [
     );
   });
 }
+test("selected artwork geometry does not override a new sketch draft or its retained PNG reference", async ({
+  page,
+}) => {
+  await connect(page, { local: true });
+  await upload(page);
+  await page
+    .getByRole("button", { name: "Use my sketch", exact: true })
+    .click();
+  await page.getByLabel("Columns", { exact: true }).fill("80");
+  await page.getByLabel("Rows", { exact: true }).fill("80");
+  await page
+    .getByLabel("Map description")
+    .fill("A small room near the corner of an eighty square map");
+  const svg = page.getByRole("img", { name: "Sketch drawing surface" });
+  await expect(svg).toHaveAttribute("viewBox", "0 0 80 80");
+  await svg.locator("..").scrollIntoViewIfNeeded();
+  const box = (await svg.boundingBox())!;
+  await page.mouse.move(box.x + 24, box.y + 24);
+  await page.mouse.down();
+  for (const [x, y] of [
+    [120, 24],
+    [120, 120],
+    [24, 120],
+  ])
+    await page.mouse.move(box.x + x, box.y + y);
+  await page.mouse.up();
+  await expect(svg.locator("polyline")).toHaveAttribute(
+    "points",
+    /^1,1 5,1 5,5 1,5 1,1$/,
+  );
+  await page.getByRole("button", { name: "Create map", exact: true }).click();
+  await expect(page.getByRole("alert")).toContainText("generation-disabled");
+  const retained = await page.evaluate(async () => {
+    const workspace = await (window as any).content.readMapWorkspace();
+    const source = workspace.versions.find((v: any) => v.reference);
+    const blob = await (window as any).content.openMapVersion(
+      source.id,
+      "reference",
+    );
+    const bitmap = await createImageBitmap(blob);
+    const canvas = document.createElement("canvas");
+    canvas.width = canvas.height = 1024;
+    const ctx = canvas.getContext("2d")!;
+    ctx.drawImage(bitmap, 0, 0);
+    bitmap.close();
+    const data = ctx.getImageData(36, 11, 5, 5).data;
+    let gold = false;
+    for (let i = 0; i < data.length; i += 4)
+      if (data[i] > 190 && data[i + 1] > 140 && data[i + 2] < 170) gold = true;
+    return {
+      document: source.document,
+      reference: source.reference,
+      gold,
+      presentation: workspace.presentation,
+    };
+  });
+  expect(retained.document).toMatchObject({ columns: 80, rows: 80 });
+  expect(retained.reference).toMatchObject({
+    pixelWidth: 1024,
+    pixelHeight: 1024,
+    width: 80,
+    height: 80,
+    x: 0,
+    y: 0,
+  });
+  expect(retained.gold).toBe(true);
+  expect(retained.presentation.version).toBeNull();
+  await expect(
+    page.getByRole("img", { name: "Inspected map artwork" }),
+  ).toHaveAttribute("viewBox", "0 0 20 14");
+});
+test("each failed job retries its own original brief despite saved selection and reload", async ({
+  page,
+}) => {
+  const c = config(5);
+  await connect(page, c);
+  await page.getByLabel("Map description").fill("Original brief A");
+  await page.getByRole("button", { name: "Create map", exact: true }).click();
+  await saveOutput(page);
+  await page.getByLabel("Map description").fill("Different brief B");
+  await page.getByRole("button", { name: "Create map", exact: true }).click();
+  let workspace = await page.evaluate(() =>
+    (window as any).content.readMapWorkspace(),
+  );
+  const b = workspace.jobs.find(
+    (j: any) => j.state === "awaiting-client-output",
+  );
+  const bCard = page.locator(`[data-job-id="${b.id}"]`);
+  await bCard.getByRole("button", { name: "Cancel creation" }).click();
+  await page.getByRole("button", { name: /Inspect version 1/ }).click();
+  await bCard.getByRole("button", { name: "Retry creation" }).click();
+  await saveOutput(page);
+  workspace = await page.evaluate(() =>
+    (window as any).content.readMapWorkspace(),
+  );
+  expect(workspace.versions.at(-1).instructions).toContain("Different brief B");
+  expect(workspace.versions.at(-1).instructions).not.toContain(
+    "Original brief A",
+  );
+  await page.getByRole("button", { name: "New map", exact: true }).click();
+  await page.getByLabel("Map description").fill("First cancelled brief C");
+  await page.getByRole("button", { name: "Create map", exact: true }).click();
+  workspace = await page.evaluate(() =>
+    (window as any).content.readMapWorkspace(),
+  );
+  const first = workspace.jobs.find(
+    (j: any) => j.state === "awaiting-client-output",
+  );
+  await page
+    .locator(`[data-job-id="${first.id}"]`)
+    .getByRole("button", { name: "Cancel creation" })
+    .click();
+  await connect(page, c);
+  await page.getByLabel("Map family").selectOption(first.familyId);
+  await page
+    .locator(`[data-job-id="${first.id}"]`)
+    .getByRole("button", { name: "Retry creation" })
+    .click();
+  await saveOutput(page);
+  const after = await page.evaluate(() =>
+    (window as any).content.readMapWorkspace(),
+  );
+  expect(
+    after.versions.find((v: any) => v.familyId === first.familyId).instructions,
+  ).toContain("First cancelled brief C");
+  expect(after.jobs).toHaveLength(5);
+  expect(after.presentation.version).toBeNull();
+});
+for (const outcome of ["failed", "missing-version"]) {
+  test(`UI transport failure fixture: ${outcome} output never claims saved or replaces retained artwork`, async ({
+    page,
+  }) => {
+    let providerRequests = 0;
+    page.on("request", (request) => {
+      if (request.url().startsWith("http://127.0.0.1:49177"))
+        providerRequests++;
+    });
+    await connect(page, { local: true, feedbackFixture: outcome });
+    await expect(page.locator("#fixture-label")).toContainText(
+      "UI transport failure fixture",
+    );
+    await upload(page);
+    const before = await page.evaluate(() =>
+      (window as any).content.readMapWorkspace(),
+    );
+    await page.getByLabel("Map description").fill("Preserved map instructions");
+    await page.getByRole("button", { name: "Create map", exact: true }).click();
+    await page.getByRole("button", { name: "Save completed artwork" }).click();
+    await expect(page.getByRole("alert")).toContainText(
+      outcome === "failed"
+        ? "Artwork was not saved"
+        : "Saved artwork could not be confirmed",
+    );
+    await expect(page.getByRole("status")).not.toContainText("Saved privately");
+    await expect(page.getByLabel("Map description")).toHaveValue(
+      "Preserved map instructions",
+    );
+    const after = await page.evaluate(() =>
+      (window as any).content.readMapWorkspace(),
+    );
+    expect(after.versions).toEqual(before.versions);
+    expect(after.presentation).toEqual(before.presentation);
+    expect(providerRequests).toBe(0);
+    expect(await page.evaluate(() => (window as any).feedbackCommands)).toEqual(
+      ["submit", "output"],
+    );
+  });
+}
+test("UI read projection fixture: reload retry reads original request, preserves intent and refreshes CAS without uncertain resubmission", async ({
+  page,
+}) => {
+  let providerRequests = 0;
+  page.on("request", (request) => {
+    if (request.url().startsWith("http://127.0.0.1:49177")) providerRequests++;
+  });
+  const c = { local: true, projectionFixture: true };
+  await connect(page, c);
+  await expect(page.locator("#projection-label")).toContainText(
+    "UI read projection fixture",
+  );
+  await upload(page);
+  await page
+    .getByLabel("Map description")
+    .fill("Original retry instructions retained across reload");
+  await page.getByLabel("Appearance instructions").fill("Copper ink");
+  await page.getByRole("button", { name: "Create map", exact: true }).click();
+  await expect(page.getByRole("alert")).toContainText("fixture-failure");
+  const first = await page.evaluate(
+    () => (window as any).projectionIntents()[0],
+  );
+  await page.getByRole("button", { name: "Save alignment as version" }).click();
+  await expect(page.getByRole("status")).toContainText(
+    "Artwork saved privately",
+  );
+  await connect(page, c);
+  const workspace = await page.evaluate(() =>
+    (window as any).content.readMapWorkspace(),
+  );
+  expect(workspace.jobs[0].originalIntent).toBeUndefined();
+  await page.getByLabel("Map family").selectOption(first.familyId);
+  await page
+    .locator(`[data-job-id="${first.requestId}"]`)
+    .getByRole("button", { name: "Retry creation" })
+    .click();
+  await expect(page.getByRole("alert")).toContainText("fixture-failure");
+  const intents = await page.evaluate(() =>
+    (window as any).projectionIntents(),
+  );
+  expect(intents).toHaveLength(2);
+  expect(intents[1]).toEqual({
+    ...first,
+    requestId: intents[1].requestId,
+    expectedVersion: 2,
+  });
+  expect(intents[1].requestId).not.toBe(first.requestId);
+  expect(
+    await page.evaluate(() =>
+      (window as any).projectionCommands.map((c: any) => c.kind),
+    ),
+  ).toEqual(["read", "submit"]);
+  await page.evaluate(() => {
+    (window as any).projectionReadState = "uncertain";
+  });
+  await page
+    .locator(`[data-job-id="${first.requestId}"]`)
+    .getByRole("button", { name: "Retry creation" })
+    .click();
+  await expect(page.getByRole("alert")).toContainText(
+    "has not failed or been cancelled",
+  );
+  expect(
+    await page.evaluate(() => (window as any).projectionIntents().length),
+  ).toBe(2);
+  expect(
+    await page.evaluate(() =>
+      (window as any).projectionCommands.map((c: any) => c.kind),
+    ),
+  ).toEqual(["read", "submit", "read"]);
+  expect(providerRequests).toBe(0);
+  expect(
+    (await page.evaluate(() => (window as any).content.readMapWorkspace()))
+      .presentation.version,
+  ).toBeNull();
+});
+test("UI read projection fixture: authoritative original intent overrides the session draft copy", async ({
+  page,
+}) => {
+  await connect(page, { local: true, projectionFixture: true });
+  await upload(page);
+  await page.evaluate(() => {
+    (window as any).projectionCanonicalInstructions =
+      "Authoritative stored original instructions";
+  });
+  await page.getByLabel("Map description").fill("Session draft copy");
+  await page.getByRole("button", { name: "Create map", exact: true }).click();
+  await expect(page.getByRole("alert")).toContainText("fixture-failure");
+  const first = await page.evaluate(
+    () => (window as any).projectionIntents()[0],
+  );
+  await page.evaluate(() => {
+    delete (window as any).projectionCanonicalInstructions;
+  });
+  await page.getByLabel("Map description").fill("Unrelated edited draft");
+  await page
+    .locator(`[data-job-id="${first.requestId}"]`)
+    .getByRole("button", { name: "Retry creation" })
+    .click();
+  await expect(page.getByRole("alert")).toContainText("fixture-failure");
+  const intents = await page.evaluate(() =>
+    (window as any).projectionIntents(),
+  );
+  expect(intents).toHaveLength(2);
+  expect(intents[1].instructions).toBe(
+    "Authoritative stored original instructions",
+  );
+  expect(intents[1].instructions).not.toContain("Session draft copy");
+  expect(intents[1].instructions).not.toContain("Unrelated edited draft");
+  expect(
+    await page.evaluate(() =>
+      (window as any).projectionCommands.map((c: any) => c.kind),
+    ),
+  ).toEqual(["submit", "read", "submit"]);
+});
+test("controlled controller transport interruption: real Edge receipt resumes the same job after reload without another submit", async ({
+  page,
+}) => {
+  const c = config(6),
+    partyId = JSON.parse(process.env.MAP_LIVE_PARTY_IDS!)[6];
+  const { sql } = await import("../scripts/local-verification.mjs");
+  let submits = 0,
+    interrupted = false,
+    requestId = "",
+    beforeRecovery: any;
+  const uuid =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{4}-4[0-9a-f]{4}-4[0-9a-f]{12}$/i;
+  function readReceipt() {
+    if (!uuid.test(requestId) || !uuid.test(partyId))
+      throw new Error("Invalid owned interruption fixture identity.");
+    return JSON.parse(
+      sql(
+        `select jsonb_build_object('id',id,'state',state,'revision',revision,'provider_finished_at',provider_finished_at,'expires_at',coalesce((proof->>'expiresAt')::numeric,floor(extract(epoch from provider_finished_at)*1000)+86400000),'candidate_present',candidate is not null,'output_present',provisional is not null,'provider_submission_present',submission_token is not null,'owned_jobs',(select count(*) from public.party_map_generation_jobs where party_id='${partyId}'::uuid)) from public.party_map_generation_jobs where id='${requestId}'::uuid and party_id='${partyId}'::uuid;`,
+      ),
+    );
+  }
+  page.on("request", (request) => {
+    if (request.url().startsWith("http://127.0.0.1:49177")) {
+      try {
+        if (request.postDataJSON()?.kind === "submit") submits++;
+      } catch {
+        /* output is encoded PNG; no body is logged */
+      }
+    }
+  });
+  await connect(page, c);
+  await upload(page);
+  const originals = await page.evaluate(() =>
+    (window as any).content.readMapWorkspace(),
+  );
+  const intercept = async (route: any) => {
+    const command = route.request().postDataJSON();
+    if (command?.kind !== "submit" || interrupted) {
+      await route.continue();
+      return;
+    }
+    interrupted = true;
+    requestId = command.intent.requestId;
+    const startedAt = Date.now();
+    const response = await route.fetch({ timeout: 160000 });
+    const body = await response.json();
+    beforeRecovery = readReceipt();
+    console.log(
+      "MAP_JOB_RECOVERY " +
+        JSON.stringify({
+          phase: "before-controller-abort",
+          id: requestId,
+          status: response.status(),
+          receivedState: body.job?.state ?? null,
+          receivedCode: body.code ?? null,
+          lifetimeMs: Date.now() - startedAt,
+          receipt: beforeRecovery,
+        }),
+    );
+    await route.abort("failed");
+  };
+  await page.route("http://127.0.0.1:49177/**", intercept);
+  await page
+    .getByLabel("Map description")
+    .fill(
+      "Retain this description through a controlled transport interruption",
+    );
+  await page.getByRole("button", { name: "Create map", exact: true }).click();
+  await expect(page.getByRole("alert")).toContainText("unavailable", {
+    timeout: 170000,
+  });
+  await expect(
+    page.getByRole("button", { name: "Create map", exact: true }),
+  ).toBeEnabled();
+  await expect(page.getByLabel("Map description")).toHaveValue(
+    "Retain this description through a controlled transport interruption",
+  );
+  expect(beforeRecovery).toMatchObject({
+    id: requestId,
+    state: "awaiting-client-output",
+    candidate_present: true,
+    output_present: false,
+    provider_submission_present: true,
+    owned_jobs: 1,
+  });
+  expect(beforeRecovery.provider_finished_at).toBeTruthy();
+  expect(beforeRecovery.expires_at).toBeGreaterThan(Date.now());
+  expect(submits).toBe(1);
+  const preserved = await page.evaluate(() =>
+    (window as any).content.readMapWorkspace(),
+  );
+  expect(preserved.versions).toEqual(originals.versions);
+  expect(preserved.presentation).toEqual(originals.presentation);
+  await page.unroute("http://127.0.0.1:49177/**", intercept);
+  await connect(page, c);
+  await page.getByLabel("Map family").selectOption(originals.families[0].id);
+  const card = page.locator(`[data-job-id="${requestId}"]`);
+  await card.getByRole("button", { name: "Refresh progress" }).click();
+  await expect(
+    card.getByRole("button", { name: "Save completed artwork" }),
+  ).toBeEnabled();
+  await card.getByRole("button", { name: "Save completed artwork" }).click();
+  await expect(page.getByRole("status")).toContainText("Saved privately");
+  const afterRecovery = readReceipt();
+  console.log(
+    "MAP_JOB_RECOVERY " +
+      JSON.stringify({
+        phase: "after-explicit-resume",
+        receipt: afterRecovery,
+      }),
+  );
+  expect(afterRecovery).toMatchObject({
+    id: requestId,
+    state: "completed",
+    candidate_present: true,
+    output_present: true,
+    provider_submission_present: true,
+    owned_jobs: 1,
+  });
+  expect(afterRecovery.provider_finished_at).toBe(
+    beforeRecovery.provider_finished_at,
+  );
+  expect(afterRecovery.expires_at).toBe(beforeRecovery.expires_at);
+  expect(submits).toBe(1);
+  const finished = await page.evaluate(() =>
+    (window as any).content.readMapWorkspace(),
+  );
+  expect(finished.jobs).toHaveLength(1);
+  expect(finished.jobs[0].id).toBe(requestId);
+  expect(finished.versions).toHaveLength(originals.versions.length + 1);
+  expect(
+    finished.versions.filter((v: any) => v.jobId === requestId),
+  ).toHaveLength(1);
+  expect(
+    finished.versions.find((v: any) => v.id === originals.versions[0].id),
+  ).toEqual(originals.versions[0]);
+  expect(finished.presentation).toEqual(originals.presentation);
+});

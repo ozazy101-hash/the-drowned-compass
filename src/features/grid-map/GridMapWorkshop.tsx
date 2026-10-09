@@ -99,6 +99,7 @@ export function GridMapWorkshop({
     lastIntent = useRef<MapGenerationIntent | undefined>(undefined),
     pendingUpload = useRef<MapVersionAttachment | undefined>(undefined);
   const workCount = useRef(0);
+  const jobIntents = useRef(new Map<string, MapGenerationIntent>());
   const selected = workspace.versions.find((v) => v.id === selectedId),
     comparison = workspace.versions.find((v) => v.id === compareId),
     image = useImage(content, selected),
@@ -119,6 +120,7 @@ export function GridMapWorkshop({
     setBusy(false);
     workCount.current = 0;
     lastIntent.current = undefined;
+    jobIntents.current.clear();
     pendingUpload.current = undefined;
     const scope = ++generation.current;
     const stop = content.observeMapWorkspace((snapshot) => {
@@ -172,26 +174,25 @@ export function GridMapWorkshop({
         document: parent ? undefined : selected.document,
       };
     }
-  }, [selected, workspace]);
+  }, [selected?.id]);
   useEffect(
     () => () => {
       generation.current++;
     },
     [],
   );
-  const document =
-    selected?.document ??
-    (() => {
-      try {
-        return createGridMapEditor({
-          columns: Number(columns),
-          rows: Number(rows),
-          feetPerSquare: Number(feet),
-        }).snapshot().document;
-      } catch {
-        return createGridMapEditor().snapshot().document;
-      }
-    })();
+  const draftDocument = (() => {
+    try {
+      return createGridMapEditor({
+        columns: Number(columns),
+        rows: Number(rows),
+        feetPerSquare: Number(feet),
+      }).snapshot().document;
+    } catch {
+      return createGridMapEditor().snapshot().document;
+    }
+  })();
+  const document = selected?.document ?? draftDocument;
   const instructions = () =>
     [
       brief,
@@ -234,6 +235,7 @@ export function GridMapWorkshop({
   async function result(intent: MapGenerationIntent, scope: number) {
     assertCurrent(scope);
     lastIntent.current = intent;
+    jobIntents.current.set(intent.requestId, intent);
     const response = await content.changeMapGeneration({
       kind: "submit",
       intent,
@@ -242,12 +244,16 @@ export function GridMapWorkshop({
     if (!response.ok) throw new Error(response.code);
     setJob(response.job);
     await refresh(scope);
+    if (response.job.state === "failed")
+      throw new Error(
+        `Creation failed. ${response.job.code ?? "Refresh progress and retry."}`,
+      );
   }
   async function referenceFile(savedDrawing?: MapArtworkVersion) {
     if (reference && !savedDrawing) return reference;
     if (!outlines.length && !savedDrawing) return undefined;
     return rasterMapReference(
-      savedDrawing?.document ?? document,
+      savedDrawing?.document ?? draftDocument,
       savedDrawing ? [] : outlines,
     );
   }
@@ -359,6 +365,45 @@ export function GridMapWorkshop({
       if (!response.ok) throw new Error(response.code);
       setJob(response.job);
       await refresh(scope);
+      if (response.job.state === "failed")
+        throw new Error(
+          `Creation failed. ${response.job.code ?? "Refresh progress and retry."}`,
+        );
+    });
+  }
+  async function retryCreation(requestId: string) {
+    await perform(async (scope) => {
+      const response = await content.changeMapGeneration({
+        kind: "read",
+        requestId,
+      });
+      assertCurrent(scope);
+      if (!response.ok) throw new Error(response.code);
+      setJob(response.job);
+      const current = await refresh(scope);
+      if (!["failed", "cancelled"].includes(response.job.state))
+        throw new Error(
+          "Refresh progress before retrying. This creation has not failed or been cancelled.",
+        );
+      const base =
+        response.job.originalIntent ?? jobIntents.current.get(requestId);
+      if (
+        !base ||
+        base.requestId !== requestId ||
+        base.familyId !== response.job.familyId
+      )
+        throw new Error(
+          "The original creation instructions are unavailable. Your saved work is retained.",
+        );
+      await result(
+        {
+          ...base,
+          requestId: crypto.randomUUID(),
+          expectedVersion:
+            current.families.find((f) => f.id === base.familyId)?.version ?? 0,
+        },
+        scope,
+      );
     });
   }
   async function accept(id: string) {
@@ -378,13 +423,19 @@ export function GridMapWorkshop({
       if (!response.ok) throw new Error(response.code);
       setJob(response.job);
       const next = await refresh(scope);
+      if (response.job.state !== "completed" || !response.job.versionId)
+        throw new Error(
+          `Artwork was not saved. ${response.job.code ?? response.job.state}`,
+        );
       const version = next.versions.find(
         (v) => v.id === response.job.versionId,
       );
-      if (version) {
-        setFamily(version.familyId);
-        setSelectedId(version.id);
-      }
+      if (!version)
+        throw new Error(
+          "Saved artwork could not be confirmed. Refresh saved versions to reconcile your Library.",
+        );
+      setFamily(version.familyId);
+      setSelectedId(version.id);
       setMessage("Saved privately. Compare alignment before use.");
     });
   }
@@ -564,22 +615,22 @@ export function GridMapWorkshop({
                 className="map-canvas"
                 role="img"
                 aria-label="Sketch drawing surface"
-                viewBox={`0 0 ${document.columns} ${document.rows}`}
-                width={document.columns * 24}
-                height={document.rows * 24}
+                viewBox={`0 0 ${draftDocument.columns} ${draftDocument.rows}`}
+                width={draftDocument.columns * 24}
+                height={draftDocument.rows * 24}
                 onPointerDown={(e) => {
                   if (e.button !== 0) return;
                   e.currentTarget.setPointerCapture(e.pointerId);
                   gesture.current = [];
                   const rect = e.currentTarget.getBoundingClientRect(),
                     p = viewPointToGrid(
-                      document,
+                      draftDocument,
                       {
                         x:
-                          ((e.clientX - rect.left) * document.columns) /
+                          ((e.clientX - rect.left) * draftDocument.columns) /
                           rect.width,
                         y:
-                          ((e.clientY - rect.top) * document.rows) /
+                          ((e.clientY - rect.top) * draftDocument.rows) /
                           rect.height,
                       },
                       1,
@@ -590,13 +641,13 @@ export function GridMapWorkshop({
                   if (!e.currentTarget.hasPointerCapture(e.pointerId)) return;
                   const rect = e.currentTarget.getBoundingClientRect(),
                     p = viewPointToGrid(
-                      document,
+                      draftDocument,
                       {
                         x:
-                          ((e.clientX - rect.left) * document.columns) /
+                          ((e.clientX - rect.left) * draftDocument.columns) /
                           rect.width,
                         y:
-                          ((e.clientY - rect.top) * document.rows) /
+                          ((e.clientY - rect.top) * draftDocument.rows) /
                           rect.height,
                       },
                       1,
@@ -605,7 +656,10 @@ export function GridMapWorkshop({
                 }}
                 onPointerUp={() => {
                   try {
-                    const outline = closeMapOutline(document, gesture.current);
+                    const outline = closeMapOutline(
+                      draftDocument,
+                      gesture.current,
+                    );
                     setOutlines((value) => [...value, outline]);
                   } catch (e) {
                     setError((e as Error).message);
@@ -616,7 +670,7 @@ export function GridMapWorkshop({
                   gesture.current = [];
                 }}
               >
-                <MapDrawing document={document} />
+                <MapDrawing document={draftDocument} />
                 {outlines.map((line, i) => (
                   <polyline
                     key={i}
@@ -707,7 +761,7 @@ export function GridMapWorkshop({
         ]
           .filter((j) => !family || j.familyId === family)
           .map((j) => (
-            <article key={j.id}>
+            <article key={j.id} data-job-id={j.id}>
               <p>
                 {j.mode === "fixture"
                   ? "Deterministic provider fixture — no live call"
@@ -730,8 +784,8 @@ export function GridMapWorkshop({
               )}
               {["failed", "cancelled"].includes(j.state) && (
                 <button
-                  disabled={busy || !lastIntent.current}
-                  onClick={() => void create(true)}
+                  disabled={busy}
+                  onClick={() => void retryCreation(j.id)}
                 >
                   Retry creation
                 </button>
