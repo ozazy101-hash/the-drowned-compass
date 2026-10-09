@@ -1,0 +1,114 @@
+[
+  {
+    "executionId": "b95acbd3-ad65-40eb-93f0-e8a65f077c20",
+    "stage": "prepare",
+    "workerInstance": "a77a6ca6-f70b-4942-a9cc-f208fb04ce0c",
+    "requestId": "live",
+    "reason": "EarlyDrop",
+    "cpuMs": 802,
+    "memorySample": {
+      "total": 42258050,
+      "heap": 8441760,
+      "external": 33816290,
+      "mem_check_captured": {
+        "current": {
+          "totalHeapSize": 11464704,
+          "totalHeapSizeExecutable": 786432,
+          "totalPhysicalSize": 11038720,
+          "totalAvailableSize": 259980920,
+          "totalGlobalHandlesSize": 24576,
+          "usedGlobalHandlesSize": 20672,
+          "usedHeapSize": 8441760,
+          "mallocedMemory": 295040,
+          "externalMemory": 33816290,
+          "peakMallocedMemory": 905800
+        },
+        "exceeded": false
+      }
+    }
+  },
+  {
+    "executionId": "110a41f2-a9ca-42a5-ad84-34ffa6f492d4",
+    "stage": "finalize",
+    "workerInstance": "649bc238-94c3-4f69-8d7b-24f241349f3d",
+    "requestId": "live",
+    "reason": "EarlyDrop",
+    "cpuMs": 124,
+    "memorySample": {
+      "total": 29028560,
+      "heap": 8028936,
+      "external": 20999624,
+      "mem_check_captured": {
+        "current": {
+          "totalHeapSize": 11464704,
+          "totalHeapSizeExecutable": 524288,
+          "totalPhysicalSize": 11296768,
+          "totalAvailableSize": 260050016,
+          "totalGlobalHandlesSize": 24576,
+          "usedGlobalHandlesSize": 20672,
+          "usedHeapSize": 8028936,
+          "mallocedMemory": 278632,
+          "externalMemory": 20999624,
+          "peakMallocedMemory": 393840
+        },
+        "exceeded": false
+      }
+    }
+  },
+  {
+    "executionId": "3ad0aa24-f782-417e-bd32-95575a01d5f7",
+    "stage": "prepare",
+    "workerInstance": "509da4d7-2e6b-4f8d-bcf0-49315aabb0f7",
+    "requestId": "live",
+    "reason": "EarlyDrop",
+    "cpuMs": 543,
+    "memorySample": {
+      "total": 42268122,
+      "heap": 8451832,
+      "external": 33816290,
+      "mem_check_captured": {
+        "current": {
+          "totalHeapSize": 10940416,
+          "totalHeapSizeExecutable": 524288,
+          "totalPhysicalSize": 10514432,
+          "totalAvailableSize": 259970912,
+          "totalGlobalHandlesSize": 24576,
+          "usedGlobalHandlesSize": 20672,
+          "usedHeapSize": 8451832,
+          "mallocedMemory": 295040,
+          "externalMemory": 33816290,
+          "peakMallocedMemory": 905800
+        },
+        "exceeded": false
+      }
+    }
+  },
+  {
+    "executionId": "8dbc7403-d485-43e1-8ba2-f652c98e64b6",
+    "stage": "finalize",
+    "workerInstance": "ee66b6dc-4771-4601-8908-15b6c3003f03",
+    "requestId": "live",
+    "reason": "EarlyDrop",
+    "cpuMs": 145,
+    "memorySample": {
+      "total": 54267565,
+      "heap": 8864520,
+      "external": 45403045,
+      "mem_check_captured": {
+        "current": {
+          "totalHeapSize": 11988992,
+          "totalHeapSizeExecutable": 786432,
+          "totalPhysicalSize": 11821056,
+          "totalAvailableSize": 259558144,
+          "totalGlobalHandlesSize": 24576,
+          "usedGlobalHandlesSize": 20672,
+          "usedHeapSize": 8864520,
+          "mallocedMemory": 295040,
+          "externalMemory": 45403045,
+          "peakMallocedMemory": 483488
+        },
+        "exceeded": false
+      }
+    }
+  }
+]

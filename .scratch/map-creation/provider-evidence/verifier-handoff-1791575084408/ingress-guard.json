@@ -1,0 +1,24 @@
+{
+  "sourceHead": "8e679aede15bfaa106ab8e5f13dbd672c02f1583",
+  "results": [
+    {
+      "label": "source/parent/region assertions",
+      "status": 422,
+      "result": {
+        "kind": "rejected",
+        "reason": "Client authority metadata not accepted"
+      },
+      "body": "empty: ingress-only rejection"
+    },
+    {
+      "label": "client proof assertion",
+      "status": 422,
+      "result": {
+        "kind": "rejected",
+        "reason": "Client authority metadata not accepted"
+      },
+      "body": "empty: ingress-only rejection"
+    }
+  ],
+  "lease": "4196 handed to coordinator preview; no user workers created by these ingress checks"
+}

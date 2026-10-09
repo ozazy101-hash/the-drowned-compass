@@ -1,0 +1,33 @@
+{
+  "ticket": "03",
+  "status": "needs-info",
+  "checkpoint": "bounded staged local corpus PASS; both independent reviews PASS; pending coordinator acceptance",
+  "sourceHead": "8e679aede15bfaa106ab8e5f13dbd672c02f1583",
+  "nodeTests": {
+    "passed": 41,
+    "failed": 0
+  },
+  "runtimePositiveFreshStages": 16,
+  "firstProcessColdCpuMs": {
+    "prepare": 1072,
+    "finalize": 423
+  },
+  "previewLease": {
+    "owner": "coordinator",
+    "containerName": "map-browser-verifier-03-8e679ae",
+    "containerId": "92da7da4d1659e991bbe2735beb773b212af9dccef256963987314321e079e89",
+    "port": 4196
+  },
+  "generationDefaults": {
+    "enabled": false,
+    "quota": 0,
+    "spend": 0
+  },
+  "newPaidProviderCalls": 0,
+  "future06Controls": "durable proof/sole ledger/private immutable provisional transport/cancel/retry/recovery/atomic04 promotion; not implemented here",
+  "independentReviews": {
+    "standardsDepth": "PASS",
+    "spec": "PASS",
+    "findings": 0
+  }
+}

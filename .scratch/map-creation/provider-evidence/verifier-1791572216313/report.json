@@ -1,0 +1,453 @@
+{
+  "sourceHead": "pending freeze",
+  "browserSourceHead": "fe48909b478971bc6e6250a6ed19ece41fd1e2ef",
+  "manifest": {
+    "live": {
+      "requestId": "live",
+      "parentId": "saved-parent-live",
+      "region": {
+        "x": 650,
+        "y": 160,
+        "width": 220,
+        "height": 240
+      },
+      "files": {
+        "source": {
+          "sha256": "eea733e73c403ea2978916a56733facd6074cbecff19f868d1e54343ed8fad89",
+          "bytes": 2542891
+        },
+        "candidate": {
+          "sha256": "17719d4c861923e3103e0edb8944d0bb2a3622576722cacbdeae44c55db034b4",
+          "bytes": 1959492
+        },
+        "output": {
+          "sha256": "7a6e9e6520de0bc24d1eeb0e3aabe742dba1afb07eac7c7e9de87036f1350d54",
+          "bytes": 2540058
+        }
+      }
+    },
+    "transparent": {
+      "requestId": "transparent",
+      "parentId": "saved-parent-transparent",
+      "region": {
+        "x": 650,
+        "y": 160,
+        "width": 220,
+        "height": 240
+      },
+      "files": {
+        "source": {
+          "sha256": "885c65567169f24f1a2909a257d0b54fd74977e2c8d3f9003d671fadd2f9cee5",
+          "bytes": 4196031
+        },
+        "candidate": {
+          "sha256": "ea262eafcdeac431078a926936de173e2104b3d359368335e2b51b7c0912c4ae",
+          "bytes": 4196031
+        },
+        "output": {
+          "sha256": "e00c95add5b2ed484681d9970e268d0b84f7663a49acf3918dbcc1738fe3a490",
+          "bytes": 3587545
+        }
+      }
+    },
+    "lowalpha": {
+      "requestId": "lowalpha",
+      "parentId": "saved-parent-lowalpha",
+      "region": {
+        "x": 650,
+        "y": 160,
+        "width": 220,
+        "height": 240
+      },
+      "files": {
+        "source": {
+          "sha256": "e7a0d2a72ffa90417eaa607191503a5afd647cb5afd1a6724533c97c01aa139c",
+          "bytes": 4196031
+        },
+        "candidate": {
+          "sha256": "bf05c5f32090e5ce2bb5c4e4b205d617fb481defb5a5f44da87eb2b985897e04",
+          "bytes": 4196031
+        },
+        "output": {
+          "sha256": "961954c57f9abd5f2921c5155680bf3533304be4ff17862f8db71d56ffd37b1b",
+          "bytes": 3786822
+        }
+      }
+    },
+    "noise": {
+      "requestId": "noise",
+      "parentId": "saved-parent-noise",
+      "region": {
+        "x": 650,
+        "y": 160,
+        "width": 220,
+        "height": 240
+      },
+      "files": {
+        "source": {
+          "sha256": "536b11b9971f8c08d226cf31ff1fca2ea9ceed39ea1d5ef2ff16f6f1110dc68c",
+          "bytes": 4196031
+        },
+        "candidate": {
+          "sha256": "a2f2bf79af1385fdff994db4f9f5e531e9d95eec52dc98273bbfef3698424dfd",
+          "bytes": 4196031
+        },
+        "output": {
+          "sha256": "526940178eec054abd4b6714a3c28090e413b172f1e7ac0577cacd0bf215947b",
+          "bytes": 3588325
+        }
+      }
+    }
+  },
+  "policy": "oneshot; every request fresh user worker; no warm claim",
+  "results": [
+    {
+      "label": "live cold 0",
+      "status": 200,
+      "wallMs": 7870.042541,
+      "response": {
+        "kind": "verified",
+        "outside": 995776,
+        "inside": 52800,
+        "outsideMismatch": 0,
+        "insideMismatch": 0,
+        "requestId": "live",
+        "parentId": "saved-parent-live",
+        "region": {
+          "x": 650,
+          "y": 160,
+          "width": 220,
+          "height": 240
+        },
+        "sourceDigest": "eea733e73c403ea2978916a56733facd6074cbecff19f868d1e54343ed8fad89",
+        "candidateDigest": "17719d4c861923e3103e0edb8944d0bb2a3622576722cacbdeae44c55db034b4",
+        "outputDigest": "7a6e9e6520de0bc24d1eeb0e3aabe742dba1afb07eac7c7e9de87036f1350d54",
+        "pixelWidth": 1024,
+        "pixelHeight": 1024,
+        "workerInstance": "a4699d2e-43d8-42ac-b856-a63ecf775130",
+        "wallMs": 2999.7100849999997
+      },
+      "expected": "verified",
+      "matchesExpected": true
+    },
+    {
+      "label": "transparent cold 0",
+      "status": 200,
+      "wallMs": 2671.542458,
+      "response": {
+        "kind": "verified",
+        "outside": 995776,
+        "inside": 52800,
+        "outsideMismatch": 0,
+        "insideMismatch": 0,
+        "requestId": "transparent",
+        "parentId": "saved-parent-transparent",
+        "region": {
+          "x": 650,
+          "y": 160,
+          "width": 220,
+          "height": 240
+        },
+        "sourceDigest": "885c65567169f24f1a2909a257d0b54fd74977e2c8d3f9003d671fadd2f9cee5",
+        "candidateDigest": "ea262eafcdeac431078a926936de173e2104b3d359368335e2b51b7c0912c4ae",
+        "outputDigest": "e00c95add5b2ed484681d9970e268d0b84f7663a49acf3918dbcc1738fe3a490",
+        "pixelWidth": 1024,
+        "pixelHeight": 1024,
+        "workerInstance": "103ff69f-84c7-48ce-88e5-5d18152ca132",
+        "wallMs": 1218.417251
+      },
+      "expected": "verified",
+      "matchesExpected": true
+    },
+    {
+      "label": "lowalpha cold 0",
+      "status": 200,
+      "wallMs": 921.6455839999999,
+      "response": {
+        "kind": "verified",
+        "outside": 995776,
+        "inside": 52800,
+        "outsideMismatch": 0,
+        "insideMismatch": 0,
+        "requestId": "lowalpha",
+        "parentId": "saved-parent-lowalpha",
+        "region": {
+          "x": 650,
+          "y": 160,
+          "width": 220,
+          "height": 240
+        },
+        "sourceDigest": "e7a0d2a72ffa90417eaa607191503a5afd647cb5afd1a6724533c97c01aa139c",
+        "candidateDigest": "bf05c5f32090e5ce2bb5c4e4b205d617fb481defb5a5f44da87eb2b985897e04",
+        "outputDigest": "961954c57f9abd5f2921c5155680bf3533304be4ff17862f8db71d56ffd37b1b",
+        "pixelWidth": 1024,
+        "pixelHeight": 1024,
+        "workerInstance": "639fc860-b3ef-43a2-b0a9-1bb55acc6057",
+        "wallMs": 712.5817920000001
+      },
+      "expected": "verified",
+      "matchesExpected": true
+    },
+    {
+      "label": "noise cold 0",
+      "status": 200,
+      "wallMs": 1036.9842499999995,
+      "response": {
+        "kind": "verified",
+        "outside": 995776,
+        "inside": 52800,
+        "outsideMismatch": 0,
+        "insideMismatch": 0,
+        "requestId": "noise",
+        "parentId": "saved-parent-noise",
+        "region": {
+          "x": 650,
+          "y": 160,
+          "width": 220,
+          "height": 240
+        },
+        "sourceDigest": "536b11b9971f8c08d226cf31ff1fca2ea9ceed39ea1d5ef2ff16f6f1110dc68c",
+        "candidateDigest": "a2f2bf79af1385fdff994db4f9f5e531e9d95eec52dc98273bbfef3698424dfd",
+        "outputDigest": "526940178eec054abd4b6714a3c28090e413b172f1e7ac0577cacd0bf215947b",
+        "pixelWidth": 1024,
+        "pixelHeight": 1024,
+        "workerInstance": "0cd16377-8e2e-4889-a912-67e7d671a902",
+        "wallMs": 922.7128339999999
+      },
+      "expected": "verified",
+      "matchesExpected": true
+    },
+    {
+      "label": "live cold 1",
+      "status": 200,
+      "wallMs": 894.812041000001,
+      "response": {
+        "kind": "verified",
+        "outside": 995776,
+        "inside": 52800,
+        "outsideMismatch": 0,
+        "insideMismatch": 0,
+        "requestId": "live",
+        "parentId": "saved-parent-live",
+        "region": {
+          "x": 650,
+          "y": 160,
+          "width": 220,
+          "height": 240
+        },
+        "sourceDigest": "eea733e73c403ea2978916a56733facd6074cbecff19f868d1e54343ed8fad89",
+        "candidateDigest": "17719d4c861923e3103e0edb8944d0bb2a3622576722cacbdeae44c55db034b4",
+        "outputDigest": "7a6e9e6520de0bc24d1eeb0e3aabe742dba1afb07eac7c7e9de87036f1350d54",
+        "pixelWidth": 1024,
+        "pixelHeight": 1024,
+        "workerInstance": "870e94b0-3cb5-4459-8f6a-5d42bfd0239e",
+        "wallMs": 624.696917
+      },
+      "expected": "verified",
+      "matchesExpected": true
+    },
+    {
+      "label": "transparent cold 1",
+      "status": 200,
+      "wallMs": 3092.559165999999,
+      "response": {
+        "kind": "verified",
+        "outside": 995776,
+        "inside": 52800,
+        "outsideMismatch": 0,
+        "insideMismatch": 0,
+        "requestId": "transparent",
+        "parentId": "saved-parent-transparent",
+        "region": {
+          "x": 650,
+          "y": 160,
+          "width": 220,
+          "height": 240
+        },
+        "sourceDigest": "885c65567169f24f1a2909a257d0b54fd74977e2c8d3f9003d671fadd2f9cee5",
+        "candidateDigest": "ea262eafcdeac431078a926936de173e2104b3d359368335e2b51b7c0912c4ae",
+        "outputDigest": "e00c95add5b2ed484681d9970e268d0b84f7663a49acf3918dbcc1738fe3a490",
+        "pixelWidth": 1024,
+        "pixelHeight": 1024,
+        "workerInstance": "11dd00e2-cfbd-4200-a8fa-52292f9ace67",
+        "wallMs": 2399.137584
+      },
+      "expected": "verified",
+      "matchesExpected": true
+    },
+    {
+      "label": "lowalpha cold 1",
+      "status": 200,
+      "wallMs": 6295.917458,
+      "response": {
+        "kind": "verified",
+        "outside": 995776,
+        "inside": 52800,
+        "outsideMismatch": 0,
+        "insideMismatch": 0,
+        "requestId": "lowalpha",
+        "parentId": "saved-parent-lowalpha",
+        "region": {
+          "x": 650,
+          "y": 160,
+          "width": 220,
+          "height": 240
+        },
+        "sourceDigest": "e7a0d2a72ffa90417eaa607191503a5afd647cb5afd1a6724533c97c01aa139c",
+        "candidateDigest": "bf05c5f32090e5ce2bb5c4e4b205d617fb481defb5a5f44da87eb2b985897e04",
+        "outputDigest": "961954c57f9abd5f2921c5155680bf3533304be4ff17862f8db71d56ffd37b1b",
+        "pixelWidth": 1024,
+        "pixelHeight": 1024,
+        "workerInstance": "80231e9d-b70a-4a6b-836e-ad04699405a4",
+        "wallMs": 2398.878084
+      },
+      "expected": "verified",
+      "matchesExpected": true
+    },
+    {
+      "label": "noise cold 1",
+      "status": 200,
+      "wallMs": 815.6553749999985,
+      "response": {
+        "kind": "verified",
+        "outside": 995776,
+        "inside": 52800,
+        "outsideMismatch": 0,
+        "insideMismatch": 0,
+        "requestId": "noise",
+        "parentId": "saved-parent-noise",
+        "region": {
+          "x": 650,
+          "y": 160,
+          "width": 220,
+          "height": 240
+        },
+        "sourceDigest": "536b11b9971f8c08d226cf31ff1fca2ea9ceed39ea1d5ef2ff16f6f1110dc68c",
+        "candidateDigest": "a2f2bf79af1385fdff994db4f9f5e531e9d95eec52dc98273bbfef3698424dfd",
+        "outputDigest": "526940178eec054abd4b6714a3c28090e413b172f1e7ac0577cacd0bf215947b",
+        "pixelWidth": 1024,
+        "pixelHeight": 1024,
+        "workerInstance": "2a7e42aa-ecf2-4a03-b732-30a4e81b066d",
+        "wallMs": 556.062042
+      },
+      "expected": "verified",
+      "matchesExpected": true
+    },
+    {
+      "label": "outside tamper",
+      "status": 200,
+      "wallMs": 997.2379169999986,
+      "response": {
+        "kind": "rejected",
+        "outside": 995776,
+        "inside": 52800,
+        "outsideMismatch": 1,
+        "insideMismatch": 0,
+        "requestId": "live",
+        "parentId": "saved-parent-live",
+        "region": {
+          "x": 650,
+          "y": 160,
+          "width": 220,
+          "height": 240
+        },
+        "sourceDigest": "eea733e73c403ea2978916a56733facd6074cbecff19f868d1e54343ed8fad89",
+        "candidateDigest": "17719d4c861923e3103e0edb8944d0bb2a3622576722cacbdeae44c55db034b4",
+        "outputDigest": "7418fb5182727bbc8bb38cb50c5437457f99f3f42932e609115572f74065afcc",
+        "pixelWidth": 1024,
+        "pixelHeight": 1024,
+        "workerInstance": "0b72f806-a34b-44f9-9cf7-2a7feb2530cb",
+        "wallMs": 828.2397090000001
+      },
+      "expected": "rejected",
+      "matchesExpected": true
+    },
+    {
+      "label": "inside tamper",
+      "status": 200,
+      "wallMs": 1938.7321250000023,
+      "response": {
+        "kind": "rejected",
+        "outside": 995776,
+        "inside": 52800,
+        "outsideMismatch": 0,
+        "insideMismatch": 1,
+        "requestId": "live",
+        "parentId": "saved-parent-live",
+        "region": {
+          "x": 650,
+          "y": 160,
+          "width": 220,
+          "height": 240
+        },
+        "sourceDigest": "eea733e73c403ea2978916a56733facd6074cbecff19f868d1e54343ed8fad89",
+        "candidateDigest": "17719d4c861923e3103e0edb8944d0bb2a3622576722cacbdeae44c55db034b4",
+        "outputDigest": "67a7e3d25f8785ed2d6982c4dafb8f2f092bfd2f479508db8f2989f82c86de36",
+        "pixelWidth": 1024,
+        "pixelHeight": 1024,
+        "workerInstance": "1d5bfbd1-e207-4d62-90d9-e87d64c42353",
+        "wallMs": 1405.392916
+      },
+      "expected": "rejected",
+      "matchesExpected": true
+    },
+    {
+      "label": "wrong request binding",
+      "status": 200,
+      "wallMs": 2254.1271659999984,
+      "response": {
+        "kind": "rejected",
+        "outside": 995776,
+        "inside": 52800,
+        "outsideMismatch": 995776,
+        "insideMismatch": 52800,
+        "requestId": "noise",
+        "parentId": "saved-parent-noise",
+        "region": {
+          "x": 650,
+          "y": 160,
+          "width": 220,
+          "height": 240
+        },
+        "sourceDigest": "536b11b9971f8c08d226cf31ff1fca2ea9ceed39ea1d5ef2ff16f6f1110dc68c",
+        "candidateDigest": "a2f2bf79af1385fdff994db4f9f5e531e9d95eec52dc98273bbfef3698424dfd",
+        "outputDigest": "7a6e9e6520de0bc24d1eeb0e3aabe742dba1afb07eac7c7e9de87036f1350d54",
+        "pixelWidth": 1024,
+        "pixelHeight": 1024,
+        "workerInstance": "9744b553-930d-475a-8757-d90133a1bfb7",
+        "wallMs": 1502.3412919999998
+      },
+      "expected": "rejected",
+      "matchesExpected": true
+    },
+    {
+      "label": "unknown request",
+      "status": 403,
+      "wallMs": 470.33220900000015,
+      "response": {
+        "kind": "rejected",
+        "reason": "Unknown trusted request"
+      },
+      "expected": "rejected",
+      "matchesExpected": true
+    },
+    {
+      "label": "client assertions cannot override trusted parent/region",
+      "error": "TypeError: fetch failed",
+      "expected": "verified",
+      "matchesExpected": false
+    },
+    {
+      "label": "corrupt PNG",
+      "status": 422,
+      "wallMs": 5975.451916000005,
+      "response": {
+        "kind": "rejected",
+        "reason": "Error: Invalid PNG bytes",
+        "requestId": "live"
+      },
+      "expected": "rejected",
+      "matchesExpected": true
+    }
+  ]
+}
