@@ -1,0 +1,26 @@
+$ tsc -b && vite build
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+  - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+vite v8.3.0 building client environment for production...
+transforming...
+✓ 135 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                0.53 kB │ gzip:   0.31 kB
+dist/assets/map-region-worker-BT3dd7Ms.js      3.84 kB
+dist/assets/pdf.worker.min-CjEcRF4W.mjs    1,264.34 kB
+dist/assets/index-ABhQ_GDo.css                39.29 kB │ gzip:   8.49 kB
+dist/assets/server.browser-BppvgDPI.js       201.71 kB │ gzip:  61.55 kB
+dist/assets/pdf-BAKUVlJy.js                  429.67 kB │ gzip: 129.00 kB
+dist/assets/index-VbgXnorP.js                903.69 kB │ gzip: 232.40 kB
+
+[33m[INEFFECTIVE_DYNAMIC_IMPORT] [0msrc/domain/map-artwork.ts is dynamically imported by src/features/grid-map/MapScene.tsx but also statically imported by src/data/local-party-content.ts, src/data/supabase-party-content.ts, src/domain/map-reveal-mask.ts, src/features/presentation/map-viewport.ts, src/features/presentation/party-display.ts, dynamic import will not move module into another chunk.
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 353ms

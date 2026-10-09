@@ -1,0 +1,54 @@
+[WebServer] (node:47889) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 2 tests using 1 worker
+
+(node:47890) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Ticket11 privileged fixture exact outside pixels: 786432; no generation/provider claim
+{"event":"http-error","path":"/functions/v1/map-generation","status":503,"code":""}
+{"event":"http-error","path":"/functions/v1/map-generation","status":503,"code":""}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/a3dd933f-0e71-4644-a3cf-7225b69faa21/57e53826-e9e8-4ec4-a5ac-abc31adb5ab1","status":400,"code":"NoSuchKey"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/a3dd933f-0e71-4644-a3cf-7225b69faa21/6546fb3b-7db1-42fb-be5e-32b4e0bc4367","status":400,"code":"NoSuchKey"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/a3dd933f-0e71-4644-a3cf-7225b69faa21/43b23e1d-0e13-4f64-859a-461fbeaba9af","status":400,"code":"NoSuchKey"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/a3dd933f-0e71-4644-a3cf-7225b69faa21/57e53826-e9e8-4ec4-a5ac-abc31adb5ab1","status":400,"code":"AccessDenied"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/a3dd933f-0e71-4644-a3cf-7225b69faa21/6546fb3b-7db1-42fb-be5e-32b4e0bc4367","status":400,"code":"AccessDenied"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/a3dd933f-0e71-4644-a3cf-7225b69faa21/43b23e1d-0e13-4f64-859a-461fbeaba9af","status":400,"code":"AccessDenied"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"42501"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"42501"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/a3dd933f-0e71-4644-a3cf-7225b69faa21/57e53826-e9e8-4ec4-a5ac-abc31adb5ab1","status":400,"code":"NoSuchKey"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"42501"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/a3dd933f-0e71-4644-a3cf-7225b69faa21/6546fb3b-7db1-42fb-be5e-32b4e0bc4367","status":400,"code":"NoSuchKey"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/a3dd933f-0e71-4644-a3cf-7225b69faa21/43b23e1d-0e13-4f64-859a-461fbeaba9af","status":400,"code":"NoSuchKey"}
+  ✓  1 [laptop] › e2e/map-aligned-stages.spec.ts:27:1 › genuine authority aligned stages retain calibration/mask; older branch and explicit incompatible hidden setup (33.3s)
+(node:48299) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Ticket11 privileged fixture exact outside pixels: 786432; no generation/provider claim
+{"event":"http-error","path":"/functions/v1/map-generation","status":503,"code":""}
+{"event":"http-error","path":"/functions/v1/map-generation","status":503,"code":""}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/e1e10b24-4f5b-4350-9433-5e619976f587/0774cd72-5f54-48a5-ae3f-bf575b88c919","status":400,"code":"NoSuchKey"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/e1e10b24-4f5b-4350-9433-5e619976f587/c45f0555-f95f-4e3b-854b-9097fcb8d0a3","status":400,"code":"NoSuchKey"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/e1e10b24-4f5b-4350-9433-5e619976f587/e9abb60e-f33d-436a-8331-5bc986df5abc","status":400,"code":"NoSuchKey"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"42501"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/e1e10b24-4f5b-4350-9433-5e619976f587/0774cd72-5f54-48a5-ae3f-bf575b88c919","status":400,"code":"AccessDenied"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/e1e10b24-4f5b-4350-9433-5e619976f587/c45f0555-f95f-4e3b-854b-9097fcb8d0a3","status":400,"code":"AccessDenied"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"42501"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/e1e10b24-4f5b-4350-9433-5e619976f587/e9abb60e-f33d-436a-8331-5bc986df5abc","status":400,"code":"AccessDenied"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"42501"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/e1e10b24-4f5b-4350-9433-5e619976f587/0774cd72-5f54-48a5-ae3f-bf575b88c919","status":400,"code":"NoSuchKey"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/e1e10b24-4f5b-4350-9433-5e619976f587/c45f0555-f95f-4e3b-854b-9097fcb8d0a3","status":400,"code":"NoSuchKey"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/e1e10b24-4f5b-4350-9433-5e619976f587/e9abb60e-f33d-436a-8331-5bc986df5abc","status":400,"code":"NoSuchKey"}
+  ✓  2 [phone] › e2e/map-aligned-stages.spec.ts:27:1 › genuine authority aligned stages retain calibration/mask; older branch and explicit incompatible hidden setup (28.8s)
+
+  2 passed (1.2m)
+Ticket11 exact schema/data baseline restored; 2 owned parties,4 auth users,6 objects cleaned; no provider/backend runtime.

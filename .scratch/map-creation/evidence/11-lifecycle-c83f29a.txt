@@ -1,0 +1,44 @@
+[WebServer] (node:51039) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 26 tests using 1 worker
+
+(node:51040) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [laptop] › e2e/map-display.spec.ts:2:1 › masked frame, private DOM, accepted strokes, failure draft, clear and reopen authority (4.9s)
+  ✓   2 [laptop] › e2e/map-display.spec.ts:24:1 › actual workshop Use intent and rapid pointer stroke controls remain private (4.7s)
+  ✓   3 [laptop] › e2e/map-display.spec.ts:37:1 › blocked popup and stale protected choice/render cannot restore cleared or revoked output (5.4s)
+Ticket10 laptop observed16Mpixel/80x80 initial frame milliseconds: 1142.3999999761581
+  ✓   4 [laptop] › e2e/map-display.spec.ts:58:1 › largest supported artwork and grid render bounded opaque frames without per-sample persistence (4.5s)
+  ✓   5 [laptop] › e2e/map-display.spec.ts:77:1 › fresh controller after reload restores accepted progress black-first while Clear suppresses restore (4.7s)
+  ✓   6 [laptop] › e2e/map-display.spec.ts:102:35 › pending reveal success settles after popup close and safely reopens (2.8s)
+  ✓   7 [laptop] › e2e/map-display.spec.ts:102:35 › pending reveal failure settles after popup close and safely reopens (3.1s)
+  ✓   8 [laptop] › e2e/party-display.spec.ts:11:1 › extended display gesture, blocked popup, closed/reopen, navigation lifetime and safe sign-out (3.4s)
+  ✓   9 [laptop] › e2e/party-display.spec.ts:21:1 › DM deterministic PDF page, viewport, Fit, Clear and withdraw (9.1s)
+  ✓  10 [laptop] › e2e/party-display.spec.ts:31:1 › replacement refreshes active bytes, interruption retains frame, reconnect withdraw and opaque session loss clear (13.2s)
+  ✓  11 [laptop] › e2e/party-display.spec.ts:42:1 › presentation interface retains ambiguous reveal identity, rejects failed private reveal and cancels stale reads (2.5s)
+  ✓  12 [laptop] › e2e/party-display.spec.ts:66:1 › pending replacement survives Fit, page and popup resize while stale reads cannot overwrite selection (2.6s)
+  -  13 [laptop] › e2e/party-display.spec.ts:95:1 › genuine Supabase display preserves interrupted frame, reconciles withdrawal, independent Player PDF and authority loss
+(node:51143) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  14 [phone] › e2e/map-display.spec.ts:2:1 › masked frame, private DOM, accepted strokes, failure draft, clear and reopen authority (4.4s)
+  ✓  15 [phone] › e2e/map-display.spec.ts:24:1 › actual workshop Use intent and rapid pointer stroke controls remain private (1.5s)
+  ✓  16 [phone] › e2e/map-display.spec.ts:37:1 › blocked popup and stale protected choice/render cannot restore cleared or revoked output (2.5s)
+Ticket10 phone observed16Mpixel/80x80 initial frame milliseconds: 538.3000000119209
+  ✓  17 [phone] › e2e/map-display.spec.ts:58:1 › largest supported artwork and grid render bounded opaque frames without per-sample persistence (3.4s)
+  ✓  18 [phone] › e2e/map-display.spec.ts:77:1 › fresh controller after reload restores accepted progress black-first while Clear suppresses restore (3.9s)
+  ✓  19 [phone] › e2e/map-display.spec.ts:102:35 › pending reveal success settles after popup close and safely reopens (3.0s)
+  ✓  20 [phone] › e2e/map-display.spec.ts:102:35 › pending reveal failure settles after popup close and safely reopens (3.3s)
+  ✓  21 [phone] › e2e/party-display.spec.ts:11:1 › extended display gesture, blocked popup, closed/reopen, navigation lifetime and safe sign-out (3.3s)
+  ✓  22 [phone] › e2e/party-display.spec.ts:21:1 › DM deterministic PDF page, viewport, Fit, Clear and withdraw (7.3s)
+  ✓  23 [phone] › e2e/party-display.spec.ts:31:1 › replacement refreshes active bytes, interruption retains frame, reconnect withdraw and opaque session loss clear (8.1s)
+  ✓  24 [phone] › e2e/party-display.spec.ts:42:1 › presentation interface retains ambiguous reveal identity, rejects failed private reveal and cancels stale reads (2.5s)
+  ✓  25 [phone] › e2e/party-display.spec.ts:66:1 › pending replacement survives Fit, page and popup resize while stale reads cannot overwrite selection (4.9s)
+  -  26 [phone] › e2e/party-display.spec.ts:95:1 › genuine Supabase display preserves interrupted frame, reconciles withdrawal, independent Player PDF and authority loss
+
+  2 skipped
+  24 passed (2.0m)
