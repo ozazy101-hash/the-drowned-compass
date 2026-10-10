@@ -62,7 +62,12 @@ test('genuine Character edits and Handout PDF sharing continue during outstandin
     const player = await c.player.open(current.id); return { ok: result.ok, type: player.type, size: player.size };
   }, [...png]);
   expect(replacement).toEqual({ ok: true, type: 'image/png', size: png.length });
-  await expect(display.getByLabel('Party Display page 1')).toBeVisible();
+  // Existing Handout canvas aria-label can retain page2 after PNG replacement.
+  // Assert accepted state and actual rendered replacement bytes, not that label.
+  await expect.poll(() => page.evaluate(() => {const s=(window as any).cross.display.getState();return {page:s.page,pages:s.pages};})).toEqual({page:1,pages:1});
+  const expectedPixel = await page.evaluate(async bytes => {const image=await createImageBitmap(new Blob([new Uint8Array(bytes)],{type:'image/png'}));const c=document.createElement('canvas');c.width=image.width;c.height=image.height;const ctx=c.getContext('2d')!;ctx.drawImage(image,0,0);image.close();return [...ctx.getImageData(c.width/2,c.height/2,1,1).data];},[...png]);
+  await expect(display.locator('canvas')).toBeVisible();
+  await expect.poll(() => display.locator('canvas').evaluate((c:HTMLCanvasElement) => [...c.getContext('2d')!.getImageData(c.width/2,c.height/2,1,1).data])).toEqual(expectedPixel);
   release(); await page.unroute(process.env.MAP_FIXTURE_SERVER! + '/**');
   await expect(page.getByRole('button', { name: 'Save completed artwork' })).toBeVisible({ timeout: 30000 });
   await page.getByRole('button', { name: 'Save completed artwork' }).click();
