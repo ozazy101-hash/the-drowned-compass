@@ -1,0 +1,15 @@
+{
+  "private_directory": "/private/tmp/map-hosted-release-20261010",
+  "backups": {
+    "schema-before.sql": {
+      "bytes": 294309,
+      "sha256": "df380be1f02939006f2d97df0b28a9472f01bd129d229faccf8d07f9a40d77c0"
+    },
+    "data-before.sql": {
+      "bytes": 50529,
+      "sha256": "91e7de6782bbb819693ab0b00fd7f84303f262d64b59d8ed5d9be8411588e6ed"
+    }
+  },
+  "restore": "isolated local restore and all six transactional migrations passed",
+  "restore_note": "pg_dump excludes auth.schema_migrations/storage.migrations internal bookkeeping; hosted canonical inventory covers all 51 original tables"
+}
