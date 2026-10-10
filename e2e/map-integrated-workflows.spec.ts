@@ -20,12 +20,12 @@ test('genuine Character edits and Handout PDF sharing continue during outstandin
     Object.assign(window, { cross: { a, b, initial, player, url, key, jwt, playerJwt } });
   }, { url, key, jwt, playerJwt });
   // Only delivery is held: real Edge receipt/SQL/storage continue. No fake job success.
-  let release!: () => void, received!: () => void;
-  const hold = new Promise<void>(r => release = r), receipt = new Promise<void>(r => received = r);
+  let release!: () => void, received!: () => void, deliveryComplete!: () => void, submissions = 0;
+  const hold = new Promise<void>(r => release = r), receipt = new Promise<void>(r => received = r), delivered = new Promise<void>(r => deliveryComplete = r);
   await page.route(process.env.MAP_FIXTURE_SERVER! + '/**', async route => {
     const body = route.request().headers()['content-type']?.includes('application/json') ? route.request().postDataJSON() : null;
     if (body?.kind !== 'submit') return route.continue();
-    const response = await route.fetch(); received(); await hold; await route.fulfill({ response });
+    submissions++; const response = await route.fetch(); received(); await hold; await route.fulfill({ response }); deliveryComplete();
   });
   await page.getByLabel('Map description').fill('Retained-image fixture: private sea cave');
   await page.getByRole('button', { name: 'Create map', exact: true }).click();
@@ -68,8 +68,8 @@ test('genuine Character edits and Handout PDF sharing continue during outstandin
   const expectedPixel = await page.evaluate(async bytes => {const image=await createImageBitmap(new Blob([new Uint8Array(bytes)],{type:'image/png'}));const c=document.createElement('canvas');c.width=image.width;c.height=image.height;const ctx=c.getContext('2d')!;ctx.drawImage(image,0,0);image.close();return [...ctx.getImageData(c.width/2,c.height/2,1,1).data];},[...png]);
   await expect(display.locator('canvas')).toBeVisible();
   await expect.poll(() => display.locator('canvas').evaluate((c:HTMLCanvasElement) => [...c.getContext('2d')!.getImageData(c.width/2,c.height/2,1,1).data])).toEqual(expectedPixel);
-  release(); await page.unroute(process.env.MAP_FIXTURE_SERVER! + '/**');
-  await expect(page.getByRole('button', { name: 'Save completed artwork' })).toBeVisible({ timeout: 30000 });
+  release(); await delivered; await page.unroute(process.env.MAP_FIXTURE_SERVER! + '/**');
+  await expect(page.getByRole('button', { name: 'Save completed artwork' })).toBeEnabled({ timeout: 30000 });
   await page.getByRole('button', { name: 'Save completed artwork' }).click();
   await expect(page.getByRole('status').first()).toContainText('Saved privately', { timeout: 30000 });
   const final = await page.evaluate(async () => {
@@ -92,5 +92,5 @@ test('genuine Character edits and Handout PDF sharing continue during outstandin
   await expect(display.locator('canvas')).toHaveCount(0);
   await display.close();
   await page.screenshot({ path: info.outputPath('integrated-workshop.png'), fullPage: true });
-  expect(context.pages()).toHaveLength(1);
+  expect(context.pages()).toHaveLength(1); expect(submissions).toBe(1);
 });
