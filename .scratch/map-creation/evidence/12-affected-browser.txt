@@ -1,0 +1,131 @@
+Starting explicitly labelled fixture application with fresh bounded Edge workers.
+[WebServer] (node:60825) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 5 tests using 1 worker
+
+(node:60826) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"45adb8c5-c3b7-4b4b-982f-2156b511fc4e","startedAt":1791591123159,"at":1791591123159,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"45adb8c5-c3b7-4b4b-982f-2156b511fc4e","startedAt":1791591129328,"at":1791591129328,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"45adb8c5-c3b7-4b4b-982f-2156b511fc4e","startedAt":1791591129328,"at":1791591132012,"phase":"response","status":200,"lifetimeMs":2684}
+MAP_HTTP_TIMING {"kind":"read","requestId":"45adb8c5-c3b7-4b4b-982f-2156b511fc4e","startedAt":1791591129328,"at":1791591132017,"phase":"end","status":200,"lifetimeMs":2689}
+MAP_HTTP_TIMING {"kind":"read","requestId":"45adb8c5-c3b7-4b4b-982f-2156b511fc4e","startedAt":1791591132148,"at":1791591132148,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"45adb8c5-c3b7-4b4b-982f-2156b511fc4e","startedAt":1791591132148,"at":1791591132440,"phase":"response","status":200,"lifetimeMs":292}
+MAP_HTTP_TIMING {"kind":"read","requestId":"45adb8c5-c3b7-4b4b-982f-2156b511fc4e","startedAt":1791591132148,"at":1791591132441,"phase":"end","status":200,"lifetimeMs":293}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"45adb8c5-c3b7-4b4b-982f-2156b511fc4e","startedAt":1791591132442,"at":1791591132442,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"45adb8c5-c3b7-4b4b-982f-2156b511fc4e","startedAt":1791591132442,"at":1791591132781,"phase":"response","status":200,"lifetimeMs":339}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"45adb8c5-c3b7-4b4b-982f-2156b511fc4e","startedAt":1791591132442,"at":1791591132815,"phase":"end","status":200,"lifetimeMs":373}
+MAP_HTTP_TIMING {"kind":"output","requestId":"45adb8c5-c3b7-4b4b-982f-2156b511fc4e","startedAt":1791591132817,"at":1791591132817,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"45adb8c5-c3b7-4b4b-982f-2156b511fc4e","startedAt":1791591132817,"at":1791591137525,"phase":"response","status":200,"lifetimeMs":4708}
+MAP_HTTP_TIMING {"kind":"output","requestId":"45adb8c5-c3b7-4b4b-982f-2156b511fc4e","startedAt":1791591132817,"at":1791591137528,"phase":"end","status":200,"lifetimeMs":4711}
+MAP_HTTP_TIMING {"kind":"read","requestId":"45adb8c5-c3b7-4b4b-982f-2156b511fc4e","startedAt":1791591137844,"at":1791591137844,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"45adb8c5-c3b7-4b4b-982f-2156b511fc4e","startedAt":1791591137844,"at":1791591141743,"phase":"response","status":200,"lifetimeMs":3899}
+MAP_HTTP_TIMING {"kind":"read","requestId":"45adb8c5-c3b7-4b4b-982f-2156b511fc4e","startedAt":1791591137844,"at":1791591141750,"phase":"end","status":200,"lifetimeMs":3906}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"72a4d995-49f7-475e-b4ee-15f323f8230e","startedAt":1791591142555,"at":1791591142555,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"72a4d995-49f7-475e-b4ee-15f323f8230e","startedAt":1791591142555,"at":1791591145705,"phase":"response","status":200,"lifetimeMs":3150}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"72a4d995-49f7-475e-b4ee-15f323f8230e","startedAt":1791591142555,"at":1791591145718,"phase":"end","status":200,"lifetimeMs":3163}
+MAP_HTTP_TIMING {"kind":"read","requestId":"72a4d995-49f7-475e-b4ee-15f323f8230e","startedAt":1791591146383,"at":1791591146383,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"72a4d995-49f7-475e-b4ee-15f323f8230e","startedAt":1791591146383,"at":1791591146624,"phase":"response","status":200,"lifetimeMs":241}
+MAP_HTTP_TIMING {"kind":"read","requestId":"72a4d995-49f7-475e-b4ee-15f323f8230e","startedAt":1791591146383,"at":1791591146624,"phase":"end","status":200,"lifetimeMs":241}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"72a4d995-49f7-475e-b4ee-15f323f8230e","startedAt":1791591146624,"at":1791591146624,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"72a4d995-49f7-475e-b4ee-15f323f8230e","startedAt":1791591146624,"at":1791591147007,"phase":"response","status":200,"lifetimeMs":383}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"72a4d995-49f7-475e-b4ee-15f323f8230e","startedAt":1791591146624,"at":1791591147130,"phase":"end","status":200,"lifetimeMs":506}
+MAP_HTTP_TIMING {"kind":"output","requestId":"72a4d995-49f7-475e-b4ee-15f323f8230e","startedAt":1791591147131,"at":1791591147131,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"72a4d995-49f7-475e-b4ee-15f323f8230e","startedAt":1791591147131,"at":1791591148405,"phase":"response","status":200,"lifetimeMs":1274}
+MAP_HTTP_TIMING {"kind":"output","requestId":"72a4d995-49f7-475e-b4ee-15f323f8230e","startedAt":1791591147131,"at":1791591148407,"phase":"end","status":200,"lifetimeMs":1276}
+MAP_HTTP_TIMING {"kind":"read","requestId":"72a4d995-49f7-475e-b4ee-15f323f8230e","startedAt":1791591148541,"at":1791591148541,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"72a4d995-49f7-475e-b4ee-15f323f8230e","startedAt":1791591148541,"at":1791591150751,"phase":"response","status":200,"lifetimeMs":2210}
+MAP_HTTP_TIMING {"kind":"read","requestId":"72a4d995-49f7-475e-b4ee-15f323f8230e","startedAt":1791591148541,"at":1791591150751,"phase":"end","status":200,"lifetimeMs":2210}
+  ✓  1 [creation-and-revision] › e2e/map-workshop.spec.ts:110:3 › laptop: real fixture invent sibling comparison and upload alignment survive reload (30.6s)
+(node:60869) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 1:12:40 AM [vite] (client) [console.warn] GoTrueClient@sb-127-auth-token:1 (2.116.0) 2026-10-10T00:12:40.661Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+[WebServer] 1:12:40 AM [vite] (client) [console.warn] GoTrueClient@sb-127-auth-token:2 (2.116.0) 2026-10-10T00:12:40.664Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+  ✘  2 [laptop] › e2e/map-integrated-workflows.spec.ts:5:1 › genuine Character edits and Handout PDF sharing continue during outstanding retained-artwork generation (13.7s)
+(node:60905) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 1:13:32 AM [vite] (client) [console.warn] GoTrueClient@sb-127-auth-token:1 (2.116.0) 2026-10-10T00:13:32.653Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+  ✓  3 [laptop] › e2e/party-display.spec.ts:95:1 › genuine Supabase display preserves interrupted frame, reconciles withdrawal, independent Player PDF and authority loss (40.2s)
+(node:60942) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"event":"http-error","path":"/rest/v1/rpc/commit_map_reveal_mask","status":503,"code":"OWNED_FAILURE"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"42501"}
+{"event":"http-error","path":"/rest/v1/rpc/read_map_workspace","status":403,"code":""}
+{"event":"http-error","path":"/rest/v1/rpc/read_map_generation_jobs","status":403,"code":""}
+  ✓  4 [phone] › e2e/map-display-live.spec.ts:26:1 › genuine authority: opaque output, touch controls, persistence/conflict/failure, reopen, PDF switching and revocation (30.5s)
+[WebServer] 1:14:12 AM [vite] (client) [console.warn] GoTrueClient@sb-127-auth-token:1 (2.116.0) 2026-10-10T00:14:12.857Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+[WebServer] 1:14:12 AM [vite] (client) [console.warn] GoTrueClient@sb-127-auth-token:2 (2.116.0) 2026-10-10T00:14:12.859Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+  ✘  5 [phone] › e2e/map-integrated-workflows.spec.ts:5:1 › genuine Character edits and Handout PDF sharing continue during outstanding retained-artwork generation (31.5s)
+
+
+  1) [laptop] › e2e/map-integrated-workflows.spec.ts:5:1 › genuine Character edits and Handout PDF sharing continue during outstanding retained-artwork generation 
+
+    Error: route.fulfill: Route is already handled!
+
+      26 |     const body = route.request().headers()['content-type']?.includes('application/json') ? route.request().postDataJSON() : null;
+      27 |     if (body?.kind !== 'submit') return route.continue();
+    > 28 |     const response = await route.fetch(); received(); await hold; await route.fulfill({ response });
+         |                                                                               ^
+      29 |   });
+      30 |   await page.getByLabel('Map description').fill('Retained-image fixture: private sea cave');
+      31 |   await page.getByRole('button', { name: 'Create map', exact: true }).click();
+        at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts:28:79
+
+    Error: locator.click: Test ended.
+    Call log:
+      - waiting for getByRole('button', { name: 'Save completed artwork' })
+        - locator resolved to <button disabled>Save completed artwork</button>
+
+
+      71 |   release(); await page.unroute(process.env.MAP_FIXTURE_SERVER! + '/**');
+      72 |   await expect(page.getByRole('button', { name: 'Save completed artwork' })).toBeVisible({ timeout: 30000 });
+    > 73 |   await page.getByRole('button', { name: 'Save completed artwork' }).click();
+         |                                                                      ^
+      74 |   await expect(page.getByRole('status').first()).toContainText('Saved privately', { timeout: 30000 });
+      75 |   const final = await page.evaluate(async () => {
+      76 |     const c = (window as any).cross, w = await (window as any).content.readMapWorkspace();
+        at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts:73:70
+
+    Error Context: ../../../../../../private/tmp/map-integration-12-browser/map-integrated-workflows-g-1d283-retained-artwork-generation-laptop/error-context.md
+
+  2) [phone] › e2e/map-integrated-workflows.spec.ts:5:1 › genuine Character edits and Handout PDF sharing continue during outstanding retained-artwork generation 
+
+    Error: route.fulfill: Route is already handled!
+
+      26 |     const body = route.request().headers()['content-type']?.includes('application/json') ? route.request().postDataJSON() : null;
+      27 |     if (body?.kind !== 'submit') return route.continue();
+    > 28 |     const response = await route.fetch(); received(); await hold; await route.fulfill({ response });
+         |                                                                               ^
+      29 |   });
+      30 |   await page.getByLabel('Map description').fill('Retained-image fixture: private sea cave');
+      31 |   await page.getByRole('button', { name: 'Create map', exact: true }).click();
+        at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts:28:79
+
+    Error: locator.click: Test ended.
+    Call log:
+      - waiting for getByRole('button', { name: 'Save completed artwork' })
+        - locator resolved to <button disabled>Save completed artwork</button>
+
+
+      71 |   release(); await page.unroute(process.env.MAP_FIXTURE_SERVER! + '/**');
+      72 |   await expect(page.getByRole('button', { name: 'Save completed artwork' })).toBeVisible({ timeout: 30000 });
+    > 73 |   await page.getByRole('button', { name: 'Save completed artwork' }).click();
+         |                                                                      ^
+      74 |   await expect(page.getByRole('status').first()).toContainText('Saved privately', { timeout: 30000 });
+      75 |   const final = await page.evaluate(async () => {
+      76 |     const c = (window as any).cross, w = await (window as any).content.readMapWorkspace();
+        at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts:73:70
+
+    Error Context: ../../../../../../private/tmp/map-integration-12-browser/map-integrated-workflows-g-1d283-retained-artwork-generation-phone/error-context.md
+
+  2 failed
+    [laptop] › e2e/map-integrated-workflows.spec.ts:5:1 › genuine Character edits and Handout PDF sharing continue during outstanding retained-artwork generation 
+    [phone] › e2e/map-integrated-workflows.spec.ts:5:1 › genuine Character edits and Handout PDF sharing continue during outstanding retained-artwork generation 
+  3 passed (2.7m)
+Exact baseline restored; 25 owned parties/DMs, eight Players and 13 owned objects cleaned; container49182 removed.

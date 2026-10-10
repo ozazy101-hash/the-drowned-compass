@@ -1,0 +1,144 @@
+{
+  "owned": [
+    {
+      "party": "eb38f415-484d-4128-9a9c-0b364f41ae38",
+      "dm": "8b1afaba-ac91-467a-84a7-a7a5ab0c8fbd"
+    },
+    {
+      "party": "c984a7ce-e53c-467d-b63d-cf11076d4e44",
+      "dm": "e8414786-64af-4621-9c0c-a546b75d5a35"
+    },
+    {
+      "party": "72a01193-7b46-45f0-87b0-672f27cffb57",
+      "dm": "68add467-9e7c-4968-9042-697b5f4099c4"
+    },
+    {
+      "party": "a236d7fd-09f3-4972-9d04-355b92aa9767",
+      "dm": "35d94c70-b338-4dd6-bb31-35588f0aa399"
+    },
+    {
+      "party": "477e78c3-f28b-4d9f-bfdf-ad1a7fa240e6",
+      "dm": "0013275f-746c-4496-b7f5-a413939beff7"
+    },
+    {
+      "party": "80c44f81-7f41-4fc5-b2e5-225e617c3f9f",
+      "dm": "afd12b0d-3677-4ecc-892f-872ee3e7ec39"
+    },
+    {
+      "party": "b398bcf4-c0d3-4621-a8d7-a2a7548d03c8",
+      "dm": "e55f6d93-3bda-4f22-a159-0402d95c9475"
+    },
+    {
+      "party": "8de200ed-c2af-492e-a315-433868da9d7c",
+      "dm": "e5580f5c-0876-4891-8040-f594a7960a26"
+    },
+    {
+      "party": "ad7b6ea5-7896-4840-ade5-6defaa4fad31",
+      "dm": "d05db831-75bc-408f-8dbf-4cb89a739609"
+    },
+    {
+      "party": "b6140491-4ffd-4fcb-8965-cf6cc0d0ed51",
+      "dm": "47508e4e-5696-4566-9d58-6dd1eafa72ec"
+    },
+    {
+      "party": "195ace78-e44f-4e16-b6fb-9b9a1369cb99",
+      "dm": "4646ec88-5529-4b9e-a601-b245bc676a29"
+    },
+    {
+      "party": "d2f9493a-180e-4ea6-b295-0c675a68139f",
+      "dm": "be0eae89-3e1c-4291-8ab7-0f1aae40abdf"
+    },
+    {
+      "party": "cfb6215a-0d68-4791-8066-824196310e4b",
+      "dm": "ae62c86e-aa96-4254-a143-2f0a0fcda133"
+    },
+    {
+      "party": "7760fb25-5ad9-48e8-befd-b32d80627995",
+      "dm": "b140e1a8-f197-4ffd-8c98-cca1f549c2f0"
+    },
+    {
+      "party": "3f276642-dcb2-4395-af4b-16b076a23aa3",
+      "dm": "39fe2e89-f4c7-426f-a1e0-d268ceb6d1d1"
+    },
+    {
+      "party": "72beb04e-2977-4e9d-93a8-5f0e7d131158",
+      "dm": "0b3cd609-d964-4ffc-962f-652e0ede61ef"
+    },
+    {
+      "party": "32e9e45d-e261-4b58-9d92-df83b6f32a8f",
+      "dm": "4ef0c049-37eb-4abd-894c-c353ba132823"
+    },
+    {
+      "party": "51124d92-068d-4fd5-ac70-924c5a5f2811",
+      "dm": "25f190e2-b6de-4ebc-afa6-bdad07cac97e"
+    },
+    {
+      "party": "d9950237-53e5-4bcc-8edc-92b48edc04dc",
+      "dm": "d5245d85-46ec-464f-8787-135e0e536d4e",
+      "player": "7634b40f-8abd-4bb7-ae9f-d051e5beb999"
+    },
+    {
+      "party": "adcd0bb5-29ae-4274-bc6f-a65a480457ad",
+      "dm": "b947c70e-9809-468f-a21f-02cca57dbd97",
+      "player": "c7fbbc0a-0935-4246-85d4-f84ce14e1b77"
+    },
+    {
+      "party": "ca917551-ed25-4a99-9291-e0255ca812ad",
+      "dm": "ce661770-2e7f-43dd-a29c-11f28c68785c",
+      "player": "73289b70-bbfa-48cb-9caf-fdc5d9bb25b5"
+    },
+    {
+      "party": "868179fd-ba10-44e5-8ae0-dfacf414887d",
+      "dm": "36654aab-154f-4ae9-8b59-9488c1068f14",
+      "player": "52434d30-e8f2-4850-821d-3dad822c84bf"
+    },
+    {
+      "party": "6bb3523a-4a6b-4d43-8f31-e67737265136",
+      "dm": "27f6927e-dc5c-46df-9819-dfbbd100b6e2",
+      "player": "c9ca08ef-308d-44b1-9561-9f3ecdf04697"
+    },
+    {
+      "party": "39f83c59-0556-4347-9260-5ffca6cf3064",
+      "dm": "0327c15d-e962-419e-857a-b461c09245b5",
+      "player": "8615c4f3-53c0-4827-889a-2515a41877bc"
+    },
+    {
+      "party": "4b73290d-37a4-43eb-9737-37bdfc879988",
+      "dm": "bedbde5e-cd35-4086-af2e-c64541eacd7b",
+      "player": "1ecee980-5af7-4d6a-b410-a64316241c7c"
+    }
+  ],
+  "player": "d1a07818-6adb-4e05-9c20-5dd4f6fb4839",
+  "baseline": {
+    "schema": "ee3810b06c6316094d45b09c676372e18efd6694e1c8a97d98597a29dc4eec1d",
+    "data": "d179b9c136736dc896ad4896757e1c37119a181dd8098fc92152ffa14d7d4baf",
+    "tables": {
+      "auth.identities": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "auth.users": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.character_classes": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.character_combat_entries": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.character_conditions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.character_inventory_entries": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.character_magic": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.character_primary_attacks": "a8a1a0ed909c53ef7fc9805966bc1f0f7112fb1064ed8db5b587c34dd899c912",
+      "public.character_rest_receipts": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.character_slots": "c84df48512dd28fd9d0c357d71710c594f9f735262f5aba47993980e5559b1cc",
+      "public.character_survival": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.character_text_entries": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.limited_resources": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.parties": "b0f1a4f9718ddf9eba5b6fbcd0144e1c55de7327892c8c828ac22872c737039d",
+      "public.party_grid_map_requests": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.party_grid_maps": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.party_handouts": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.party_map_artwork_versions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.party_map_generation_jobs": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.party_map_generation_settings": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.party_map_presentation_requests": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.party_map_presentations": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.party_map_reveal_masks": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "public.party_members": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "storage.buckets": "186d89fea06cf52ef285ce9b60ce24fd2565d070d06f78c6ebdabd7d5e5720c8",
+      "storage.objects": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  }
+}

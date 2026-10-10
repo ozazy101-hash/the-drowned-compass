@@ -1,0 +1,58 @@
+Listing tests:
+  [creation-and-revision] › map-revision.spec.ts:47:107 › laptop: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching
+  [creation-and-revision] › map-revision.spec.ts:47:107 › phone: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching
+  [creation-and-revision] › map-revision.spec.ts:88:1 › selected-area cancel terminates assembly; retry reconciles the original area with a new request
+  [creation-and-revision] › map-revision.spec.ts:101:1 › expired selected-area proof and stale parent never attach or replace presentation
+  [creation-and-revision] › map-revision.spec.ts:110:1 › assembly timeout and controller replacement terminate workers without output or a new version
+  [creation-and-revision] › map-revision.spec.ts:118:1 › phone multi-touch cannot replace primary rectangle and cancelled gestures clear the draft
+  [creation-and-revision] › map-revision.spec.ts:133:1 › whole-map original intent restores after inspection and recoverable read failure without changing its source
+  [creation-and-revision] › map-workshop.spec.ts:110:3 › laptop: real fixture invent sibling comparison and upload alignment survive reload
+  [creation-and-revision] › map-workshop.spec.ts:202:3 › laptop: touch sketch clear undo reference creation, cancellation and retry preserve originals
+  [creation-and-revision] › map-workshop.spec.ts:110:3 › phone: real fixture invent sibling comparison and upload alignment survive reload
+  [creation-and-revision] › map-workshop.spec.ts:202:3 › phone: touch sketch clear undo reference creation, cancellation and retry preserve originals
+  [creation-and-revision] › map-workshop.spec.ts:291:1 › local adapter manual formats, maximum image/grid, failed input and alignment reload
+  [creation-and-revision] › map-workshop.spec.ts:334:1 › actual App retains drawing route and offers dedicated workshop navigation
+  [creation-and-revision] › map-workshop.spec.ts:357:1 › reference-only saved drawing reaches creation through the existing keyboard editor
+  [creation-and-revision] › map-workshop.spec.ts:406:1 › provider timeout has honest error and explicit retry/cancel with private work retained
+  [creation-and-revision] › map-workshop.spec.ts:456:3 › local: conflicting alignment retains immutable originals and recoverable placement
+  [creation-and-revision] › map-workshop.spec.ts:456:3 › Supabase: conflicting alignment retains immutable originals and recoverable placement
+  [creation-and-revision] › map-workshop.spec.ts:558:1 › selected artwork geometry does not override a new sketch draft or its retained PNG reference
+  [creation-and-revision] › map-workshop.spec.ts:629:1 › each failed job retries its own original brief despite saved selection and reload
+  [creation-and-revision] › map-workshop.spec.ts:680:3 › UI transport failure fixture: failed output never claims saved or replaces retained artwork
+  [creation-and-revision] › map-workshop.spec.ts:680:3 › UI transport failure fixture: missing-version output never claims saved or replaces retained artwork
+  [creation-and-revision] › map-workshop.spec.ts:722:1 › UI read projection fixture: reload retry reads original request, preserves intent and refreshes CAS without uncertain resubmission
+  [creation-and-revision] › map-workshop.spec.ts:799:1 › UI read projection fixture: authoritative original intent overrides the session draft copy
+  [creation-and-revision] › map-workshop.spec.ts:838:1 › controlled controller transport interruption: real Edge receipt resumes the same job after reload without another submit
+  [laptop] › map-aligned-stages.spec.ts:27:1 › genuine authority aligned stages retain calibration/mask; older branch and explicit incompatible hidden setup
+  [laptop] › map-display-live.spec.ts:26:1 › genuine authority: opaque output, touch controls, persistence/conflict/failure, reopen, PDF switching and revocation
+  [laptop] › map-display.spec.ts:2:1 › masked frame, private DOM, accepted strokes, failure draft, clear and reopen authority
+  [laptop] › map-display.spec.ts:24:1 › actual workshop Use intent and rapid pointer stroke controls remain private
+  [laptop] › map-display.spec.ts:37:1 › blocked popup and stale protected choice/render cannot restore cleared or revoked output
+  [laptop] › map-display.spec.ts:58:1 › largest supported artwork and grid render bounded opaque frames without per-sample persistence
+  [laptop] › map-display.spec.ts:77:1 › fresh controller after reload restores accepted progress black-first while Clear suppresses restore
+  [laptop] › map-display.spec.ts:102:35 › pending reveal success settles after popup close and safely reopens
+  [laptop] › map-display.spec.ts:102:35 › pending reveal failure settles after popup close and safely reopens
+  [laptop] › map-integrated-workflows.spec.ts:5:1 › genuine Character edits and Handout PDF sharing continue during outstanding retained-artwork generation
+  [laptop] › party-display.spec.ts:11:1 › extended display gesture, blocked popup, closed/reopen, navigation lifetime and safe sign-out
+  [laptop] › party-display.spec.ts:21:1 › DM deterministic PDF page, viewport, Fit, Clear and withdraw
+  [laptop] › party-display.spec.ts:31:1 › replacement refreshes active bytes, interruption retains frame, reconnect withdraw and opaque session loss clear
+  [laptop] › party-display.spec.ts:42:1 › presentation interface retains ambiguous reveal identity, rejects failed private reveal and cancels stale reads
+  [laptop] › party-display.spec.ts:66:1 › pending replacement survives Fit, page and popup resize while stale reads cannot overwrite selection
+  [laptop] › party-display.spec.ts:95:1 › genuine Supabase display preserves interrupted frame, reconciles withdrawal, independent Player PDF and authority loss
+  [phone] › map-aligned-stages.spec.ts:27:1 › genuine authority aligned stages retain calibration/mask; older branch and explicit incompatible hidden setup
+  [phone] › map-display-live.spec.ts:26:1 › genuine authority: opaque output, touch controls, persistence/conflict/failure, reopen, PDF switching and revocation
+  [phone] › map-display.spec.ts:2:1 › masked frame, private DOM, accepted strokes, failure draft, clear and reopen authority
+  [phone] › map-display.spec.ts:24:1 › actual workshop Use intent and rapid pointer stroke controls remain private
+  [phone] › map-display.spec.ts:37:1 › blocked popup and stale protected choice/render cannot restore cleared or revoked output
+  [phone] › map-display.spec.ts:58:1 › largest supported artwork and grid render bounded opaque frames without per-sample persistence
+  [phone] › map-display.spec.ts:77:1 › fresh controller after reload restores accepted progress black-first while Clear suppresses restore
+  [phone] › map-display.spec.ts:102:35 › pending reveal success settles after popup close and safely reopens
+  [phone] › map-display.spec.ts:102:35 › pending reveal failure settles after popup close and safely reopens
+  [phone] › map-integrated-workflows.spec.ts:5:1 › genuine Character edits and Handout PDF sharing continue during outstanding retained-artwork generation
+  [phone] › party-display.spec.ts:11:1 › extended display gesture, blocked popup, closed/reopen, navigation lifetime and safe sign-out
+  [phone] › party-display.spec.ts:21:1 › DM deterministic PDF page, viewport, Fit, Clear and withdraw
+  [phone] › party-display.spec.ts:31:1 › replacement refreshes active bytes, interruption retains frame, reconnect withdraw and opaque session loss clear
+  [phone] › party-display.spec.ts:42:1 › presentation interface retains ambiguous reveal identity, rejects failed private reveal and cancels stale reads
+  [phone] › party-display.spec.ts:66:1 › pending replacement survives Fit, page and popup resize while stale reads cannot overwrite selection
+  [phone] › party-display.spec.ts:95:1 › genuine Supabase display preserves interrupted frame, reconciles withdrawal, independent Player PDF and authority loss
+Total: 56 tests in 7 files

@@ -1,0 +1,512 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/bin/node",
+      "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config=playwright.map-integration.config.ts",
+      "--test-list=/private/tmp/map-ticket12-failed-tests.txt"
+    ],
+    "configFile": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/playwright.map-integration.config.ts",
+    "rootDir": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/private/tmp/map-integration-12-browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "creation-and-revision",
+        "name": "creation-and-revision",
+        "testDir": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "map-workshop.spec.ts",
+          "map-revision.spec.ts"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/private/tmp/map-integration-12-browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "laptop",
+        "name": "laptop",
+        "testDir": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "map-display-live.spec.ts",
+          "map-aligned-stages.spec.ts",
+          "map-display.spec.ts",
+          "party-display.spec.ts",
+          "map-integrated-workflows.spec.ts"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/private/tmp/map-integration-12-browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "phone",
+        "name": "phone",
+        "testDir": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "map-display-live.spec.ts",
+          "map-aligned-stages.spec.ts",
+          "map-display.spec.ts",
+          "party-display.spec.ts",
+          "map-integrated-workflows.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": ".scratch/map-creation/evidence/12-browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": {
+      "command": "VITE_USE_IN_MEMORY_DATA=true node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 4182 --strictPort",
+      "url": "http://127.0.0.1:4182/the-drowned-compass/",
+      "reuseExistingServer": false
+    }
+  },
+  "suites": [
+    {
+      "title": "map-workshop.spec.ts",
+      "file": "map-workshop.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "laptop: real fixture invent sibling comparison and upload alignment survive reload",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 30564,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"45adb8c5-c3b7-4b4b-982f-2156b511fc4e\",\"startedAt\":1791591123159,\"at\":1791591123159,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"45adb8c5-c3b7-4b4b-982f-2156b511fc4e\",\"startedAt\":1791591129328,\"at\":1791591129328,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"45adb8c5-c3b7-4b4b-982f-2156b511fc4e\",\"startedAt\":1791591129328,\"at\":1791591132012,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":2684}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"45adb8c5-c3b7-4b4b-982f-2156b511fc4e\",\"startedAt\":1791591129328,\"at\":1791591132017,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":2689}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"45adb8c5-c3b7-4b4b-982f-2156b511fc4e\",\"startedAt\":1791591132148,\"at\":1791591132148,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"45adb8c5-c3b7-4b4b-982f-2156b511fc4e\",\"startedAt\":1791591132148,\"at\":1791591132440,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":292}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"45adb8c5-c3b7-4b4b-982f-2156b511fc4e\",\"startedAt\":1791591132148,\"at\":1791591132441,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":293}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"45adb8c5-c3b7-4b4b-982f-2156b511fc4e\",\"startedAt\":1791591132442,\"at\":1791591132442,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"45adb8c5-c3b7-4b4b-982f-2156b511fc4e\",\"startedAt\":1791591132442,\"at\":1791591132781,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":339}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"45adb8c5-c3b7-4b4b-982f-2156b511fc4e\",\"startedAt\":1791591132442,\"at\":1791591132815,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":373}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"45adb8c5-c3b7-4b4b-982f-2156b511fc4e\",\"startedAt\":1791591132817,\"at\":1791591132817,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"45adb8c5-c3b7-4b4b-982f-2156b511fc4e\",\"startedAt\":1791591132817,\"at\":1791591137525,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":4708}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"45adb8c5-c3b7-4b4b-982f-2156b511fc4e\",\"startedAt\":1791591132817,\"at\":1791591137528,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":4711}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"45adb8c5-c3b7-4b4b-982f-2156b511fc4e\",\"startedAt\":1791591137844,\"at\":1791591137844,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"45adb8c5-c3b7-4b4b-982f-2156b511fc4e\",\"startedAt\":1791591137844,\"at\":1791591141743,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":3899}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"45adb8c5-c3b7-4b4b-982f-2156b511fc4e\",\"startedAt\":1791591137844,\"at\":1791591141750,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":3906}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"72a4d995-49f7-475e-b4ee-15f323f8230e\",\"startedAt\":1791591142555,\"at\":1791591142555,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"72a4d995-49f7-475e-b4ee-15f323f8230e\",\"startedAt\":1791591142555,\"at\":1791591145705,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":3150}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"72a4d995-49f7-475e-b4ee-15f323f8230e\",\"startedAt\":1791591142555,\"at\":1791591145718,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":3163}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"72a4d995-49f7-475e-b4ee-15f323f8230e\",\"startedAt\":1791591146383,\"at\":1791591146383,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"72a4d995-49f7-475e-b4ee-15f323f8230e\",\"startedAt\":1791591146383,\"at\":1791591146624,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":241}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"72a4d995-49f7-475e-b4ee-15f323f8230e\",\"startedAt\":1791591146383,\"at\":1791591146624,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":241}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"72a4d995-49f7-475e-b4ee-15f323f8230e\",\"startedAt\":1791591146624,\"at\":1791591146624,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"72a4d995-49f7-475e-b4ee-15f323f8230e\",\"startedAt\":1791591146624,\"at\":1791591147007,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":383}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"72a4d995-49f7-475e-b4ee-15f323f8230e\",\"startedAt\":1791591146624,\"at\":1791591147130,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":506}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"72a4d995-49f7-475e-b4ee-15f323f8230e\",\"startedAt\":1791591147131,\"at\":1791591147131,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"72a4d995-49f7-475e-b4ee-15f323f8230e\",\"startedAt\":1791591147131,\"at\":1791591148405,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":1274}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"72a4d995-49f7-475e-b4ee-15f323f8230e\",\"startedAt\":1791591147131,\"at\":1791591148407,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":1276}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"72a4d995-49f7-475e-b4ee-15f323f8230e\",\"startedAt\":1791591148541,\"at\":1791591148541,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"72a4d995-49f7-475e-b4ee-15f323f8230e\",\"startedAt\":1791591148541,\"at\":1791591150751,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":2210}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"72a4d995-49f7-475e-b4ee-15f323f8230e\",\"startedAt\":1791591148541,\"at\":1791591150751,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":2210}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:11:57.925Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c58da7709562eb5494aa-8fc2cdaf0412776dbb9f",
+          "file": "map-workshop.spec.ts",
+          "line": 110,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "title": "map-integrated-workflows.spec.ts",
+      "file": "map-integrated-workflows.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "genuine Character edits and Handout PDF sharing continue during outstanding retained-artwork generation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "laptop",
+              "projectName": "laptop",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13748,
+                  "error": {
+                    "message": "Error: route.fulfill: Route is already handled!",
+                    "stack": "Error: route.fulfill: Route is already handled!\n    at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts:28:79",
+                    "location": {
+                      "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts",
+                      "column": 79,
+                      "line": 28
+                    },
+                    "snippet": "  26 |     const body = route.request().headers()['content-type']?.includes('application/json') ? route.request().postDataJSON() : null;\n  27 |     if (body?.kind !== 'submit') return route.continue();\n> 28 |     const response = await route.fetch(); received(); await hold; await route.fulfill({ response });\n     |                                                                               ^\n  29 |   });\n  30 |   await page.getByLabel('Map description').fill('Retained-image fixture: private sea cave');\n  31 |   await page.getByRole('button', { name: 'Create map', exact: true }).click();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts",
+                        "column": 79,
+                        "line": 28
+                      },
+                      "message": "Error: route.fulfill: Route is already handled!\n\n  26 |     const body = route.request().headers()['content-type']?.includes('application/json') ? route.request().postDataJSON() : null;\n  27 |     if (body?.kind !== 'submit') return route.continue();\n> 28 |     const response = await route.fetch(); received(); await hold; await route.fulfill({ response });\n     |                                                                               ^\n  29 |   });\n  30 |   await page.getByLabel('Map description').fill('Retained-image fixture: private sea cave');\n  31 |   await page.getByRole('button', { name: 'Create map', exact: true }).click();\n    at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts:28:79"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts",
+                        "column": 70,
+                        "line": 73
+                      },
+                      "message": "Error: locator.click: Test ended.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Save completed artwork' })\u001b[22m\n\u001b[2m    - locator resolved to <button disabled>Save completed artwork</button>\u001b[22m\n\n\n  71 |   release(); await page.unroute(process.env.MAP_FIXTURE_SERVER! + '/**');\n  72 |   await expect(page.getByRole('button', { name: 'Save completed artwork' })).toBeVisible({ timeout: 30000 });\n> 73 |   await page.getByRole('button', { name: 'Save completed artwork' }).click();\n     |                                                                      ^\n  74 |   await expect(page.getByRole('status').first()).toContainText('Saved privately', { timeout: 30000 });\n  75 |   const final = await page.evaluate(async () => {\n  76 |     const c = (window as any).cross, w = await (window as any).content.readMapWorkspace();\n    at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts:73:70"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:12:33.051Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/private/tmp/map-integration-12-browser/map-integrated-workflows-g-1d283-retained-artwork-generation-laptop/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts",
+                    "column": 79,
+                    "line": 28
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "608a07c9c93a035fd456-2865aaff5bb4464abcbb",
+          "file": "map-integrated-workflows.spec.ts",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "title": "genuine Character edits and Handout PDF sharing continue during outstanding retained-artwork generation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 31518,
+                  "error": {
+                    "message": "Error: route.fulfill: Route is already handled!",
+                    "stack": "Error: route.fulfill: Route is already handled!\n    at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts:28:79",
+                    "location": {
+                      "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts",
+                      "column": 79,
+                      "line": 28
+                    },
+                    "snippet": "  26 |     const body = route.request().headers()['content-type']?.includes('application/json') ? route.request().postDataJSON() : null;\n  27 |     if (body?.kind !== 'submit') return route.continue();\n> 28 |     const response = await route.fetch(); received(); await hold; await route.fulfill({ response });\n     |                                                                               ^\n  29 |   });\n  30 |   await page.getByLabel('Map description').fill('Retained-image fixture: private sea cave');\n  31 |   await page.getByRole('button', { name: 'Create map', exact: true }).click();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts",
+                        "column": 79,
+                        "line": 28
+                      },
+                      "message": "Error: route.fulfill: Route is already handled!\n\n  26 |     const body = route.request().headers()['content-type']?.includes('application/json') ? route.request().postDataJSON() : null;\n  27 |     if (body?.kind !== 'submit') return route.continue();\n> 28 |     const response = await route.fetch(); received(); await hold; await route.fulfill({ response });\n     |                                                                               ^\n  29 |   });\n  30 |   await page.getByLabel('Map description').fill('Retained-image fixture: private sea cave');\n  31 |   await page.getByRole('button', { name: 'Create map', exact: true }).click();\n    at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts:28:79"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts",
+                        "column": 70,
+                        "line": 73
+                      },
+                      "message": "Error: locator.click: Test ended.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Save completed artwork' })\u001b[22m\n\u001b[2m    - locator resolved to <button disabled>Save completed artwork</button>\u001b[22m\n\n\n  71 |   release(); await page.unroute(process.env.MAP_FIXTURE_SERVER! + '/**');\n  72 |   await expect(page.getByRole('button', { name: 'Save completed artwork' })).toBeVisible({ timeout: 30000 });\n> 73 |   await page.getByRole('button', { name: 'Save completed artwork' }).click();\n     |                                                                      ^\n  74 |   await expect(page.getByRole('status').first()).toContainText('Saved privately', { timeout: 30000 });\n  75 |   const final = await page.evaluate(async () => {\n  76 |     const c = (window as any).cross, w = await (window as any).content.readMapWorkspace();\n    at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts:73:70"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:14:08.509Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/private/tmp/map-integration-12-browser/map-integrated-workflows-g-1d283-retained-artwork-generation-phone/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts",
+                    "column": 79,
+                    "line": 28
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "608a07c9c93a035fd456-236226448db46ee0a647",
+          "file": "map-integrated-workflows.spec.ts",
+          "line": 5,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "party-display.spec.ts",
+      "file": "party-display.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "genuine Supabase display preserves interrupted frame, reconciles withdrawal, independent Player PDF and authority loss",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "laptop",
+              "projectName": "laptop",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 40181,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:12:51.282Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "376fe854729c5b107445-a6b23138303a1638a0b1",
+          "file": "party-display.spec.ts",
+          "line": 95,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "map-display-live.spec.ts",
+      "file": "map-display-live.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "genuine authority: opaque output, touch controls, persistence/conflict/failure, reopen, PDF switching and revocation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 30521,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/rpc/commit_map_reveal_mask\",\"status\":503,\"code\":\"OWNED_FAILURE\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/party_map_artwork_versions\",\"status\":401,\"code\":\"PGRST303\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/party_map_artwork_versions\",\"status\":401,\"code\":\"42501\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/rpc/read_map_workspace\",\"status\":403,\"code\":\"\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/rpc/read_map_generation_jobs\",\"status\":403,\"code\":\"\"}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:13:34.747Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "105c41ce6b0004b73ba4-2ddb573b291ce6dc0dd0",
+          "file": "map-display-live.spec.ts",
+          "line": 26,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-10T00:11:57.207Z",
+    "duration": 163765.686,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

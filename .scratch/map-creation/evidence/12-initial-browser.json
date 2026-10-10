@@ -1,0 +1,3059 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/bin/node",
+      "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config=playwright.map-integration.config.ts"
+    ],
+    "configFile": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/playwright.map-integration.config.ts",
+    "rootDir": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/private/tmp/map-integration-12-browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "creation-and-revision",
+        "name": "creation-and-revision",
+        "testDir": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "map-workshop.spec.ts",
+          "map-revision.spec.ts"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/private/tmp/map-integration-12-browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "laptop",
+        "name": "laptop",
+        "testDir": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "map-display-live.spec.ts",
+          "map-aligned-stages.spec.ts",
+          "map-display.spec.ts",
+          "party-display.spec.ts",
+          "map-integrated-workflows.spec.ts"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/private/tmp/map-integration-12-browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "phone",
+        "name": "phone",
+        "testDir": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "map-display-live.spec.ts",
+          "map-aligned-stages.spec.ts",
+          "map-display.spec.ts",
+          "party-display.spec.ts",
+          "map-integrated-workflows.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": ".scratch/map-creation/evidence/12-browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": {
+      "command": "VITE_USE_IN_MEMORY_DATA=true node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 4182 --strictPort",
+      "url": "http://127.0.0.1:4182/the-drowned-compass/",
+      "reuseExistingServer": false
+    }
+  },
+  "suites": [
+    {
+      "title": "map-revision.spec.ts",
+      "file": "map-revision.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "laptop: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 87065,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/rpc/read_map_generation_jobs\",\"status\":401,\"code\":\"PGRST303\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/rpc/read_map_workspace\",\"status\":401,\"code\":\"PGRST303\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/\",\"status\":422,\"code\":\"output-pixels-mismatch\"}\n"
+                    },
+                    {
+                      "text": "{\"name\":\"laptop\",\"outside\":962140,\"inside\":86436,\"mismatch\":0,\"region\":{\"x\":292,\"y\":438,\"width\":294,\"height\":294},\"registrationPreserved\":true,\"sourceId\":\"dc073876-026e-4e14-be62-df95dd57f33f\",\"acceptedId\":\"bb2240c3-e9cc-4464-b3e5-70e5bf84fe52\"}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-09T23:53:03.613Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "321f7fb7938134900acc-cd474d6aeee4d0c913dc",
+          "file": "map-revision.spec.ts",
+          "line": 47,
+          "column": 107
+        },
+        {
+          "title": "phone: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 111985,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/\",\"status\":422,\"code\":\"output-pixels-mismatch\"}\n"
+                    },
+                    {
+                      "text": "{\"name\":\"phone\",\"outside\":962140,\"inside\":86436,\"mismatch\":0,\"region\":{\"x\":292,\"y\":438,\"width\":294,\"height\":294},\"registrationPreserved\":true,\"sourceId\":\"74a8dbf2-5b8e-4f9d-9918-9047e4403a0d\",\"acceptedId\":\"4bb69c67-ddc2-4e06-bf53-b58207c19483\"}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-09T23:54:33.615Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "321f7fb7938134900acc-a21f25a6b7f0aaea4045",
+          "file": "map-revision.spec.ts",
+          "line": 47,
+          "column": 107
+        },
+        {
+          "title": "selected-area cancel terminates assembly; retry reconciles the original area with a new request",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 25777,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-09T23:56:25.764Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "321f7fb7938134900acc-3286b6bb756195447cf0",
+          "file": "map-revision.spec.ts",
+          "line": 88,
+          "column": 1
+        },
+        {
+          "title": "expired selected-area proof and stale parent never attach or replace presentation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 30531,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/\",\"status\":422,\"code\":\"expired-output\"}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-09T23:56:51.647Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "321f7fb7938134900acc-b57e247735cc765dd20d",
+          "file": "map-revision.spec.ts",
+          "line": 101,
+          "column": 1
+        },
+        {
+          "title": "assembly timeout and controller replacement terminate workers without output or a new version",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 13517,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-09T23:57:22.237Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "321f7fb7938134900acc-3c74d1a08ee6b0436069",
+          "file": "map-revision.spec.ts",
+          "line": 110,
+          "column": 1
+        },
+        {
+          "title": "phone multi-touch cannot replace primary rectangle and cancelled gestures clear the draft",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8847,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-09T23:57:35.813Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "321f7fb7938134900acc-56fe8344a54c66c64fd0",
+          "file": "map-revision.spec.ts",
+          "line": 118,
+          "column": 1
+        },
+        {
+          "title": "whole-map original intent restores after inspection and recoverable read failure without changing its source",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 23358,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-09T23:57:44.698Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "321f7fb7938134900acc-886f561fcdd5b3af0ae5",
+          "file": "map-revision.spec.ts",
+          "line": 133,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "map-workshop.spec.ts",
+      "file": "map-workshop.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "laptop: real fixture invent sibling comparison and upload alignment survive reload",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 9286,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'Save completed artwork' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('button', { name: 'Save completed artwork' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Save completed artwork' })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'Save completed artwork' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('button', { name: 'Save completed artwork' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Save completed artwork' })\u001b[22m\n\n    at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-workshop.spec.ts:124:7",
+                    "location": {
+                      "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-workshop.spec.ts",
+                      "column": 7,
+                      "line": 124
+                    },
+                    "snippet": "  122 |     await expect(\n  123 |       page.getByRole(\"button\", { name: \"Save completed artwork\" }),\n> 124 |     ).toBeVisible();\n      |       ^\n  125 |     const queued = await page.evaluate(() =>\n  126 |       (window as any).content.readMapWorkspace(),\n  127 |     );"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-workshop.spec.ts",
+                        "column": 7,
+                        "line": 124
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'Save completed artwork' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('button', { name: 'Save completed artwork' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Save completed artwork' })\u001b[22m\n\n\n  122 |     await expect(\n  123 |       page.getByRole(\"button\", { name: \"Save completed artwork\" }),\n> 124 |     ).toBeVisible();\n      |       ^\n  125 |     const queued = await page.evaluate(() =>\n  126 |       (window as any).content.readMapWorkspace(),\n  127 |     );\n    at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-workshop.spec.ts:124:7"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"615aa069-184e-4ca1-80d5-81111af2acb1\",\"startedAt\":1791590292305,\"at\":1791590292305,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-09T23:58:08.509Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/private/tmp/map-integration-12-browser/map-workshop-laptop-real-f-f6ed2-ad-alignment-survive-reload-creation-and-revision/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-workshop.spec.ts",
+                    "column": 7,
+                    "line": 124
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c58da7709562eb5494aa-8fc2cdaf0412776dbb9f",
+          "file": "map-workshop.spec.ts",
+          "line": 110,
+          "column": 3
+        },
+        {
+          "title": "laptop: touch sketch clear undo reference creation, cancellation and retry preserve originals",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 30600,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"8857897e-cbae-48ab-a08c-a0f1d1f11f90\",\"startedAt\":1791590310231,\"at\":1791590310231,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"8857897e-cbae-48ab-a08c-a0f1d1f11f90\",\"startedAt\":1791590310231,\"at\":1791590314914,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":4683}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"8857897e-cbae-48ab-a08c-a0f1d1f11f90\",\"startedAt\":1791590310231,\"at\":1791590314919,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":4688}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"8857897e-cbae-48ab-a08c-a0f1d1f11f90\",\"startedAt\":1791590315304,\"at\":1791590315304,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"8857897e-cbae-48ab-a08c-a0f1d1f11f90\",\"startedAt\":1791590315304,\"at\":1791590315696,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":392}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"8857897e-cbae-48ab-a08c-a0f1d1f11f90\",\"startedAt\":1791590315304,\"at\":1791590315696,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":392}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"8857897e-cbae-48ab-a08c-a0f1d1f11f90\",\"startedAt\":1791590315697,\"at\":1791590315697,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"8857897e-cbae-48ab-a08c-a0f1d1f11f90\",\"startedAt\":1791590315697,\"at\":1791590316206,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":509}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"8857897e-cbae-48ab-a08c-a0f1d1f11f90\",\"startedAt\":1791590315697,\"at\":1791590316296,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":599}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"8857897e-cbae-48ab-a08c-a0f1d1f11f90\",\"startedAt\":1791590316297,\"at\":1791590316297,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"8857897e-cbae-48ab-a08c-a0f1d1f11f90\",\"startedAt\":1791590316297,\"at\":1791590319466,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":3169}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"8857897e-cbae-48ab-a08c-a0f1d1f11f90\",\"startedAt\":1791590316297,\"at\":1791590319468,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":3171}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"8857897e-cbae-48ab-a08c-a0f1d1f11f90\",\"startedAt\":1791590319525,\"at\":1791590319525,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"1c808402-ec85-4896-b387-3f8bd259dd9f\",\"startedAt\":1791590322547,\"at\":1791590322547,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"8857897e-cbae-48ab-a08c-a0f1d1f11f90\",\"startedAt\":1791590319525,\"at\":1791590324158,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":4633}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"8857897e-cbae-48ab-a08c-a0f1d1f11f90\",\"startedAt\":1791590319525,\"at\":1791590324159,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":4634}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"1c808402-ec85-4896-b387-3f8bd259dd9f\",\"startedAt\":1791590322547,\"at\":1791590327058,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":4511}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"1c808402-ec85-4896-b387-3f8bd259dd9f\",\"startedAt\":1791590322547,\"at\":1791590327065,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":4518}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"1c808402-ec85-4896-b387-3f8bd259dd9f\",\"startedAt\":1791590327261,\"at\":1791590327261,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"1c808402-ec85-4896-b387-3f8bd259dd9f\",\"startedAt\":1791590327261,\"at\":1791590327808,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":547}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"1c808402-ec85-4896-b387-3f8bd259dd9f\",\"startedAt\":1791590327261,\"at\":1791590327809,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":548}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"cancel\",\"requestId\":\"1c808402-ec85-4896-b387-3f8bd259dd9f\",\"startedAt\":1791590328118,\"at\":1791590328118,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"cancel\",\"requestId\":\"1c808402-ec85-4896-b387-3f8bd259dd9f\",\"startedAt\":1791590328118,\"at\":1791590328233,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":115}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"cancel\",\"requestId\":\"1c808402-ec85-4896-b387-3f8bd259dd9f\",\"startedAt\":1791590328118,\"at\":1791590328233,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":115}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"1c808402-ec85-4896-b387-3f8bd259dd9f\",\"startedAt\":1791590328356,\"at\":1791590328356,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"1c808402-ec85-4896-b387-3f8bd259dd9f\",\"startedAt\":1791590328356,\"at\":1791590328498,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":142}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"1c808402-ec85-4896-b387-3f8bd259dd9f\",\"startedAt\":1791590328356,\"at\":1791590328498,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":142}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"7356a6c3-8310-4be6-8485-7dee2507fa0b\",\"startedAt\":1791590328521,\"at\":1791590328521,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"7356a6c3-8310-4be6-8485-7dee2507fa0b\",\"startedAt\":1791590328521,\"at\":1791590330393,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":1872}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"7356a6c3-8310-4be6-8485-7dee2507fa0b\",\"startedAt\":1791590328521,\"at\":1791590330394,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":1873}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"7356a6c3-8310-4be6-8485-7dee2507fa0b\",\"startedAt\":1791590330776,\"at\":1791590330776,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"7356a6c3-8310-4be6-8485-7dee2507fa0b\",\"startedAt\":1791590330776,\"at\":1791590330879,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":103}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"7356a6c3-8310-4be6-8485-7dee2507fa0b\",\"startedAt\":1791590330776,\"at\":1791590330879,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":103}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"7356a6c3-8310-4be6-8485-7dee2507fa0b\",\"startedAt\":1791590330880,\"at\":1791590330880,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"7356a6c3-8310-4be6-8485-7dee2507fa0b\",\"startedAt\":1791590330880,\"at\":1791590331052,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":172}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"7356a6c3-8310-4be6-8485-7dee2507fa0b\",\"startedAt\":1791590330880,\"at\":1791590331089,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":209}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"7356a6c3-8310-4be6-8485-7dee2507fa0b\",\"startedAt\":1791590331089,\"at\":1791590331089,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"7356a6c3-8310-4be6-8485-7dee2507fa0b\",\"startedAt\":1791590331089,\"at\":1791590332927,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":1838}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"7356a6c3-8310-4be6-8485-7dee2507fa0b\",\"startedAt\":1791590331089,\"at\":1791590332931,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":1842}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"7356a6c3-8310-4be6-8485-7dee2507fa0b\",\"startedAt\":1791590333058,\"at\":1791590333058,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-09T23:58:19.788Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c58da7709562eb5494aa-975394e8ce39b5f09bed",
+          "file": "map-workshop.spec.ts",
+          "line": 202,
+          "column": 3
+        },
+        {
+          "title": "phone: real fixture invent sibling comparison and upload alignment survive reload",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 39605,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"8cb2ba64-605a-4ee6-9030-f5e4f49010a5\",\"startedAt\":1791590338467,\"at\":1791590338467,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"8cb2ba64-605a-4ee6-9030-f5e4f49010a5\",\"startedAt\":1791590342919,\"at\":1791590342919,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"8cb2ba64-605a-4ee6-9030-f5e4f49010a5\",\"startedAt\":1791590342919,\"at\":1791590350118,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":7199}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"8cb2ba64-605a-4ee6-9030-f5e4f49010a5\",\"startedAt\":1791590342919,\"at\":1791590350123,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":7204}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"8cb2ba64-605a-4ee6-9030-f5e4f49010a5\",\"startedAt\":1791590350582,\"at\":1791590350582,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"8cb2ba64-605a-4ee6-9030-f5e4f49010a5\",\"startedAt\":1791590350582,\"at\":1791590353621,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":3039}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"8cb2ba64-605a-4ee6-9030-f5e4f49010a5\",\"startedAt\":1791590350582,\"at\":1791590353626,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":3044}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"8cb2ba64-605a-4ee6-9030-f5e4f49010a5\",\"startedAt\":1791590353633,\"at\":1791590353633,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"8cb2ba64-605a-4ee6-9030-f5e4f49010a5\",\"startedAt\":1791590353633,\"at\":1791590354439,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":806}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"8cb2ba64-605a-4ee6-9030-f5e4f49010a5\",\"startedAt\":1791590353633,\"at\":1791590354496,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":863}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"8cb2ba64-605a-4ee6-9030-f5e4f49010a5\",\"startedAt\":1791590354497,\"at\":1791590354497,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"8cb2ba64-605a-4ee6-9030-f5e4f49010a5\",\"startedAt\":1791590354497,\"at\":1791590356062,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":1565}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"8cb2ba64-605a-4ee6-9030-f5e4f49010a5\",\"startedAt\":1791590354497,\"at\":1791590356063,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":1566}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"8cb2ba64-605a-4ee6-9030-f5e4f49010a5\",\"startedAt\":1791590356157,\"at\":1791590356157,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"8cb2ba64-605a-4ee6-9030-f5e4f49010a5\",\"startedAt\":1791590356157,\"at\":1791590359145,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":2988}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"8cb2ba64-605a-4ee6-9030-f5e4f49010a5\",\"startedAt\":1791590356157,\"at\":1791590359146,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":2989}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"2c934a9d-64e1-49d0-849d-52dc64e3772c\",\"startedAt\":1791590359577,\"at\":1791590359577,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"2c934a9d-64e1-49d0-849d-52dc64e3772c\",\"startedAt\":1791590359577,\"at\":1791590363442,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":3865}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"2c934a9d-64e1-49d0-849d-52dc64e3772c\",\"startedAt\":1791590359577,\"at\":1791590363443,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":3866}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"2c934a9d-64e1-49d0-849d-52dc64e3772c\",\"startedAt\":1791590363992,\"at\":1791590363992,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"2c934a9d-64e1-49d0-849d-52dc64e3772c\",\"startedAt\":1791590363992,\"at\":1791590364203,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":211}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"2c934a9d-64e1-49d0-849d-52dc64e3772c\",\"startedAt\":1791590363992,\"at\":1791590364204,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":212}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"2c934a9d-64e1-49d0-849d-52dc64e3772c\",\"startedAt\":1791590364204,\"at\":1791590364204,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"2c934a9d-64e1-49d0-849d-52dc64e3772c\",\"startedAt\":1791590364204,\"at\":1791590364426,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":222}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"2c934a9d-64e1-49d0-849d-52dc64e3772c\",\"startedAt\":1791590364204,\"at\":1791590364458,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":254}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"2c934a9d-64e1-49d0-849d-52dc64e3772c\",\"startedAt\":1791590364459,\"at\":1791590364459,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"2c934a9d-64e1-49d0-849d-52dc64e3772c\",\"startedAt\":1791590364459,\"at\":1791590366297,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":1838}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"2c934a9d-64e1-49d0-849d-52dc64e3772c\",\"startedAt\":1791590364459,\"at\":1791590366298,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":1839}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"2c934a9d-64e1-49d0-849d-52dc64e3772c\",\"startedAt\":1791590366568,\"at\":1791590366568,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-09T23:58:54.587Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c58da7709562eb5494aa-4162ff56ca911af7d5ca",
+          "file": "map-workshop.spec.ts",
+          "line": 110,
+          "column": 3
+        },
+        {
+          "title": "phone: touch sketch clear undo reference creation, cancellation and retry preserve originals",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 46966,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"33b218fe-aa5c-4ba9-8760-5d74dbd28720\",\"startedAt\":1791590384466,\"at\":1791590384466,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"33b218fe-aa5c-4ba9-8760-5d74dbd28720\",\"startedAt\":1791590384466,\"at\":1791590391816,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":7350}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"33b218fe-aa5c-4ba9-8760-5d74dbd28720\",\"startedAt\":1791590384466,\"at\":1791590391817,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":7351}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"33b218fe-aa5c-4ba9-8760-5d74dbd28720\",\"startedAt\":1791590392346,\"at\":1791590392346,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"33b218fe-aa5c-4ba9-8760-5d74dbd28720\",\"startedAt\":1791590392346,\"at\":1791590392647,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":301}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"33b218fe-aa5c-4ba9-8760-5d74dbd28720\",\"startedAt\":1791590392346,\"at\":1791590392647,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":301}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"33b218fe-aa5c-4ba9-8760-5d74dbd28720\",\"startedAt\":1791590392647,\"at\":1791590392647,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"33b218fe-aa5c-4ba9-8760-5d74dbd28720\",\"startedAt\":1791590392647,\"at\":1791590392978,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":331}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"33b218fe-aa5c-4ba9-8760-5d74dbd28720\",\"startedAt\":1791590392647,\"at\":1791590393002,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":355}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"33b218fe-aa5c-4ba9-8760-5d74dbd28720\",\"startedAt\":1791590393003,\"at\":1791590393003,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"33b218fe-aa5c-4ba9-8760-5d74dbd28720\",\"startedAt\":1791590393003,\"at\":1791590397558,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":4555}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"33b218fe-aa5c-4ba9-8760-5d74dbd28720\",\"startedAt\":1791590393003,\"at\":1791590397559,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":4556}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"33b218fe-aa5c-4ba9-8760-5d74dbd28720\",\"startedAt\":1791590397663,\"at\":1791590397663,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"33b218fe-aa5c-4ba9-8760-5d74dbd28720\",\"startedAt\":1791590397663,\"at\":1791590398724,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":1061}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"33b218fe-aa5c-4ba9-8760-5d74dbd28720\",\"startedAt\":1791590397663,\"at\":1791590398724,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":1061}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"3d045fd2-bea4-436a-9f34-a85df922c14d\",\"startedAt\":1791590400221,\"at\":1791590400221,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"3d045fd2-bea4-436a-9f34-a85df922c14d\",\"startedAt\":1791590400221,\"at\":1791590405402,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":5181}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"3d045fd2-bea4-436a-9f34-a85df922c14d\",\"startedAt\":1791590400221,\"at\":1791590405407,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":5186}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"3d045fd2-bea4-436a-9f34-a85df922c14d\",\"startedAt\":1791590405845,\"at\":1791590405845,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"3d045fd2-bea4-436a-9f34-a85df922c14d\",\"startedAt\":1791590405845,\"at\":1791590406660,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":815}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"3d045fd2-bea4-436a-9f34-a85df922c14d\",\"startedAt\":1791590405845,\"at\":1791590406660,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":815}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"cancel\",\"requestId\":\"3d045fd2-bea4-436a-9f34-a85df922c14d\",\"startedAt\":1791590406757,\"at\":1791590406757,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"cancel\",\"requestId\":\"3d045fd2-bea4-436a-9f34-a85df922c14d\",\"startedAt\":1791590406757,\"at\":1791590406908,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":151}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"cancel\",\"requestId\":\"3d045fd2-bea4-436a-9f34-a85df922c14d\",\"startedAt\":1791590406757,\"at\":1791590406909,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":152}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"3d045fd2-bea4-436a-9f34-a85df922c14d\",\"startedAt\":1791590407147,\"at\":1791590407147,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"3d045fd2-bea4-436a-9f34-a85df922c14d\",\"startedAt\":1791590407147,\"at\":1791590407416,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":269}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"3d045fd2-bea4-436a-9f34-a85df922c14d\",\"startedAt\":1791590407147,\"at\":1791590407416,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":269}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"4dbc49db-78e4-49ab-ae4f-b9338c4b3804\",\"startedAt\":1791590407481,\"at\":1791590407481,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"4dbc49db-78e4-49ab-ae4f-b9338c4b3804\",\"startedAt\":1791590407481,\"at\":1791590412383,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":4902}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"4dbc49db-78e4-49ab-ae4f-b9338c4b3804\",\"startedAt\":1791590407481,\"at\":1791590412393,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":4912}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"4dbc49db-78e4-49ab-ae4f-b9338c4b3804\",\"startedAt\":1791590412695,\"at\":1791590412695,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"4dbc49db-78e4-49ab-ae4f-b9338c4b3804\",\"startedAt\":1791590412695,\"at\":1791590413212,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":517}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"4dbc49db-78e4-49ab-ae4f-b9338c4b3804\",\"startedAt\":1791590412695,\"at\":1791590413212,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":517}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"4dbc49db-78e4-49ab-ae4f-b9338c4b3804\",\"startedAt\":1791590413213,\"at\":1791590413213,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"4dbc49db-78e4-49ab-ae4f-b9338c4b3804\",\"startedAt\":1791590413213,\"at\":1791590413557,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":344}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"4dbc49db-78e4-49ab-ae4f-b9338c4b3804\",\"startedAt\":1791590413213,\"at\":1791590413599,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":386}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"4dbc49db-78e4-49ab-ae4f-b9338c4b3804\",\"startedAt\":1791590413599,\"at\":1791590413599,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"4dbc49db-78e4-49ab-ae4f-b9338c4b3804\",\"startedAt\":1791590413599,\"at\":1791590418042,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":4443}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"4dbc49db-78e4-49ab-ae4f-b9338c4b3804\",\"startedAt\":1791590413599,\"at\":1791590418045,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":4446}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"4dbc49db-78e4-49ab-ae4f-b9338c4b3804\",\"startedAt\":1791590418379,\"at\":1791590418379,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-09T23:59:34.264Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c58da7709562eb5494aa-894a2205674bf0975f58",
+          "file": "map-workshop.spec.ts",
+          "line": 202,
+          "column": 3
+        },
+        {
+          "title": "local adapter manual formats, maximum image/grid, failed input and alignment reload",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9513,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:00:21.326Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c58da7709562eb5494aa-d9a8ec3843c1fcde7858",
+          "file": "map-workshop.spec.ts",
+          "line": 291,
+          "column": 1
+        },
+        {
+          "title": "actual App retains drawing route and offers dedicated workshop navigation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2371,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:00:30.882Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c58da7709562eb5494aa-71e1e4a54302c6bcd399",
+          "file": "map-workshop.spec.ts",
+          "line": 334,
+          "column": 1
+        },
+        {
+          "title": "reference-only saved drawing reaches creation through the existing keyboard editor",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 15693,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c\",\"startedAt\":1791590438758,\"at\":1791590438758,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c\",\"startedAt\":1791590438758,\"at\":1791590443480,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":4722}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c\",\"startedAt\":1791590438758,\"at\":1791590443481,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":4723}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c\",\"startedAt\":1791590444056,\"at\":1791590444056,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c\",\"startedAt\":1791590444056,\"at\":1791590444708,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":652}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c\",\"startedAt\":1791590444056,\"at\":1791590444709,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":653}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c\",\"startedAt\":1791590444709,\"at\":1791590444709,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c\",\"startedAt\":1791590444709,\"at\":1791590445256,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":547}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c\",\"startedAt\":1791590444709,\"at\":1791590445291,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":582}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c\",\"startedAt\":1791590445292,\"at\":1791590445292,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c\",\"startedAt\":1791590445292,\"at\":1791590448034,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":2742}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c\",\"startedAt\":1791590445292,\"at\":1791590448034,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":2742}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c\",\"startedAt\":1791590448086,\"at\":1791590448086,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:00:33.263Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c58da7709562eb5494aa-6808bfae42495a72f52f",
+          "file": "map-workshop.spec.ts",
+          "line": 357,
+          "column": 1
+        },
+        {
+          "title": "provider timeout has honest error and explicit retry/cancel with private work retained",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7454,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"60e093ef-657d-44b1-b6e5-f3db3e2553cf\",\"startedAt\":1791590454365,\"at\":1791590454365,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"60e093ef-657d-44b1-b6e5-f3db3e2553cf\",\"startedAt\":1791590454365,\"at\":1791590454939,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":574}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"60e093ef-657d-44b1-b6e5-f3db3e2553cf\",\"startedAt\":1791590454365,\"at\":1791590454940,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":575}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"60e093ef-657d-44b1-b6e5-f3db3e2553cf\",\"startedAt\":1791590455900,\"at\":1791590455900,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"60e093ef-657d-44b1-b6e5-f3db3e2553cf\",\"startedAt\":1791590455900,\"at\":1791590456057,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":157}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"60e093ef-657d-44b1-b6e5-f3db3e2553cf\",\"startedAt\":1791590455900,\"at\":1791590456057,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":157}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"60e093ef-657d-44b1-b6e5-f3db3e2553cf\",\"startedAt\":1791590456149,\"at\":1791590456149,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"60e093ef-657d-44b1-b6e5-f3db3e2553cf\",\"startedAt\":1791590456149,\"at\":1791590456223,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":74}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"60e093ef-657d-44b1-b6e5-f3db3e2553cf\",\"startedAt\":1791590456149,\"at\":1791590456223,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":74}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"a2a186fd-b6b3-481c-9f4a-f316fb35667d\",\"startedAt\":1791590456236,\"at\":1791590456236,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"a2a186fd-b6b3-481c-9f4a-f316fb35667d\",\"startedAt\":1791590456236,\"at\":1791590456323,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":87}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"a2a186fd-b6b3-481c-9f4a-f316fb35667d\",\"startedAt\":1791590456236,\"at\":1791590456323,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":87}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"cancel\",\"requestId\":\"a2a186fd-b6b3-481c-9f4a-f316fb35667d\",\"startedAt\":1791590456381,\"at\":1791590456381,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"cancel\",\"requestId\":\"a2a186fd-b6b3-481c-9f4a-f316fb35667d\",\"startedAt\":1791590456381,\"at\":1791590456434,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":53}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"cancel\",\"requestId\":\"a2a186fd-b6b3-481c-9f4a-f316fb35667d\",\"startedAt\":1791590456381,\"at\":1791590456434,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":53}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:00:48.983Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c58da7709562eb5494aa-b000a141d94f9a8752f4",
+          "file": "map-workshop.spec.ts",
+          "line": 406,
+          "column": 1
+        },
+        {
+          "title": "local: conflicting alignment retains immutable originals and recoverable placement",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3100,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:00:56.539Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c58da7709562eb5494aa-d2b1f1b6e00c2b86238e",
+          "file": "map-workshop.spec.ts",
+          "line": 456,
+          "column": 3
+        },
+        {
+          "title": "Supabase: conflicting alignment retains immutable originals and recoverable placement",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4223,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:00:59.663Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c58da7709562eb5494aa-a284e25c130e840efb41",
+          "file": "map-workshop.spec.ts",
+          "line": 456,
+          "column": 3
+        },
+        {
+          "title": "selected artwork geometry does not override a new sketch draft or its retained PNG reference",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4284,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:01:03.902Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c58da7709562eb5494aa-27ceed9e152464a02c29",
+          "file": "map-workshop.spec.ts",
+          "line": 558,
+          "column": 1
+        },
+        {
+          "title": "each failed job retries its own original brief despite saved selection and reload",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 37220,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"a9f6535d-6b69-4712-92bf-4d000d57a131\",\"startedAt\":1791590469838,\"at\":1791590469838,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"a9f6535d-6b69-4712-92bf-4d000d57a131\",\"startedAt\":1791590469838,\"at\":1791590473959,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":4121}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"a9f6535d-6b69-4712-92bf-4d000d57a131\",\"startedAt\":1791590469838,\"at\":1791590473962,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":4124}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"a9f6535d-6b69-4712-92bf-4d000d57a131\",\"startedAt\":1791590474175,\"at\":1791590474175,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"a9f6535d-6b69-4712-92bf-4d000d57a131\",\"startedAt\":1791590474175,\"at\":1791590474367,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":192}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"a9f6535d-6b69-4712-92bf-4d000d57a131\",\"startedAt\":1791590474175,\"at\":1791590474367,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":192}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"a9f6535d-6b69-4712-92bf-4d000d57a131\",\"startedAt\":1791590474369,\"at\":1791590474369,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"a9f6535d-6b69-4712-92bf-4d000d57a131\",\"startedAt\":1791590474369,\"at\":1791590474796,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":427}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"a9f6535d-6b69-4712-92bf-4d000d57a131\",\"startedAt\":1791590474369,\"at\":1791590474924,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":555}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"a9f6535d-6b69-4712-92bf-4d000d57a131\",\"startedAt\":1791590474925,\"at\":1791590474925,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"a9f6535d-6b69-4712-92bf-4d000d57a131\",\"startedAt\":1791590474925,\"at\":1791590477095,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":2170}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"a9f6535d-6b69-4712-92bf-4d000d57a131\",\"startedAt\":1791590474925,\"at\":1791590477095,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":2170}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"a9f6535d-6b69-4712-92bf-4d000d57a131\",\"startedAt\":1791590477154,\"at\":1791590477154,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"78027b5d-57a0-483e-bbe2-61913c08604e\",\"startedAt\":1791590478051,\"at\":1791590478051,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"a9f6535d-6b69-4712-92bf-4d000d57a131\",\"startedAt\":1791590477154,\"at\":1791590481158,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":4004}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"a9f6535d-6b69-4712-92bf-4d000d57a131\",\"startedAt\":1791590477154,\"at\":1791590481162,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":4008}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"78027b5d-57a0-483e-bbe2-61913c08604e\",\"startedAt\":1791590478051,\"at\":1791590482122,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":4071}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"78027b5d-57a0-483e-bbe2-61913c08604e\",\"startedAt\":1791590478051,\"at\":1791590482125,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":4074}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"78027b5d-57a0-483e-bbe2-61913c08604e\",\"startedAt\":1791590482683,\"at\":1791590482683,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"78027b5d-57a0-483e-bbe2-61913c08604e\",\"startedAt\":1791590482683,\"at\":1791590482947,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":264}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"78027b5d-57a0-483e-bbe2-61913c08604e\",\"startedAt\":1791590482683,\"at\":1791590482948,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":265}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"cancel\",\"requestId\":\"78027b5d-57a0-483e-bbe2-61913c08604e\",\"startedAt\":1791590483041,\"at\":1791590483041,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"cancel\",\"requestId\":\"78027b5d-57a0-483e-bbe2-61913c08604e\",\"startedAt\":1791590483041,\"at\":1791590483111,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":70}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"cancel\",\"requestId\":\"78027b5d-57a0-483e-bbe2-61913c08604e\",\"startedAt\":1791590483041,\"at\":1791590483111,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":70}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"78027b5d-57a0-483e-bbe2-61913c08604e\",\"startedAt\":1791590483227,\"at\":1791590483227,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"78027b5d-57a0-483e-bbe2-61913c08604e\",\"startedAt\":1791590483227,\"at\":1791590483349,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":122}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"78027b5d-57a0-483e-bbe2-61913c08604e\",\"startedAt\":1791590483227,\"at\":1791590483350,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":123}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"23023dd4-62ac-4503-87e9-4f3113dfde04\",\"startedAt\":1791590483363,\"at\":1791590483363,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"23023dd4-62ac-4503-87e9-4f3113dfde04\",\"startedAt\":1791590483363,\"at\":1791590485712,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":2349}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"23023dd4-62ac-4503-87e9-4f3113dfde04\",\"startedAt\":1791590483363,\"at\":1791590485712,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":2349}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"23023dd4-62ac-4503-87e9-4f3113dfde04\",\"startedAt\":1791590485973,\"at\":1791590485973,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"23023dd4-62ac-4503-87e9-4f3113dfde04\",\"startedAt\":1791590485973,\"at\":1791590486280,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":307}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"23023dd4-62ac-4503-87e9-4f3113dfde04\",\"startedAt\":1791590485973,\"at\":1791590486281,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":308}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"23023dd4-62ac-4503-87e9-4f3113dfde04\",\"startedAt\":1791590486281,\"at\":1791590486281,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"23023dd4-62ac-4503-87e9-4f3113dfde04\",\"startedAt\":1791590486281,\"at\":1791590486996,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":715}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"23023dd4-62ac-4503-87e9-4f3113dfde04\",\"startedAt\":1791590486281,\"at\":1791590487070,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":789}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"23023dd4-62ac-4503-87e9-4f3113dfde04\",\"startedAt\":1791590487071,\"at\":1791590487071,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"23023dd4-62ac-4503-87e9-4f3113dfde04\",\"startedAt\":1791590487071,\"at\":1791590491999,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":4928}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"23023dd4-62ac-4503-87e9-4f3113dfde04\",\"startedAt\":1791590487071,\"at\":1791590492004,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":4933}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"23023dd4-62ac-4503-87e9-4f3113dfde04\",\"startedAt\":1791590492140,\"at\":1791590492140,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972\",\"startedAt\":1791590492889,\"at\":1791590492889,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"23023dd4-62ac-4503-87e9-4f3113dfde04\",\"startedAt\":1791590492140,\"at\":1791590495960,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":3820}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"23023dd4-62ac-4503-87e9-4f3113dfde04\",\"startedAt\":1791590492140,\"at\":1791590495964,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":3824}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972\",\"startedAt\":1791590492889,\"at\":1791590497157,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":4268}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972\",\"startedAt\":1791590492889,\"at\":1791590497158,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":4269}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972\",\"startedAt\":1791590497553,\"at\":1791590497553,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972\",\"startedAt\":1791590497553,\"at\":1791590498042,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":489}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972\",\"startedAt\":1791590497553,\"at\":1791590498042,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":489}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"cancel\",\"requestId\":\"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972\",\"startedAt\":1791590498433,\"at\":1791590498433,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"cancel\",\"requestId\":\"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972\",\"startedAt\":1791590498433,\"at\":1791590498832,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":399}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"cancel\",\"requestId\":\"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972\",\"startedAt\":1791590498433,\"at\":1791590498834,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":401}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972\",\"startedAt\":1791590499864,\"at\":1791590499864,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972\",\"startedAt\":1791590499864,\"at\":1791590500292,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":428}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972\",\"startedAt\":1791590499864,\"at\":1791590500295,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":431}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"ef0b1d74-ada5-4cc2-adca-213275562fd3\",\"startedAt\":1791590500352,\"at\":1791590500352,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"ef0b1d74-ada5-4cc2-adca-213275562fd3\",\"startedAt\":1791590500352,\"at\":1791590502674,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":2322}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"ef0b1d74-ada5-4cc2-adca-213275562fd3\",\"startedAt\":1791590500352,\"at\":1791590502675,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":2323}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"ef0b1d74-ada5-4cc2-adca-213275562fd3\",\"startedAt\":1791590502792,\"at\":1791590502792,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"ef0b1d74-ada5-4cc2-adca-213275562fd3\",\"startedAt\":1791590502792,\"at\":1791590502938,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":146}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"ef0b1d74-ada5-4cc2-adca-213275562fd3\",\"startedAt\":1791590502792,\"at\":1791590502938,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":146}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"ef0b1d74-ada5-4cc2-adca-213275562fd3\",\"startedAt\":1791590502938,\"at\":1791590502938,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"ef0b1d74-ada5-4cc2-adca-213275562fd3\",\"startedAt\":1791590502938,\"at\":1791590503131,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":193}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"ef0b1d74-ada5-4cc2-adca-213275562fd3\",\"startedAt\":1791590502938,\"at\":1791590503212,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":274}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"ef0b1d74-ada5-4cc2-adca-213275562fd3\",\"startedAt\":1791590503212,\"at\":1791590503212,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"ef0b1d74-ada5-4cc2-adca-213275562fd3\",\"startedAt\":1791590503212,\"at\":1791590505024,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":1812}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"ef0b1d74-ada5-4cc2-adca-213275562fd3\",\"startedAt\":1791590503212,\"at\":1791590505024,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":1812}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"ef0b1d74-ada5-4cc2-adca-213275562fd3\",\"startedAt\":1791590505122,\"at\":1791590505122,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:01:08.218Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c58da7709562eb5494aa-c2d44e37edfb186c86ff",
+          "file": "map-workshop.spec.ts",
+          "line": 629,
+          "column": 1
+        },
+        {
+          "title": "UI transport failure fixture: failed output never claims saved or replaces retained artwork",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8178,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:01:45.472Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c58da7709562eb5494aa-42ed5121be8f7b461dcc",
+          "file": "map-workshop.spec.ts",
+          "line": 680,
+          "column": 3
+        },
+        {
+          "title": "UI transport failure fixture: missing-version output never claims saved or replaces retained artwork",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2948,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:01:53.719Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c58da7709562eb5494aa-51c456865949ef0e7aac",
+          "file": "map-workshop.spec.ts",
+          "line": 680,
+          "column": 3
+        },
+        {
+          "title": "UI read projection fixture: reload retry reads original request, preserves intent and refreshes CAS without uncertain resubmission",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3022,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:01:56.707Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c58da7709562eb5494aa-59ab14570802a8fcb59f",
+          "file": "map-workshop.spec.ts",
+          "line": 722,
+          "column": 1
+        },
+        {
+          "title": "UI read projection fixture: authoritative original intent overrides the session draft copy",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5415,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:01:59.739Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c58da7709562eb5494aa-3ee63066d194fea4af94",
+          "file": "map-workshop.spec.ts",
+          "line": 799,
+          "column": 1
+        },
+        {
+          "title": "controlled controller transport interruption: real Edge receipt resumes the same job after reload without another submit",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "creation-and-revision",
+              "projectName": "creation-and-revision",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 17053,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"fb7a0b3f-50dc-4782-824b-28ca59a9eb40\",\"startedAt\":1791590529725,\"at\":1791590529725,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_JOB_RECOVERY {\"phase\":\"before-controller-abort\",\"id\":\"fb7a0b3f-50dc-4782-824b-28ca59a9eb40\",\"status\":200,\"receivedState\":\"awaiting-client-output\",\"receivedCode\":null,\"lifetimeMs\":5259,\"receipt\":{\"id\":\"fb7a0b3f-50dc-4782-824b-28ca59a9eb40\",\"state\":\"awaiting-client-output\",\"revision\":4,\"expires_at\":1791676931344,\"owned_jobs\":1,\"output_present\":false,\"candidate_present\":true,\"provider_finished_at\":\"2026-10-10T00:02:11.344524+00:00\",\"provider_submission_present\":true}}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"submit\",\"requestId\":\"fb7a0b3f-50dc-4782-824b-28ca59a9eb40\",\"startedAt\":1791590529725,\"at\":1791590535030,\"phase\":\"failure\",\"status\":null,\"lifetimeMs\":5305}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"fb7a0b3f-50dc-4782-824b-28ca59a9eb40\",\"startedAt\":1791590536311,\"at\":1791590536311,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"fb7a0b3f-50dc-4782-824b-28ca59a9eb40\",\"startedAt\":1791590536311,\"at\":1791590536624,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":313}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"fb7a0b3f-50dc-4782-824b-28ca59a9eb40\",\"startedAt\":1791590536311,\"at\":1791590536625,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":314}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"fb7a0b3f-50dc-4782-824b-28ca59a9eb40\",\"startedAt\":1791590536722,\"at\":1791590536722,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"fb7a0b3f-50dc-4782-824b-28ca59a9eb40\",\"startedAt\":1791590536722,\"at\":1791590537003,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":281}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"fb7a0b3f-50dc-4782-824b-28ca59a9eb40\",\"startedAt\":1791590536722,\"at\":1791590537004,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":282}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"fb7a0b3f-50dc-4782-824b-28ca59a9eb40\",\"startedAt\":1791590537004,\"at\":1791590537004,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"fb7a0b3f-50dc-4782-824b-28ca59a9eb40\",\"startedAt\":1791590537004,\"at\":1791590537945,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":941}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"open-candidate\",\"requestId\":\"fb7a0b3f-50dc-4782-824b-28ca59a9eb40\",\"startedAt\":1791590537004,\"at\":1791590537970,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":966}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"fb7a0b3f-50dc-4782-824b-28ca59a9eb40\",\"startedAt\":1791590537971,\"at\":1791590537971,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"fb7a0b3f-50dc-4782-824b-28ca59a9eb40\",\"startedAt\":1791590537971,\"at\":1791590540900,\"phase\":\"response\",\"status\":200,\"lifetimeMs\":2929}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"output\",\"requestId\":\"fb7a0b3f-50dc-4782-824b-28ca59a9eb40\",\"startedAt\":1791590537971,\"at\":1791590540914,\"phase\":\"end\",\"status\":200,\"lifetimeMs\":2943}\n"
+                    },
+                    {
+                      "text": "MAP_HTTP_TIMING {\"kind\":\"read\",\"requestId\":\"fb7a0b3f-50dc-4782-824b-28ca59a9eb40\",\"startedAt\":1791590541202,\"at\":1791590541202,\"phase\":\"start\",\"status\":null,\"lifetimeMs\":0}\n"
+                    },
+                    {
+                      "text": "MAP_JOB_RECOVERY {\"phase\":\"after-explicit-resume\",\"receipt\":{\"id\":\"fb7a0b3f-50dc-4782-824b-28ca59a9eb40\",\"state\":\"completed\",\"revision\":6,\"expires_at\":1791676931344,\"owned_jobs\":1,\"output_present\":true,\"candidate_present\":true,\"provider_finished_at\":\"2026-10-10T00:02:11.344524+00:00\",\"provider_submission_present\":true}}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:02:05.176Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c58da7709562eb5494aa-1b2bdf0c9f44e5d0e358",
+          "file": "map-workshop.spec.ts",
+          "line": 838,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "map-aligned-stages.spec.ts",
+      "file": "map-aligned-stages.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "genuine authority aligned stages retain calibration/mask; older branch and explicit incompatible hidden setup",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "laptop",
+              "projectName": "laptop",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 26934,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Ticket11 privileged fixture exact outside pixels: 786432; no generation/provider claim\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/functions/v1/map-generation\",\"status\":503,\"code\":\"\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/functions/v1/map-generation\",\"status\":503,\"code\":\"\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/storage/v1/object/authenticated/party-handouts/ca917551-ed25-4a99-9291-e0255ca812ad/02304cc2-095b-4ab1-b0ef-24477d33b687\",\"status\":400,\"code\":\"NoSuchKey\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/storage/v1/object/authenticated/party-handouts/ca917551-ed25-4a99-9291-e0255ca812ad/c39af9c0-87cc-496d-9803-40f45b00b782\",\"status\":400,\"code\":\"NoSuchKey\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/party_map_artwork_versions\",\"status\":401,\"code\":\"PGRST303\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/storage/v1/object/authenticated/party-handouts/ca917551-ed25-4a99-9291-e0255ca812ad/c5eda99b-9f3b-43f7-a38b-29a86ed0a69b\",\"status\":400,\"code\":\"NoSuchKey\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/party_map_artwork_versions\",\"status\":401,\"code\":\"PGRST303\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/party_map_artwork_versions\",\"status\":401,\"code\":\"PGRST303\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/storage/v1/object/authenticated/party-handouts/ca917551-ed25-4a99-9291-e0255ca812ad/02304cc2-095b-4ab1-b0ef-24477d33b687\",\"status\":400,\"code\":\"AccessDenied\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/storage/v1/object/authenticated/party-handouts/ca917551-ed25-4a99-9291-e0255ca812ad/c39af9c0-87cc-496d-9803-40f45b00b782\",\"status\":400,\"code\":\"AccessDenied\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/party_map_artwork_versions\",\"status\":401,\"code\":\"42501\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/storage/v1/object/authenticated/party-handouts/ca917551-ed25-4a99-9291-e0255ca812ad/c5eda99b-9f3b-43f7-a38b-29a86ed0a69b\",\"status\":400,\"code\":\"AccessDenied\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/party_map_artwork_versions\",\"status\":401,\"code\":\"42501\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/party_map_artwork_versions\",\"status\":401,\"code\":\"42501\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/storage/v1/object/authenticated/party-handouts/ca917551-ed25-4a99-9291-e0255ca812ad/02304cc2-095b-4ab1-b0ef-24477d33b687\",\"status\":400,\"code\":\"NoSuchKey\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/storage/v1/object/authenticated/party-handouts/ca917551-ed25-4a99-9291-e0255ca812ad/c39af9c0-87cc-496d-9803-40f45b00b782\",\"status\":400,\"code\":\"NoSuchKey\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/storage/v1/object/authenticated/party-handouts/ca917551-ed25-4a99-9291-e0255ca812ad/c5eda99b-9f3b-43f7-a38b-29a86ed0a69b\",\"status\":400,\"code\":\"NoSuchKey\"}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:02:23.495Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6900f88ebcc9311d9975-1c447bc55f9d45fb85eb",
+          "file": "map-aligned-stages.spec.ts",
+          "line": 27,
+          "column": 1
+        },
+        {
+          "title": "genuine authority aligned stages retain calibration/mask; older branch and explicit incompatible hidden setup",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 47277,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Ticket11 privileged fixture exact outside pixels: 786432; no generation/provider claim\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/functions/v1/map-generation\",\"status\":503,\"code\":\"\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/functions/v1/map-generation\",\"status\":503,\"code\":\"\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/storage/v1/object/authenticated/party-handouts/868179fd-ba10-44e5-8ae0-dfacf414887d/c820531f-89ce-4812-b4d6-9a81673cf152\",\"status\":400,\"code\":\"NoSuchKey\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/party_map_artwork_versions\",\"status\":401,\"code\":\"PGRST303\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/storage/v1/object/authenticated/party-handouts/868179fd-ba10-44e5-8ae0-dfacf414887d/0485b61e-35f4-409a-af7f-1e2283903d6a\",\"status\":400,\"code\":\"NoSuchKey\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/party_map_artwork_versions\",\"status\":401,\"code\":\"PGRST303\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/storage/v1/object/authenticated/party-handouts/868179fd-ba10-44e5-8ae0-dfacf414887d/88efbedb-0494-4508-b1d5-559f098c664e\",\"status\":400,\"code\":\"NoSuchKey\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/party_map_artwork_versions\",\"status\":401,\"code\":\"PGRST303\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/storage/v1/object/authenticated/party-handouts/868179fd-ba10-44e5-8ae0-dfacf414887d/c820531f-89ce-4812-b4d6-9a81673cf152\",\"status\":400,\"code\":\"AccessDenied\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/storage/v1/object/authenticated/party-handouts/868179fd-ba10-44e5-8ae0-dfacf414887d/0485b61e-35f4-409a-af7f-1e2283903d6a\",\"status\":400,\"code\":\"AccessDenied\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/storage/v1/object/authenticated/party-handouts/868179fd-ba10-44e5-8ae0-dfacf414887d/88efbedb-0494-4508-b1d5-559f098c664e\",\"status\":400,\"code\":\"AccessDenied\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/party_map_artwork_versions\",\"status\":401,\"code\":\"42501\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/party_map_artwork_versions\",\"status\":401,\"code\":\"42501\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/storage/v1/object/authenticated/party-handouts/868179fd-ba10-44e5-8ae0-dfacf414887d/c820531f-89ce-4812-b4d6-9a81673cf152\",\"status\":400,\"code\":\"NoSuchKey\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/party_map_artwork_versions\",\"status\":401,\"code\":\"42501\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/storage/v1/object/authenticated/party-handouts/868179fd-ba10-44e5-8ae0-dfacf414887d/0485b61e-35f4-409a-af7f-1e2283903d6a\",\"status\":400,\"code\":\"NoSuchKey\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/storage/v1/object/authenticated/party-handouts/868179fd-ba10-44e5-8ae0-dfacf414887d/88efbedb-0494-4508-b1d5-559f098c664e\",\"status\":400,\"code\":\"NoSuchKey\"}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:05:48.582Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6900f88ebcc9311d9975-7172a60079843940e4be",
+          "file": "map-aligned-stages.spec.ts",
+          "line": 27,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "map-display-live.spec.ts",
+      "file": "map-display-live.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "genuine authority: opaque output, touch controls, persistence/conflict/failure, reopen, PDF switching and revocation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "laptop",
+              "projectName": "laptop",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11861,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/rpc/commit_map_reveal_mask\",\"status\":503,\"code\":\"OWNED_FAILURE\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/party_map_artwork_versions\",\"status\":401,\"code\":\"PGRST303\"}\n"
+                    },
+                    {
+                      "text": "{\"event\":\"http-error\",\"path\":\"/rest/v1/party_map_artwork_versions\",\"status\":401,\"code\":\"42501\"}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:02:54.638Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "105c41ce6b0004b73ba4-df9f376d1fc79ee6248d",
+          "file": "map-display-live.spec.ts",
+          "line": 26,
+          "column": 1
+        },
+        {
+          "title": "genuine authority: opaque output, touch controls, persistence/conflict/failure, reopen, PDF switching and revocation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 17587,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"accepted\"\u001b[39m\nReceived: \u001b[31m\"pending\"\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"accepted\"\u001b[39m\nReceived: \u001b[31m\"pending\"\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n    at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-display-live.spec.ts:36:101",
+                    "location": {
+                      "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-display-live.spec.ts",
+                      "column": 101,
+                      "line": 36
+                    },
+                    "snippet": "  34 |  const point=await svg.evaluate((svg:SVGSVGElement)=>{const p=new DOMPoint(.5,.5).matrixTransform(svg.getScreenCTM()!);return{x:p.x,y:p.y};});\n  35 |  if(isMobile)await page.touchscreen.tap(point.x,point.y);else await page.mouse.click(point.x,point.y);\n> 36 |  await expect.poll(()=>page.evaluate(()=>(window as any).liveMap.display.getState().reveal.status)).toBe('accepted');\n     |                                                                                                     ^\n  37 |  await expect.poll(()=>pixel(popup,.1,.1)).not.toEqual([0,0,0,255]);expect(await pixel(popup,.5,.5)).toEqual([0,0,0,255]);\n  38 |  const before=await page.evaluate(()=>(window as any).liveMap.content.readMapWorkspace());expect(before.presentation.mask.uncovered).toEqual([0]);\n  39 |  // External competing controller accepted a stroke; dirty local work must retain"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-display-live.spec.ts",
+                        "column": 101,
+                        "line": 36
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"accepted\"\u001b[39m\nReceived: \u001b[31m\"pending\"\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n  34 |  const point=await svg.evaluate((svg:SVGSVGElement)=>{const p=new DOMPoint(.5,.5).matrixTransform(svg.getScreenCTM()!);return{x:p.x,y:p.y};});\n  35 |  if(isMobile)await page.touchscreen.tap(point.x,point.y);else await page.mouse.click(point.x,point.y);\n> 36 |  await expect.poll(()=>page.evaluate(()=>(window as any).liveMap.display.getState().reveal.status)).toBe('accepted');\n     |                                                                                                     ^\n  37 |  await expect.poll(()=>pixel(popup,.1,.1)).not.toEqual([0,0,0,255]);expect(await pixel(popup,.5,.5)).toEqual([0,0,0,255]);\n  38 |  const before=await page.evaluate(()=>(window as any).liveMap.content.readMapWorkspace());expect(before.presentation.mask.uncovered).toEqual([0]);\n  39 |  // External competing controller accepted a stroke; dirty local work must retain\n    at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-display-live.spec.ts:36:101"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:06:52.712Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/private/tmp/map-integration-12-browser/map-display-live-genuine-a-7b12c-DF-switching-and-revocation-phone/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-display-live.spec.ts",
+                    "column": 101,
+                    "line": 36
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "105c41ce6b0004b73ba4-2ddb573b291ce6dc0dd0",
+          "file": "map-display-live.spec.ts",
+          "line": 26,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "map-display.spec.ts",
+      "file": "map-display.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "masked frame, private DOM, accepted strokes, failure draft, clear and reopen authority",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "laptop",
+              "projectName": "laptop",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4444,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:03:06.559Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "995e1c4017a96d7ce61a-154259a17635881b956b",
+          "file": "map-display.spec.ts",
+          "line": 2,
+          "column": 1
+        },
+        {
+          "title": "actual workshop Use intent and rapid pointer stroke controls remain private",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "laptop",
+              "projectName": "laptop",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4642,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:03:11.024Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "995e1c4017a96d7ce61a-e96c8d1bcea1e969bdaf",
+          "file": "map-display.spec.ts",
+          "line": 24,
+          "column": 1
+        },
+        {
+          "title": "blocked popup and stale protected choice/render cannot restore cleared or revoked output",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "laptop",
+              "projectName": "laptop",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4535,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:03:15.692Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "995e1c4017a96d7ce61a-31d8146ebae00baddebd",
+          "file": "map-display.spec.ts",
+          "line": 37,
+          "column": 1
+        },
+        {
+          "title": "largest supported artwork and grid render bounded opaque frames without per-sample persistence",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "laptop",
+              "projectName": "laptop",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3961,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Ticket10 laptop observed16Mpixel/80x80 initial frame milliseconds: 788.6999999880791\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:03:20.253Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "995e1c4017a96d7ce61a-bf2983e5e57f6c6e5246",
+          "file": "map-display.spec.ts",
+          "line": 58,
+          "column": 1
+        },
+        {
+          "title": "fresh controller after reload restores accepted progress black-first while Clear suppresses restore",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "laptop",
+              "projectName": "laptop",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3830,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:03:24.293Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "995e1c4017a96d7ce61a-a11e20e9a33a19853c71",
+          "file": "map-display.spec.ts",
+          "line": 77,
+          "column": 1
+        },
+        {
+          "title": "pending reveal success settles after popup close and safely reopens",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "laptop",
+              "projectName": "laptop",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3568,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:03:28.176Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "995e1c4017a96d7ce61a-a69148fa62fa161e0318",
+          "file": "map-display.spec.ts",
+          "line": 102,
+          "column": 35
+        },
+        {
+          "title": "pending reveal failure settles after popup close and safely reopens",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "laptop",
+              "projectName": "laptop",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3838,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:03:31.772Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "995e1c4017a96d7ce61a-8fd1a07236aa51dfdfd0",
+          "file": "map-display.spec.ts",
+          "line": 102,
+          "column": 35
+        },
+        {
+          "title": "masked frame, private DOM, accepted strokes, failure draft, clear and reopen authority",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7681,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:07:12.403Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "995e1c4017a96d7ce61a-44c862cff16e7d9e07a7",
+          "file": "map-display.spec.ts",
+          "line": 2,
+          "column": 1
+        },
+        {
+          "title": "actual workshop Use intent and rapid pointer stroke controls remain private",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2107,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:07:24.851Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "995e1c4017a96d7ce61a-36b1ce9158e7634ba501",
+          "file": "map-display.spec.ts",
+          "line": 24,
+          "column": 1
+        },
+        {
+          "title": "blocked popup and stale protected choice/render cannot restore cleared or revoked output",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5895,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:07:26.980Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "995e1c4017a96d7ce61a-7399da6118552cb04866",
+          "file": "map-display.spec.ts",
+          "line": 37,
+          "column": 1
+        },
+        {
+          "title": "largest supported artwork and grid render bounded opaque frames without per-sample persistence",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4798,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Ticket10 phone observed16Mpixel/80x80 initial frame milliseconds: 1049.8999999761581\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:07:32.891Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "995e1c4017a96d7ce61a-7942b8cc74c550a5a744",
+          "file": "map-display.spec.ts",
+          "line": 58,
+          "column": 1
+        },
+        {
+          "title": "fresh controller after reload restores accepted progress black-first while Clear suppresses restore",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5682,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:07:37.725Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "995e1c4017a96d7ce61a-489b9934f53297f3d45e",
+          "file": "map-display.spec.ts",
+          "line": 77,
+          "column": 1
+        },
+        {
+          "title": "pending reveal success settles after popup close and safely reopens",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5561,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:07:43.462Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "995e1c4017a96d7ce61a-24776b3702d405c18faf",
+          "file": "map-display.spec.ts",
+          "line": 102,
+          "column": 35
+        },
+        {
+          "title": "pending reveal failure settles after popup close and safely reopens",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2997,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:07:49.161Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "995e1c4017a96d7ce61a-22c5b874536260dfdfa5",
+          "file": "map-display.spec.ts",
+          "line": 102,
+          "column": 35
+        }
+      ]
+    },
+    {
+      "title": "map-integrated-workflows.spec.ts",
+      "file": "map-integrated-workflows.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "genuine Character edits and Handout PDF sharing continue during outstanding retained-artwork generation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "laptop",
+              "projectName": "laptop",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 21625,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Party Display page 1')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByLabel('Party Display page 1') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Party Display page 1')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Party Display page 1')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByLabel('Party Display page 1') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Party Display page 1')\u001b[22m\n\n    at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts:65:60",
+                    "location": {
+                      "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts",
+                      "column": 60,
+                      "line": 65
+                    },
+                    "snippet": "  63 |   }, [...png]);\n  64 |   expect(replacement).toEqual({ ok: true, type: 'image/png', size: png.length });\n> 65 |   await expect(display.getByLabel('Party Display page 1')).toBeVisible();\n     |                                                            ^\n  66 |   release(); await page.unroute(process.env.MAP_FIXTURE_SERVER! + '/**');\n  67 |   await expect(page.getByRole('button', { name: 'Save completed artwork' })).toBeVisible({ timeout: 30000 });\n  68 |   await page.getByRole('button', { name: 'Save completed artwork' }).click();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts",
+                        "column": 60,
+                        "line": 65
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Party Display page 1')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByLabel('Party Display page 1') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Party Display page 1')\u001b[22m\n\n\n  63 |   }, [...png]);\n  64 |   expect(replacement).toEqual({ ok: true, type: 'image/png', size: png.length });\n> 65 |   await expect(display.getByLabel('Party Display page 1')).toBeVisible();\n     |                                                            ^\n  66 |   release(); await page.unroute(process.env.MAP_FIXTURE_SERVER! + '/**');\n  67 |   await expect(page.getByRole('button', { name: 'Save completed artwork' })).toBeVisible({ timeout: 30000 });\n  68 |   await page.getByRole('button', { name: 'Save completed artwork' }).click();\n    at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts:65:60"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:03:35.695Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/private/tmp/map-integration-12-browser/map-integrated-workflows-g-1d283-retained-artwork-generation-laptop/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts",
+                    "column": 60,
+                    "line": 65
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "608a07c9c93a035fd456-2865aaff5bb4464abcbb",
+          "file": "map-integrated-workflows.spec.ts",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "title": "genuine Character edits and Handout PDF sharing continue during outstanding retained-artwork generation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 25978,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Party Display page 1')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByLabel('Party Display page 1') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Party Display page 1')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Party Display page 1')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByLabel('Party Display page 1') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Party Display page 1')\u001b[22m\n\n    at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts:65:60",
+                    "location": {
+                      "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts",
+                      "column": 60,
+                      "line": 65
+                    },
+                    "snippet": "  63 |   }, [...png]);\n  64 |   expect(replacement).toEqual({ ok: true, type: 'image/png', size: png.length });\n> 65 |   await expect(display.getByLabel('Party Display page 1')).toBeVisible();\n     |                                                            ^\n  66 |   release(); await page.unroute(process.env.MAP_FIXTURE_SERVER! + '/**');\n  67 |   await expect(page.getByRole('button', { name: 'Save completed artwork' })).toBeVisible({ timeout: 30000 });\n  68 |   await page.getByRole('button', { name: 'Save completed artwork' }).click();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts",
+                        "column": 60,
+                        "line": 65
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Party Display page 1')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByLabel('Party Display page 1') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Party Display page 1')\u001b[22m\n\n\n  63 |   }, [...png]);\n  64 |   expect(replacement).toEqual({ ok: true, type: 'image/png', size: png.length });\n> 65 |   await expect(display.getByLabel('Party Display page 1')).toBeVisible();\n     |                                                            ^\n  66 |   release(); await page.unroute(process.env.MAP_FIXTURE_SERVER! + '/**');\n  67 |   await expect(page.getByRole('button', { name: 'Save completed artwork' })).toBeVisible({ timeout: 30000 });\n  68 |   await page.getByRole('button', { name: 'Save completed artwork' }).click();\n    at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts:65:60"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:07:52.408Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/private/tmp/map-integration-12-browser/map-integrated-workflows-g-1d283-retained-artwork-generation-phone/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts",
+                    "column": 60,
+                    "line": 65
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "608a07c9c93a035fd456-236226448db46ee0a647",
+          "file": "map-integrated-workflows.spec.ts",
+          "line": 5,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "party-display.spec.ts",
+      "file": "party-display.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "extended display gesture, blocked popup, closed/reopen, navigation lifetime and safe sign-out",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "laptop",
+              "projectName": "laptop",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12703,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:03:58.213Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "376fe854729c5b107445-80b306f1e5094e9f96e6",
+          "file": "party-display.spec.ts",
+          "line": 11,
+          "column": 1
+        },
+        {
+          "title": "DM deterministic PDF page, viewport, Fit, Clear and withdraw",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "laptop",
+              "projectName": "laptop",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 18767,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:04:14.101Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "376fe854729c5b107445-256e810fa480926d9d34",
+          "file": "party-display.spec.ts",
+          "line": 21,
+          "column": 1
+        },
+        {
+          "title": "replacement refreshes active bytes, interruption retains frame, reconnect withdraw and opaque session loss clear",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "laptop",
+              "projectName": "laptop",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9526,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:04:32.906Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "376fe854729c5b107445-f42fae0417a0465fdd5a",
+          "file": "party-display.spec.ts",
+          "line": 31,
+          "column": 1
+        },
+        {
+          "title": "presentation interface retains ambiguous reveal identity, rejects failed private reveal and cancels stale reads",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "laptop",
+              "projectName": "laptop",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3482,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:04:42.471Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "376fe854729c5b107445-39572c00232192e167f0",
+          "file": "party-display.spec.ts",
+          "line": 42,
+          "column": 1
+        },
+        {
+          "title": "pending replacement survives Fit, page and popup resize while stale reads cannot overwrite selection",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "laptop",
+              "projectName": "laptop",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3398,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:04:45.977Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "376fe854729c5b107445-bfd6e55bf27e9623f707",
+          "file": "party-display.spec.ts",
+          "line": 66,
+          "column": 1
+        },
+        {
+          "title": "genuine Supabase display preserves interrupted frame, reconciles withdrawal, independent Player PDF and authority loss",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "laptop",
+              "projectName": "laptop",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 54123,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Display page 1 of 1')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Display page 1 of 1') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Display page 1 of 1')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Display page 1 of 1')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Display page 1 of 1') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Display page 1 of 1')\u001b[22m\n\n    at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/party-display.spec.ts:118:241",
+                    "location": {
+                      "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/party-display.spec.ts",
+                      "column": 241,
+                      "line": 118
+                    },
+                    "snippet": "  116 |   await page.getByRole('button',{name:new RegExp(`${title} Private`)}).click();\n  117 |   await page.getByRole('button',{name:'Reveal and present',exact:true}).click();await expect(display.locator('canvas')).toBeVisible({timeout:15_000});await player.getByRole('button',{name:new RegExp(`${title} Revealed`)}).click();await expect(player.getByText('Page 1 of 2',{exact:true})).toBeVisible();\n> 118 |   await page.getByLabel('Replacement file').setInputFiles({name:'map.png',mimeType:'image/png',buffer:png});await page.getByRole('button',{name:'Replace for everyone',exact:true}).click();await expect(page.getByText('Display page 1 of 1')).toBeVisible();await expect(player.getByRole('img',{name:'Handout content',exact:true})).toBeVisible();\n      |                                                                                                                                                                                                                                                 ^\n  119 |   await page.screenshot({path:info.outputPath('live-handout.png'),fullPage:true});\n  120 |   // Confirmed expired/invalid auth response clears, even with a previously rendered frame.\n  121 |   await page.route('**/rest/v1/party_members?**',route=>route.fulfill({status:401,json:{code:'PGRST301',message:'Invalid JWT'}}));await expect(display.locator('canvas')).toHaveCount(0);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/party-display.spec.ts",
+                        "column": 241,
+                        "line": 118
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Display page 1 of 1')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Display page 1 of 1') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Display page 1 of 1')\u001b[22m\n\n\n  116 |   await page.getByRole('button',{name:new RegExp(`${title} Private`)}).click();\n  117 |   await page.getByRole('button',{name:'Reveal and present',exact:true}).click();await expect(display.locator('canvas')).toBeVisible({timeout:15_000});await player.getByRole('button',{name:new RegExp(`${title} Revealed`)}).click();await expect(player.getByText('Page 1 of 2',{exact:true})).toBeVisible();\n> 118 |   await page.getByLabel('Replacement file').setInputFiles({name:'map.png',mimeType:'image/png',buffer:png});await page.getByRole('button',{name:'Replace for everyone',exact:true}).click();await expect(page.getByText('Display page 1 of 1')).toBeVisible();await expect(player.getByRole('img',{name:'Handout content',exact:true})).toBeVisible();\n      |                                                                                                                                                                                                                                                 ^\n  119 |   await page.screenshot({path:info.outputPath('live-handout.png'),fullPage:true});\n  120 |   // Confirmed expired/invalid auth response clears, even with a previously rendered frame.\n  121 |   await page.route('**/rest/v1/party_members?**',route=>route.fulfill({status:401,json:{code:'PGRST301',message:'Invalid JWT'}}));await expect(display.locator('canvas')).toHaveCount(0);\n    at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/party-display.spec.ts:118:241"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:04:49.400Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/private/tmp/map-integration-12-browser/party-display-genuine-Supa-90bd1-ayer-PDF-and-authority-loss-laptop/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/party-display.spec.ts",
+                    "column": 241,
+                    "line": 118
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "376fe854729c5b107445-a6b23138303a1638a0b1",
+          "file": "party-display.spec.ts",
+          "line": 95,
+          "column": 1
+        },
+        {
+          "title": "extended display gesture, blocked popup, closed/reopen, navigation lifetime and safe sign-out",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5360,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:08:19.496Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "376fe854729c5b107445-37a3b936844dede2f50b",
+          "file": "party-display.spec.ts",
+          "line": 11,
+          "column": 1
+        },
+        {
+          "title": "DM deterministic PDF page, viewport, Fit, Clear and withdraw",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9212,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:08:27.269Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "376fe854729c5b107445-d4b4cb7532a8732abe9e",
+          "file": "party-display.spec.ts",
+          "line": 21,
+          "column": 1
+        },
+        {
+          "title": "replacement refreshes active bytes, interruption retains frame, reconnect withdraw and opaque session loss clear",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8618,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:08:36.509Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "376fe854729c5b107445-0b4e19a10720bc3b98c4",
+          "file": "party-display.spec.ts",
+          "line": 31,
+          "column": 1
+        },
+        {
+          "title": "presentation interface retains ambiguous reveal identity, rejects failed private reveal and cancels stale reads",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3215,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:08:45.152Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "376fe854729c5b107445-b68cccf49be33800d61d",
+          "file": "party-display.spec.ts",
+          "line": 42,
+          "column": 1
+        },
+        {
+          "title": "pending replacement survives Fit, page and popup resize while stale reads cannot overwrite selection",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4023,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:08:48.398Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "376fe854729c5b107445-078448c8a9467e623686",
+          "file": "party-display.spec.ts",
+          "line": 66,
+          "column": 1
+        },
+        {
+          "title": "genuine Supabase display preserves interrupted frame, reconciles withdrawal, independent Player PDF and authority loss",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 45822,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-10T00:08:52.440Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "376fe854729c5b107445-c804ffdde3e7c83d0126",
+          "file": "party-display.spec.ts",
+          "line": 95,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-09T23:53:01.949Z",
+    "duration": 997865.097,
+    "expected": 51,
+    "skipped": 0,
+    "unexpected": 5,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "source": "222e42f0a9cb701ddb90bb22bb726d046d8e84da",
+  "inspection": "All literal static/dynamic imports and new URL module references in client and server source; non-literal dynamic references also manually searched. Domain map-generation is client types, not server code.",
+  "graphs": [
+    {
+      "root": "src",
+      "sourceFiles": 64,
+      "crossGraphEdges": []
+    },
+    {
+      "root": "supabase/functions/map-generation",
+      "sourceFiles": 9,
+      "crossGraphEdges": []
+    }
+  ],
+  "applicableFrozenSource": "84772f6d53431ada5a2b30f3ad9531e960ed95a0",
+  "applicability": "Client/server production source byte-identical to original inspected 222e42f; later commits change test configuration/assertions only."
+}

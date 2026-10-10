@@ -1,0 +1,23 @@
+Starting explicitly labelled fixture application with fresh bounded Edge workers.
+[WebServer] (node:63036) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 2 tests using 1 worker
+
+(node:63037) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 1:16:42 AM [vite] (client) [console.warn] GoTrueClient@sb-127-auth-token:1 (2.116.0) 2026-10-10T00:16:42.033Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+[WebServer] 1:16:42 AM [vite] (client) [console.warn] GoTrueClient@sb-127-auth-token:2 (2.116.0) 2026-10-10T00:16:42.038Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+  ✓  1 [laptop] › e2e/map-integrated-workflows.spec.ts:5:1 › genuine Character edits and Handout PDF sharing continue during outstanding retained-artwork generation (28.8s)
+(node:63073) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 1:17:16 AM [vite] (client) [console.warn] GoTrueClient@sb-127-auth-token:1 (2.116.0) 2026-10-10T00:17:16.897Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+[WebServer] 1:17:16 AM [vite] (client) [console.warn] GoTrueClient@sb-127-auth-token:2 (2.116.0) 2026-10-10T00:17:16.899Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+  ✓  2 [phone] › e2e/map-integrated-workflows.spec.ts:5:1 › genuine Character edits and Handout PDF sharing continue during outstanding retained-artwork generation (27.7s)
+
+  2 passed (1.1m)
+Exact baseline restored; 25 owned parties/DMs, eight Players and 6 owned objects cleaned; container49182 removed.

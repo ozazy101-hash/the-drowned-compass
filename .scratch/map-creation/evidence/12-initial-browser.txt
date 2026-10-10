@@ -1,0 +1,489 @@
+Starting explicitly labelled fixture application with fresh bounded Edge workers.
+[WebServer] (node:56914) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./rules-reference" without a file extension (src/domain/spell-catalog.ts:2:27). Add the file extension
+[WebServer]   - import "./party-content" without a file extension (src/domain/party.ts:1:35). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 56 tests using 1 worker
+
+(node:56921) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"event":"http-error","path":"/rest/v1/rpc/read_map_generation_jobs","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/rest/v1/rpc/read_map_workspace","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/","status":422,"code":"output-pixels-mismatch"}
+{"name":"laptop","outside":962140,"inside":86436,"mismatch":0,"region":{"x":292,"y":438,"width":294,"height":294},"registrationPreserved":true,"sourceId":"dc073876-026e-4e14-be62-df95dd57f33f","acceptedId":"bb2240c3-e9cc-4464-b3e5-70e5bf84fe52"}
+  ✓   1 [creation-and-revision] › e2e/map-revision.spec.ts:47:107 › laptop: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching (1.5m)
+{"event":"http-error","path":"/","status":422,"code":"output-pixels-mismatch"}
+{"name":"phone","outside":962140,"inside":86436,"mismatch":0,"region":{"x":292,"y":438,"width":294,"height":294},"registrationPreserved":true,"sourceId":"74a8dbf2-5b8e-4f9d-9918-9047e4403a0d","acceptedId":"4bb69c67-ddc2-4e06-bf53-b58207c19483"}
+  ✓   2 [creation-and-revision] › e2e/map-revision.spec.ts:47:107 › phone: aligned selected-area output has exact outside/inside pixels, parent comparison and older branching (1.9m)
+  ✓   3 [creation-and-revision] › e2e/map-revision.spec.ts:88:1 › selected-area cancel terminates assembly; retry reconciles the original area with a new request (25.8s)
+{"event":"http-error","path":"/","status":422,"code":"expired-output"}
+  ✓   4 [creation-and-revision] › e2e/map-revision.spec.ts:101:1 › expired selected-area proof and stale parent never attach or replace presentation (30.5s)
+[WebServer] 12:57:35 AM [vite] (client) [console.warn] GoTrueClient@sb-127-auth-token:1 (2.116.0) 2026-10-09T23:58:05.186Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+  ✓   5 [creation-and-revision] › e2e/map-revision.spec.ts:110:1 › assembly timeout and controller replacement terminate workers without output or a new version (13.5s)
+  ✓   6 [creation-and-revision] › e2e/map-revision.spec.ts:118:1 › phone multi-touch cannot replace primary rectangle and cancelled gestures clear the draft (8.8s)
+  ✓   7 [creation-and-revision] › e2e/map-revision.spec.ts:133:1 › whole-map original intent restores after inspection and recoverable read failure without changing its source (23.4s)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"615aa069-184e-4ca1-80d5-81111af2acb1","startedAt":1791590292305,"at":1791590292305,"phase":"start","status":null,"lifetimeMs":0}
+  ✘   8 [creation-and-revision] › e2e/map-workshop.spec.ts:110:3 › laptop: real fixture invent sibling comparison and upload alignment survive reload (9.3s)
+(node:57477) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"8857897e-cbae-48ab-a08c-a0f1d1f11f90","startedAt":1791590310231,"at":1791590310231,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"8857897e-cbae-48ab-a08c-a0f1d1f11f90","startedAt":1791590310231,"at":1791590314914,"phase":"response","status":200,"lifetimeMs":4683}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"8857897e-cbae-48ab-a08c-a0f1d1f11f90","startedAt":1791590310231,"at":1791590314919,"phase":"end","status":200,"lifetimeMs":4688}
+MAP_HTTP_TIMING {"kind":"read","requestId":"8857897e-cbae-48ab-a08c-a0f1d1f11f90","startedAt":1791590315304,"at":1791590315304,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"8857897e-cbae-48ab-a08c-a0f1d1f11f90","startedAt":1791590315304,"at":1791590315696,"phase":"response","status":200,"lifetimeMs":392}
+MAP_HTTP_TIMING {"kind":"read","requestId":"8857897e-cbae-48ab-a08c-a0f1d1f11f90","startedAt":1791590315304,"at":1791590315696,"phase":"end","status":200,"lifetimeMs":392}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"8857897e-cbae-48ab-a08c-a0f1d1f11f90","startedAt":1791590315697,"at":1791590315697,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"8857897e-cbae-48ab-a08c-a0f1d1f11f90","startedAt":1791590315697,"at":1791590316206,"phase":"response","status":200,"lifetimeMs":509}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"8857897e-cbae-48ab-a08c-a0f1d1f11f90","startedAt":1791590315697,"at":1791590316296,"phase":"end","status":200,"lifetimeMs":599}
+MAP_HTTP_TIMING {"kind":"output","requestId":"8857897e-cbae-48ab-a08c-a0f1d1f11f90","startedAt":1791590316297,"at":1791590316297,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"8857897e-cbae-48ab-a08c-a0f1d1f11f90","startedAt":1791590316297,"at":1791590319466,"phase":"response","status":200,"lifetimeMs":3169}
+MAP_HTTP_TIMING {"kind":"output","requestId":"8857897e-cbae-48ab-a08c-a0f1d1f11f90","startedAt":1791590316297,"at":1791590319468,"phase":"end","status":200,"lifetimeMs":3171}
+MAP_HTTP_TIMING {"kind":"read","requestId":"8857897e-cbae-48ab-a08c-a0f1d1f11f90","startedAt":1791590319525,"at":1791590319525,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"1c808402-ec85-4896-b387-3f8bd259dd9f","startedAt":1791590322547,"at":1791590322547,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"8857897e-cbae-48ab-a08c-a0f1d1f11f90","startedAt":1791590319525,"at":1791590324158,"phase":"response","status":200,"lifetimeMs":4633}
+MAP_HTTP_TIMING {"kind":"read","requestId":"8857897e-cbae-48ab-a08c-a0f1d1f11f90","startedAt":1791590319525,"at":1791590324159,"phase":"end","status":200,"lifetimeMs":4634}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"1c808402-ec85-4896-b387-3f8bd259dd9f","startedAt":1791590322547,"at":1791590327058,"phase":"response","status":200,"lifetimeMs":4511}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"1c808402-ec85-4896-b387-3f8bd259dd9f","startedAt":1791590322547,"at":1791590327065,"phase":"end","status":200,"lifetimeMs":4518}
+MAP_HTTP_TIMING {"kind":"read","requestId":"1c808402-ec85-4896-b387-3f8bd259dd9f","startedAt":1791590327261,"at":1791590327261,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"1c808402-ec85-4896-b387-3f8bd259dd9f","startedAt":1791590327261,"at":1791590327808,"phase":"response","status":200,"lifetimeMs":547}
+MAP_HTTP_TIMING {"kind":"read","requestId":"1c808402-ec85-4896-b387-3f8bd259dd9f","startedAt":1791590327261,"at":1791590327809,"phase":"end","status":200,"lifetimeMs":548}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"1c808402-ec85-4896-b387-3f8bd259dd9f","startedAt":1791590328118,"at":1791590328118,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"1c808402-ec85-4896-b387-3f8bd259dd9f","startedAt":1791590328118,"at":1791590328233,"phase":"response","status":200,"lifetimeMs":115}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"1c808402-ec85-4896-b387-3f8bd259dd9f","startedAt":1791590328118,"at":1791590328233,"phase":"end","status":200,"lifetimeMs":115}
+MAP_HTTP_TIMING {"kind":"read","requestId":"1c808402-ec85-4896-b387-3f8bd259dd9f","startedAt":1791590328356,"at":1791590328356,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"1c808402-ec85-4896-b387-3f8bd259dd9f","startedAt":1791590328356,"at":1791590328498,"phase":"response","status":200,"lifetimeMs":142}
+MAP_HTTP_TIMING {"kind":"read","requestId":"1c808402-ec85-4896-b387-3f8bd259dd9f","startedAt":1791590328356,"at":1791590328498,"phase":"end","status":200,"lifetimeMs":142}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"7356a6c3-8310-4be6-8485-7dee2507fa0b","startedAt":1791590328521,"at":1791590328521,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"7356a6c3-8310-4be6-8485-7dee2507fa0b","startedAt":1791590328521,"at":1791590330393,"phase":"response","status":200,"lifetimeMs":1872}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"7356a6c3-8310-4be6-8485-7dee2507fa0b","startedAt":1791590328521,"at":1791590330394,"phase":"end","status":200,"lifetimeMs":1873}
+MAP_HTTP_TIMING {"kind":"read","requestId":"7356a6c3-8310-4be6-8485-7dee2507fa0b","startedAt":1791590330776,"at":1791590330776,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"7356a6c3-8310-4be6-8485-7dee2507fa0b","startedAt":1791590330776,"at":1791590330879,"phase":"response","status":200,"lifetimeMs":103}
+MAP_HTTP_TIMING {"kind":"read","requestId":"7356a6c3-8310-4be6-8485-7dee2507fa0b","startedAt":1791590330776,"at":1791590330879,"phase":"end","status":200,"lifetimeMs":103}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"7356a6c3-8310-4be6-8485-7dee2507fa0b","startedAt":1791590330880,"at":1791590330880,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"7356a6c3-8310-4be6-8485-7dee2507fa0b","startedAt":1791590330880,"at":1791590331052,"phase":"response","status":200,"lifetimeMs":172}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"7356a6c3-8310-4be6-8485-7dee2507fa0b","startedAt":1791590330880,"at":1791590331089,"phase":"end","status":200,"lifetimeMs":209}
+MAP_HTTP_TIMING {"kind":"output","requestId":"7356a6c3-8310-4be6-8485-7dee2507fa0b","startedAt":1791590331089,"at":1791590331089,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"7356a6c3-8310-4be6-8485-7dee2507fa0b","startedAt":1791590331089,"at":1791590332927,"phase":"response","status":200,"lifetimeMs":1838}
+MAP_HTTP_TIMING {"kind":"output","requestId":"7356a6c3-8310-4be6-8485-7dee2507fa0b","startedAt":1791590331089,"at":1791590332931,"phase":"end","status":200,"lifetimeMs":1842}
+MAP_HTTP_TIMING {"kind":"read","requestId":"7356a6c3-8310-4be6-8485-7dee2507fa0b","startedAt":1791590333058,"at":1791590333058,"phase":"start","status":null,"lifetimeMs":0}
+  ✓   9 [creation-and-revision] › e2e/map-workshop.spec.ts:202:3 › laptop: touch sketch clear undo reference creation, cancellation and retry preserve originals (30.6s)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"8cb2ba64-605a-4ee6-9030-f5e4f49010a5","startedAt":1791590338467,"at":1791590338467,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"8cb2ba64-605a-4ee6-9030-f5e4f49010a5","startedAt":1791590342919,"at":1791590342919,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"8cb2ba64-605a-4ee6-9030-f5e4f49010a5","startedAt":1791590342919,"at":1791590350118,"phase":"response","status":200,"lifetimeMs":7199}
+MAP_HTTP_TIMING {"kind":"read","requestId":"8cb2ba64-605a-4ee6-9030-f5e4f49010a5","startedAt":1791590342919,"at":1791590350123,"phase":"end","status":200,"lifetimeMs":7204}
+MAP_HTTP_TIMING {"kind":"read","requestId":"8cb2ba64-605a-4ee6-9030-f5e4f49010a5","startedAt":1791590350582,"at":1791590350582,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"8cb2ba64-605a-4ee6-9030-f5e4f49010a5","startedAt":1791590350582,"at":1791590353621,"phase":"response","status":200,"lifetimeMs":3039}
+MAP_HTTP_TIMING {"kind":"read","requestId":"8cb2ba64-605a-4ee6-9030-f5e4f49010a5","startedAt":1791590350582,"at":1791590353626,"phase":"end","status":200,"lifetimeMs":3044}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"8cb2ba64-605a-4ee6-9030-f5e4f49010a5","startedAt":1791590353633,"at":1791590353633,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"8cb2ba64-605a-4ee6-9030-f5e4f49010a5","startedAt":1791590353633,"at":1791590354439,"phase":"response","status":200,"lifetimeMs":806}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"8cb2ba64-605a-4ee6-9030-f5e4f49010a5","startedAt":1791590353633,"at":1791590354496,"phase":"end","status":200,"lifetimeMs":863}
+MAP_HTTP_TIMING {"kind":"output","requestId":"8cb2ba64-605a-4ee6-9030-f5e4f49010a5","startedAt":1791590354497,"at":1791590354497,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"8cb2ba64-605a-4ee6-9030-f5e4f49010a5","startedAt":1791590354497,"at":1791590356062,"phase":"response","status":200,"lifetimeMs":1565}
+MAP_HTTP_TIMING {"kind":"output","requestId":"8cb2ba64-605a-4ee6-9030-f5e4f49010a5","startedAt":1791590354497,"at":1791590356063,"phase":"end","status":200,"lifetimeMs":1566}
+MAP_HTTP_TIMING {"kind":"read","requestId":"8cb2ba64-605a-4ee6-9030-f5e4f49010a5","startedAt":1791590356157,"at":1791590356157,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"8cb2ba64-605a-4ee6-9030-f5e4f49010a5","startedAt":1791590356157,"at":1791590359145,"phase":"response","status":200,"lifetimeMs":2988}
+MAP_HTTP_TIMING {"kind":"read","requestId":"8cb2ba64-605a-4ee6-9030-f5e4f49010a5","startedAt":1791590356157,"at":1791590359146,"phase":"end","status":200,"lifetimeMs":2989}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"2c934a9d-64e1-49d0-849d-52dc64e3772c","startedAt":1791590359577,"at":1791590359577,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"2c934a9d-64e1-49d0-849d-52dc64e3772c","startedAt":1791590359577,"at":1791590363442,"phase":"response","status":200,"lifetimeMs":3865}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"2c934a9d-64e1-49d0-849d-52dc64e3772c","startedAt":1791590359577,"at":1791590363443,"phase":"end","status":200,"lifetimeMs":3866}
+MAP_HTTP_TIMING {"kind":"read","requestId":"2c934a9d-64e1-49d0-849d-52dc64e3772c","startedAt":1791590363992,"at":1791590363992,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"2c934a9d-64e1-49d0-849d-52dc64e3772c","startedAt":1791590363992,"at":1791590364203,"phase":"response","status":200,"lifetimeMs":211}
+MAP_HTTP_TIMING {"kind":"read","requestId":"2c934a9d-64e1-49d0-849d-52dc64e3772c","startedAt":1791590363992,"at":1791590364204,"phase":"end","status":200,"lifetimeMs":212}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"2c934a9d-64e1-49d0-849d-52dc64e3772c","startedAt":1791590364204,"at":1791590364204,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"2c934a9d-64e1-49d0-849d-52dc64e3772c","startedAt":1791590364204,"at":1791590364426,"phase":"response","status":200,"lifetimeMs":222}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"2c934a9d-64e1-49d0-849d-52dc64e3772c","startedAt":1791590364204,"at":1791590364458,"phase":"end","status":200,"lifetimeMs":254}
+MAP_HTTP_TIMING {"kind":"output","requestId":"2c934a9d-64e1-49d0-849d-52dc64e3772c","startedAt":1791590364459,"at":1791590364459,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"2c934a9d-64e1-49d0-849d-52dc64e3772c","startedAt":1791590364459,"at":1791590366297,"phase":"response","status":200,"lifetimeMs":1838}
+MAP_HTTP_TIMING {"kind":"output","requestId":"2c934a9d-64e1-49d0-849d-52dc64e3772c","startedAt":1791590364459,"at":1791590366298,"phase":"end","status":200,"lifetimeMs":1839}
+MAP_HTTP_TIMING {"kind":"read","requestId":"2c934a9d-64e1-49d0-849d-52dc64e3772c","startedAt":1791590366568,"at":1791590366568,"phase":"start","status":null,"lifetimeMs":0}
+  ✓  10 [creation-and-revision] › e2e/map-workshop.spec.ts:110:3 › phone: real fixture invent sibling comparison and upload alignment survive reload (39.6s)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"33b218fe-aa5c-4ba9-8760-5d74dbd28720","startedAt":1791590384466,"at":1791590384466,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"33b218fe-aa5c-4ba9-8760-5d74dbd28720","startedAt":1791590384466,"at":1791590391816,"phase":"response","status":200,"lifetimeMs":7350}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"33b218fe-aa5c-4ba9-8760-5d74dbd28720","startedAt":1791590384466,"at":1791590391817,"phase":"end","status":200,"lifetimeMs":7351}
+MAP_HTTP_TIMING {"kind":"read","requestId":"33b218fe-aa5c-4ba9-8760-5d74dbd28720","startedAt":1791590392346,"at":1791590392346,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"33b218fe-aa5c-4ba9-8760-5d74dbd28720","startedAt":1791590392346,"at":1791590392647,"phase":"response","status":200,"lifetimeMs":301}
+MAP_HTTP_TIMING {"kind":"read","requestId":"33b218fe-aa5c-4ba9-8760-5d74dbd28720","startedAt":1791590392346,"at":1791590392647,"phase":"end","status":200,"lifetimeMs":301}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"33b218fe-aa5c-4ba9-8760-5d74dbd28720","startedAt":1791590392647,"at":1791590392647,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"33b218fe-aa5c-4ba9-8760-5d74dbd28720","startedAt":1791590392647,"at":1791590392978,"phase":"response","status":200,"lifetimeMs":331}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"33b218fe-aa5c-4ba9-8760-5d74dbd28720","startedAt":1791590392647,"at":1791590393002,"phase":"end","status":200,"lifetimeMs":355}
+MAP_HTTP_TIMING {"kind":"output","requestId":"33b218fe-aa5c-4ba9-8760-5d74dbd28720","startedAt":1791590393003,"at":1791590393003,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"33b218fe-aa5c-4ba9-8760-5d74dbd28720","startedAt":1791590393003,"at":1791590397558,"phase":"response","status":200,"lifetimeMs":4555}
+MAP_HTTP_TIMING {"kind":"output","requestId":"33b218fe-aa5c-4ba9-8760-5d74dbd28720","startedAt":1791590393003,"at":1791590397559,"phase":"end","status":200,"lifetimeMs":4556}
+MAP_HTTP_TIMING {"kind":"read","requestId":"33b218fe-aa5c-4ba9-8760-5d74dbd28720","startedAt":1791590397663,"at":1791590397663,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"33b218fe-aa5c-4ba9-8760-5d74dbd28720","startedAt":1791590397663,"at":1791590398724,"phase":"response","status":200,"lifetimeMs":1061}
+MAP_HTTP_TIMING {"kind":"read","requestId":"33b218fe-aa5c-4ba9-8760-5d74dbd28720","startedAt":1791590397663,"at":1791590398724,"phase":"end","status":200,"lifetimeMs":1061}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"3d045fd2-bea4-436a-9f34-a85df922c14d","startedAt":1791590400221,"at":1791590400221,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"3d045fd2-bea4-436a-9f34-a85df922c14d","startedAt":1791590400221,"at":1791590405402,"phase":"response","status":200,"lifetimeMs":5181}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"3d045fd2-bea4-436a-9f34-a85df922c14d","startedAt":1791590400221,"at":1791590405407,"phase":"end","status":200,"lifetimeMs":5186}
+MAP_HTTP_TIMING {"kind":"read","requestId":"3d045fd2-bea4-436a-9f34-a85df922c14d","startedAt":1791590405845,"at":1791590405845,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"3d045fd2-bea4-436a-9f34-a85df922c14d","startedAt":1791590405845,"at":1791590406660,"phase":"response","status":200,"lifetimeMs":815}
+MAP_HTTP_TIMING {"kind":"read","requestId":"3d045fd2-bea4-436a-9f34-a85df922c14d","startedAt":1791590405845,"at":1791590406660,"phase":"end","status":200,"lifetimeMs":815}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"3d045fd2-bea4-436a-9f34-a85df922c14d","startedAt":1791590406757,"at":1791590406757,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"3d045fd2-bea4-436a-9f34-a85df922c14d","startedAt":1791590406757,"at":1791590406908,"phase":"response","status":200,"lifetimeMs":151}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"3d045fd2-bea4-436a-9f34-a85df922c14d","startedAt":1791590406757,"at":1791590406909,"phase":"end","status":200,"lifetimeMs":152}
+MAP_HTTP_TIMING {"kind":"read","requestId":"3d045fd2-bea4-436a-9f34-a85df922c14d","startedAt":1791590407147,"at":1791590407147,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"3d045fd2-bea4-436a-9f34-a85df922c14d","startedAt":1791590407147,"at":1791590407416,"phase":"response","status":200,"lifetimeMs":269}
+MAP_HTTP_TIMING {"kind":"read","requestId":"3d045fd2-bea4-436a-9f34-a85df922c14d","startedAt":1791590407147,"at":1791590407416,"phase":"end","status":200,"lifetimeMs":269}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"4dbc49db-78e4-49ab-ae4f-b9338c4b3804","startedAt":1791590407481,"at":1791590407481,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"4dbc49db-78e4-49ab-ae4f-b9338c4b3804","startedAt":1791590407481,"at":1791590412383,"phase":"response","status":200,"lifetimeMs":4902}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"4dbc49db-78e4-49ab-ae4f-b9338c4b3804","startedAt":1791590407481,"at":1791590412393,"phase":"end","status":200,"lifetimeMs":4912}
+MAP_HTTP_TIMING {"kind":"read","requestId":"4dbc49db-78e4-49ab-ae4f-b9338c4b3804","startedAt":1791590412695,"at":1791590412695,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"4dbc49db-78e4-49ab-ae4f-b9338c4b3804","startedAt":1791590412695,"at":1791590413212,"phase":"response","status":200,"lifetimeMs":517}
+MAP_HTTP_TIMING {"kind":"read","requestId":"4dbc49db-78e4-49ab-ae4f-b9338c4b3804","startedAt":1791590412695,"at":1791590413212,"phase":"end","status":200,"lifetimeMs":517}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"4dbc49db-78e4-49ab-ae4f-b9338c4b3804","startedAt":1791590413213,"at":1791590413213,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"4dbc49db-78e4-49ab-ae4f-b9338c4b3804","startedAt":1791590413213,"at":1791590413557,"phase":"response","status":200,"lifetimeMs":344}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"4dbc49db-78e4-49ab-ae4f-b9338c4b3804","startedAt":1791590413213,"at":1791590413599,"phase":"end","status":200,"lifetimeMs":386}
+MAP_HTTP_TIMING {"kind":"output","requestId":"4dbc49db-78e4-49ab-ae4f-b9338c4b3804","startedAt":1791590413599,"at":1791590413599,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"4dbc49db-78e4-49ab-ae4f-b9338c4b3804","startedAt":1791590413599,"at":1791590418042,"phase":"response","status":200,"lifetimeMs":4443}
+MAP_HTTP_TIMING {"kind":"output","requestId":"4dbc49db-78e4-49ab-ae4f-b9338c4b3804","startedAt":1791590413599,"at":1791590418045,"phase":"end","status":200,"lifetimeMs":4446}
+MAP_HTTP_TIMING {"kind":"read","requestId":"4dbc49db-78e4-49ab-ae4f-b9338c4b3804","startedAt":1791590418379,"at":1791590418379,"phase":"start","status":null,"lifetimeMs":0}
+  ✓  11 [creation-and-revision] › e2e/map-workshop.spec.ts:202:3 › phone: touch sketch clear undo reference creation, cancellation and retry preserve originals (47.0s)
+  ✓  12 [creation-and-revision] › e2e/map-workshop.spec.ts:291:1 › local adapter manual formats, maximum image/grid, failed input and alignment reload (9.5s)
+  ✓  13 [creation-and-revision] › e2e/map-workshop.spec.ts:334:1 › actual App retains drawing route and offers dedicated workshop navigation (2.4s)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c","startedAt":1791590438758,"at":1791590438758,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c","startedAt":1791590438758,"at":1791590443480,"phase":"response","status":200,"lifetimeMs":4722}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c","startedAt":1791590438758,"at":1791590443481,"phase":"end","status":200,"lifetimeMs":4723}
+MAP_HTTP_TIMING {"kind":"read","requestId":"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c","startedAt":1791590444056,"at":1791590444056,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c","startedAt":1791590444056,"at":1791590444708,"phase":"response","status":200,"lifetimeMs":652}
+MAP_HTTP_TIMING {"kind":"read","requestId":"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c","startedAt":1791590444056,"at":1791590444709,"phase":"end","status":200,"lifetimeMs":653}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c","startedAt":1791590444709,"at":1791590444709,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c","startedAt":1791590444709,"at":1791590445256,"phase":"response","status":200,"lifetimeMs":547}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c","startedAt":1791590444709,"at":1791590445291,"phase":"end","status":200,"lifetimeMs":582}
+MAP_HTTP_TIMING {"kind":"output","requestId":"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c","startedAt":1791590445292,"at":1791590445292,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c","startedAt":1791590445292,"at":1791590448034,"phase":"response","status":200,"lifetimeMs":2742}
+MAP_HTTP_TIMING {"kind":"output","requestId":"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c","startedAt":1791590445292,"at":1791590448034,"phase":"end","status":200,"lifetimeMs":2742}
+MAP_HTTP_TIMING {"kind":"read","requestId":"c8ab7fb1-c4d0-4815-aa8b-1c66b1e3e32c","startedAt":1791590448086,"at":1791590448086,"phase":"start","status":null,"lifetimeMs":0}
+  ✓  14 [creation-and-revision] › e2e/map-workshop.spec.ts:357:1 › reference-only saved drawing reaches creation through the existing keyboard editor (15.7s)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"60e093ef-657d-44b1-b6e5-f3db3e2553cf","startedAt":1791590454365,"at":1791590454365,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"60e093ef-657d-44b1-b6e5-f3db3e2553cf","startedAt":1791590454365,"at":1791590454939,"phase":"response","status":200,"lifetimeMs":574}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"60e093ef-657d-44b1-b6e5-f3db3e2553cf","startedAt":1791590454365,"at":1791590454940,"phase":"end","status":200,"lifetimeMs":575}
+MAP_HTTP_TIMING {"kind":"read","requestId":"60e093ef-657d-44b1-b6e5-f3db3e2553cf","startedAt":1791590455900,"at":1791590455900,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"60e093ef-657d-44b1-b6e5-f3db3e2553cf","startedAt":1791590455900,"at":1791590456057,"phase":"response","status":200,"lifetimeMs":157}
+MAP_HTTP_TIMING {"kind":"read","requestId":"60e093ef-657d-44b1-b6e5-f3db3e2553cf","startedAt":1791590455900,"at":1791590456057,"phase":"end","status":200,"lifetimeMs":157}
+MAP_HTTP_TIMING {"kind":"read","requestId":"60e093ef-657d-44b1-b6e5-f3db3e2553cf","startedAt":1791590456149,"at":1791590456149,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"60e093ef-657d-44b1-b6e5-f3db3e2553cf","startedAt":1791590456149,"at":1791590456223,"phase":"response","status":200,"lifetimeMs":74}
+MAP_HTTP_TIMING {"kind":"read","requestId":"60e093ef-657d-44b1-b6e5-f3db3e2553cf","startedAt":1791590456149,"at":1791590456223,"phase":"end","status":200,"lifetimeMs":74}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"a2a186fd-b6b3-481c-9f4a-f316fb35667d","startedAt":1791590456236,"at":1791590456236,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"a2a186fd-b6b3-481c-9f4a-f316fb35667d","startedAt":1791590456236,"at":1791590456323,"phase":"response","status":200,"lifetimeMs":87}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"a2a186fd-b6b3-481c-9f4a-f316fb35667d","startedAt":1791590456236,"at":1791590456323,"phase":"end","status":200,"lifetimeMs":87}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"a2a186fd-b6b3-481c-9f4a-f316fb35667d","startedAt":1791590456381,"at":1791590456381,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"a2a186fd-b6b3-481c-9f4a-f316fb35667d","startedAt":1791590456381,"at":1791590456434,"phase":"response","status":200,"lifetimeMs":53}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"a2a186fd-b6b3-481c-9f4a-f316fb35667d","startedAt":1791590456381,"at":1791590456434,"phase":"end","status":200,"lifetimeMs":53}
+  ✓  15 [creation-and-revision] › e2e/map-workshop.spec.ts:406:1 › provider timeout has honest error and explicit retry/cancel with private work retained (7.5s)
+  ✓  16 [creation-and-revision] › e2e/map-workshop.spec.ts:456:3 › local: conflicting alignment retains immutable originals and recoverable placement (3.1s)
+  ✓  17 [creation-and-revision] › e2e/map-workshop.spec.ts:456:3 › Supabase: conflicting alignment retains immutable originals and recoverable placement (4.2s)
+  ✓  18 [creation-and-revision] › e2e/map-workshop.spec.ts:558:1 › selected artwork geometry does not override a new sketch draft or its retained PNG reference (4.3s)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"a9f6535d-6b69-4712-92bf-4d000d57a131","startedAt":1791590469838,"at":1791590469838,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"a9f6535d-6b69-4712-92bf-4d000d57a131","startedAt":1791590469838,"at":1791590473959,"phase":"response","status":200,"lifetimeMs":4121}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"a9f6535d-6b69-4712-92bf-4d000d57a131","startedAt":1791590469838,"at":1791590473962,"phase":"end","status":200,"lifetimeMs":4124}
+MAP_HTTP_TIMING {"kind":"read","requestId":"a9f6535d-6b69-4712-92bf-4d000d57a131","startedAt":1791590474175,"at":1791590474175,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"a9f6535d-6b69-4712-92bf-4d000d57a131","startedAt":1791590474175,"at":1791590474367,"phase":"response","status":200,"lifetimeMs":192}
+MAP_HTTP_TIMING {"kind":"read","requestId":"a9f6535d-6b69-4712-92bf-4d000d57a131","startedAt":1791590474175,"at":1791590474367,"phase":"end","status":200,"lifetimeMs":192}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"a9f6535d-6b69-4712-92bf-4d000d57a131","startedAt":1791590474369,"at":1791590474369,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"a9f6535d-6b69-4712-92bf-4d000d57a131","startedAt":1791590474369,"at":1791590474796,"phase":"response","status":200,"lifetimeMs":427}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"a9f6535d-6b69-4712-92bf-4d000d57a131","startedAt":1791590474369,"at":1791590474924,"phase":"end","status":200,"lifetimeMs":555}
+MAP_HTTP_TIMING {"kind":"output","requestId":"a9f6535d-6b69-4712-92bf-4d000d57a131","startedAt":1791590474925,"at":1791590474925,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"a9f6535d-6b69-4712-92bf-4d000d57a131","startedAt":1791590474925,"at":1791590477095,"phase":"response","status":200,"lifetimeMs":2170}
+MAP_HTTP_TIMING {"kind":"output","requestId":"a9f6535d-6b69-4712-92bf-4d000d57a131","startedAt":1791590474925,"at":1791590477095,"phase":"end","status":200,"lifetimeMs":2170}
+MAP_HTTP_TIMING {"kind":"read","requestId":"a9f6535d-6b69-4712-92bf-4d000d57a131","startedAt":1791590477154,"at":1791590477154,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"78027b5d-57a0-483e-bbe2-61913c08604e","startedAt":1791590478051,"at":1791590478051,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"a9f6535d-6b69-4712-92bf-4d000d57a131","startedAt":1791590477154,"at":1791590481158,"phase":"response","status":200,"lifetimeMs":4004}
+MAP_HTTP_TIMING {"kind":"read","requestId":"a9f6535d-6b69-4712-92bf-4d000d57a131","startedAt":1791590477154,"at":1791590481162,"phase":"end","status":200,"lifetimeMs":4008}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"78027b5d-57a0-483e-bbe2-61913c08604e","startedAt":1791590478051,"at":1791590482122,"phase":"response","status":200,"lifetimeMs":4071}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"78027b5d-57a0-483e-bbe2-61913c08604e","startedAt":1791590478051,"at":1791590482125,"phase":"end","status":200,"lifetimeMs":4074}
+MAP_HTTP_TIMING {"kind":"read","requestId":"78027b5d-57a0-483e-bbe2-61913c08604e","startedAt":1791590482683,"at":1791590482683,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"78027b5d-57a0-483e-bbe2-61913c08604e","startedAt":1791590482683,"at":1791590482947,"phase":"response","status":200,"lifetimeMs":264}
+MAP_HTTP_TIMING {"kind":"read","requestId":"78027b5d-57a0-483e-bbe2-61913c08604e","startedAt":1791590482683,"at":1791590482948,"phase":"end","status":200,"lifetimeMs":265}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"78027b5d-57a0-483e-bbe2-61913c08604e","startedAt":1791590483041,"at":1791590483041,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"78027b5d-57a0-483e-bbe2-61913c08604e","startedAt":1791590483041,"at":1791590483111,"phase":"response","status":200,"lifetimeMs":70}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"78027b5d-57a0-483e-bbe2-61913c08604e","startedAt":1791590483041,"at":1791590483111,"phase":"end","status":200,"lifetimeMs":70}
+MAP_HTTP_TIMING {"kind":"read","requestId":"78027b5d-57a0-483e-bbe2-61913c08604e","startedAt":1791590483227,"at":1791590483227,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"78027b5d-57a0-483e-bbe2-61913c08604e","startedAt":1791590483227,"at":1791590483349,"phase":"response","status":200,"lifetimeMs":122}
+MAP_HTTP_TIMING {"kind":"read","requestId":"78027b5d-57a0-483e-bbe2-61913c08604e","startedAt":1791590483227,"at":1791590483350,"phase":"end","status":200,"lifetimeMs":123}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"23023dd4-62ac-4503-87e9-4f3113dfde04","startedAt":1791590483363,"at":1791590483363,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"23023dd4-62ac-4503-87e9-4f3113dfde04","startedAt":1791590483363,"at":1791590485712,"phase":"response","status":200,"lifetimeMs":2349}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"23023dd4-62ac-4503-87e9-4f3113dfde04","startedAt":1791590483363,"at":1791590485712,"phase":"end","status":200,"lifetimeMs":2349}
+MAP_HTTP_TIMING {"kind":"read","requestId":"23023dd4-62ac-4503-87e9-4f3113dfde04","startedAt":1791590485973,"at":1791590485973,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"23023dd4-62ac-4503-87e9-4f3113dfde04","startedAt":1791590485973,"at":1791590486280,"phase":"response","status":200,"lifetimeMs":307}
+MAP_HTTP_TIMING {"kind":"read","requestId":"23023dd4-62ac-4503-87e9-4f3113dfde04","startedAt":1791590485973,"at":1791590486281,"phase":"end","status":200,"lifetimeMs":308}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"23023dd4-62ac-4503-87e9-4f3113dfde04","startedAt":1791590486281,"at":1791590486281,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"23023dd4-62ac-4503-87e9-4f3113dfde04","startedAt":1791590486281,"at":1791590486996,"phase":"response","status":200,"lifetimeMs":715}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"23023dd4-62ac-4503-87e9-4f3113dfde04","startedAt":1791590486281,"at":1791590487070,"phase":"end","status":200,"lifetimeMs":789}
+MAP_HTTP_TIMING {"kind":"output","requestId":"23023dd4-62ac-4503-87e9-4f3113dfde04","startedAt":1791590487071,"at":1791590487071,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"23023dd4-62ac-4503-87e9-4f3113dfde04","startedAt":1791590487071,"at":1791590491999,"phase":"response","status":200,"lifetimeMs":4928}
+MAP_HTTP_TIMING {"kind":"output","requestId":"23023dd4-62ac-4503-87e9-4f3113dfde04","startedAt":1791590487071,"at":1791590492004,"phase":"end","status":200,"lifetimeMs":4933}
+MAP_HTTP_TIMING {"kind":"read","requestId":"23023dd4-62ac-4503-87e9-4f3113dfde04","startedAt":1791590492140,"at":1791590492140,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972","startedAt":1791590492889,"at":1791590492889,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"23023dd4-62ac-4503-87e9-4f3113dfde04","startedAt":1791590492140,"at":1791590495960,"phase":"response","status":200,"lifetimeMs":3820}
+MAP_HTTP_TIMING {"kind":"read","requestId":"23023dd4-62ac-4503-87e9-4f3113dfde04","startedAt":1791590492140,"at":1791590495964,"phase":"end","status":200,"lifetimeMs":3824}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972","startedAt":1791590492889,"at":1791590497157,"phase":"response","status":200,"lifetimeMs":4268}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972","startedAt":1791590492889,"at":1791590497158,"phase":"end","status":200,"lifetimeMs":4269}
+MAP_HTTP_TIMING {"kind":"read","requestId":"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972","startedAt":1791590497553,"at":1791590497553,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972","startedAt":1791590497553,"at":1791590498042,"phase":"response","status":200,"lifetimeMs":489}
+MAP_HTTP_TIMING {"kind":"read","requestId":"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972","startedAt":1791590497553,"at":1791590498042,"phase":"end","status":200,"lifetimeMs":489}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972","startedAt":1791590498433,"at":1791590498433,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972","startedAt":1791590498433,"at":1791590498832,"phase":"response","status":200,"lifetimeMs":399}
+MAP_HTTP_TIMING {"kind":"cancel","requestId":"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972","startedAt":1791590498433,"at":1791590498834,"phase":"end","status":200,"lifetimeMs":401}
+MAP_HTTP_TIMING {"kind":"read","requestId":"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972","startedAt":1791590499864,"at":1791590499864,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972","startedAt":1791590499864,"at":1791590500292,"phase":"response","status":200,"lifetimeMs":428}
+MAP_HTTP_TIMING {"kind":"read","requestId":"ebf2de11-b1e3-4c8e-8df2-1d1bc48c7972","startedAt":1791590499864,"at":1791590500295,"phase":"end","status":200,"lifetimeMs":431}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"ef0b1d74-ada5-4cc2-adca-213275562fd3","startedAt":1791590500352,"at":1791590500352,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"ef0b1d74-ada5-4cc2-adca-213275562fd3","startedAt":1791590500352,"at":1791590502674,"phase":"response","status":200,"lifetimeMs":2322}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"ef0b1d74-ada5-4cc2-adca-213275562fd3","startedAt":1791590500352,"at":1791590502675,"phase":"end","status":200,"lifetimeMs":2323}
+MAP_HTTP_TIMING {"kind":"read","requestId":"ef0b1d74-ada5-4cc2-adca-213275562fd3","startedAt":1791590502792,"at":1791590502792,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"ef0b1d74-ada5-4cc2-adca-213275562fd3","startedAt":1791590502792,"at":1791590502938,"phase":"response","status":200,"lifetimeMs":146}
+MAP_HTTP_TIMING {"kind":"read","requestId":"ef0b1d74-ada5-4cc2-adca-213275562fd3","startedAt":1791590502792,"at":1791590502938,"phase":"end","status":200,"lifetimeMs":146}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"ef0b1d74-ada5-4cc2-adca-213275562fd3","startedAt":1791590502938,"at":1791590502938,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"ef0b1d74-ada5-4cc2-adca-213275562fd3","startedAt":1791590502938,"at":1791590503131,"phase":"response","status":200,"lifetimeMs":193}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"ef0b1d74-ada5-4cc2-adca-213275562fd3","startedAt":1791590502938,"at":1791590503212,"phase":"end","status":200,"lifetimeMs":274}
+MAP_HTTP_TIMING {"kind":"output","requestId":"ef0b1d74-ada5-4cc2-adca-213275562fd3","startedAt":1791590503212,"at":1791590503212,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"ef0b1d74-ada5-4cc2-adca-213275562fd3","startedAt":1791590503212,"at":1791590505024,"phase":"response","status":200,"lifetimeMs":1812}
+MAP_HTTP_TIMING {"kind":"output","requestId":"ef0b1d74-ada5-4cc2-adca-213275562fd3","startedAt":1791590503212,"at":1791590505024,"phase":"end","status":200,"lifetimeMs":1812}
+MAP_HTTP_TIMING {"kind":"read","requestId":"ef0b1d74-ada5-4cc2-adca-213275562fd3","startedAt":1791590505122,"at":1791590505122,"phase":"start","status":null,"lifetimeMs":0}
+  ✓  19 [creation-and-revision] › e2e/map-workshop.spec.ts:629:1 › each failed job retries its own original brief despite saved selection and reload (37.2s)
+  ✓  20 [creation-and-revision] › e2e/map-workshop.spec.ts:680:3 › UI transport failure fixture: failed output never claims saved or replaces retained artwork (8.2s)
+  ✓  21 [creation-and-revision] › e2e/map-workshop.spec.ts:680:3 › UI transport failure fixture: missing-version output never claims saved or replaces retained artwork (2.9s)
+  ✓  22 [creation-and-revision] › e2e/map-workshop.spec.ts:722:1 › UI read projection fixture: reload retry reads original request, preserves intent and refreshes CAS without uncertain resubmission (3.0s)
+  ✓  23 [creation-and-revision] › e2e/map-workshop.spec.ts:799:1 › UI read projection fixture: authoritative original intent overrides the session draft copy (5.4s)
+MAP_HTTP_TIMING {"kind":"submit","requestId":"fb7a0b3f-50dc-4782-824b-28ca59a9eb40","startedAt":1791590529725,"at":1791590529725,"phase":"start","status":null,"lifetimeMs":0}
+MAP_JOB_RECOVERY {"phase":"before-controller-abort","id":"fb7a0b3f-50dc-4782-824b-28ca59a9eb40","status":200,"receivedState":"awaiting-client-output","receivedCode":null,"lifetimeMs":5259,"receipt":{"id":"fb7a0b3f-50dc-4782-824b-28ca59a9eb40","state":"awaiting-client-output","revision":4,"expires_at":1791676931344,"owned_jobs":1,"output_present":false,"candidate_present":true,"provider_finished_at":"2026-10-10T00:02:11.344524+00:00","provider_submission_present":true}}
+MAP_HTTP_TIMING {"kind":"submit","requestId":"fb7a0b3f-50dc-4782-824b-28ca59a9eb40","startedAt":1791590529725,"at":1791590535030,"phase":"failure","status":null,"lifetimeMs":5305}
+MAP_HTTP_TIMING {"kind":"read","requestId":"fb7a0b3f-50dc-4782-824b-28ca59a9eb40","startedAt":1791590536311,"at":1791590536311,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"fb7a0b3f-50dc-4782-824b-28ca59a9eb40","startedAt":1791590536311,"at":1791590536624,"phase":"response","status":200,"lifetimeMs":313}
+MAP_HTTP_TIMING {"kind":"read","requestId":"fb7a0b3f-50dc-4782-824b-28ca59a9eb40","startedAt":1791590536311,"at":1791590536625,"phase":"end","status":200,"lifetimeMs":314}
+MAP_HTTP_TIMING {"kind":"read","requestId":"fb7a0b3f-50dc-4782-824b-28ca59a9eb40","startedAt":1791590536722,"at":1791590536722,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"read","requestId":"fb7a0b3f-50dc-4782-824b-28ca59a9eb40","startedAt":1791590536722,"at":1791590537003,"phase":"response","status":200,"lifetimeMs":281}
+MAP_HTTP_TIMING {"kind":"read","requestId":"fb7a0b3f-50dc-4782-824b-28ca59a9eb40","startedAt":1791590536722,"at":1791590537004,"phase":"end","status":200,"lifetimeMs":282}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"fb7a0b3f-50dc-4782-824b-28ca59a9eb40","startedAt":1791590537004,"at":1791590537004,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"fb7a0b3f-50dc-4782-824b-28ca59a9eb40","startedAt":1791590537004,"at":1791590537945,"phase":"response","status":200,"lifetimeMs":941}
+MAP_HTTP_TIMING {"kind":"open-candidate","requestId":"fb7a0b3f-50dc-4782-824b-28ca59a9eb40","startedAt":1791590537004,"at":1791590537970,"phase":"end","status":200,"lifetimeMs":966}
+MAP_HTTP_TIMING {"kind":"output","requestId":"fb7a0b3f-50dc-4782-824b-28ca59a9eb40","startedAt":1791590537971,"at":1791590537971,"phase":"start","status":null,"lifetimeMs":0}
+MAP_HTTP_TIMING {"kind":"output","requestId":"fb7a0b3f-50dc-4782-824b-28ca59a9eb40","startedAt":1791590537971,"at":1791590540900,"phase":"response","status":200,"lifetimeMs":2929}
+MAP_HTTP_TIMING {"kind":"output","requestId":"fb7a0b3f-50dc-4782-824b-28ca59a9eb40","startedAt":1791590537971,"at":1791590540914,"phase":"end","status":200,"lifetimeMs":2943}
+MAP_HTTP_TIMING {"kind":"read","requestId":"fb7a0b3f-50dc-4782-824b-28ca59a9eb40","startedAt":1791590541202,"at":1791590541202,"phase":"start","status":null,"lifetimeMs":0}
+MAP_JOB_RECOVERY {"phase":"after-explicit-resume","receipt":{"id":"fb7a0b3f-50dc-4782-824b-28ca59a9eb40","state":"completed","revision":6,"expires_at":1791676931344,"owned_jobs":1,"output_present":true,"candidate_present":true,"provider_finished_at":"2026-10-10T00:02:11.344524+00:00","provider_submission_present":true}}
+  ✓  24 [creation-and-revision] › e2e/map-workshop.spec.ts:838:1 › controlled controller transport interruption: real Edge receipt resumes the same job after reload without another submit (17.1s)
+(node:57743) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Ticket11 privileged fixture exact outside pixels: 786432; no generation/provider claim
+{"event":"http-error","path":"/functions/v1/map-generation","status":503,"code":""}
+{"event":"http-error","path":"/functions/v1/map-generation","status":503,"code":""}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/ca917551-ed25-4a99-9291-e0255ca812ad/02304cc2-095b-4ab1-b0ef-24477d33b687","status":400,"code":"NoSuchKey"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/ca917551-ed25-4a99-9291-e0255ca812ad/c39af9c0-87cc-496d-9803-40f45b00b782","status":400,"code":"NoSuchKey"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/ca917551-ed25-4a99-9291-e0255ca812ad/c5eda99b-9f3b-43f7-a38b-29a86ed0a69b","status":400,"code":"NoSuchKey"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/ca917551-ed25-4a99-9291-e0255ca812ad/02304cc2-095b-4ab1-b0ef-24477d33b687","status":400,"code":"AccessDenied"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/ca917551-ed25-4a99-9291-e0255ca812ad/c39af9c0-87cc-496d-9803-40f45b00b782","status":400,"code":"AccessDenied"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"42501"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/ca917551-ed25-4a99-9291-e0255ca812ad/c5eda99b-9f3b-43f7-a38b-29a86ed0a69b","status":400,"code":"AccessDenied"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"42501"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"42501"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/ca917551-ed25-4a99-9291-e0255ca812ad/02304cc2-095b-4ab1-b0ef-24477d33b687","status":400,"code":"NoSuchKey"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/ca917551-ed25-4a99-9291-e0255ca812ad/c39af9c0-87cc-496d-9803-40f45b00b782","status":400,"code":"NoSuchKey"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/ca917551-ed25-4a99-9291-e0255ca812ad/c5eda99b-9f3b-43f7-a38b-29a86ed0a69b","status":400,"code":"NoSuchKey"}
+  ✓  25 [laptop] › e2e/map-aligned-stages.spec.ts:27:1 › genuine authority aligned stages retain calibration/mask; older branch and explicit incompatible hidden setup (26.9s)
+{"event":"http-error","path":"/rest/v1/rpc/commit_map_reveal_mask","status":503,"code":"OWNED_FAILURE"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"42501"}
+  ✓  26 [laptop] › e2e/map-display-live.spec.ts:26:1 › genuine authority: opaque output, touch controls, persistence/conflict/failure, reopen, PDF switching and revocation (11.9s)
+  ✓  27 [laptop] › e2e/map-display.spec.ts:2:1 › masked frame, private DOM, accepted strokes, failure draft, clear and reopen authority (4.4s)
+  ✓  28 [laptop] › e2e/map-display.spec.ts:24:1 › actual workshop Use intent and rapid pointer stroke controls remain private (4.6s)
+  ✓  29 [laptop] › e2e/map-display.spec.ts:37:1 › blocked popup and stale protected choice/render cannot restore cleared or revoked output (4.5s)
+Ticket10 laptop observed16Mpixel/80x80 initial frame milliseconds: 788.6999999880791
+  ✓  30 [laptop] › e2e/map-display.spec.ts:58:1 › largest supported artwork and grid render bounded opaque frames without per-sample persistence (4.0s)
+  ✓  31 [laptop] › e2e/map-display.spec.ts:77:1 › fresh controller after reload restores accepted progress black-first while Clear suppresses restore (3.8s)
+  ✓  32 [laptop] › e2e/map-display.spec.ts:102:35 › pending reveal success settles after popup close and safely reopens (3.6s)
+  ✓  33 [laptop] › e2e/map-display.spec.ts:102:35 › pending reveal failure settles after popup close and safely reopens (3.8s)
+[WebServer] 1:03:37 AM [vite] (client) [console.warn] GoTrueClient@sb-127-auth-token:1 (2.116.0) 2026-10-10T00:03:37.923Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+[WebServer] 1:03:37 AM [vite] (client) [console.warn] GoTrueClient@sb-127-auth-token:2 (2.116.0) 2026-10-10T00:03:37.926Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+  ✘  34 [laptop] › e2e/map-integrated-workflows.spec.ts:5:1 › genuine Character edits and Handout PDF sharing continue during outstanding retained-artwork generation (21.6s)
+(node:58051) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  35 [laptop] › e2e/party-display.spec.ts:11:1 › extended display gesture, blocked popup, closed/reopen, navigation lifetime and safe sign-out (12.7s)
+  ✓  36 [laptop] › e2e/party-display.spec.ts:21:1 › DM deterministic PDF page, viewport, Fit, Clear and withdraw (18.8s)
+  ✓  37 [laptop] › e2e/party-display.spec.ts:31:1 › replacement refreshes active bytes, interruption retains frame, reconnect withdraw and opaque session loss clear (9.5s)
+  ✓  38 [laptop] › e2e/party-display.spec.ts:42:1 › presentation interface retains ambiguous reveal identity, rejects failed private reveal and cancels stale reads (3.5s)
+  ✓  39 [laptop] › e2e/party-display.spec.ts:66:1 › pending replacement survives Fit, page and popup resize while stale reads cannot overwrite selection (3.4s)
+  ✘  40 [laptop] › e2e/party-display.spec.ts:95:1 › genuine Supabase display preserves interrupted frame, reconciles withdrawal, independent Player PDF and authority loss (54.1s)
+(node:58280) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Ticket11 privileged fixture exact outside pixels: 786432; no generation/provider claim
+{"event":"http-error","path":"/functions/v1/map-generation","status":503,"code":""}
+{"event":"http-error","path":"/functions/v1/map-generation","status":503,"code":""}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/868179fd-ba10-44e5-8ae0-dfacf414887d/c820531f-89ce-4812-b4d6-9a81673cf152","status":400,"code":"NoSuchKey"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/868179fd-ba10-44e5-8ae0-dfacf414887d/0485b61e-35f4-409a-af7f-1e2283903d6a","status":400,"code":"NoSuchKey"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/868179fd-ba10-44e5-8ae0-dfacf414887d/88efbedb-0494-4508-b1d5-559f098c664e","status":400,"code":"NoSuchKey"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"PGRST303"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/868179fd-ba10-44e5-8ae0-dfacf414887d/c820531f-89ce-4812-b4d6-9a81673cf152","status":400,"code":"AccessDenied"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/868179fd-ba10-44e5-8ae0-dfacf414887d/0485b61e-35f4-409a-af7f-1e2283903d6a","status":400,"code":"AccessDenied"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/868179fd-ba10-44e5-8ae0-dfacf414887d/88efbedb-0494-4508-b1d5-559f098c664e","status":400,"code":"AccessDenied"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"42501"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"42501"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/868179fd-ba10-44e5-8ae0-dfacf414887d/c820531f-89ce-4812-b4d6-9a81673cf152","status":400,"code":"NoSuchKey"}
+{"event":"http-error","path":"/rest/v1/party_map_artwork_versions","status":401,"code":"42501"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/868179fd-ba10-44e5-8ae0-dfacf414887d/0485b61e-35f4-409a-af7f-1e2283903d6a","status":400,"code":"NoSuchKey"}
+{"event":"http-error","path":"/storage/v1/object/authenticated/party-handouts/868179fd-ba10-44e5-8ae0-dfacf414887d/88efbedb-0494-4508-b1d5-559f098c664e","status":400,"code":"NoSuchKey"}
+  ✓  41 [phone] › e2e/map-aligned-stages.spec.ts:27:1 › genuine authority aligned stages retain calibration/mask; older branch and explicit incompatible hidden setup (47.3s)
+  ✘  42 [phone] › e2e/map-display-live.spec.ts:26:1 › genuine authority: opaque output, touch controls, persistence/conflict/failure, reopen, PDF switching and revocation (17.6s)
+(node:58686) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  43 [phone] › e2e/map-display.spec.ts:2:1 › masked frame, private DOM, accepted strokes, failure draft, clear and reopen authority (7.7s)
+  ✓  44 [phone] › e2e/map-display.spec.ts:24:1 › actual workshop Use intent and rapid pointer stroke controls remain private (2.1s)
+  ✓  45 [phone] › e2e/map-display.spec.ts:37:1 › blocked popup and stale protected choice/render cannot restore cleared or revoked output (5.9s)
+Ticket10 phone observed16Mpixel/80x80 initial frame milliseconds: 1049.8999999761581
+  ✓  46 [phone] › e2e/map-display.spec.ts:58:1 › largest supported artwork and grid render bounded opaque frames without per-sample persistence (4.8s)
+  ✓  47 [phone] › e2e/map-display.spec.ts:77:1 › fresh controller after reload restores accepted progress black-first while Clear suppresses restore (5.7s)
+  ✓  48 [phone] › e2e/map-display.spec.ts:102:35 › pending reveal success settles after popup close and safely reopens (5.6s)
+  ✓  49 [phone] › e2e/map-display.spec.ts:102:35 › pending reveal failure settles after popup close and safely reopens (3.0s)
+[WebServer] 1:07:57 AM [vite] (client) [console.warn] GoTrueClient@sb-127-auth-token:1 (2.116.0) 2026-10-10T00:07:57.219Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+[WebServer] 1:07:57 AM [vite] (client) [console.warn] GoTrueClient@sb-127-auth-token:2 (2.116.0) 2026-10-10T00:07:57.222Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+  ✘  50 [phone] › e2e/map-integrated-workflows.spec.ts:5:1 › genuine Character edits and Handout PDF sharing continue during outstanding retained-artwork generation (26.0s)
+(node:58809) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  51 [phone] › e2e/party-display.spec.ts:11:1 › extended display gesture, blocked popup, closed/reopen, navigation lifetime and safe sign-out (5.4s)
+  ✓  52 [phone] › e2e/party-display.spec.ts:21:1 › DM deterministic PDF page, viewport, Fit, Clear and withdraw (9.2s)
+  ✓  53 [phone] › e2e/party-display.spec.ts:31:1 › replacement refreshes active bytes, interruption retains frame, reconnect withdraw and opaque session loss clear (8.6s)
+  ✓  54 [phone] › e2e/party-display.spec.ts:42:1 › presentation interface retains ambiguous reveal identity, rejects failed private reveal and cancels stale reads (3.2s)
+  ✓  55 [phone] › e2e/party-display.spec.ts:66:1 › pending replacement survives Fit, page and popup resize while stale reads cannot overwrite selection (4.0s)
+[WebServer] 1:09:35 AM [vite] (client) [console.warn] GoTrueClient@sb-127-auth-token:1 (2.116.0) 2026-10-10T00:09:35.513Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+  ✓  56 [phone] › e2e/party-display.spec.ts:95:1 › genuine Supabase display preserves interrupted frame, reconciles withdrawal, independent Player PDF and authority loss (45.8s)
+
+
+  1) [creation-and-revision] › e2e/map-workshop.spec.ts:110:3 › laptop: real fixture invent sibling comparison and upload alignment survive reload 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: 'Save completed artwork' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('button', { name: 'Save completed artwork' }) with timeout 5000ms
+      - waiting for getByRole('button', { name: 'Save completed artwork' })
+
+
+      122 |     await expect(
+      123 |       page.getByRole("button", { name: "Save completed artwork" }),
+    > 124 |     ).toBeVisible();
+          |       ^
+      125 |     const queued = await page.evaluate(() =>
+      126 |       (window as any).content.readMapWorkspace(),
+      127 |     );
+        at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-workshop.spec.ts:124:7
+
+    Error Context: ../../../../../../private/tmp/map-integration-12-browser/map-workshop-laptop-real-f-f6ed2-ad-alignment-survive-reload-creation-and-revision/error-context.md
+
+  2) [laptop] › e2e/map-integrated-workflows.spec.ts:5:1 › genuine Character edits and Handout PDF sharing continue during outstanding retained-artwork generation 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByLabel('Party Display page 1')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByLabel('Party Display page 1') with timeout 5000ms
+      - waiting for getByLabel('Party Display page 1')
+
+
+      63 |   }, [...png]);
+      64 |   expect(replacement).toEqual({ ok: true, type: 'image/png', size: png.length });
+    > 65 |   await expect(display.getByLabel('Party Display page 1')).toBeVisible();
+         |                                                            ^
+      66 |   release(); await page.unroute(process.env.MAP_FIXTURE_SERVER! + '/**');
+      67 |   await expect(page.getByRole('button', { name: 'Save completed artwork' })).toBeVisible({ timeout: 30000 });
+      68 |   await page.getByRole('button', { name: 'Save completed artwork' }).click();
+        at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts:65:60
+
+    Error Context: ../../../../../../private/tmp/map-integration-12-browser/map-integrated-workflows-g-1d283-retained-artwork-generation-laptop/error-context.md
+
+  3) [laptop] › e2e/party-display.spec.ts:95:1 › genuine Supabase display preserves interrupted frame, reconciles withdrawal, independent Player PDF and authority loss 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Display page 1 of 1')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Display page 1 of 1') with timeout 5000ms
+      - waiting for getByText('Display page 1 of 1')
+
+
+      116 |   await page.getByRole('button',{name:new RegExp(`${title} Private`)}).click();
+      117 |   await page.getByRole('button',{name:'Reveal and present',exact:true}).click();await expect(display.locator('canvas')).toBeVisible({timeout:15_000});await player.getByRole('button',{name:new RegExp(`${title} Revealed`)}).click();await expect(player.getByText('Page 1 of 2',{exact:true})).toBeVisible();
+    > 118 |   await page.getByLabel('Replacement file').setInputFiles({name:'map.png',mimeType:'image/png',buffer:png});await page.getByRole('button',{name:'Replace for everyone',exact:true}).click();await expect(page.getByText('Display page 1 of 1')).toBeVisible();await expect(player.getByRole('img',{name:'Handout content',exact:true})).toBeVisible();
+          |                                                                                                                                                                                                                                                 ^
+      119 |   await page.screenshot({path:info.outputPath('live-handout.png'),fullPage:true});
+      120 |   // Confirmed expired/invalid auth response clears, even with a previously rendered frame.
+      121 |   await page.route('**/rest/v1/party_members?**',route=>route.fulfill({status:401,json:{code:'PGRST301',message:'Invalid JWT'}}));await expect(display.locator('canvas')).toHaveCount(0);
+        at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/party-display.spec.ts:118:241
+
+    Error Context: ../../../../../../private/tmp/map-integration-12-browser/party-display-genuine-Supa-90bd1-ayer-PDF-and-authority-loss-laptop/error-context.md
+
+  4) [phone] › e2e/map-display-live.spec.ts:26:1 › genuine authority: opaque output, touch controls, persistence/conflict/failure, reopen, PDF switching and revocation 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "accepted"
+    Received: "pending"
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      34 |  const point=await svg.evaluate((svg:SVGSVGElement)=>{const p=new DOMPoint(.5,.5).matrixTransform(svg.getScreenCTM()!);return{x:p.x,y:p.y};});
+      35 |  if(isMobile)await page.touchscreen.tap(point.x,point.y);else await page.mouse.click(point.x,point.y);
+    > 36 |  await expect.poll(()=>page.evaluate(()=>(window as any).liveMap.display.getState().reveal.status)).toBe('accepted');
+         |                                                                                                     ^
+      37 |  await expect.poll(()=>pixel(popup,.1,.1)).not.toEqual([0,0,0,255]);expect(await pixel(popup,.5,.5)).toEqual([0,0,0,255]);
+      38 |  const before=await page.evaluate(()=>(window as any).liveMap.content.readMapWorkspace());expect(before.presentation.mask.uncovered).toEqual([0]);
+      39 |  // External competing controller accepted a stroke; dirty local work must retain
+        at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-display-live.spec.ts:36:101
+
+    Error Context: ../../../../../../private/tmp/map-integration-12-browser/map-display-live-genuine-a-7b12c-DF-switching-and-revocation-phone/error-context.md
+
+  5) [phone] › e2e/map-integrated-workflows.spec.ts:5:1 › genuine Character edits and Handout PDF sharing continue during outstanding retained-artwork generation 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByLabel('Party Display page 1')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByLabel('Party Display page 1') with timeout 5000ms
+      - waiting for getByLabel('Party Display page 1')
+
+
+      63 |   }, [...png]);
+      64 |   expect(replacement).toEqual({ ok: true, type: 'image/png', size: png.length });
+    > 65 |   await expect(display.getByLabel('Party Display page 1')).toBeVisible();
+         |                                                            ^
+      66 |   release(); await page.unroute(process.env.MAP_FIXTURE_SERVER! + '/**');
+      67 |   await expect(page.getByRole('button', { name: 'Save completed artwork' })).toBeVisible({ timeout: 30000 });
+      68 |   await page.getByRole('button', { name: 'Save completed artwork' }).click();
+        at /Users/oscarpauwels/.codex/worktrees/map-ticket12/Dungeons&Dragons/e2e/map-integrated-workflows.spec.ts:65:60
+
+    Error Context: ../../../../../../private/tmp/map-integration-12-browser/map-integrated-workflows-g-1d283-retained-artwork-generation-phone/error-context.md
+
+  Slow test file: [creation-and-revision] › e2e/map-revision.spec.ts (5.0m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  5 failed
+    [creation-and-revision] › e2e/map-workshop.spec.ts:110:3 › laptop: real fixture invent sibling comparison and upload alignment survive reload 
+    [laptop] › e2e/map-integrated-workflows.spec.ts:5:1 › genuine Character edits and Handout PDF sharing continue during outstanding retained-artwork generation 
+    [laptop] › e2e/party-display.spec.ts:95:1 › genuine Supabase display preserves interrupted frame, reconciles withdrawal, independent Player PDF and authority loss 
+    [phone] › e2e/map-display-live.spec.ts:26:1 › genuine authority: opaque output, touch controls, persistence/conflict/failure, reopen, PDF switching and revocation 
+    [phone] › e2e/map-integrated-workflows.spec.ts:5:1 › genuine Character edits and Handout PDF sharing continue during outstanding retained-artwork generation 
+  51 passed (16.6m)
+Exact baseline restored; 25 owned parties/DMs, eight Players and 86 owned objects cleaned; container49182 removed.

@@ -1,0 +1,252 @@
+{
+  "source": "84772f6d53431ada5a2b30f3ad9531e960ed95a0",
+  "stageCount": 8,
+  "shutdownCount": 8,
+  "stagesWithoutRetainedShutdown": 0,
+  "cpuFailureCount": 0,
+  "maximumReportedCpuMs": 1210,
+  "memoryExceededCount": 0,
+  "stageExecutionJoin": [
+    {
+      "execution": "7a8408c3-4b3d-4681-9688-eef190d376e2",
+      "stage": "prepare",
+      "instance": "cb776ad1-9c63-41ff-a82a-64300fc7bdf3",
+      "time": "2026-10-10T00:16:47.367Z",
+      "shutdown": {
+        "reason": "EarlyDrop",
+        "cpu_time_used": 1210,
+        "memory_used": {
+          "total": 36088029,
+          "heap": 8133464,
+          "external": 27954565,
+          "mem_check_captured": {
+            "current": {
+              "totalHeapSize": 11202560,
+              "totalHeapSizeExecutable": 524288,
+              "totalPhysicalSize": 11034624,
+              "totalAvailableSize": 260111152,
+              "totalGlobalHandlesSize": 24576,
+              "usedGlobalHandlesSize": 20736,
+              "usedHeapSize": 8133464,
+              "mallocedMemory": 278632,
+              "externalMemory": 27954565,
+              "peakMallocedMemory": 1171304
+            },
+            "exceeded": false
+          }
+        }
+      }
+    },
+    {
+      "execution": "a0bcf338-d4d2-46d4-9d0a-f506525cfd41",
+      "stage": "finalize",
+      "instance": "c92af6ce-36cb-4cdb-8f0b-533b78e5477d",
+      "time": "2026-10-10T00:16:57.777Z",
+      "shutdown": {
+        "reason": "EarlyDrop",
+        "cpu_time_used": 646,
+        "memory_used": {
+          "total": 41936281,
+          "heap": 8496688,
+          "external": 33439593,
+          "mem_check_captured": {
+            "current": {
+              "totalHeapSize": 11988992,
+              "totalHeapSizeExecutable": 786432,
+              "totalPhysicalSize": 11563008,
+              "totalAvailableSize": 259925976,
+              "totalGlobalHandlesSize": 24576,
+              "usedGlobalHandlesSize": 20736,
+              "usedHeapSize": 8496688,
+              "mallocedMemory": 295040,
+              "externalMemory": 33439593,
+              "peakMallocedMemory": 972696
+            },
+            "exceeded": false
+          }
+        }
+      }
+    },
+    {
+      "execution": "d1b87173-0af0-4d7a-b607-7b121f980faa",
+      "stage": "finalize",
+      "instance": "d69b3e28-af7b-4873-8e57-2c8a1a909098",
+      "time": "2026-10-10T00:17:04.175Z",
+      "shutdown": {
+        "reason": "EarlyDrop",
+        "cpu_time_used": 576,
+        "memory_used": {
+          "total": 41958721,
+          "heap": 8453592,
+          "external": 33505129,
+          "mem_check_captured": {
+            "current": {
+              "totalHeapSize": 11202560,
+              "totalHeapSizeExecutable": 524288,
+              "totalPhysicalSize": 10776576,
+              "totalAvailableSize": 259969128,
+              "totalGlobalHandlesSize": 24576,
+              "usedGlobalHandlesSize": 20736,
+              "usedHeapSize": 8453592,
+              "mallocedMemory": 295040,
+              "externalMemory": 33505129,
+              "peakMallocedMemory": 878120
+            },
+            "exceeded": false
+          }
+        }
+      }
+    },
+    {
+      "execution": "ccb86db3-a5c3-4b12-b7c9-298aff9abc6c",
+      "stage": "finalize",
+      "instance": "bc616a18-0518-49d7-865e-fca77c0b3a2b",
+      "time": "2026-10-10T00:17:07.778Z",
+      "shutdown": {
+        "reason": "EarlyDrop",
+        "cpu_time_used": 546,
+        "memory_used": {
+          "total": 41916449,
+          "heap": 8476856,
+          "external": 33439593,
+          "mem_check_captured": {
+            "current": {
+              "totalHeapSize": 11202560,
+              "totalHeapSizeExecutable": 524288,
+              "totalPhysicalSize": 10776576,
+              "totalAvailableSize": 259945848,
+              "totalGlobalHandlesSize": 24576,
+              "usedGlobalHandlesSize": 20736,
+              "usedHeapSize": 8476856,
+              "mallocedMemory": 295040,
+              "externalMemory": 33439593,
+              "peakMallocedMemory": 869920
+            },
+            "exceeded": false
+          }
+        }
+      }
+    },
+    {
+      "execution": "1396224b-525e-48b1-8efb-8fd790709254",
+      "stage": "prepare",
+      "instance": "5a2b98fb-e384-4386-acb2-c3e79350027f",
+      "time": "2026-10-10T00:17:21.668Z",
+      "shutdown": {
+        "reason": "EarlyDrop",
+        "cpu_time_used": 493,
+        "memory_used": {
+          "total": 47183565,
+          "heap": 8499040,
+          "external": 38684525,
+          "mem_check_captured": {
+            "current": {
+              "totalHeapSize": 11202560,
+              "totalHeapSizeExecutable": 524288,
+              "totalPhysicalSize": 11034624,
+              "totalAvailableSize": 259730400,
+              "totalGlobalHandlesSize": 24576,
+              "usedGlobalHandlesSize": 20736,
+              "usedHeapSize": 8499040,
+              "mallocedMemory": 278632,
+              "externalMemory": 38684525,
+              "peakMallocedMemory": 938728
+            },
+            "exceeded": false
+          }
+        }
+      }
+    },
+    {
+      "execution": "12ba826a-84a7-49aa-ba7a-935ac40ea57a",
+      "stage": "finalize",
+      "instance": "6c7dfbd9-1123-4071-b7ed-54b154b725cf",
+      "time": "2026-10-10T00:17:33.776Z",
+      "shutdown": {
+        "reason": "EarlyDrop",
+        "cpu_time_used": 324,
+        "memory_used": {
+          "total": 41927785,
+          "heap": 8488192,
+          "external": 33439593,
+          "mem_check_captured": {
+            "current": {
+              "totalHeapSize": 11202560,
+              "totalHeapSizeExecutable": 524288,
+              "totalPhysicalSize": 10776576,
+              "totalAvailableSize": 259934536,
+              "totalGlobalHandlesSize": 24576,
+              "usedGlobalHandlesSize": 20736,
+              "usedHeapSize": 8488192,
+              "mallocedMemory": 295040,
+              "externalMemory": 33439593,
+              "peakMallocedMemory": 1038248
+            },
+            "exceeded": false
+          }
+        }
+      }
+    },
+    {
+      "execution": "773d47a0-0d72-4f59-b7a9-4115fa34d3df",
+      "stage": "finalize",
+      "instance": "b30d8f19-5e40-488a-bf1b-0d74fb8b0cd8",
+      "time": "2026-10-10T00:17:36.687Z",
+      "shutdown": {
+        "reason": "EarlyDrop",
+        "cpu_time_used": 354,
+        "memory_used": {
+          "total": 42034153,
+          "heap": 8529024,
+          "external": 33505129,
+          "mem_check_captured": {
+            "current": {
+              "totalHeapSize": 11726848,
+              "totalHeapSizeExecutable": 786432,
+              "totalPhysicalSize": 11300864,
+              "totalAvailableSize": 259893648,
+              "totalGlobalHandlesSize": 24576,
+              "usedGlobalHandlesSize": 20736,
+              "usedHeapSize": 8529024,
+              "mallocedMemory": 295040,
+              "externalMemory": 33505129,
+              "peakMallocedMemory": 869920
+            },
+            "exceeded": false
+          }
+        }
+      }
+    },
+    {
+      "execution": "33eda549-bdc5-4331-b5e5-e1aec2864b61",
+      "stage": "finalize",
+      "instance": "ba437783-7365-4fad-bb39-3dfbf7146f27",
+      "time": "2026-10-10T00:17:39.500Z",
+      "shutdown": {
+        "reason": "EarlyDrop",
+        "cpu_time_used": 642,
+        "memory_used": {
+          "total": 41952161,
+          "heap": 8512568,
+          "external": 33439593,
+          "mem_check_captured": {
+            "current": {
+              "totalHeapSize": 11202560,
+              "totalHeapSizeExecutable": 524288,
+              "totalPhysicalSize": 10776576,
+              "totalAvailableSize": 259910152,
+              "totalGlobalHandlesSize": 24576,
+              "usedGlobalHandlesSize": 20736,
+              "usedHeapSize": 8512568,
+              "mallocedMemory": 295040,
+              "externalMemory": 33439593,
+              "peakMallocedMemory": 869920
+            },
+            "exceeded": false
+          }
+        }
+      }
+    }
+  ],
+  "limits": "Configured freshoneshot1900/2000msCPU256MiB perworker150s wall; container2GiB/1CPU. Missingshutdown does not establish resourcequalification. No universalcold reliability or hostedproof. CPU2608 initialrun is real; jobcausality is not established by timestamp coincidence."
+}
